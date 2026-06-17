@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml:2:13-83
-INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml:2:13-83
+ADDED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml:2:13-83
+INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml:2:13-83
 	package
-		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml
+		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml
 	xmlns:android
-		ADDED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml:2:23-81
+		ADDED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml:2:23-81
 uses-sdk
-INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml reason: use-sdk injection requested
-INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml
-INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml
+INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml reason: use-sdk injection requested
+INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml
+INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml
 	android:targetSdkVersion
-		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml
+		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml
 	android:minSdkVersion
-		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest2179490795596969588.xml
+		INJECTED from /mnt/c/Users/matla/dev/TurnZero/core/ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12661142049409514723.xml

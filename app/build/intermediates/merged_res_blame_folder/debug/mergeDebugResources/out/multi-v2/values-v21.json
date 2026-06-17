@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.turnzero.app-mergeDebugResources-59:/values-v21/values-v21.xml",
+            "outputFile": "com.turnzero.app-mergeDebugResources-54:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/home/prehistoic/.gradle/caches/transforms-4/aa92cda30af139bd2a87accdf6717045/transformed/core-1.13.1/res/values-v21/values-v21.xml",
+                    "source": "/home/prehistoic/.gradle/caches/transforms-4/0a4b08c0663e753a5ab53770e9580da6/transformed/core-1.13.1/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

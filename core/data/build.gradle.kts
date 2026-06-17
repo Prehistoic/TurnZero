@@ -23,6 +23,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.datastore.preferences)
+    api(libs.datastore.preferences)
     implementation(libs.coroutines.android)
 }

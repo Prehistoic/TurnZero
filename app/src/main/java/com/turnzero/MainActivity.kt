@@ -19,14 +19,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            var isDark by remember { mutableStateOf(isSystemInDarkTheme()) }
+            val systemDark = isSystemInDarkTheme()
+            var isDark by remember { mutableStateOf(systemDark) }
 
             TZTheme(darkTheme = isDark) {
                 TZNavHost(
                     toolRegistry = ServiceLocator.toolRegistry,
                     dataStore = ServiceLocator.dataStore,
                     isDarkTheme = isDark,
-                    onThemeChanged = { dark -> isDark = dark }
+                    onThemeChanged = { isDark = it }
                 )
             }
         }

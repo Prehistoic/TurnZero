@@ -1,18 +1,18 @@
 [
     {
-        "merged": "com.turnzero.app-debug-61:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.turnzero.app-main-63:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.turnzero.app-debug-56:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.turnzero.app-main-58:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "com.turnzero.app-debug-61:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.turnzero.app-main-63:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "com.turnzero.app-debug-56:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.turnzero.app-main-58:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "com.turnzero.app-debug-61:/xml_network_security_config.xml.flat",
-        "source": "com.turnzero.app-main-63:/xml/network_security_config.xml"
+        "merged": "com.turnzero.app-debug-56:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.turnzero.app-main-58:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "com.turnzero.app-debug-61:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "com.turnzero.app-main-63:/drawable/ic_launcher_foreground.xml"
+        "merged": "com.turnzero.app-debug-56:/xml_network_security_config.xml.flat",
+        "source": "com.turnzero.app-main-58:/xml/network_security_config.xml"
     }
 ]

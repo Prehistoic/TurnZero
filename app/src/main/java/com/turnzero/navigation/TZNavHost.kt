@@ -39,6 +39,7 @@ fun TZNavHost(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope()
+    val systemIsDark = isSystemInDarkTheme()
 
     val gamesLayout = remember {
         runBlocking {
@@ -127,7 +128,7 @@ fun TZNavHost(
                             when (mode) {
                                 ThemeMode.LIGHT -> false
                                 ThemeMode.DARK -> true
-                                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                                ThemeMode.SYSTEM -> systemIsDark
                             }
                         )
                     }

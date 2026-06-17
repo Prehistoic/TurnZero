@@ -37,8 +37,8 @@ fun GamesScreen(
         when (currentLayout) {
             LayoutMode.LIST -> {
                 LazyColumn(
-                    contentPadding = PaddingValues(padding)
-                        .plus(PaddingValues(horizontal = 16.dp, vertical = 8.dp)),
+                    contentPadding = padding,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(games, key = { it.id }) { game ->
@@ -54,8 +54,8 @@ fun GamesScreen(
                 val columns = if (currentLayout == LayoutMode.COMPACT) 3 else 2
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(columns),
-                    contentPadding = PaddingValues(padding)
-                        .plus(PaddingValues(horizontal = 16.dp, vertical = 8.dp)),
+                    contentPadding = padding,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
