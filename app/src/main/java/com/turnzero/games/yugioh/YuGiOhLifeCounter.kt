@@ -6,11 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.turnzero.core.tools.api.Tool
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class YuGiOhLifeCounter @Inject constructor() : Tool {
+class YuGiOhLifeCounter : Tool {
     override val id = "ygo-life-counter"
     override val name = "Life Point Counter"
     override val icon = Icons.Default.Favorite

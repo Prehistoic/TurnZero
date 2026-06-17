@@ -6,7 +6,8 @@ plugins {
 
 android {
     namespace = "com.turnzero.core.tools.api"
-    compileSdk = 34
+    compileSdk = 35
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         minSdk = 28

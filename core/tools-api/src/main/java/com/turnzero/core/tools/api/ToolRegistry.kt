@@ -1,10 +1,6 @@
 package com.turnzero.core.tools.api
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class ToolRegistry @Inject constructor(
+class ToolRegistry(
     private val games: Set<@JvmSuppressWildcards Game>,
     private val tools: Set<@JvmSuppressWildcards Tool>
 ) {
