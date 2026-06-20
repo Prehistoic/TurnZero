@@ -178,17 +178,17 @@ fun TZNavHost(
             }
 
             composable(Screen.Favorites.route) {
-                val favorites = remember(favoriteToolIds) {
-                    toolRegistry.getToolsByIds(favoriteToolIds)
+                val favoriteEntries = remember(favoriteToolIds) {
+                    toolRegistry.getFavoriteEntries(favoriteToolIds)
                 }
                 FavoritesScreen(
-                    favoriteTools = favorites,
+                    favoriteEntries = favoriteEntries,
                     onToolClick = { gameId, toolId ->
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
                     highlightedToolId = selectedToolId,
-                    onToolLongClick = { toolId ->
-                        selectedToolId = toolId
+                    onToolLongClick = { compositeKey ->
+                        selectedToolId = compositeKey
                     },
                     onTapOutside = {
                         selectedToolId = null
@@ -318,8 +318,8 @@ fun TZNavHost(
                     },
                     onBack = { navController.popBackStack() },
                     highlightedToolId = selectedToolId,
-                    onToolLongClick = { toolId ->
-                        selectedToolId = toolId
+                    onToolLongClick = { compositeKey ->
+                        selectedToolId = compositeKey
                     },
                     onTapOutside = {
                         selectedToolId = null

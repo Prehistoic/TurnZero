@@ -71,8 +71,8 @@ fun ToolsScreen(
                                 tool = tool,
                                 layoutMode = currentLayout,
                                 onClick = { onToolClick(tool.id) },
-                                onLongClick = onToolLongClick?.let { { it(tool.id) } },
-                                isHighlighted = tool.id == highlightedToolId
+                                onLongClick = onToolLongClick?.let { { it("$gameId:${tool.id}") } },
+                                isHighlighted = "$gameId:${tool.id}" == highlightedToolId
                             )
                         }
                     }
@@ -90,8 +90,8 @@ fun ToolsScreen(
                                 tool = tool,
                                 layoutMode = currentLayout,
                                 onClick = { onToolClick(tool.id) },
-                                onLongClick = onToolLongClick?.let { { it(tool.id) } },
-                                isHighlighted = tool.id == highlightedToolId
+                                onLongClick = onToolLongClick?.let { { it("$gameId:${tool.id}") } },
+                                isHighlighted = "$gameId:${tool.id}" == highlightedToolId
                             )
                         }
                     }

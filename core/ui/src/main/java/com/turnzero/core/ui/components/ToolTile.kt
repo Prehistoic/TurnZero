@@ -24,11 +24,12 @@ fun ToolTile(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     onLongClick: (() -> Unit)? = null,
-    isHighlighted: Boolean = false
+    isHighlighted: Boolean = false,
+    subtitle: String? = null
 ) {
     when (layoutMode) {
-        LayoutMode.LIST -> ToolTileList(tool, onClick, onLongClick, isHighlighted, modifier)
-        LayoutMode.GRID -> ToolTileGrid(tool, onClick, onLongClick, isHighlighted, modifier)
+        LayoutMode.LIST -> ToolTileList(tool, onClick, onLongClick, isHighlighted, subtitle, modifier)
+        LayoutMode.GRID -> ToolTileGrid(tool, onClick, onLongClick, isHighlighted, subtitle, modifier)
     }
 }
 
@@ -39,6 +40,7 @@ private fun ToolTileGrid(
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
     isHighlighted: Boolean,
+    subtitle: String?,
     modifier: Modifier
 ) {
     val highlightBorder = if (isHighlighted) {
@@ -80,6 +82,17 @@ private fun ToolTileGrid(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+            if (subtitle != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
@@ -91,6 +104,7 @@ private fun ToolTileList(
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
     isHighlighted: Boolean,
+    subtitle: String?,
     modifier: Modifier
 ) {
     val highlightBorder = if (isHighlighted) {
@@ -123,11 +137,21 @@ private fun ToolTileList(
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(Modifier.width(16.dp))
-            Text(
-                text = tool.name,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f)
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = tool.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                if (subtitle != null) {
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowForward,
                 contentDescription = null,

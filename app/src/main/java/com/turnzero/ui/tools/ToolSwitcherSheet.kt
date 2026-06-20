@@ -38,7 +38,7 @@ fun ToolSwitcherSheet(
                         },
                     colors = CardDefaults.cardColors(
                         containerColor = if (isCurrent)
-                            MaterialTheme.colorScheme.primaryContainer
+                            MaterialTheme.colorScheme.primary
                         else
                             MaterialTheme.colorScheme.surfaceContainer
                     )
@@ -52,7 +52,7 @@ fun ToolSwitcherSheet(
                             contentDescription = null,
                             modifier = Modifier.size(32.dp),
                             tint = if (isCurrent)
-                                MaterialTheme.colorScheme.onPrimaryContainer
+                                MaterialTheme.colorScheme.onPrimary
                             else
                                 MaterialTheme.colorScheme.primary
                         )
@@ -61,7 +61,7 @@ fun ToolSwitcherSheet(
                             text = tool.name,
                             style = MaterialTheme.typography.titleMedium,
                             color = if (isCurrent)
-                                MaterialTheme.colorScheme.onPrimaryContainer
+                                MaterialTheme.colorScheme.onPrimary
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )
@@ -70,7 +70,7 @@ fun ToolSwitcherSheet(
                             Text(
                                 text = "Current",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                     }
@@ -90,12 +90,12 @@ fun ToolSwitcherFAB(
     FloatingActionButton(
         onClick = onTap,
         modifier = modifier.padding(16.dp),
-        containerColor = MaterialTheme.colorScheme.primaryContainer
+        containerColor = MaterialTheme.colorScheme.primary
     ) {
         Icon(
             imageVector = Icons.Default.SwapHoriz,
             contentDescription = "Switch Tool",
-            tint = MaterialTheme.colorScheme.onPrimaryContainer
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
