@@ -11,12 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Game
 
-enum class LayoutMode { COMPACT, COMFORTABLE, LIST }
+enum class LayoutMode { GRID, LIST }
 
 @Composable
 fun GameTile(
@@ -27,13 +26,12 @@ fun GameTile(
 ) {
     when (layoutMode) {
         LayoutMode.LIST -> GameTileList(game, onClick, modifier)
-        LayoutMode.COMPACT -> GameTileCompact(game, onClick, modifier)
-        LayoutMode.COMFORTABLE -> GameTileComfortable(game, onClick, modifier)
+        LayoutMode.GRID -> GameTileGrid(game, onClick, modifier)
     }
 }
 
 @Composable
-private fun GameTileComfortable(game: Game, onClick: () -> Unit, modifier: Modifier) {
+private fun GameTileGrid(game: Game, onClick: () -> Unit, modifier: Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -71,45 +69,6 @@ private fun GameTileComfortable(game: Game, onClick: () -> Unit, modifier: Modif
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun GameTileCompact(game: Game, onClick: () -> Unit, modifier: Modifier) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
-    ) {
-        Box(modifier = Modifier.padding(12.dp)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = game.name.first().toString(),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = game.name,
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }

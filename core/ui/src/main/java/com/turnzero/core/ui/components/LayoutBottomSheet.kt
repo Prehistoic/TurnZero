@@ -20,8 +20,7 @@ data class LayoutOption(
 )
 
 val layoutOptions = listOf(
-    LayoutOption(LayoutMode.COMPACT, "Compact Grid", "Small tiles, more per row"),
-    LayoutOption(LayoutMode.COMFORTABLE, "Comfortable Grid", "Larger tiles with details"),
+    LayoutOption(LayoutMode.GRID, "Grid", "Tiles with details"),
     LayoutOption(LayoutMode.LIST, "List", "Full-width rows")
 )
 

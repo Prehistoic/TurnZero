@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Tool
@@ -23,13 +22,12 @@ fun ToolTile(
 ) {
     when (layoutMode) {
         LayoutMode.LIST -> ToolTileList(tool, onClick, modifier)
-        LayoutMode.COMPACT -> ToolTileCompact(tool, onClick, modifier)
-        LayoutMode.COMFORTABLE -> ToolTileComfortable(tool, onClick, modifier)
+        LayoutMode.GRID -> ToolTileGrid(tool, onClick, modifier)
     }
 }
 
 @Composable
-private fun ToolTileComfortable(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
+private fun ToolTileGrid(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -53,38 +51,6 @@ private fun ToolTileComfortable(tool: Tool, onClick: () -> Unit, modifier: Modif
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-        }
-    }
-}
-
-@Composable
-private fun ToolTileCompact(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
-    ) {
-        Box(modifier = Modifier.padding(12.dp)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = tool.icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = tool.name,
-                    style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
         }
     }
 }

@@ -58,9 +58,8 @@ fun ToolsScreen(
                 }
             }
             else -> {
-                val columns = if (currentLayout == LayoutMode.COMPACT) 3 else 2
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(columns),
+                    columns = GridCells.Fixed(2),
                     contentPadding = padding,
                     modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

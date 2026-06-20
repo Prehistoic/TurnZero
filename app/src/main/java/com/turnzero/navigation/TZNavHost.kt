@@ -44,8 +44,8 @@ fun TZNavHost(
     val gamesLayout = remember {
         runBlocking {
             dataStore.data.first()[UserPreferences.LAYOUT_GAMES]?.let {
-                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.COMFORTABLE }
-            } ?: LayoutMode.COMFORTABLE
+                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.GRID }
+            } ?: LayoutMode.GRID
         }
     }
 
@@ -54,8 +54,8 @@ fun TZNavHost(
     val toolsLayout = remember {
         runBlocking {
             dataStore.data.first()[UserPreferences.LAYOUT_TOOLS]?.let {
-                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.COMFORTABLE }
-            } ?: LayoutMode.COMFORTABLE
+                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.GRID }
+            } ?: LayoutMode.GRID
         }
     }
 
