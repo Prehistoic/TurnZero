@@ -13,6 +13,8 @@ object UserPreferences {
     val LAYOUT_GAMES = stringPreferencesKey("layout_games")
     val LAYOUT_TOOLS = stringPreferencesKey("layout_tools")
     val THEME_MODE = stringPreferencesKey("theme_mode")
+    val COLOR_THEME = stringPreferencesKey("color_theme")
+    val LANGUAGE = stringPreferencesKey("language")
     val FAVORITE_GAMES = stringSetPreferencesKey("favorite_games")
     val FAVORITE_TOOLS = stringSetPreferencesKey("favorite_tools")
 }

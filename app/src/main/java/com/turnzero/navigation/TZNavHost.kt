@@ -22,6 +22,10 @@ import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.core.ui.components.*
 import com.turnzero.ui.favorites.FavoritesScreen
 import com.turnzero.ui.games.GamesScreen
+import com.turnzero.ui.settings.AppearanceSettingsScreen
+import com.turnzero.ui.settings.DisplaySettingsScreen
+import com.turnzero.ui.settings.LanguageSelectionScreen
+import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
 import com.turnzero.ui.settings.ThemeMode
 import com.turnzero.ui.tools.ToolSwitcherFAB
@@ -36,7 +40,9 @@ fun TZNavHost(
     toolRegistry: ToolRegistry,
     dataStore: DataStore<Preferences>,
     isDarkTheme: Boolean,
-    onThemeChanged: (Boolean) -> Unit
+    onThemeChanged: (Boolean) -> Unit,
+    selectedColorThemeId: String,
+    onColorThemeChanged: (String) -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -82,8 +88,15 @@ fun TZNavHost(
         }
     }
 
+    val savedLanguage = remember {
+        runBlocking {
+            dataStore.data.first()[UserPreferences.LANGUAGE] ?: "en"
+        }
+    }
+
     var favoriteToolIds by remember { mutableStateOf(initialFavorites) }
     var selectedToolId by remember { mutableStateOf<String?>(null) }
+    var currentLanguage by remember { mutableStateOf(savedLanguage) }
 
     Scaffold(
         bottomBar = {
@@ -181,8 +194,23 @@ fun TZNavHost(
 
             composable(Screen.Settings.route) {
                 SettingsScreen(
+                    onSearchClick = {
+                        navController.navigate(Screen.SearchSettings.route)
+                    },
+                    onAppearanceClick = {
+                        navController.navigate(Screen.AppearanceSettings.route)
+                    }
+                )
+            }
+
+            composable(Screen.AppearanceSettings.route) {
+                AppearanceSettingsScreen(
                     currentTheme = themeModeState,
-                    onThemeSelected = { mode ->
+                    selectedColorThemeId = selectedColorThemeId,
+                    currentLanguage = currentLanguage,
+                    gamesLayout = gamesLayoutState,
+                    toolsLayout = toolsLayoutState,
+                    onThemeModeSelected = { mode ->
                         themeModeState = mode
                         scope.launch {
                             dataStore.edit { prefs ->
@@ -196,7 +224,71 @@ fun TZNavHost(
                                 ThemeMode.SYSTEM -> systemIsDark
                             }
                         )
-                    }
+                    },
+                    onColorThemeSelected = { id ->
+                        onColorThemeChanged(id)
+                    },
+                    onLanguageClick = {
+                        navController.navigate(Screen.LanguageSettings.route)
+                    },
+                    onGamesLayoutClick = {
+                        navController.navigate(Screen.DisplaySettings.createRoute("games"))
+                    },
+                    onToolsLayoutClick = {
+                        navController.navigate(Screen.DisplaySettings.createRoute("tools"))
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.LanguageSettings.route) {
+                LanguageSelectionScreen(
+                    currentLanguage = currentLanguage,
+                    onLanguageSelected = { code ->
+                        currentLanguage = code
+                        scope.launch {
+                            dataStore.edit { prefs ->
+                                prefs[UserPreferences.LANGUAGE] = code
+                            }
+                        }
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = Screen.DisplaySettings.route,
+                arguments = listOf(navArgument("type") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type") ?: return@composable
+                val layout = if (type == "games") gamesLayoutState else toolsLayoutState
+                DisplaySettingsScreen(
+                    type = type,
+                    currentLayout = layout,
+                    onLayoutSelected = { mode ->
+                        if (type == "games") {
+                            gamesLayoutState = mode
+                            scope.launch {
+                                dataStore.edit { prefs ->
+                                    prefs[UserPreferences.LAYOUT_GAMES] = mode.name
+                                }
+                            }
+                        } else {
+                            toolsLayoutState = mode
+                            scope.launch {
+                                dataStore.edit { prefs ->
+                                    prefs[UserPreferences.LAYOUT_TOOLS] = mode.name
+                                }
+                            }
+                        }
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.SearchSettings.route) {
+                SearchSettingsScreen(
+                    onBack = { navController.popBackStack() }
                 )
             }
 

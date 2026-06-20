@@ -11,34 +11,18 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = SurfaceDark,
-    surface = SurfaceDark,
-    surfaceContainer = SurfaceContainerDark,
-    onBackground = OnSurfaceDark,
-    onSurface = OnSurfaceDark
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = SurfaceLight,
-    surface = SurfaceLight,
-    surfaceContainer = SurfaceContainerLight,
-    onBackground = OnSurfaceLight,
-    onSurface = OnSurfaceLight
-)
-
 @Composable
 fun TZTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    colorTheme: ColorTheme? = null,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (colorTheme != null) {
+        colorTheme.toColorScheme(darkTheme)
+    } else {
+        val fallback = colorThemes.first()
+        if (darkTheme) fallback.toColorScheme(darkTheme = true) else fallback.toColorScheme(darkTheme = false)
+    }
 
     val view = LocalView.current
     if (!view.isInEditMode) {

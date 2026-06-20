@@ -9,8 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.edit
+import com.turnzero.core.data.UserPreferences
 import com.turnzero.core.ui.theme.TZTheme
+import com.turnzero.core.ui.theme.colorThemes
 import com.turnzero.navigation.TZNavHost
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
 
@@ -22,12 +27,31 @@ class MainActivity : ComponentActivity() {
             val systemDark = isSystemInDarkTheme()
             var isDark by remember { mutableStateOf(systemDark) }
 
-            TZTheme(darkTheme = isDark) {
+            val savedColorTheme = remember {
+                runBlocking {
+                    ServiceLocator.dataStore.data.first()[UserPreferences.COLOR_THEME] ?: "purple"
+                }
+            }
+            var selectedColorThemeId by remember { mutableStateOf(savedColorTheme) }
+            val selectedColorTheme = remember(selectedColorThemeId) {
+                colorThemes.find { it.id == selectedColorThemeId } ?: colorThemes.first()
+            }
+
+            TZTheme(darkTheme = isDark, colorTheme = selectedColorTheme) {
                 TZNavHost(
                     toolRegistry = ServiceLocator.toolRegistry,
                     dataStore = ServiceLocator.dataStore,
                     isDarkTheme = isDark,
-                    onThemeChanged = { isDark = it }
+                    onThemeChanged = { isDark = it },
+                    selectedColorThemeId = selectedColorThemeId,
+                    onColorThemeChanged = { id ->
+                        selectedColorThemeId = id
+                        runBlocking {
+                            ServiceLocator.dataStore.edit { prefs ->
+                                prefs[UserPreferences.COLOR_THEME] = id
+                            }
+                        }
+                    }
                 )
             }
         }

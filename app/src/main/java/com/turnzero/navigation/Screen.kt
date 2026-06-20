@@ -21,6 +21,16 @@ sealed class Screen(val route: String) {
     data object ToolDetail : Screen("tool/{gameId}/{toolId}") {
         fun createRoute(gameId: String, toolId: String) = "tool/$gameId/$toolId"
     }
+
+    data object SearchSettings : Screen("settings/search")
+
+    data object AppearanceSettings : Screen("settings/appearance")
+
+    data object DisplaySettings : Screen("settings/display/{type}") {
+        fun createRoute(type: String) = "settings/display/$type"
+    }
+
+    data object LanguageSettings : Screen("settings/language")
 }
 
 data class BottomNavItem(
