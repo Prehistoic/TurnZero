@@ -1,6 +1,8 @@
 package com.turnzero.core.ui.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,25 +16,45 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Tool
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ToolTile(
     tool: Tool,
     layoutMode: LayoutMode,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null,
+    isHighlighted: Boolean = false
 ) {
     when (layoutMode) {
-        LayoutMode.LIST -> ToolTileList(tool, onClick, modifier)
-        LayoutMode.GRID -> ToolTileGrid(tool, onClick, modifier)
+        LayoutMode.LIST -> ToolTileList(tool, onClick, onLongClick, isHighlighted, modifier)
+        LayoutMode.GRID -> ToolTileGrid(tool, onClick, onLongClick, isHighlighted, modifier)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ToolTileGrid(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
+private fun ToolTileGrid(
+    tool: Tool,
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)?,
+    isHighlighted: Boolean,
+    modifier: Modifier
+) {
+    val highlightBorder = if (isHighlighted) {
+        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+    } else {
+        Modifier
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .then(highlightBorder)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
@@ -62,12 +84,29 @@ private fun ToolTileGrid(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ToolTileList(tool: Tool, onClick: () -> Unit, modifier: Modifier) {
+private fun ToolTileList(
+    tool: Tool,
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)?,
+    isHighlighted: Boolean,
+    modifier: Modifier
+) {
+    val highlightBorder = if (isHighlighted) {
+        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+    } else {
+        Modifier
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .then(highlightBorder)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer

@@ -10,4 +10,7 @@ class ToolRegistry(
         tools.filter { tool ->
             tool.supportedGames.contains("*") || tool.supportedGames.contains(gameId)
         }
+
+    fun getToolsByIds(ids: Set<String>): List<Tool> =
+        tools.filter { it.id in ids }
 }

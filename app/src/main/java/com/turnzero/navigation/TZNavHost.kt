@@ -2,7 +2,10 @@ package com.turnzero.navigation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
@@ -73,16 +76,65 @@ fun TZNavHost(
         )
     }
 
+    val initialFavorites = remember {
+        runBlocking {
+            dataStore.data.first()[UserPreferences.FAVORITE_TOOLS] ?: emptySet()
+        }
+    }
+
+    var favoriteToolIds by remember { mutableStateOf(initialFavorites) }
+    var selectedToolId by remember { mutableStateOf<String?>(null) }
+
     Scaffold(
         bottomBar = {
-            TZBottomNavBar(
-                currentRoute = currentRoute,
-                onItemClick = { screen ->
-                    navController.navigate(screen.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
+            if (selectedToolId != null) {
+                NavigationBar {
+                    val isFavorited = selectedToolId in favoriteToolIds
+                    NavigationBarItem(
+                        selected = isFavorited,
+                        onClick = {
+                            val toolId = selectedToolId ?: return@NavigationBarItem
+                            val updated = if (isFavorited) {
+                                favoriteToolIds - toolId
+                            } else {
+                                favoriteToolIds + toolId
+                            }
+                            favoriteToolIds = updated
+                            if (isFavorited) {
+                                selectedToolId = null
+                            }
+                            scope.launch {
+                                dataStore.edit { prefs ->
+                                    prefs[UserPreferences.FAVORITE_TOOLS] = updated
+                                }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                contentDescription = if (isFavorited) "Remove from favorites" else "Add to favorites"
+                            )
+                        },
+                        label = { Text(if (isFavorited) "Favorited" else "Favorite") },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
                 }
-            )
+            } else {
+                TZBottomNavBar(
+                    currentRoute = currentRoute,
+                    onItemClick = { screen ->
+                        navController.navigate(screen.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
+            }
         }
     ) { innerPadding ->
         NavHost(
@@ -109,7 +161,22 @@ fun TZNavHost(
             }
 
             composable(Screen.Favorites.route) {
-                FavoritesScreen()
+                val favorites = remember(favoriteToolIds) {
+                    toolRegistry.getToolsByIds(favoriteToolIds)
+                }
+                FavoritesScreen(
+                    favoriteTools = favorites,
+                    onToolClick = { gameId, toolId ->
+                        navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
+                    },
+                    highlightedToolId = selectedToolId,
+                    onToolLongClick = { toolId ->
+                        selectedToolId = toolId
+                    },
+                    onTapOutside = {
+                        selectedToolId = null
+                    }
+                )
             }
 
             composable(Screen.Settings.route) {
@@ -153,7 +220,14 @@ fun TZNavHost(
                     onToolClick = { toolId ->
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    highlightedToolId = selectedToolId,
+                    onToolLongClick = { toolId ->
+                        selectedToolId = toolId
+                    },
+                    onTapOutside = {
+                        selectedToolId = null
+                    }
                 )
             }
 
