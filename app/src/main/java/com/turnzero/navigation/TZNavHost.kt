@@ -79,9 +79,7 @@ fun TZNavHost(
                 currentRoute = currentRoute,
                 onItemClick = { screen ->
                     navController.navigate(screen.route) {
-                        popUpTo(Screen.Games.route) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+                        popUpTo(0) { inclusive = true }
                     }
                 }
             )
