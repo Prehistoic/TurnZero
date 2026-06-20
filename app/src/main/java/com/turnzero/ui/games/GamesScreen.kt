@@ -23,14 +23,30 @@ fun GamesScreen(
     onGameClick: (String) -> Unit
 ) {
     var showLayoutSheet by remember { mutableStateOf(false) }
-    val games = remember { toolRegistry.getGames() }
+    var isSearchActive by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+    val allGames = remember { toolRegistry.getGames() }
+    val games = if (searchQuery.isEmpty()) {
+        allGames
+    } else {
+        allGames.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    }
 
     Scaffold(
         topBar = {
             TZTopBar(
                 title = "TurnZero",
                 showLayoutButton = true,
-                onLayoutClick = { showLayoutSheet = true }
+                showSearchButton = true,
+                isSearchActive = isSearchActive,
+                searchQuery = searchQuery,
+                onLayoutClick = { showLayoutSheet = true },
+                onSearchClick = { isSearchActive = true },
+                onSearchQueryChange = { searchQuery = it },
+                onSearchClose = {
+                    isSearchActive = false
+                    searchQuery = ""
+                }
             )
         }
     ) { padding ->
