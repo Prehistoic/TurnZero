@@ -98,6 +98,10 @@ fun TZNavHost(
     var selectedToolId by remember { mutableStateOf<String?>(null) }
     var currentLanguage by remember { mutableStateOf(savedLanguage) }
 
+    LaunchedEffect(currentRoute) {
+        selectedToolId = null
+    }
+
     Scaffold(
         bottomBar = {
             if (selectedToolId != null) {
