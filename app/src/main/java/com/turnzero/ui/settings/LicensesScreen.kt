@@ -81,12 +81,14 @@ private fun LicenseRow(component: OssComponent) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         Icon(
             imageVector = Icons.Outlined.Description,
             contentDescription = null,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .size(24.dp)
+                .offset(y = 2.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.width(12.dp))
@@ -105,22 +107,25 @@ private fun LicenseRow(component: OssComponent) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(Modifier.height(4.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = MaterialTheme.shapes.extraSmall
+            ) {
+                Text(
+                    text = component.licenses,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                )
+            }
         }
         Spacer(Modifier.width(8.dp))
         Text(
             text = component.version,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.width(8.dp))
-        SuggestionChip(
-            onClick = {},
-            label = {
-                Text(
-                    text = component.licenses,
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 3.dp)
         )
     }
 }
