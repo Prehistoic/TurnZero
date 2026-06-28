@@ -61,11 +61,12 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsCategoryRow(
+internal fun SettingsCategoryRow(
     icon: ImageVector,
     title: String,
     description: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    widget: @Composable (() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
@@ -95,6 +96,10 @@ private fun SettingsCategoryRow(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+        }
+        if (widget != null) {
+            Spacer(Modifier.width(8.dp))
+            widget()
         }
     }
 }

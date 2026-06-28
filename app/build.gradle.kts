@@ -1,5 +1,3 @@
-import java.io.File
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -73,67 +71,31 @@ dependencies {
 
 val generateLicensesJson by tasks.registering {
     group = "licenses"
-    description = "Generates licenses.json from resolved dependencies"
+    description = "Generates licenses.json for OSS components"
 
     val outputDir = layout.projectDirectory.dir("src/main/assets/licenses")
     val outputFile = outputDir.file("licenses.json")
 
-    outputs.dir(outputDir)
+    outputs.file(outputFile)
 
     doLast {
-        val deps = mutableListOf<Map<String, String>>()
-        val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
-        val seen = mutableSetOf<String>()
-        val gradleUserHome = gradle.gradleUserHomeDir
-        val cacheDir = File(gradleUserHome, "caches/modules-2/files-2.1")
+        val deps = listOf(
+            mapOf("name" to "Compose BOM", "group" to "androidx.compose", "version" to "2024.12.01", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Compose UI", "group" to "androidx.compose.ui", "version" to "2024.12.01", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Compose Material3", "group" to "androidx.compose.material3", "version" to "2024.12.01", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Material Icons Extended", "group" to "androidx.compose.material", "version" to "2024.12.01", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Navigation Compose", "group" to "androidx.navigation", "version" to "2.9.8", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Lifecycle Runtime Compose", "group" to "androidx.lifecycle", "version" to "2.10.0", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Lifecycle ViewModel Compose", "group" to "androidx.lifecycle", "version" to "2.10.0", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Activity Compose", "group" to "androidx.activity", "version" to "1.12.4", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Core KTX", "group" to "androidx.core", "version" to "1.13.1", "licenses" to "Apache-2.0"),
+            mapOf("name" to "DataStore Preferences", "group" to "androidx.datastore", "version" to "1.1.1", "licenses" to "Apache-2.0"),
+            mapOf("name" to "Kotlin Coroutines Android", "group" to "org.jetbrains.kotlinx", "version" to "1.11.0", "licenses" to "Apache-2.0"),
+            mapOf("name" to "JUnit", "group" to "junit", "version" to "4.13.2", "licenses" to "EPL-1.0"),
+            mapOf("name" to "MockK", "group" to "io.mockk", "version" to "1.13.12", "licenses" to "Apache-2.0"),
+        )
 
-        val configs = listOf("debugRuntimeClasspath", "releaseRuntimeClasspath")
-        for (configName in configs) {
-            try {
-                val config = configurations.getByName(configName)
-                config.resolvedConfiguration.lenientConfiguration.allModuleDependencies.forEach { dep ->
-                    val key = "${dep.moduleGroup}:${dep.moduleName}"
-                    if (key in seen) return@forEach
-                    seen.add(key)
-
-                    val groupPath = dep.moduleGroup.replace('.', '/')
-                    val artifactDir = File(cacheDir, "$groupPath/${dep.moduleName}/${dep.moduleVersion}")
-                    if (!artifactDir.exists()) return@forEach
-
-                    val licenses = mutableListOf<String>()
-                    val pomFile = artifactDir.walkTopDown().find { it.extension == "pom" }
-
-                    if (pomFile != null) {
-                        try {
-                            val doc = factory.newDocumentBuilder().parse(pomFile)
-                            val licenseNodes = doc.getElementsByTagName("license")
-                            for (i in 0 until licenseNodes.length) {
-                                val childNodes = licenseNodes.item(i).childNodes
-                                for (j in 0 until childNodes.length) {
-                                    val child = childNodes.item(j)
-                                    if (child.nodeName == "name") {
-                                        licenses.add(child.textContent.trim())
-                                    }
-                                }
-                            }
-                        } catch (_: Exception) {
-                        }
-                    }
-                    if (licenses.isEmpty()) licenses.add("Unknown")
-
-                    deps.add(mapOf(
-                        "name" to dep.moduleName,
-                        "group" to dep.moduleGroup,
-                        "version" to dep.moduleVersion,
-                        "licenses" to licenses.joinToString(", ")
-                    ))
-                }
-            } catch (_: Exception) {
-            }
-        }
-
-        val json = groovy.json.JsonOutput.toJson(deps.distinctBy { "${it["group"]}:${it["name"]}" }
-            .sortedBy { it["name"].toString().lowercase() })
+        val json = groovy.json.JsonOutput.toJson(deps.sortedBy { it["name"].toString().lowercase() })
 
         outputFile.asFile.parentFile.mkdirs()
         outputFile.asFile.writeText(json)
