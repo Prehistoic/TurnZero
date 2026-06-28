@@ -80,7 +80,8 @@ private fun ToolTileGrid(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.heightIn(min = 48.dp)
             )
             if (subtitle != null) {
                 Spacer(Modifier.height(4.dp))
