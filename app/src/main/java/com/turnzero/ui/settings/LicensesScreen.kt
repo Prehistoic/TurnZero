@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.OpenInNew
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -101,7 +101,7 @@ fun LicensesScreen(onBack: () -> Unit) {
                         selectedLibrary = null
                     }) {
                         Icon(
-                            imageVector = Icons.Outlined.OpenInNew,
+                            imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
@@ -115,7 +115,7 @@ fun LicensesScreen(onBack: () -> Unit) {
                         selectedLibrary = null
                     }) {
                         Icon(
-                            imageVector = Icons.Outlined.OpenInNew,
+                            imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
