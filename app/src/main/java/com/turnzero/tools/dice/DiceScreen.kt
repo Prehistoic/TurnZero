@@ -39,7 +39,11 @@ fun DiceScreen(
             contentAlignment = Alignment.Center
         ) {
             val columns = uiState.dice.chunked(4).maxOfOrNull { it.size }?.coerceAtLeast(1) ?: 1
-            val widthFraction = if (columns <= 2) 0.35f else 0.8f
+            val widthFraction = when (columns) {
+                1 -> 0.35f
+                2 -> 0.60f
+                else -> 0.8f
+            }
             val availableWidth = maxWidth * widthFraction
             val gaps = 8.dp * (columns - 1)
             val dieSize = (availableWidth - gaps) / columns
@@ -64,7 +68,7 @@ fun DiceScreen(
             if (uiState.total != null && !uiState.isRolling) {
                 Text(
                     text = "Total: ${uiState.total}",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
