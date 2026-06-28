@@ -1,0 +1,104 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  get_tag:
+    name: Extract tag name
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.extract.outputs.tag }}
+      version: ${{ steps.extract.outputs.version }}
+
+    steps:
+      - name: Get tag name
+        id: extract
+        run: |
+          echo "tag=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build Release
+    runs-on: ubuntu-24.04
+    needs: get_tag
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up JDK
+        uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520 # v5.4.0
+        with:
+          java-version-file: .github/.java-version
+          distribution: temurin
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+
+      - name: Validate version matches tag
+        run: |
+          VERSION_NAME=$(grep 'versionName' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+          TAG_VERSION="${{ needs.get_tag.outputs.version }}"
+          if [ "$VERSION_NAME" != "$TAG_VERSION" ]; then
+            echo "ERROR: versionName ($VERSION_NAME) does not match tag version ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "Version validation passed: $VERSION_NAME"
+
+      - name: Build release APK
+        run: ./gradlew assembleRelease
+
+      - name: Rename APK
+        run: |
+          mv app/build/outputs/apk/release/app-release-unsigned.apk TurnZero-${{ needs.get_tag.outputs.tag }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-apk
+          path: TurnZero-${{ needs.get_tag.outputs.tag }}.apk
+
+      - name: Upload mapping artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mapping-${{ needs.get_tag.outputs.tag }}
+          path: app/build/outputs/mapping/release
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-24.04
+    needs: [get_tag, build]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
+        with:
+          tag_name: ${{ needs.get_tag.outputs.tag }}
+          name: TurnZero ${{ needs.get_tag.outputs.tag }}
+          body: |
+            ## Changes
+
+            See [full changelog](https://github.com/Prehistoic/TurnZero/releases) for details.
+
+            ## Download
+
+            Download the APK below and install it on your device.
+          files: |
+            TurnZero-${{ needs.get_tag.outputs.tag }}.apk
+          draft: true
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}

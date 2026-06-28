@@ -31,6 +31,10 @@ sealed class Screen(val route: String) {
     }
 
     data object LanguageSettings : Screen("settings/language")
+
+    data object AboutSettings : Screen("settings/about")
+
+    data object LicensesSettings : Screen("settings/licenses")
 }
 
 data class BottomNavItem(

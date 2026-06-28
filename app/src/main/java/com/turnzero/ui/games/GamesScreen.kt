@@ -12,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
+import com.turnzero.R
 import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.core.ui.components.*
 
@@ -38,6 +40,7 @@ fun GamesScreen(
         topBar = {
             TZTopBar(
                 title = "TurnZero",
+                logoPainter = painterResource(id = R.drawable.ic_tz_logo),
                 showLayoutButton = true,
                 showSearchButton = true,
                 isSearchActive = isSearchActive,
