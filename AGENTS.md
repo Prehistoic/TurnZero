@@ -172,6 +172,30 @@ chore: update Compose BOM to 2025.01.00
 - Squash-merge into `main` to keep history clean.
 - PR title follows the same Conventional Commits format.
 - Ensure all checks pass (build, lint, tests) before merging.
+- **PR description must include the relevant CHANGELOG entry** for the changes being merged.
+
+### Changelog
+
+The project maintains a `CHANGELOG.md` at the repository root following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
+
+**Rules:**
+- Every PR that changes functionality MUST update `CHANGELOG.md` under the `## [Unreleased]` section.
+- Use the categories: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
+- Each entry is a single bullet point describing the change from the user's perspective.
+- Before creating a release, move the `[Unreleased]` entries to a new version section with the date.
+- The version header must match the tag format exactly (e.g., `## [0.2.0] - 2026-06-28`).
+- The release workflow automatically extracts the changelog section for the tagged version as the GitHub Release body.
+
+**Example entry:**
+```markdown
+## [Unreleased]
+
+### Added
+- About section in Settings with version info and update checker
+
+### Fixed
+- Tool tiles now have uniform height in grid layout
+```
 
 ## Dependency Management
 

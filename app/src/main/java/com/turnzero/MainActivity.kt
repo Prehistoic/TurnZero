@@ -25,7 +25,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val systemDark = isSystemInDarkTheme()
-            var isDark by remember { mutableStateOf(systemDark) }
+
+            val savedThemeMode = remember {
+                runBlocking {
+                    ServiceLocator.dataStore.data.first()[UserPreferences.THEME_MODE] ?: "system"
+                }
+            }
+            var isDark by remember {
+                mutableStateOf(
+                    when (savedThemeMode) {
+                        "light" -> false
+                        "dark" -> true
+                        else -> systemDark
+                    }
+                )
+            }
 
             val savedColorTheme = remember {
                 runBlocking {
