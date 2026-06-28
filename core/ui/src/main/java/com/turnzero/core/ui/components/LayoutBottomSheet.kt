@@ -31,7 +31,7 @@ fun LayoutBottomSheet(
     onLayoutSelected: (LayoutMode) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var selected by remember { mutableStateOf(currentLayout) }
+    var selected by remember(currentLayout) { mutableStateOf(currentLayout) }
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -75,7 +75,8 @@ fun LayoutBottomSheet(
             Spacer(Modifier.height(16.dp))
             Button(
                 onClick = { onLayoutSelected(selected) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = selected != currentLayout
             ) {
                 Text("Apply")
             }

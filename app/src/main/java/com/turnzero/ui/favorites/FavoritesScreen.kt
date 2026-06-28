@@ -2,9 +2,11 @@ package com.turnzero.ui.favorites
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +27,8 @@ fun FavoritesScreen(
     onToolClick: ((gameId: String, toolId: String) -> Unit)? = null,
     highlightedToolId: String? = null,
     onToolLongClick: ((String) -> Unit)? = null,
-    onTapOutside: (() -> Unit)? = null
+    onTapOutside: (() -> Unit)? = null,
+    layoutMode: LayoutMode = LayoutMode.GRID
 ) {
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
@@ -115,24 +118,45 @@ fun FavoritesScreen(
                         }
                     )
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = padding,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(filteredEntries, key = { it.key }) { entry ->
-                        ToolTile(
-                            tool = entry.tool,
-                            layoutMode = LayoutMode.GRID,
-                            onClick = {
-                                onToolClick?.invoke(entry.gameId, entry.tool.id)
-                            },
-                            onLongClick = onToolLongClick?.let { { it(entry.key) } },
-                            isHighlighted = entry.key == highlightedToolId,
-                            subtitle = entry.gameName
-                        )
+                if (layoutMode == LayoutMode.GRID) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = padding,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(filteredEntries, key = { it.key }) { entry ->
+                            ToolTile(
+                                tool = entry.tool,
+                                layoutMode = layoutMode,
+                                onClick = {
+                                    onToolClick?.invoke(entry.gameId, entry.tool.id)
+                                },
+                                onLongClick = onToolLongClick?.let { { it(entry.key) } },
+                                isHighlighted = entry.key == highlightedToolId,
+                                subtitle = entry.gameName
+                            )
+                        }
+                    }
+                } else {
+                    LazyColumn(
+                        contentPadding = padding,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        items(filteredEntries, key = { it.key }) { entry ->
+                            ToolTile(
+                                tool = entry.tool,
+                                layoutMode = layoutMode,
+                                onClick = {
+                                    onToolClick?.invoke(entry.gameId, entry.tool.id)
+                                },
+                                onLongClick = onToolLongClick?.let { { it(entry.key) } },
+                                isHighlighted = entry.key == highlightedToolId,
+                                subtitle = entry.gameName
+                            )
+                        }
                     }
                 }
             }
