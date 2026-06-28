@@ -37,12 +37,6 @@ android {
         compose = true
         buildConfig = true
     }
-
-    sourceSets {
-        getByName("main") {
-            assets.srcDirs(layout.buildDirectory.dir("generated/assets"))
-        }
-    }
 }
 
 kotlin {
@@ -79,47 +73,61 @@ val generateLicensesJson by tasks.registering {
     group = "licenses"
     description = "Generates licenses.json from resolved dependencies"
 
-    val outputDir = layout.buildDirectory.dir("generated/assets/licenses")
-    val outputFile = outputDir.map { it.file("licenses.json") }
+    val outputDir = layout.projectDirectory.dir("src/main/assets/licenses")
+    val outputFile = outputDir.file("licenses.json")
 
-    inputs.files(configurations.runtimeClasspath)
     outputs.dir(outputDir)
 
     doLast {
         val deps = mutableListOf<Map<String, String>>()
+        val runtimeConfig = configurations.getByName("debugRuntimeClasspath")
+        val resolved = runtimeConfig.resolvedConfiguration
+        val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
 
-        configurations.runtimeClasspath.get().resolvedConfiguration.resolvedArtifacts.forEach { artifact ->
-            try {
-                val module = artifact.moduleVersion.id
-                val pomFile = artifact.file.resolveSibling(
-                    "${module.name}-${module.version}.pom"
-                )
-                val licenses = mutableListOf<String>()
-                if (pomFile.exists()) {
-                    val xml = groovy.xml.XmlSlurper(false, false).parse(pomFile)
-                    xml.licenses.license.each { lic ->
-                        licenses.add(lic.name.text().trim())
+        try {
+            resolved.resolvedArtifacts.forEach { artifact ->
+                try {
+                    val module = artifact.moduleVersion.id
+                    val pomFile = artifact.file.resolveSibling(
+                        "${module.name}-${module.version}.pom"
+                    )
+                    val licenses = mutableListOf<String>()
+                    if (pomFile.exists()) {
+                        val doc = factory.newDocumentBuilder().parse(pomFile)
+                        val licenseNodes = doc.getElementsByTagName("license")
+                        for (i in 0 until licenseNodes.length) {
+                            val licenseNode = licenseNodes.item(i)
+                            val nameNodes = licenseNode.childNodes
+                            for (j in 0 until nameNodes.length) {
+                                val child = nameNodes.item(j)
+                                if (child.nodeName == "name") {
+                                    licenses.add(child.textContent.trim())
+                                }
+                            }
+                        }
                     }
+                    if (licenses.isEmpty()) {
+                        licenses.add("Unknown")
+                    }
+                    deps.add(mapOf(
+                        "name" to module.name,
+                        "group" to module.group,
+                        "version" to module.version,
+                        "licenses" to licenses.joinToString(", ")
+                    ))
+                } catch (e: Exception) {
+                    logger.warn("Failed to parse license: ${e.message}")
                 }
-                if (licenses.isEmpty()) {
-                    licenses.add("Unknown")
-                }
-                deps.add(mapOf(
-                    "name" to module.name,
-                    "group" to module.group,
-                    "version" to module.version,
-                    "licenses" to licenses.joinToString(", ")
-                ))
-            } catch (e: Exception) {
-                logger.warn("Failed to parse license for ${artifact.moduleVersion.id}: ${e.message}")
             }
+        } finally {
+            runtimeConfig.resolvedConfiguration.rethrowFailure()
         }
 
         val json = groovy.json.JsonOutput.toJson(deps.distinctBy { "${it["group"]}:${it["name"]}" }
             .sortedBy { it["name"].toString().lowercase() })
 
-        outputFile.get().asFile.parentFile.mkdirs()
-        outputFile.get().asFile.writeText(json)
+        outputFile.asFile.parentFile.mkdirs()
+        outputFile.asFile.writeText(json)
     }
 }
 
