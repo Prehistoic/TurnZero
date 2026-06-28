@@ -3,6 +3,7 @@ package com.turnzero.ui.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,7 +20,8 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK }
 @Composable
 fun SettingsScreen(
     onSearchClick: () -> Unit,
-    onAppearanceClick: () -> Unit
+    onAppearanceClick: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -42,6 +44,15 @@ fun SettingsScreen(
                 title = "Appearance",
                 description = "Theme, colors and language",
                 onClick = onAppearanceClick
+            )
+
+            HorizontalDivider()
+
+            SettingsCategoryRow(
+                icon = Icons.Outlined.Info,
+                title = "About",
+                description = "Version, licenses and more",
+                onClick = onAboutClick
             )
 
             HorizontalDivider()
