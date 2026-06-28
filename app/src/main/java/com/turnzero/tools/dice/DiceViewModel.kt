@@ -28,13 +28,11 @@ class DiceViewModel @Inject constructor(
         viewModelScope.launch {
             val pool = diceRepo.getPool(gameId)
             val color = diceRepo.getSelectedColor()
-            val history = diceRepo.getHistory()
             val presets = getPresetsForGame(gameId)
             _uiState.update {
                 it.copy(
                     dice = pool,
                     selectedColor = color,
-                    history = history,
                     presets = presets
                 )
             }
@@ -86,7 +84,6 @@ class DiceViewModel @Inject constructor(
         )
         val updatedHistory = (listOf(roll) + state.history).take(10)
         _uiState.update { it.copy(isRolling = false, history = updatedHistory) }
-        viewModelScope.launch { diceRepo.saveHistory(updatedHistory) }
     }
 
     fun loadPreset(preset: DicePreset) {
@@ -95,7 +92,6 @@ class DiceViewModel @Inject constructor(
 
     fun clearHistory() {
         _uiState.update { it.copy(history = emptyList()) }
-        viewModelScope.launch { diceRepo.saveHistory(emptyList()) }
     }
 
     fun toggleHistory() {
