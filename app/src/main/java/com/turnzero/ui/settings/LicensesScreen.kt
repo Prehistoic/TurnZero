@@ -40,10 +40,10 @@ fun LicensesScreen(onBack: () -> Unit) {
         ) {
             items(libraries, key = { it.uniqueId }) { library ->
                 LicenseRow(
-                    name = library.name,
+                    name = library.name ?: library.artifactId ?: library.uniqueId,
                     artifactId = library.artifactId,
-                    version = library.artifactVersion,
-                    licenses = library.licenses.joinToString(", ") { it.name }
+                    version = library.artifactVersion ?: "",
+                    licenses = library.licenses?.joinToString(", ") { it.name } ?: ""
                 )
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
