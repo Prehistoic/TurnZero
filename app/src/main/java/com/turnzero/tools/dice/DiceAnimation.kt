@@ -28,7 +28,7 @@ fun DiceAnimation(
     isRolling: Boolean,
     onAnimationComplete: () -> Unit,
     modifier: Modifier = Modifier,
-    dieSize: Dp = 72.dp,
+    dieSize: Dp,
     onRoll: () -> Unit = {},
     triggerScale: Int = 0
 ) {
@@ -111,7 +111,7 @@ fun DieCard(
     die: Die,
     displayNumber: Int?,
     modifier: Modifier = Modifier,
-    dieSize: Dp = 72.dp
+    dieSize: Dp
 ) {
     val dieColor = Color(die.color.hex)
     val isWhite = die.color == DiceColor.WHITE

@@ -23,21 +23,11 @@ fun DiceScreen(
     modifier: Modifier = Modifier
 ) {
     val canRoll = uiState.dice.isNotEmpty() && !uiState.isRolling
-    val dieSize = when {
-        uiState.dice.size <= 2 -> 120.dp
-        uiState.dice.size <= 3 -> 100.dp
-        uiState.dice.size <= 4 -> 96.dp
-        uiState.dice.size <= 6 -> 80.dp
-        uiState.dice.size <= 9 -> 68.dp
-        uiState.dice.size <= 12 -> 56.dp
-        uiState.dice.size <= 16 -> 48.dp
-        else -> 40.dp
-    }
 
     var tapCount by remember { mutableIntStateOf(0) }
 
     Column(modifier = modifier.fillMaxSize()) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
@@ -48,29 +38,29 @@ fun DiceScreen(
                 ) { tapCount++ },
             contentAlignment = Alignment.Center
         ) {
-            DiceAnimation(
-                dice = uiState.dice,
-                results = uiState.results,
-                isRolling = uiState.isRolling,
-                onAnimationComplete = onAnimationComplete,
-                onRoll = onRoll,
-                dieSize = dieSize,
-                triggerScale = tapCount
-            )
-        }
+            val columns = uiState.dice.chunked(4).maxOfOrNull { it.size }?.coerceAtLeast(1) ?: 1
+            val availableWidth = maxWidth * 0.8f
+            val gaps = 8.dp * (columns - 1)
+            val dieSize = (availableWidth - gaps) / columns
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            if (uiState.total != null && !uiState.isRolling) {
-                Text(
-                    text = "Total: ${uiState.total}",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                DiceAnimation(
+                    dice = uiState.dice,
+                    results = uiState.results,
+                    isRolling = uiState.isRolling,
+                    onAnimationComplete = onAnimationComplete,
+                    onRoll = onRoll,
+                    dieSize = dieSize,
+                    triggerScale = tapCount
                 )
+                if (uiState.total != null && !uiState.isRolling) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Total: ${uiState.total}",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
