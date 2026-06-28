@@ -75,14 +75,20 @@ private fun ToolTileGrid(
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(Modifier.height(10.dp))
-            Text(
-                text = tool.name,
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.heightIn(min = 48.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = tool.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             if (subtitle != null) {
                 Spacer(Modifier.height(4.dp))
                 Text(
