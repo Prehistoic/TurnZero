@@ -1,5 +1,7 @@
 package com.turnzero.tools.dice
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -9,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +28,9 @@ fun DiceAnimation(
     isRolling: Boolean,
     onAnimationComplete: () -> Unit,
     modifier: Modifier = Modifier,
-    dieSize: Dp = 72.dp
+    dieSize: Dp = 72.dp,
+    onRoll: () -> Unit = {},
+    triggerScale: Int = 0
 ) {
     val hasRolled = results != null
 
@@ -54,10 +59,29 @@ fun DiceAnimation(
         }
     }
 
+    // Tap scale animation
+    var targetScale by remember { mutableFloatStateOf(1f) }
+
+    LaunchedEffect(triggerScale) {
+        if (triggerScale > 0) {
+            targetScale = 1.08f
+            delay(100)
+            targetScale = 1f
+            delay(80)
+            onRoll()
+        }
+    }
+
+    val animatedScale by animateFloatAsState(
+        targetValue = targetScale,
+        animationSpec = spring(dampingRatio = 0.5f, stiffness = 500f),
+        label = "tapScale"
+    )
+
     val rows = dice.chunked(4)
 
     Column(
-        modifier = modifier,
+        modifier = modifier.scale(animatedScale),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

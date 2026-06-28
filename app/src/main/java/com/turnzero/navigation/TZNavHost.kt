@@ -363,25 +363,20 @@ fun TZNavHost(
                 var showSwitcher by remember { mutableStateOf(false) }
                 var showOptions by remember { mutableStateOf(false) }
 
-                Scaffold(
-                    topBar = {
-                        TZTopBar(
-                            title = tool.name,
-                            showBackButton = true,
-                            onBackClick = { navController.popBackStack() },
-                            actions = tool.TopBarActions()
-                        )
-                    },
-                    bottomBar = {
-                        ToolBottomNavBar(
-                            onToolsClick = { showSwitcher = true },
-                            onOptionsClick = { showOptions = true }
-                        )
-                    }
-                ) { contentPadding ->
-                    Box(modifier = Modifier.padding(contentPadding)) {
+                Column {
+                    TZTopBar(
+                        title = tool.name,
+                        showBackButton = true,
+                        onBackClick = { navController.popBackStack() },
+                        actions = tool.TopBarActions()
+                    )
+                    Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                         tool.Screen(onBack = { navController.popBackStack() })
                     }
+                    ToolBottomNavBar(
+                        onToolsClick = { showSwitcher = true },
+                        onOptionsClick = { showOptions = true }
+                    )
                 }
 
                 if (showSwitcher) {

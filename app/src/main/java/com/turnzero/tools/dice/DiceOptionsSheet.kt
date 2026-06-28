@@ -49,7 +49,11 @@ fun DiceOptionsSheet(
                             selected = false,
                             onClick = { onLoadPreset(preset) },
                             label = { Text(preset.name, fontSize = 12.sp) },
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            colors = FilterChipDefaults.filterChipColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                labelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
                         )
                     }
                 }
