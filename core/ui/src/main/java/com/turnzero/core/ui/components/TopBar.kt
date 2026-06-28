@@ -1,5 +1,6 @@
 package com.turnzero.core.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -71,11 +72,10 @@ fun TZTopBar(
             } else {
                 if (logoPainter != null) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
+                        Image(
                             painter = logoPainter,
                             contentDescription = "TurnZero logo",
-                            modifier = Modifier.size(28.dp),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            modifier = Modifier.size(28.dp)
                         )
                         Spacer(Modifier.width(10.dp))
                         Text(
