@@ -119,13 +119,17 @@ fun DiceOptionsSheet(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     row.forEach { faceCount ->
+                        val isWhite = uiState.selectedColor == DiceColor.WHITE
                         val colorHex = Color(uiState.selectedColor.hex)
+                        val tokenBorder = if (isWhite) Color.Black else colorHex
+                        val tokenBg = if (isWhite) Color.White else colorHex.copy(alpha = 0.1f)
+                        val tokenText = if (isWhite) Color.Black else colorHex
                         Box(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .size(52.dp)
-                                .border(2.dp, colorHex, RoundedCornerShape(8.dp))
-                                .background(colorHex.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+                                .border(2.dp, tokenBorder, RoundedCornerShape(8.dp))
+                                .background(tokenBg, RoundedCornerShape(8.dp))
                                 .clickable { onChangeDieCount(faceCount, uiState.selectedColor, 1) },
                             contentAlignment = Alignment.Center
                         ) {
@@ -133,7 +137,7 @@ fun DiceOptionsSheet(
                                 text = "d$faceCount",
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = colorHex,
+                                color = tokenText,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -151,6 +155,10 @@ fun DiceOptionsSheet(
             ) {
                 DiceColor.entries.forEach { color ->
                     val isSelected = color == uiState.selectedColor
+                    val isWhite = color == DiceColor.WHITE
+                    val dotBorder = if (isSelected) MaterialTheme.colorScheme.onSurface
+                        else if (isWhite) Color.Black
+                        else Color.Transparent
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 6.dp)
@@ -158,8 +166,8 @@ fun DiceOptionsSheet(
                             .clip(CircleShape)
                             .background(Color(color.hex))
                             .border(
-                                width = if (isSelected) 3.dp else 0.dp,
-                                color = if (isSelected) MaterialTheme.colorScheme.onSurface else Color.Transparent,
+                                width = if (isSelected || isWhite) 3.dp else 0.dp,
+                                color = dotBorder,
                                 shape = CircleShape
                             )
                             .clickable { onSetSelectedColor(color) }

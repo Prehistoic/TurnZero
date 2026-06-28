@@ -119,7 +119,6 @@ fun DieCard(
 
     val borderColor = if (isWhite) Color.Black else dieColor
     val bgColor = if (isWhite) Color.White else dieColor.copy(alpha = 0.12f)
-    val labelColor = if (isWhite) Color.Black else dieColor
 
     val borderWidth = (dieSize.value / 32f).dp
     val innerPadding = (dieSize.value / 16f).dp
@@ -139,14 +138,14 @@ fun DieCard(
         Text(
             text = faceLabel,
             style = MaterialTheme.typography.labelSmall,
-            color = labelColor,
+            color = borderColor,
             fontSize = labelFontSize
         )
         Spacer(modifier = Modifier.height(gap))
         Text(
             text = if (displayNumber != null) displayNumber.toString() else faceLabel,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = borderColor,
             fontSize = numberFontSize,
             textAlign = TextAlign.Center
         )
