@@ -136,33 +136,6 @@ val generateLicensesJson by tasks.registering {
         outputFile.asFile.parentFile.mkdirs()
         outputFile.asFile.writeText(json)
     }
-                            }
-                        }
-                        if (licenses.isEmpty()) licenses.add("Unknown")
-
-                        val displayName = artifactId.ifEmpty { name.substringBeforeLast("-") }
-                        val displayVersion = version.ifEmpty { name.substringAfterLast("-") }
-
-                        deps.add(mapOf(
-                            "name" to displayName,
-                            "group" to groupId,
-                            "version" to displayVersion,
-                            "licenses" to licenses.joinToString(", ")
-                        ))
-                    } catch (_: Exception) {
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            logger.warn("Could not resolve licenses: ${e.message}")
-        }
-
-        val json = groovy.json.JsonOutput.toJson(deps.distinctBy { "${it["group"]}:${it["name"]}" }
-            .sortedBy { it["name"].toString().lowercase() })
-
-        outputFile.asFile.parentFile.mkdirs()
-        outputFile.asFile.writeText(json)
-    }
 }
 
 tasks.named("preBuild") {
