@@ -1,10 +1,14 @@
 package com.turnzero.tools.dice
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Casino
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.*
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.tools.api.Tool
 
 class DiceTool : Tool {
@@ -14,10 +18,41 @@ class DiceTool : Tool {
     override val supportedGames = setOf("*")
 
     @Composable
+    override fun TopBarActions(): @Composable RowScope.() -> Unit = {
+        val viewModel: DiceViewModel = hiltViewModel()
+        IconButton(onClick = { viewModel.toggleHistory() }) {
+            Icon(Icons.Default.History, contentDescription = "History")
+        }
+    }
+
+    @Composable
     override fun Screen(onBack: () -> Unit) {
-        Text(
-            text = "Dice Roller — Coming Soon",
-            style = MaterialTheme.typography.titleMedium
+        val viewModel: DiceViewModel = hiltViewModel()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+        DiceScreen(
+            uiState = uiState,
+            onChangeDieCount = viewModel::changeDieCount,
+            onSetSelectedColor = viewModel::setSelectedColor,
+            onRoll = viewModel::roll,
+            onAnimationComplete = viewModel::animationComplete,
+            onLoadPreset = viewModel::loadPreset,
+            onClearHistory = viewModel::clearHistory,
+            onToggleHistory = viewModel::toggleHistory
+        )
+    }
+
+    @Composable
+    override fun OptionsSheet(onDismiss: () -> Unit) {
+        val viewModel: DiceViewModel = hiltViewModel()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+        DiceOptionsSheet(
+            uiState = uiState,
+            onChangeDieCount = viewModel::changeDieCount,
+            onSetSelectedColor = viewModel::setSelectedColor,
+            onLoadPreset = viewModel::loadPreset,
+            onDismiss = onDismiss
         )
     }
 }

@@ -30,7 +30,6 @@ import com.turnzero.ui.settings.LicensesScreen
 import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
 import com.turnzero.ui.settings.ThemeMode
-import com.turnzero.ui.tools.ToolSwitcherFAB
 import com.turnzero.ui.tools.ToolSwitcherSheet
 import com.turnzero.ui.tools.ToolsScreen
 import kotlinx.coroutines.flow.first
@@ -99,14 +98,23 @@ fun TZNavHost(
     var favoriteToolIds by remember { mutableStateOf(initialFavorites) }
     var selectedToolId by remember { mutableStateOf<String?>(null) }
     var currentLanguage by remember { mutableStateOf(savedLanguage) }
+    var toolShowSwitcher by remember { mutableStateOf(false) }
+    var toolShowOptions by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentRoute) {
         selectedToolId = null
+        toolShowSwitcher = false
+        toolShowOptions = false
     }
 
     Scaffold(
         bottomBar = {
-            if (selectedToolId != null) {
+            if (currentRoute?.startsWith("tool/") == true) {
+                ToolBottomNavBar(
+                    onToolsClick = { toolShowSwitcher = true },
+                    onOptionsClick = { toolShowOptions = true }
+                )
+            } else if (selectedToolId != null) {
                 NavigationBar {
                     val isFavorited = selectedToolId in favoriteToolIds
                     NavigationBarItem(
@@ -359,35 +367,24 @@ fun TZNavHost(
                 val allTools = remember(gameId) { toolRegistry.getToolsForGame(gameId) }
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
-                var showSwitcher by remember { mutableStateOf(false) }
-
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Scaffold(
-                        topBar = {
-                            TZTopBar(
-                                title = tool.name,
-                                showBackButton = true,
-                                onBackClick = { navController.popBackStack() }
-                            )
-                        },
-                        floatingActionButton = {
-                            ToolSwitcherFAB(
-                                onTap = { showSwitcher = true }
-                            )
-                        }
-                    ) { contentPadding ->
-                        Box(modifier = Modifier.padding(contentPadding)) {
-                            tool.Screen(onBack = { navController.popBackStack() })
-                        }
+                Column {
+                    TZTopBar(
+                        title = tool.name,
+                        showBackButton = true,
+                        onBackClick = { navController.popBackStack() },
+                        actions = tool.TopBarActions()
+                    )
+                    Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                        tool.Screen(onBack = { navController.popBackStack() })
                     }
                 }
 
-                if (showSwitcher) {
+                if (toolShowSwitcher) {
                     ToolSwitcherSheet(
                         tools = allTools,
                         currentToolId = toolId,
                         onToolSelected = { selected ->
-                            showSwitcher = false
+                            toolShowSwitcher = false
                             navController.navigate(
                                 Screen.ToolDetail.createRoute(gameId, selected.id)
                             ) {
@@ -395,8 +392,12 @@ fun TZNavHost(
                                 launchSingleTop = true
                             }
                         },
-                        onDismiss = { showSwitcher = false }
+                        onDismiss = { toolShowSwitcher = false }
                     )
+                }
+
+                if (toolShowOptions) {
+                    tool.OptionsSheet(onDismiss = { toolShowOptions = false })
                 }
             }
         }

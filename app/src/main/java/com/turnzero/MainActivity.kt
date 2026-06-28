@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
+import dagger.hilt.android.AndroidEntryPoint
 import com.turnzero.core.data.UserPreferences
 import com.turnzero.core.ui.theme.TZTheme
 import com.turnzero.core.ui.theme.colorThemes
@@ -17,6 +18,7 @@ import com.turnzero.navigation.TZNavHost
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
