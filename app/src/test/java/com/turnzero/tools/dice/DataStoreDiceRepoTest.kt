@@ -49,13 +49,13 @@ class DataStoreDiceRepoTest {
     }
 
     @Test
-    fun `saveHistory caps at 10 entries`() = runTest {
+    fun `saveHistory caps at 10 entries newest first`() = runTest {
         val ds = PreferenceDataStoreFactory.create(
             scope = backgroundScope,
             produceFile = { File(tempDir.newFolder(), "test_prefs.preferences_pb") }
         )
         val repo = DataStoreDiceRepo(ds)
-        val rolls = (1..15).map { i ->
+        val rolls = (1..15).reversed().map { i ->
             DiceRoll(
                 id = "r$i", timestamp = i.toLong(),
                 dice = listOf(Die(id = "d", faceCount = 6, color = DiceColor.RED)),

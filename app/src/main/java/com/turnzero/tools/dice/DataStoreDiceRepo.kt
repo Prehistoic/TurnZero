@@ -58,7 +58,7 @@ class DataStoreDiceRepo @Inject constructor(
     }
 
     override suspend fun saveHistory(history: List<DiceRoll>) {
-        val capped = history.takeLast(10).reversed()
+        val capped = history.take(10)
         dataStore.edit { prefs ->
             prefs[UserPreferences.DICE_HISTORY] = json.encodeToString(capped)
         }

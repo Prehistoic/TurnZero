@@ -84,7 +84,7 @@ class DiceViewModel @Inject constructor(
             results = results,
             total = results.sum()
         )
-        val updatedHistory = listOf(roll) + state.history
+        val updatedHistory = (listOf(roll) + state.history).take(10)
         _uiState.update { it.copy(isRolling = false, history = updatedHistory) }
         viewModelScope.launch { diceRepo.saveHistory(updatedHistory) }
     }
