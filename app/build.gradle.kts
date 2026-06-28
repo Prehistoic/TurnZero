@@ -96,7 +96,7 @@ val generateLicensesJson by tasks.registering {
                 )
                 val licenses = mutableListOf<String>()
                 if (pomFile.exists()) {
-                    val xml = groovy.xml.XmlSlurper().parse(pomFile)
+                    val xml = groovy.xml.XmlSlurper(false, false).parse(pomFile)
                     xml.licenses.license.each { lic ->
                         licenses.add(lic.name.text().trim())
                     }
@@ -110,7 +110,8 @@ val generateLicensesJson by tasks.registering {
                     "version" to module.version,
                     "licenses" to licenses.joinToString(", ")
                 ))
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.warn("Failed to parse license for ${artifact.moduleVersion.id}: ${e.message}")
             }
         }
 
