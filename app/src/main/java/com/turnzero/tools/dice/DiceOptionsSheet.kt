@@ -64,8 +64,17 @@ fun DiceOptionsSheet(
 
             // Dice pool (grouped by face+color)
             val grouped = uiState.dice.groupBy { it.faceCount to it.color }
+            if (grouped.isEmpty()) {
+                Text(
+                    text = "No dice",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
             grouped.forEach { (key, dice) ->
                 val (faceCount, color) = key
+                val isWhite = color == DiceColor.WHITE
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -98,6 +107,10 @@ fun DiceOptionsSheet(
                             .size(16.dp)
                             .clip(CircleShape)
                             .background(Color(color.hex))
+                            .then(
+                                if (isWhite) Modifier.border(1.dp, Color.Black, CircleShape)
+                                else Modifier
+                            )
                     )
                     IconButton(
                         onClick = { onChangeDieCount(faceCount, color, 1) },
@@ -120,10 +133,23 @@ fun DiceOptionsSheet(
                 ) {
                     row.forEach { faceCount ->
                         val isWhite = uiState.selectedColor == DiceColor.WHITE
+                        val isBlack = uiState.selectedColor == DiceColor.BLACK
                         val colorHex = Color(uiState.selectedColor.hex)
-                        val tokenBorder = if (isWhite) Color.Black else colorHex
-                        val tokenBg = if (isWhite) Color.White else colorHex.copy(alpha = 0.1f)
-                        val tokenText = if (isWhite) Color.Black else colorHex
+                        val tokenBorder = when {
+                            isWhite -> Color.Black
+                            isBlack -> Color.White
+                            else -> colorHex
+                        }
+                        val tokenBg = when {
+                            isWhite -> Color.White
+                            isBlack -> Color.Black
+                            else -> colorHex.copy(alpha = 0.1f)
+                        }
+                        val tokenText = when {
+                            isWhite -> Color.Black
+                            isBlack -> Color.White
+                            else -> colorHex
+                        }
                         Box(
                             modifier = Modifier
                                 .padding(4.dp)
@@ -156,9 +182,14 @@ fun DiceOptionsSheet(
                 DiceColor.entries.forEach { color ->
                     val isSelected = color == uiState.selectedColor
                     val isWhite = color == DiceColor.WHITE
-                    val dotBorder = if (isSelected) MaterialTheme.colorScheme.onSurface
-                        else if (isWhite) Color.Black
-                        else Color.Transparent
+                    val isBlack = color == DiceColor.BLACK
+                    val needsBorder = isSelected || isWhite || isBlack
+                    val dotBorder = when {
+                        isSelected -> MaterialTheme.colorScheme.primary
+                        isWhite -> MaterialTheme.colorScheme.outline
+                        isBlack -> Color.White
+                        else -> Color.Transparent
+                    }
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 6.dp)
@@ -166,7 +197,7 @@ fun DiceOptionsSheet(
                             .clip(CircleShape)
                             .background(Color(color.hex))
                             .border(
-                                width = if (isSelected || isWhite) 3.dp else 0.dp,
+                                width = if (needsBorder) 3.dp else 0.dp,
                                 color = dotBorder,
                                 shape = CircleShape
                             )

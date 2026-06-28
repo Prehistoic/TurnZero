@@ -115,10 +115,19 @@ fun DieCard(
 ) {
     val dieColor = Color(die.color.hex)
     val isWhite = die.color == DiceColor.WHITE
+    val isBlack = die.color == DiceColor.BLACK
     val faceLabel = "d${die.faceCount}"
 
-    val borderColor = if (isWhite) Color.Black else dieColor
-    val bgColor = if (isWhite) Color.White else dieColor.copy(alpha = 0.12f)
+    val borderColor = when {
+        isWhite -> Color.Black
+        isBlack -> Color.White
+        else -> dieColor
+    }
+    val bgColor = when {
+        isWhite -> Color.White
+        isBlack -> Color.Black
+        else -> dieColor.copy(alpha = 0.12f)
+    }
 
     val borderWidth = (dieSize.value / 32f).dp
     val innerPadding = (dieSize.value / 16f).dp
