@@ -22,9 +22,11 @@ import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.core.ui.components.*
 import com.turnzero.ui.favorites.FavoritesScreen
 import com.turnzero.ui.games.GamesScreen
+import com.turnzero.ui.settings.AboutSettingsScreen
 import com.turnzero.ui.settings.AppearanceSettingsScreen
 import com.turnzero.ui.settings.DisplaySettingsScreen
 import com.turnzero.ui.settings.LanguageSelectionScreen
+import com.turnzero.ui.settings.LicensesScreen
 import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
 import com.turnzero.ui.settings.ThemeMode
@@ -203,6 +205,9 @@ fun TZNavHost(
                     },
                     onAppearanceClick = {
                         navController.navigate(Screen.AppearanceSettings.route)
+                    },
+                    onAboutClick = {
+                        navController.navigate(Screen.AboutSettings.route)
                     }
                 )
             }
@@ -292,6 +297,21 @@ fun TZNavHost(
 
             composable(Screen.SearchSettings.route) {
                 SearchSettingsScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AboutSettings.route) {
+                AboutSettingsScreen(
+                    onBack = { navController.popBackStack() },
+                    onLicensesClick = {
+                        navController.navigate(Screen.LicensesSettings.route)
+                    }
+                )
+            }
+
+            composable(Screen.LicensesSettings.route) {
+                LicensesScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
