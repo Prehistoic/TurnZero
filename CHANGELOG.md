@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-28
+
+### Added
+- Fully-functional Dice Roller tool with configurable dice pool
+- Support for standard RPG dice: d2, d4, d6, d8, d10, d12, d20, d100
+- Six dice color options per die (Red, Blue, Green, Yellow, White, Black)
+- Number-shuffle animation on roll with deceleration and bounce settle
+- Roll history panel (session-only, last 10 rolls)
+- Game-specific dice presets (dev-defined, e.g., Yu-Gi-Oh! 1d6 and 2d6)
+- New tool bottom navbar with Tools (switcher) and Options for all tool screens
+- Tool interface extended with OptionsSheet and TopBarActions composables
+- Hilt dependency injection activated across the app
+- Adaptive die sizing based on screen width and dice count
+
+### Changed
+- Dice pool persists per-game across sessions
+- Tool detail screens now use a dedicated bottom bar replacing the FAB
+- Tool navbar replaces Games/Favorites/Settings bar on tool screens
+- History icon moved from FAB to top bar actions
+
 ## [0.2.2] - 2026-06-28
 
 ### Changed
