@@ -1,11 +1,9 @@
 package com.turnzero.ui.settings
 
-import androidx.compose.animation.*
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Info
@@ -14,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -24,8 +21,9 @@ import com.turnzero.BuildConfig
 import com.turnzero.R
 import com.turnzero.core.ui.components.TZTopBar
 import com.turnzero.update.UpdateManager
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,27 +36,22 @@ fun AboutSettingsScreen(
     val scope = rememberCoroutineScope()
     var updateStatus by remember { mutableStateOf<UpdateManager.UpdateStatus>(UpdateManager.UpdateStatus.Idle) }
     val updateManager = remember { UpdateManager(context) }
-    var showPill by remember { mutableStateOf(false) }
-    var pillMessage by remember { mutableStateOf("") }
 
     LaunchedEffect(updateStatus) {
         if (updateStatus is UpdateManager.UpdateStatus.UpToDate) {
-            pillMessage = "No update available"
-            showPill = true
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "No update available", Toast.LENGTH_SHORT).show()
+            }
             updateStatus = UpdateManager.UpdateStatus.Idle
-            delay(2000)
-            showPill = false
         }
         if (updateStatus is UpdateManager.UpdateStatus.Error) {
-            pillMessage = (updateStatus as UpdateManager.UpdateStatus.Error).message
-            showPill = true
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, (updateStatus as UpdateManager.UpdateStatus.Error).message, Toast.LENGTH_SHORT).show()
+            }
             updateStatus = UpdateManager.UpdateStatus.Idle
-            delay(2000)
-            showPill = false
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
     Scaffold(
         topBar = {
             TZTopBar(
@@ -168,19 +161,16 @@ fun AboutSettingsScreen(
                 ) {
                     SocialLink(
                         icon = painterResource(id = R.drawable.ic_web),
-                        label = "Web",
                         url = "https://turnzero.example.com",
                         uriHandler = uriHandler
                     )
                     SocialLink(
                         icon = painterResource(id = R.drawable.ic_discord),
-                        label = "Discord",
                         url = "https://discord.gg/turnzero",
                         uriHandler = uriHandler
                     )
                     SocialLink(
                         icon = painterResource(id = R.drawable.ic_github),
-                        label = "GitHub",
                         url = "https://github.com/Prehistoic/TurnZero",
                         uriHandler = uriHandler
                     )
@@ -188,37 +178,6 @@ fun AboutSettingsScreen(
                 Spacer(Modifier.height(32.dp))
             }
         }
-    }
-
-    AnimatedVisibility(
-        visible = showPill,
-        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
-        modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp)
-    ) {
-        Surface(
-            color = MaterialTheme.colorScheme.inverseSurface,
-            shape = RoundedCornerShape(24.dp),
-            shadowElevation = 6.dp
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_tz_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(
-                    text = pillMessage,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.inverseOnSurface
-                )
-            }
-        }
-    }
     }
 
     LaunchedEffect(updateStatus) {
@@ -236,25 +195,15 @@ fun AboutSettingsScreen(
 @Composable
 private fun SocialLink(
     icon: androidx.compose.ui.graphics.painter.Painter,
-    label: String,
     url: String,
     uriHandler: androidx.compose.ui.platform.UriHandler
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        IconButton(onClick = { uriHandler.openUri(url) }) {
-            Icon(
-                painter = icon,
-                contentDescription = label,
-                modifier = Modifier.size(28.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+    IconButton(onClick = { uriHandler.openUri(url) }) {
+        Icon(
+            painter = icon,
+            contentDescription = null,
+            modifier = Modifier.size(28.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
