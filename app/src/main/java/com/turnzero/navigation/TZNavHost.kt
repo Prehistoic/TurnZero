@@ -30,7 +30,6 @@ import com.turnzero.ui.settings.LicensesScreen
 import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
 import com.turnzero.ui.settings.ThemeMode
-import com.turnzero.ui.tools.ToolSwitcherFAB
 import com.turnzero.ui.tools.ToolSwitcherSheet
 import com.turnzero.ui.tools.ToolsScreen
 import kotlinx.coroutines.flow.first
@@ -360,25 +359,25 @@ fun TZNavHost(
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
                 var showSwitcher by remember { mutableStateOf(false) }
+                var showOptions by remember { mutableStateOf(false) }
 
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Scaffold(
-                        topBar = {
-                            TZTopBar(
-                                title = tool.name,
-                                showBackButton = true,
-                                onBackClick = { navController.popBackStack() }
-                            )
-                        },
-                        floatingActionButton = {
-                            ToolSwitcherFAB(
-                                onTap = { showSwitcher = true }
-                            )
-                        }
-                    ) { contentPadding ->
-                        Box(modifier = Modifier.padding(contentPadding)) {
-                            tool.Screen(onBack = { navController.popBackStack() })
-                        }
+                Scaffold(
+                    topBar = {
+                        TZTopBar(
+                            title = tool.name,
+                            showBackButton = true,
+                            onBackClick = { navController.popBackStack() }
+                        )
+                    },
+                    bottomBar = {
+                        ToolBottomNavBar(
+                            onToolsClick = { showSwitcher = true },
+                            onOptionsClick = { showOptions = true }
+                        )
+                    }
+                ) { contentPadding ->
+                    Box(modifier = Modifier.padding(contentPadding)) {
+                        tool.Screen(onBack = { navController.popBackStack() })
                     }
                 }
 
@@ -397,6 +396,10 @@ fun TZNavHost(
                         },
                         onDismiss = { showSwitcher = false }
                     )
+                }
+
+                if (showOptions) {
+                    tool.OptionsSheet(onDismiss = { showOptions = false })
                 }
             }
         }
