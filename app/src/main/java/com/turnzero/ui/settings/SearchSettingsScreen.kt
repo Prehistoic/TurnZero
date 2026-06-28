@@ -20,7 +20,11 @@ data class SettingEntry(
 val searchableSettings = listOf(
     SettingEntry("theme", "Appearance", "Theme", "Light, Dark or System"),
     SettingEntry("games_layout", "Display", "Games Layout", "Grid or List"),
-    SettingEntry("tools_layout", "Display", "Tools Layout", "Grid or List")
+    SettingEntry("tools_layout", "Display", "Tools Layout", "Grid or List"),
+    SettingEntry("about", "About", "Version", "App version, licenses and updates"),
+    SettingEntry("about", "About", "Changelog", "View release notes and changes"),
+    SettingEntry("about", "About", "Licenses", "Open source component licenses"),
+    SettingEntry("about", "About", "Updates", "Check for app updates")
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
