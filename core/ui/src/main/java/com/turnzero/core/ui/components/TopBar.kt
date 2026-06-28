@@ -1,6 +1,6 @@
 package com.turnzero.core.ui.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -13,7 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +31,7 @@ fun TZTopBar(
     onSearchClick: () -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
     onSearchClose: () -> Unit = {},
+    logoPainter: Painter? = null,
     modifier: Modifier = Modifier
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -65,10 +68,26 @@ fun TZTopBar(
                         .focusRequester(focusRequester)
                 )
             } else {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge
-                )
+                if (logoPainter != null) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = logoPainter,
+                            contentDescription = "TurnZero logo",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+                } else {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
             }
         },
         navigationIcon = {
