@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -48,11 +50,11 @@ fun DiceOptionsSheet(
                         FilterChip(
                             selected = false,
                             onClick = { onLoadPreset(preset) },
-                            label = { Text(preset.name, fontSize = 12.sp) },
+                            label = { Text(preset.name, fontSize = 14.sp) },
                             modifier = Modifier.padding(horizontal = 4.dp),
                             colors = FilterChipDefaults.filterChipColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                labelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                labelColor = MaterialTheme.colorScheme.onPrimary
                             )
                         )
                     }
@@ -62,7 +64,7 @@ fun DiceOptionsSheet(
                 Spacer(Modifier.height(8.dp))
             }
 
-            // Dice pool (grouped by face+color)
+            // Dice pool (grouped by face+color) — scrollable, 3 rows visible
             val grouped = uiState.dice.groupBy { it.faceCount to it.color }
             if (grouped.isEmpty()) {
                 Text(
@@ -72,51 +74,60 @@ fun DiceOptionsSheet(
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
-            grouped.forEach { (key, dice) ->
-                val (faceCount, color) = key
-                val isWhite = color == DiceColor.WHITE
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    IconButton(
-                        onClick = { onChangeDieCount(faceCount, color, -1) },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(Icons.Default.Remove, contentDescription = "Remove", modifier = Modifier.size(18.dp))
-                    }
-                    Text(
-                        text = "d$faceCount",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                    if (dice.size > 1) {
-                        Text(
-                            text = "× ${dice.size}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(16.dp)
-                            .clip(CircleShape)
-                            .background(Color(color.hex))
-                            .then(
-                                if (isWhite) Modifier.border(1.dp, Color.Black, CircleShape)
-                                else Modifier
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(144.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    grouped.forEach { (key, dice) ->
+                        val (faceCount, color) = key
+                        val isWhite = color == DiceColor.WHITE
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            IconButton(
+                                onClick = { onChangeDieCount(faceCount, color, -1) },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(Icons.Default.Remove, contentDescription = "Remove", modifier = Modifier.size(18.dp))
+                            }
+                            Text(
+                                text = "d$faceCount",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             )
-                    )
-                    IconButton(
-                        onClick = { onChangeDieCount(faceCount, color, 1) },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(18.dp))
+                            if (dice.size > 1) {
+                                Text(
+                                    text = "× ${dice.size}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .size(16.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(color.hex))
+                                    .then(
+                                        if (isWhite) Modifier.border(1.dp, Color.Black, CircleShape)
+                                        else Modifier
+                                    )
+                            )
+                            IconButton(
+                                onClick = { onChangeDieCount(faceCount, color, 1) },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(18.dp))
+                            }
+                        }
                     }
                 }
             }
