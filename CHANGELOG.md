@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-06-28
+
+### Added
+- Custom app logo and app icon with adaptive icon safe zone inset
+- CHANGELOG.md following Keep a Changelog format
+- AGENTS.md changelog update enforcement rules
+- Release workflow now auto-extracts changelog sections for GitHub Releases
+
+### Changed
+- Top bar logo uses Image instead of Icon to preserve original colors and transparency
+
+### Fixed
+- Theme mode now persists correctly across app restarts
+- Tool tiles in grid layout now have uniform height regardless of text length
+
+## [0.2.0] - 2026-06-28
+
 ### Added
 - About section in Settings with version info, changelog link, and update checker
 - OSS licenses screen with auto-detected dependency data (powered by AboutLibraries)
