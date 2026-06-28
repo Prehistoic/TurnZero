@@ -79,24 +79,37 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
       - name: Download APK artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: release-apk
+
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          VERSION="${{ needs.get_tag.outputs.version }}"
+          awk -v ver="$VERSION" '
+            BEGIN { found=0; output="" }
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "## \\[" ver "\\]") { found=1; next }
+            }
+            found { output = output $0 "\n" }
+            END { print output }
+          ' CHANGELOG.md > /tmp/changelog_entry.md
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/changelog_entry.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
         with:
           tag_name: ${{ needs.get_tag.outputs.tag }}
           name: TurnZero ${{ needs.get_tag.outputs.tag }}
-          body: |
-            ## Changes
-
-            See [full changelog](https://github.com/Prehistoic/TurnZero/releases) for details.
-
-            ## Download
-
-            Download the APK below and install it on your device.
+          body: ${{ steps.changelog.outputs.changelog }}
           files: |
             TurnZero-${{ needs.get_tag.outputs.tag }}.apk
           draft: true
