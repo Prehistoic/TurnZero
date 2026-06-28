@@ -9,7 +9,7 @@ import com.turnzero.core.tools.api.Tool
 
 class YuGiOhLifeCounter : Tool {
     override val id = "ygo-life-counter"
-    override val name = "Life Point Counter"
+    override val name = "LP Counter"
     override val icon = Icons.Default.Favorite
     override val supportedGames = setOf("yugioh")
 
