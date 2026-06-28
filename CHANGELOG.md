@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-06-29
+
+### Changed
+- Dice pool capped at 20 dice maximum
+- Die sizing now relative to screen width (35%/60%/80%) instead of hardcoded values
+- Total display centered between dice and bottom navbar
+- History limited to last 10 rolls (session-only, not persisted)
+
+### Fixed
+- White dice now render with black border and black text for visibility
+- Black dice now render with white border and white text for visibility
+- Dice numbers and labels match border color for all dice
+- ToolBottomNavBar height now matches TZBottomNavBar exactly
+- Fixed total area reserving space so dice never shift when total appears
+- Fixed tap-to-roll showing no highlight (indication = null)
+- Fixed brief scale animation triggering on tap before roll
+
+### Refactored
+- Removed all `runBlocking` calls from main thread (replaced with `LaunchedEffect`)
+- Deleted dead code: `Color.kt` (9 unused constants), `ToolSwitcherFAB`, `FAVORITE_GAMES` key, `Game.imageRes`
+- Extracted shared components: `TZDivider`, `TZEmptyState`, `navItemColors`
+- `FavoritesScreen` now supports LIST layout in addition to GRID
+- `LayoutBottomSheet`: fixed stale state memory and disabled Apply button when unchanged
+- Added 14 unit tests for `ToolRegistry`
+- App icon updated to use TurnZero logo with white background
+
 ## [0.3.0] - 2026-06-28
 
 ### Added
