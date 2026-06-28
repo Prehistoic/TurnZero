@@ -1,6 +1,7 @@
 # Superpowers
 docs/superpowers
 /.superpowers
+.opencode/plans/
 
 # Gradle files
 .gradle/
