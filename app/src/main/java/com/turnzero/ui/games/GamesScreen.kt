@@ -62,22 +62,7 @@ fun GamesScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "\u00AF\\_(\u30C4)_/\u00AF",
-                        style = MaterialTheme.typography.headlineLarge.copy(
-                            fontSize = 32.sp
-                        ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = "No result found",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                TZEmptyState(message = "No result found")
             }
         } else {
             when (currentLayout) {

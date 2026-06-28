@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.turnzero.core.ui.components.TZTopBar
 import com.turnzero.core.ui.components.TZDivider
+import com.turnzero.core.ui.components.TZEmptyState
 
 data class SettingEntry(
     val id: String,
@@ -68,22 +69,7 @@ fun SearchSettingsScreen(onBack: () -> Unit) {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "\u00AF\\_(\u30C4)_/\u00AF",
-                            style = MaterialTheme.typography.headlineLarge.copy(
-                                fontSize = 32.sp
-                            ),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text(
-                            text = "No result found",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    TZEmptyState(message = "No result found")
                 }
             } else if (results.isNotEmpty()) {
                 Column {
