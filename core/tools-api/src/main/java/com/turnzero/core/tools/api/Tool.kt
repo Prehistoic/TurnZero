@@ -11,4 +11,7 @@ interface Tool {
 
     @Composable
     fun Screen(onBack: () -> Unit)
+
+    @Composable
+    fun OptionsSheet(onDismiss: () -> Unit) {}
 }
