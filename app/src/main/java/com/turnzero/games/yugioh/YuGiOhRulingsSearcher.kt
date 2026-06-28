@@ -9,7 +9,7 @@ import com.turnzero.core.tools.api.Tool
 
 class YuGiOhRulingsSearcher : Tool {
     override val id = "ygo-rulings-searcher"
-    override val name = "Rulings Searcher"
+    override val name = "Rulings"
     override val icon = Icons.Default.Search
     override val supportedGames = setOf("yugioh")
 

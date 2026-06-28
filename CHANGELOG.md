@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-06-28
+
+### Changed
+- Shortened tool names: Dice Roller → Dice, Life Point Counter → LP Counter, Rulings Searcher → Rulings
+- Increased tool tile grid icon size from 48dp to 64dp
+- Tool names now single-line with bold weight
+- Reduced spacing between tool name and subtitle in favorites
+
 ## [0.2.1] - 2026-06-28
 
 ### Added

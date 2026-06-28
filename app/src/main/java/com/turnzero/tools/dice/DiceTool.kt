@@ -9,7 +9,7 @@ import com.turnzero.core.tools.api.Tool
 
 class DiceTool : Tool {
     override val id = "dice"
-    override val name = "Dice Roller"
+    override val name = "Dice"
     override val icon = Icons.Default.Casino
     override val supportedGames = setOf("*")
 
