@@ -39,28 +39,34 @@ fun DiceScreen(
             contentAlignment = Alignment.Center
         ) {
             val columns = uiState.dice.chunked(4).maxOfOrNull { it.size }?.coerceAtLeast(1) ?: 1
-            val availableWidth = maxWidth * 0.8f
+            val widthFraction = if (columns <= 2) 0.35f else 0.8f
+            val availableWidth = maxWidth * widthFraction
             val gaps = 8.dp * (columns - 1)
             val dieSize = (availableWidth - gaps) / columns
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                DiceAnimation(
-                    dice = uiState.dice,
-                    results = uiState.results,
-                    isRolling = uiState.isRolling,
-                    onAnimationComplete = onAnimationComplete,
-                    onRoll = onRoll,
-                    dieSize = dieSize,
-                    triggerScale = tapCount
+            DiceAnimation(
+                dice = uiState.dice,
+                results = uiState.results,
+                isRolling = uiState.isRolling,
+                onAnimationComplete = onAnimationComplete,
+                onRoll = onRoll,
+                dieSize = dieSize,
+                triggerScale = tapCount
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.25f),
+            contentAlignment = Alignment.Center
+        ) {
+            if (uiState.total != null && !uiState.isRolling) {
+                Text(
+                    text = "Total: ${uiState.total}",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
                 )
-                if (uiState.total != null && !uiState.isRolling) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Total: ${uiState.total}",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
             }
         }
     }
