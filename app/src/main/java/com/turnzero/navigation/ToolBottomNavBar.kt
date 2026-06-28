@@ -23,7 +23,14 @@ fun ToolBottomNavBar(
                     contentDescription = "Tools"
                 )
             },
-            label = { Text("Tools") }
+            label = { Text("Tools") },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
         NavigationBarItem(
             selected = false,
@@ -34,7 +41,14 @@ fun ToolBottomNavBar(
                     contentDescription = "Options"
                 )
             },
-            label = { Text("Options") }
+            label = { Text("Options") },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.primary,
+                selectedTextColor = MaterialTheme.colorScheme.primary,
+                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
     }
 }

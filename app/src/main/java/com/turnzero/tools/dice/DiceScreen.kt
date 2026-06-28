@@ -1,5 +1,6 @@
 package com.turnzero.tools.dice
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,53 +21,44 @@ fun DiceScreen(
     onToggleHistory: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+    val canRoll = uiState.dice.isNotEmpty() && !uiState.isRolling
+    val dieSize = when {
+        uiState.dice.size <= 4 -> 80.dp
+        uiState.dice.size <= 8 -> 64.dp
+        uiState.dice.size <= 12 -> 56.dp
+        uiState.dice.size <= 16 -> 48.dp
+        else -> 40.dp
+    }
+
+    Column(modifier = modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .clickable(enabled = canRoll) { onRoll() },
+            contentAlignment = Alignment.Center
         ) {
-            // Dice pool — grid layout, centered
             DiceAnimation(
                 dice = uiState.dice,
                 results = uiState.results,
                 isRolling = uiState.isRolling,
-                onAnimationComplete = onAnimationComplete
+                onAnimationComplete = onAnimationComplete,
+                dieSize = dieSize
             )
+        }
 
-            // Total
-            if (uiState.total != null && !uiState.isRolling) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Total: ${uiState.total}",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Roll button
-            Button(
-                onClick = onRoll,
-                enabled = uiState.dice.isNotEmpty() && !uiState.isRolling,
+        if (uiState.total != null && !uiState.isRolling) {
+            Text(
+                text = "Total: ${uiState.total}",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 48.dp)
-                    .height(56.dp),
-                shape = MaterialTheme.shapes.large
-            ) {
-                Text(
-                    text = "ROLL!",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 16.dp)
+            )
         }
     }
 
-    // History Sheet
     if (uiState.showHistory) {
         DiceHistorySheet(
             history = uiState.history,

@@ -79,6 +79,18 @@ class DiceViewModelTest {
     }
 
     @Test
+    fun `changeDieCount caps at 20 dice maximum`() = runTest {
+        val vm = DiceViewModel(repo, savedStateHandle)
+        advanceUntilIdle()
+        vm.changeDieCount(6, DiceColor.RED, 15)
+        assertEquals(15, vm.uiState.value.dice.size)
+        vm.changeDieCount(6, DiceColor.RED, 10)
+        assertEquals(20, vm.uiState.value.dice.size)
+        vm.changeDieCount(20, DiceColor.BLUE, 5)
+        assertEquals(20, vm.uiState.value.dice.size)
+    }
+
+    @Test
     fun `roll generates results within faceCount range`() = runTest {
         val vm = DiceViewModel(repo, savedStateHandle)
         advanceUntilIdle()

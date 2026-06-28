@@ -45,7 +45,9 @@ class DiceViewModel @Inject constructor(
         val current = _uiState.value.dice
         val matching = current.filter { it.faceCount == faceCount && it.color == color }
         if (delta > 0) {
-            val newDice = (1..delta).map {
+            val clampedDelta = minOf(delta, 20 - current.size)
+            if (clampedDelta <= 0) return
+            val newDice = (1..clampedDelta).map {
                 Die(id = UUID.randomUUID().toString(), faceCount = faceCount, color = color)
             }
             val updated = current + newDice
