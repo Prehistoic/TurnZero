@@ -15,7 +15,6 @@ object UserPreferences {
     val THEME_MODE = stringPreferencesKey("theme_mode")
     val COLOR_THEME = stringPreferencesKey("color_theme")
     val LANGUAGE = stringPreferencesKey("language")
-    val FAVORITE_GAMES = stringSetPreferencesKey("favorite_games")
     val FAVORITE_TOOLS = stringSetPreferencesKey("favorite_tools")
     val DICE_SELECTED_COLOR = stringPreferencesKey("dice_selected_color")
     val DICE_HISTORY = stringPreferencesKey("dice_history")

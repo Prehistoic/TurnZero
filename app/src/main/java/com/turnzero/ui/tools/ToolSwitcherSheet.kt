@@ -3,7 +3,6 @@ package com.turnzero.ui.tools
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -79,23 +78,5 @@ fun ToolSwitcherSheet(
 
             Spacer(Modifier.height(32.dp))
         }
-    }
-}
-
-@Composable
-fun ToolSwitcherFAB(
-    onTap: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    FloatingActionButton(
-        onClick = onTap,
-        modifier = modifier.padding(16.dp),
-        containerColor = MaterialTheme.colorScheme.primary
-    ) {
-        Icon(
-            imageVector = Icons.Default.SwapHoriz,
-            contentDescription = "Switch Tool",
-            tint = MaterialTheme.colorScheme.onPrimary
-        )
     }
 }

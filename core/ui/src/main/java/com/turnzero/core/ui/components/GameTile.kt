@@ -51,7 +51,7 @@ private fun GameTileGrid(game: Game, onClick: () -> Unit, modifier: Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = game.name.first().toString(),
+                    text = game.name.firstOrNull()?.toString() ?: "?",
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -99,7 +99,7 @@ private fun GameTileList(game: Game, onClick: () -> Unit, modifier: Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = game.name.first().toString(),
+                    text = game.name.firstOrNull()?.toString() ?: "?",
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
