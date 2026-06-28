@@ -80,47 +80,81 @@ val generateLicensesJson by tasks.registering {
 
     doLast {
         val deps = mutableListOf<Map<String, String>>()
-        val runtimeConfig = configurations.getByName("debugRuntimeClasspath")
-        val resolved = runtimeConfig.resolvedConfiguration
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+        val seen = mutableSetOf<String>()
+        val gradleUserHome = gradle.gradleUserHomeDir
+        val cacheDir = java.io.File(gradleUserHome, "caches/modules-2/files-2.1")
 
-        try {
-            resolved.resolvedArtifacts.forEach { artifact ->
-                try {
-                    val module = artifact.moduleVersion.id
-                    val pomFile = artifact.file.resolveSibling(
-                        "${module.name}-${module.version}.pom"
-                    )
+        val configs = listOf("debugRuntimeClasspath", "releaseRuntimeClasspath")
+        for (configName in configs) {
+            try {
+                val config = configurations.getByName(configName)
+                config.resolvedConfiguration.lenientConfiguration.allModuleDependencies.forEach { dep ->
+                    val key = "${dep.moduleGroup}:${dep.moduleName}"
+                    if (key in seen) return@forEach
+                    seen.add(key)
+
+                    val groupPath = dep.moduleGroup.replace('.', '/')
+                    val artifactDir = java.io.File(cacheDir, "$groupPath/${dep.moduleName}/${dep.moduleVersion}")
+                    if (!artifactDir.exists()) return@forEach
+
                     val licenses = mutableListOf<String>()
-                    if (pomFile.exists()) {
-                        val doc = factory.newDocumentBuilder().parse(pomFile)
-                        val licenseNodes = doc.getElementsByTagName("license")
-                        for (i in 0 until licenseNodes.length) {
-                            val licenseNode = licenseNodes.item(i)
-                            val nameNodes = licenseNode.childNodes
-                            for (j in 0 until nameNodes.length) {
-                                val child = nameNodes.item(j)
-                                if (child.nodeName == "name") {
-                                    licenses.add(child.textContent.trim())
+                    val pomFile = artifactDir.walkTopDown().find { it.extension == "pom" }
+
+                    if (pomFile != null) {
+                        try {
+                            val doc = factory.newDocumentBuilder().parse(pomFile)
+                            val licenseNodes = doc.getElementsByTagName("license")
+                            for (i in 0 until licenseNodes.length) {
+                                val childNodes = licenseNodes.item(i).childNodes
+                                for (j in 0 until childNodes.length) {
+                                    val child = childNodes.item(j)
+                                    if (child.nodeName == "name") {
+                                        licenses.add(child.textContent.trim())
+                                    }
                                 }
                             }
+                        } catch (_: Exception) {
                         }
                     }
-                    if (licenses.isEmpty()) {
-                        licenses.add("Unknown")
-                    }
+                    if (licenses.isEmpty()) licenses.add("Unknown")
+
                     deps.add(mapOf(
-                        "name" to module.name,
-                        "group" to module.group,
-                        "version" to module.version,
+                        "name" to dep.moduleName,
+                        "group" to dep.moduleGroup,
+                        "version" to dep.moduleVersion,
                         "licenses" to licenses.joinToString(", ")
                     ))
-                } catch (e: Exception) {
-                    logger.warn("Failed to parse license: ${e.message}")
+                }
+            } catch (_: Exception) {
+            }
+        }
+
+        val json = groovy.json.JsonOutput.toJson(deps.distinctBy { "${it["group"]}:${it["name"]}" }
+            .sortedBy { it["name"].toString().lowercase() })
+
+        outputFile.asFile.parentFile.mkdirs()
+        outputFile.asFile.writeText(json)
+    }
+                            }
+                        }
+                        if (licenses.isEmpty()) licenses.add("Unknown")
+
+                        val displayName = artifactId.ifEmpty { name.substringBeforeLast("-") }
+                        val displayVersion = version.ifEmpty { name.substringAfterLast("-") }
+
+                        deps.add(mapOf(
+                            "name" to displayName,
+                            "group" to groupId,
+                            "version" to displayVersion,
+                            "licenses" to licenses.joinToString(", ")
+                        ))
+                    } catch (_: Exception) {
+                    }
                 }
             }
-        } finally {
-            runtimeConfig.resolvedConfiguration.rethrowFailure()
+        } catch (e: Exception) {
+            logger.warn("Could not resolve licenses: ${e.message}")
         }
 
         val json = groovy.json.JsonOutput.toJson(deps.distinctBy { "${it["group"]}:${it["name"]}" }
