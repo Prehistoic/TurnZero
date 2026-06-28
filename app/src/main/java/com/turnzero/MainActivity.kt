@@ -5,10 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.datastore.preferences.core.edit
 import dagger.hilt.android.AndroidEntryPoint
 import com.turnzero.core.data.UserPreferences
@@ -16,7 +13,8 @@ import com.turnzero.core.ui.theme.TZTheme
 import com.turnzero.core.ui.theme.colorThemes
 import com.turnzero.navigation.TZNavHost
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,28 +25,23 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val systemDark = isSystemInDarkTheme()
+            val scope = rememberCoroutineScope()
 
-            val savedThemeMode = remember {
-                runBlocking {
-                    ServiceLocator.dataStore.data.first()[UserPreferences.THEME_MODE] ?: "system"
+            var isDark by remember { mutableStateOf(systemDark) }
+            LaunchedEffect(Unit) {
+                val mode = ServiceLocator.dataStore.data.map { it[UserPreferences.THEME_MODE] }.first() ?: "system"
+                isDark = when (mode) {
+                    "light" -> false
+                    "dark" -> true
+                    else -> systemDark
                 }
             }
-            var isDark by remember {
-                mutableStateOf(
-                    when (savedThemeMode) {
-                        "light" -> false
-                        "dark" -> true
-                        else -> systemDark
-                    }
-                )
-            }
 
-            val savedColorTheme = remember {
-                runBlocking {
-                    ServiceLocator.dataStore.data.first()[UserPreferences.COLOR_THEME] ?: "purple"
-                }
+            var selectedColorThemeId by remember { mutableStateOf("purple") }
+            LaunchedEffect(Unit) {
+                val saved = ServiceLocator.dataStore.data.map { it[UserPreferences.COLOR_THEME] }.first() ?: "purple"
+                selectedColorThemeId = saved
             }
-            var selectedColorThemeId by remember { mutableStateOf(savedColorTheme) }
             val selectedColorTheme = remember(selectedColorThemeId) {
                 colorThemes.find { it.id == selectedColorThemeId } ?: colorThemes.first()
             }
@@ -62,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     selectedColorThemeId = selectedColorThemeId,
                     onColorThemeChanged = { id ->
                         selectedColorThemeId = id
-                        runBlocking {
+                        scope.launch {
                             ServiceLocator.dataStore.edit { prefs ->
                                 prefs[UserPreferences.COLOR_THEME] = id
                             }

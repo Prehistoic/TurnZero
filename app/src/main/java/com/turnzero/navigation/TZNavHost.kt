@@ -33,8 +33,8 @@ import com.turnzero.ui.settings.ThemeMode
 import com.turnzero.ui.tools.ToolSwitcherSheet
 import com.turnzero.ui.tools.ToolsScreen
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun TZNavHost(
@@ -51,53 +51,39 @@ fun TZNavHost(
     val scope = rememberCoroutineScope()
     val systemIsDark = isSystemInDarkTheme()
 
-    val gamesLayout = remember {
-        runBlocking {
-            dataStore.data.first()[UserPreferences.LAYOUT_GAMES]?.let {
-                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.GRID }
-            } ?: LayoutMode.GRID
+    var gamesLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
+    LaunchedEffect(Unit) {
+        dataStore.data.map { it[UserPreferences.LAYOUT_GAMES] }.first()?.let {
+            try { gamesLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
         }
     }
 
-    var gamesLayoutState by remember { mutableStateOf(gamesLayout) }
-
-    val toolsLayout = remember {
-        runBlocking {
-            dataStore.data.first()[UserPreferences.LAYOUT_TOOLS]?.let {
-                try { LayoutMode.valueOf(it) } catch (_: Exception) { LayoutMode.GRID }
-            } ?: LayoutMode.GRID
+    var toolsLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
+    LaunchedEffect(Unit) {
+        dataStore.data.map { it[UserPreferences.LAYOUT_TOOLS] }.first()?.let {
+            try { toolsLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
         }
     }
 
-    var toolsLayoutState by remember { mutableStateOf(toolsLayout) }
-
-    val themeMode = remember {
-        runBlocking {
-            dataStore.data.first()[UserPreferences.THEME_MODE] ?: "system"
-        }
+    var themeModeState by remember { mutableStateOf(ThemeMode.SYSTEM) }
+    LaunchedEffect(Unit) {
+        val mode = dataStore.data.map { it[UserPreferences.THEME_MODE] }.first() ?: "system"
+        themeModeState = try { ThemeMode.valueOf(mode.uppercase()) } catch (_: Exception) { ThemeMode.SYSTEM }
     }
 
-    var themeModeState by remember {
-        mutableStateOf(
-            try { ThemeMode.valueOf(themeMode.uppercase()) } catch (_: Exception) { ThemeMode.SYSTEM }
-        )
+    var favoriteToolIds by remember { mutableStateOf(emptySet<String>()) }
+    LaunchedEffect(Unit) {
+        val favs = dataStore.data.map { it[UserPreferences.FAVORITE_TOOLS] }.first() ?: emptySet()
+        favoriteToolIds = favs
     }
 
-    val initialFavorites = remember {
-        runBlocking {
-            dataStore.data.first()[UserPreferences.FAVORITE_TOOLS] ?: emptySet()
-        }
+    var currentLanguage by remember { mutableStateOf("en") }
+    LaunchedEffect(Unit) {
+        val lang = dataStore.data.map { it[UserPreferences.LANGUAGE] }.first() ?: "en"
+        currentLanguage = lang
     }
 
-    val savedLanguage = remember {
-        runBlocking {
-            dataStore.data.first()[UserPreferences.LANGUAGE] ?: "en"
-        }
-    }
-
-    var favoriteToolIds by remember { mutableStateOf(initialFavorites) }
     var selectedToolId by remember { mutableStateOf<String?>(null) }
-    var currentLanguage by remember { mutableStateOf(savedLanguage) }
     var toolShowSwitcher by remember { mutableStateOf(false) }
     var toolShowOptions by remember { mutableStateOf(false) }
 
