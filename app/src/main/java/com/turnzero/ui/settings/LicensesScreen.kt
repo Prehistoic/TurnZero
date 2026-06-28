@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mikepenz.aboutlibraries.Library
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.turnzero.R
 import com.turnzero.core.ui.components.TZTopBar
@@ -21,7 +20,8 @@ import com.turnzero.core.ui.components.TZTopBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicensesScreen(onBack: () -> Unit) {
-    val libraries by produceLibraries(R.raw.aboutlibraries)
+    val libs by produceLibraries(R.raw.aboutlibraries)
+    val libraries = libs?.libraries ?: emptyList()
 
     Scaffold(
         topBar = {
@@ -39,7 +39,12 @@ fun LicensesScreen(onBack: () -> Unit) {
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(libraries, key = { it.uniqueId }) { library ->
-                LicenseRow(library = library)
+                LicenseRow(
+                    name = library.name,
+                    artifactId = library.artifactId,
+                    version = library.artifactVersion,
+                    licenses = library.licenses.joinToString(", ") { it.name }
+                )
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
@@ -47,7 +52,12 @@ fun LicensesScreen(onBack: () -> Unit) {
 }
 
 @Composable
-private fun LicenseRow(library: Library) {
+private fun LicenseRow(
+    name: String,
+    artifactId: String,
+    version: String,
+    licenses: String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,28 +75,27 @@ private fun LicenseRow(library: Library) {
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = library.name,
+                text = name,
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = library.artifactId,
+                text = artifactId,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 11.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            val licenseNames = library.licenses.joinToString(", ") { it.name }
-            if (licenseNames.isNotEmpty()) {
+            if (licenses.isNotEmpty()) {
                 Spacer(Modifier.height(4.dp))
                 Surface(
                     color = MaterialTheme.colorScheme.primaryContainer,
                     shape = MaterialTheme.shapes.extraSmall
                 ) {
                     Text(
-                        text = licenseNames,
+                        text = licenses,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
@@ -96,7 +105,7 @@ private fun LicenseRow(library: Library) {
         }
         Spacer(Modifier.width(8.dp))
         Text(
-            text = library.artifactVersion,
+            text = version,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 3.dp)
