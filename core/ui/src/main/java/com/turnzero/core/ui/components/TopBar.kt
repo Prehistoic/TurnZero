@@ -34,7 +34,8 @@ fun TZTopBar(
     onSearchQueryChange: (String) -> Unit = {},
     onSearchClose: () -> Unit = {},
     logoPainter: Painter? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -109,6 +110,7 @@ fun TZTopBar(
             }
         },
         actions = {
+            actions()
             if (showSearchButton && !isSearchActive) {
                 IconButton(onClick = onSearchClick) {
                     Icon(

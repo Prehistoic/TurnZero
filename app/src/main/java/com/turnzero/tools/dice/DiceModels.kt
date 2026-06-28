@@ -43,7 +43,8 @@ data class DiceUiState(
     val history: List<DiceRoll> = emptyList(),
     val isRolling: Boolean = false,
     val results: List<Int>? = null,
-    val total: Int? = null
+    val total: Int? = null,
+    val showHistory: Boolean = false
 )
 
 interface DiceRepo {

@@ -1,5 +1,6 @@
 package com.turnzero.core.tools.api
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -14,4 +15,7 @@ interface Tool {
 
     @Composable
     fun OptionsSheet(onDismiss: () -> Unit) {}
+
+    @Composable
+    fun TopBarActions(): @Composable RowScope.() -> Unit = {}
 }

@@ -1,8 +1,6 @@
 package com.turnzero.tools.dice
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,24 +17,22 @@ fun DiceScreen(
     onAnimationComplete: () -> Unit,
     onLoadPreset: (DicePreset) -> Unit,
     onClearHistory: () -> Unit,
-    showHistory: Boolean,
     onToggleHistory: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Dice pool
+            // Dice pool — grid layout, centered
             DiceAnimation(
                 dice = uiState.dice,
                 results = uiState.results,
                 isRolling = uiState.isRolling,
-                onAnimationComplete = onAnimationComplete,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                onAnimationComplete = onAnimationComplete
             )
 
             // Total
@@ -49,7 +45,7 @@ fun DiceScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Roll button
             Button(
@@ -67,25 +63,11 @@ fun DiceScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // History toggle FAB
-        FloatingActionButton(
-            onClick = onToggleHistory,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 0.dp, end = 0.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            contentColor = MaterialTheme.colorScheme.onSurface
-        ) {
-            Icon(Icons.Default.History, contentDescription = "History")
         }
     }
 
     // History Sheet
-    if (showHistory) {
+    if (uiState.showHistory) {
         DiceHistorySheet(
             history = uiState.history,
             onClear = onClearHistory,

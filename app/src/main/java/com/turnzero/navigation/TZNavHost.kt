@@ -105,7 +105,9 @@ fun TZNavHost(
 
     Scaffold(
         bottomBar = {
-            if (selectedToolId != null) {
+            if (currentRoute?.startsWith("tool/") == true) {
+                // ToolDetail has its own bottom bar (Tools | Options)
+            } else if (selectedToolId != null) {
                 NavigationBar {
                     val isFavorited = selectedToolId in favoriteToolIds
                     NavigationBarItem(
@@ -366,7 +368,8 @@ fun TZNavHost(
                         TZTopBar(
                             title = tool.name,
                             showBackButton = true,
-                            onBackClick = { navController.popBackStack() }
+                            onBackClick = { navController.popBackStack() },
+                            actions = tool.TopBarActions()
                         )
                     },
                     bottomBar = {

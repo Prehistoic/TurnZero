@@ -1,7 +1,5 @@
 package com.turnzero.tools.dice
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -33,13 +31,11 @@ fun DiceAnimation(
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
-            // Fast shuffle phase: ~600ms
             val fastEnd = System.currentTimeMillis() + 600
             while (System.currentTimeMillis() < fastEnd) {
                 displayedNumbers = dice.map { Random.nextInt(1, it.faceCount + 1) }
                 delay(50)
             }
-            // Deceleration phase: ~400ms
             delay(100)
             displayedNumbers = dice.mapIndexed { i, _ ->
                 if (Random.nextBoolean()) results[i] else Random.nextInt(1, dice[i].faceCount + 1)
@@ -56,26 +52,29 @@ fun DiceAnimation(
         }
     }
 
-    Row(
+    val rows = dice.chunked(4)
+
+    Column(
         modifier = modifier,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        dice.forEachIndexed { index, die ->
-            val number = if (isRolling || hasRolled) displayedNumbers.getOrElse(index) { 1 } else 0
-            val settled = !isRolling && results != null
+        rows.forEachIndexed { rowIndex, rowDice ->
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                rowDice.forEachIndexed { colIndex, die ->
+                    val index = rowIndex * 4 + colIndex
+                    val number = if (isRolling || hasRolled) displayedNumbers.getOrElse(index) { 1 } else 0
 
-            val scale by animateFloatAsState(
-                targetValue = if (settled) 1f else 1f,
-                animationSpec = spring(dampingRatio = 0.4f, stiffness = 300f),
-                label = "dieScale"
-            )
-
-            DieCard(
-                die = die,
-                displayNumber = if (hasRolled || isRolling) number else null,
-                modifier = Modifier.padding(horizontal = 6.dp)
-            )
+                    DieCard(
+                        die = die,
+                        displayNumber = if (hasRolled || isRolling) number else null,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -87,13 +86,18 @@ fun DieCard(
     modifier: Modifier = Modifier
 ) {
     val dieColor = Color(die.color.hex)
+    val isWhite = die.color == DiceColor.WHITE
     val faceLabel = "d${die.faceCount}"
+
+    val borderColor = if (isWhite) Color.Black else dieColor
+    val bgColor = if (isWhite) Color.White else dieColor.copy(alpha = 0.12f)
+    val labelColor = if (isWhite) Color.Black else dieColor
 
     Column(
         modifier = modifier
             .size(72.dp)
-            .border(2.dp, dieColor, RoundedCornerShape(12.dp))
-            .background(dieColor.copy(alpha = 0.12f), RoundedCornerShape(12.dp))
+            .border(2.dp, borderColor, RoundedCornerShape(12.dp))
+            .background(bgColor, RoundedCornerShape(12.dp))
             .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -101,7 +105,7 @@ fun DieCard(
         Text(
             text = faceLabel,
             style = MaterialTheme.typography.labelSmall,
-            color = dieColor,
+            color = labelColor,
             fontSize = 10.sp
         )
         Spacer(modifier = Modifier.height(2.dp))
@@ -109,7 +113,7 @@ fun DieCard(
             text = if (displayNumber != null) displayNumber.toString() else faceLabel,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = if (displayNumber != null) Color.Unspecified else dieColor.copy(alpha = 0.5f),
+            color = Color.Black,
             textAlign = TextAlign.Center
         )
     }

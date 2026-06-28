@@ -96,6 +96,10 @@ class DiceViewModel @Inject constructor(
         viewModelScope.launch { diceRepo.saveHistory(emptyList()) }
     }
 
+    fun toggleHistory() {
+        _uiState.update { it.copy(showHistory = !it.showHistory) }
+    }
+
     private fun persistPool(dice: List<Die>) {
         _uiState.update { it.copy(dice = dice) }
         viewModelScope.launch { diceRepo.savePool(gameId, dice) }

@@ -155,6 +155,16 @@ class DiceViewModelTest {
         assertEquals(DiceColor.GREEN, vm.uiState.value.selectedColor)
         assertEquals(DiceColor.GREEN, repo.selectedColor)
     }
+    @Test
+    fun `toggleHistory toggles showHistory flag`() = runTest {
+        val vm = DiceViewModel(repo, savedStateHandle)
+        advanceUntilIdle()
+        assertFalse(vm.uiState.value.showHistory)
+        vm.toggleHistory()
+        assertTrue(vm.uiState.value.showHistory)
+        vm.toggleHistory()
+        assertFalse(vm.uiState.value.showHistory)
+    }
 }
 
 private class FakeDiceRepo : DiceRepo {
@@ -167,5 +177,5 @@ private class FakeDiceRepo : DiceRepo {
     override suspend fun getSelectedColor() = selectedColor
     override suspend fun saveSelectedColor(color: DiceColor) { selectedColor = color }
     override suspend fun getHistory() = history
-    override suspend fun saveHistory(h: List<DiceRoll>) { history = h }
+    override suspend fun saveHistory(history: List<DiceRoll>) { this.history = history }
 }
