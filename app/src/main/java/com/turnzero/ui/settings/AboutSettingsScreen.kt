@@ -1,11 +1,9 @@
 package com.turnzero.ui.settings
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.SystemUpdate
@@ -33,8 +31,20 @@ fun AboutSettingsScreen(
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     var updateStatus by remember { mutableStateOf<UpdateManager.UpdateStatus>(UpdateManager.UpdateStatus.Idle) }
     val updateManager = remember { UpdateManager(context) }
+
+    LaunchedEffect(updateStatus) {
+        if (updateStatus is UpdateManager.UpdateStatus.UpToDate) {
+            snackbarHostState.showSnackbar("No new update available")
+            updateStatus = UpdateManager.UpdateStatus.Idle
+        }
+        if (updateStatus is UpdateManager.UpdateStatus.Error) {
+            snackbarHostState.showSnackbar((updateStatus as UpdateManager.UpdateStatus.Error).message)
+            updateStatus = UpdateManager.UpdateStatus.Idle
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -43,7 +53,8 @@ fun AboutSettingsScreen(
                 showBackButton = true,
                 onBackClick = onBack
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -99,27 +110,16 @@ fun AboutSettingsScreen(
                     title = "Check for updates",
                     description = when (updateStatus) {
                         is UpdateManager.UpdateStatus.Checking -> "Checking..."
-                        is UpdateManager.UpdateStatus.UpToDate -> "Up to date"
-                        is UpdateManager.UpdateStatus.UpdateAvailable -> "Update available"
                         is UpdateManager.UpdateStatus.Downloading -> "Downloading..."
-                        is UpdateManager.UpdateStatus.Error -> "Tap to retry"
-                        is UpdateManager.UpdateStatus.Idle -> "Check for new versions"
                         is UpdateManager.UpdateStatus.ReadyToInstall -> "Ready to install"
+                        else -> "Check for new versions"
                     },
                     widget = {
-                        AnimatedVisibility(visible = updateStatus is UpdateManager.UpdateStatus.Checking ||
+                        if (updateStatus is UpdateManager.UpdateStatus.Checking ||
                             updateStatus is UpdateManager.UpdateStatus.Downloading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
                                 strokeWidth = 2.dp
-                            )
-                        }
-                        if (updateStatus is UpdateManager.UpdateStatus.UpToDate) {
-                            Icon(
-                                imageVector = Icons.Outlined.CheckCircle,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     },
