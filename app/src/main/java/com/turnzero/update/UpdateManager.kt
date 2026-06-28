@@ -39,6 +39,15 @@ class UpdateManager(private val context: Context) {
             connection.connectTimeout = 10000
             connection.readTimeout = 10000
 
+            val responseCode = connection.responseCode
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                connection.disconnect()
+                if (responseCode == 404) {
+                    return@withContext UpdateStatus.UpToDate
+                }
+                return@withContext UpdateStatus.Error("Server error: $responseCode")
+            }
+
             val response = connection.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(response)
             val tagName = json.getString("tag_name")
