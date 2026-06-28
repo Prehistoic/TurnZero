@@ -98,15 +98,22 @@ fun TZNavHost(
     var favoriteToolIds by remember { mutableStateOf(initialFavorites) }
     var selectedToolId by remember { mutableStateOf<String?>(null) }
     var currentLanguage by remember { mutableStateOf(savedLanguage) }
+    var toolShowSwitcher by remember { mutableStateOf(false) }
+    var toolShowOptions by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentRoute) {
         selectedToolId = null
+        toolShowSwitcher = false
+        toolShowOptions = false
     }
 
     Scaffold(
         bottomBar = {
             if (currentRoute?.startsWith("tool/") == true) {
-                // ToolDetail has its own bottom bar (Tools | Options)
+                ToolBottomNavBar(
+                    onToolsClick = { toolShowSwitcher = true },
+                    onOptionsClick = { toolShowOptions = true }
+                )
             } else if (selectedToolId != null) {
                 NavigationBar {
                     val isFavorited = selectedToolId in favoriteToolIds
@@ -360,9 +367,6 @@ fun TZNavHost(
                 val allTools = remember(gameId) { toolRegistry.getToolsForGame(gameId) }
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
-                var showSwitcher by remember { mutableStateOf(false) }
-                var showOptions by remember { mutableStateOf(false) }
-
                 Column {
                     TZTopBar(
                         title = tool.name,
@@ -373,18 +377,14 @@ fun TZNavHost(
                     Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                         tool.Screen(onBack = { navController.popBackStack() })
                     }
-                    ToolBottomNavBar(
-                        onToolsClick = { showSwitcher = true },
-                        onOptionsClick = { showOptions = true }
-                    )
                 }
 
-                if (showSwitcher) {
+                if (toolShowSwitcher) {
                     ToolSwitcherSheet(
                         tools = allTools,
                         currentToolId = toolId,
                         onToolSelected = { selected ->
-                            showSwitcher = false
+                            toolShowSwitcher = false
                             navController.navigate(
                                 Screen.ToolDetail.createRoute(gameId, selected.id)
                             ) {
@@ -392,12 +392,12 @@ fun TZNavHost(
                                 launchSingleTop = true
                             }
                         },
-                        onDismiss = { showSwitcher = false }
+                        onDismiss = { toolShowSwitcher = false }
                     )
                 }
 
-                if (showOptions) {
-                    tool.OptionsSheet(onDismiss = { showOptions = false })
+                if (toolShowOptions) {
+                    tool.OptionsSheet(onDismiss = { toolShowOptions = false })
                 }
             }
         }

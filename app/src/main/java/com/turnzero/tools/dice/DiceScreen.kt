@@ -24,8 +24,11 @@ fun DiceScreen(
 ) {
     val canRoll = uiState.dice.isNotEmpty() && !uiState.isRolling
     val dieSize = when {
-        uiState.dice.size <= 4 -> 80.dp
-        uiState.dice.size <= 8 -> 64.dp
+        uiState.dice.size <= 2 -> 120.dp
+        uiState.dice.size <= 3 -> 100.dp
+        uiState.dice.size <= 4 -> 96.dp
+        uiState.dice.size <= 6 -> 80.dp
+        uiState.dice.size <= 9 -> 68.dp
         uiState.dice.size <= 12 -> 56.dp
         uiState.dice.size <= 16 -> 48.dp
         else -> 40.dp
