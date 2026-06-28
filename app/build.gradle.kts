@@ -1,3 +1,5 @@
+import java.io.File
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -83,7 +85,7 @@ val generateLicensesJson by tasks.registering {
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
         val seen = mutableSetOf<String>()
         val gradleUserHome = gradle.gradleUserHomeDir
-        val cacheDir = java.io.File(gradleUserHome, "caches/modules-2/files-2.1")
+        val cacheDir = File(gradleUserHome, "caches/modules-2/files-2.1")
 
         val configs = listOf("debugRuntimeClasspath", "releaseRuntimeClasspath")
         for (configName in configs) {
@@ -95,7 +97,7 @@ val generateLicensesJson by tasks.registering {
                     seen.add(key)
 
                     val groupPath = dep.moduleGroup.replace('.', '/')
-                    val artifactDir = java.io.File(cacheDir, "$groupPath/${dep.moduleName}/${dep.moduleVersion}")
+                    val artifactDir = File(cacheDir, "$groupPath/${dep.moduleName}/${dep.moduleVersion}")
                     if (!artifactDir.exists()) return@forEach
 
                     val licenses = mutableListOf<String>()
