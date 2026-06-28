@@ -71,19 +71,19 @@ fun AboutSettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(Modifier.height(48.dp))
+                    Spacer(Modifier.height(16.dp))
                     Image(
                         painter = painterResource(id = R.drawable.ic_tz_logo),
                         contentDescription = "TurnZero logo",
                         modifier = Modifier.size(80.dp)
                     )
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         text = "TurnZero",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(Modifier.height(48.dp))
+                    Spacer(Modifier.height(16.dp))
                 }
             }
 
@@ -152,7 +152,7 @@ fun AboutSettingsScreen(
             }
 
             item {
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(16.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -175,7 +175,7 @@ fun AboutSettingsScreen(
                         uriHandler = uriHandler
                     )
                 }
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(8.dp))
             }
         }
     }
