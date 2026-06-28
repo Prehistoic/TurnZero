@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.ui.components.LayoutMode
+import com.turnzero.core.ui.components.TZDivider
 import com.turnzero.core.ui.components.TZTopBar
+import com.turnzero.core.ui.components.TZDivider
 import com.turnzero.core.ui.theme.colorThemes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +79,7 @@ fun AppearanceSettingsScreen(
             }
 
             Spacer(Modifier.height(16.dp))
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            TZDivider()
             Spacer(Modifier.height(8.dp))
 
             Text(
@@ -117,7 +119,7 @@ fun AppearanceSettingsScreen(
                 }
             }
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            TZDivider()
 
             Row(
                 modifier = Modifier
@@ -150,7 +152,7 @@ fun AppearanceSettingsScreen(
                 }
             }
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            TZDivider()
 
             Row(
                 modifier = Modifier
@@ -183,7 +185,7 @@ fun AppearanceSettingsScreen(
                 }
             }
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            TZDivider()
         }
     }
 }

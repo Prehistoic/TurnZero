@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.turnzero.core.ui.components.TZTopBar
+import com.turnzero.core.ui.components.TZDivider
 
 data class SettingEntry(
     val id: String,
@@ -105,7 +106,7 @@ fun SearchSettingsScreen(onBack: () -> Unit) {
                                 )
                             }
                         }
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                        TZDivider()
                     }
                 }
             }

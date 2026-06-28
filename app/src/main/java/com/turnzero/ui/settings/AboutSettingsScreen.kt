@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.turnzero.BuildConfig
 import com.turnzero.R
 import com.turnzero.core.ui.components.TZTopBar
+import com.turnzero.core.ui.components.TZDivider
 import com.turnzero.update.UpdateManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -94,7 +95,7 @@ fun AboutSettingsScreen(
                     description = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     onClick = {}
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                TZDivider()
             }
 
             item {
@@ -106,7 +107,7 @@ fun AboutSettingsScreen(
                         uriHandler.openUri("https://github.com/Prehistoic/TurnZero/releases")
                     }
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                TZDivider()
             }
 
             item {
@@ -138,7 +139,7 @@ fun AboutSettingsScreen(
                         }
                     }
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                TZDivider()
             }
 
             item {
@@ -148,7 +149,7 @@ fun AboutSettingsScreen(
                     description = "Open source components",
                     onClick = onLicensesClick
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                TZDivider()
             }
 
             item {

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.turnzero.R
 import com.turnzero.core.ui.components.TZTopBar
+import com.turnzero.core.ui.components.TZDivider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun LicensesScreen(onBack: () -> Unit) {
                         )
                     }
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                TZDivider()
             }
         }
     }
