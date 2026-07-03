@@ -71,7 +71,21 @@ object YuGiOhRules {
             RuleStep(
                 title = "Battle Phase",
                 summary = "Declare attacks with your monsters to destroy opponent's monsters and deal damage.",
-                detail = "The Battle Phase is divided into four steps per attack: Start Step, Battle Step (declare attack), Damage Step (calculate damage), and End Step. Each of your Attack Position monsters can declare one attack per turn. The player going first cannot conduct a Battle Phase during their first turn.",
+                detail = """The Battle Phase is your opportunity to attack and deal damage to your opponent.
+
+**Steps of an Attack:**
+
+1. **Start Step** — Declare you are entering the Battle Phase
+2. **Battle Step** — Declare an attack with one monster
+3. **Damage Step** — Calculate battle damage and resolve effects
+4. **End Step** — Resolve end-of-Battle-Step effects
+
+**Important Rules:**
+
+- Each of your *Attack Position* monsters can declare **one attack per turn**
+- The player going first **cannot conduct a Battle Phase** during their first turn
+- If your opponent controls no monsters, you can attack them *directly*, dealing damage equal to your monster's ATK
+""",
             ),
             RuleStep(
                 title = "Main Phase 2",
@@ -122,7 +136,12 @@ object YuGiOhRules {
             ),
             Keyword(
                 name = "Spell Speed",
-                definition = "Determines which effects can be chained to which. Spell Speed 1 (most Spell Cards, Ignition/Trigger/Flip Effects), Spell Speed 2 (Quick-Play Spells, Normal/Continuous Traps, Quick Effects), Spell Speed 3 (Counter Traps). Higher Spell Speeds can chain to lower ones, but not vice versa.",
+                definition = """Determines which effects can be chained to which, and in what order. Higher Spell Speeds can chain to lower ones, but **not vice versa**.
+
+- **Spell Speed 1:** Normal Spells, Field Spells, Equip Spells, Continuous Spells, Ritual Spells, Ignition Effects, Trigger Effects, Flip Effects
+- **Spell Speed 2:** Quick-Play Spells, Normal Traps, Continuous Traps, Quick Effects (Monster)
+- **Spell Speed 3:** Counter Traps — *only* other Counter Traps can respond to these
+""",
                 category = "Core Mechanics",
             ),
             Keyword(

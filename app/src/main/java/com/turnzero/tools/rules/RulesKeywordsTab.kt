@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.mikepenz.markdown.m3.Markdown
 
 @Composable
 fun RulesKeywordsTab(
@@ -179,10 +180,8 @@ private fun KeywordCard(
 
             if (isExpanded) {
                 Spacer(Modifier.height(8.dp))
-                Text(
-                    text = keyword.definition,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                Markdown(
+                    content = keyword.definition,
                 )
             }
         }

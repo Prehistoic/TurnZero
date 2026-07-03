@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.turnzero"
-    compileSdk = 36
+    compileSdk = 37
     buildToolsVersion = "36.0.0"
 
     defaultConfig {
@@ -46,6 +46,7 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
     }
 }
 
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.aboutlibraries.compose)
+    implementation(libs.markdown.m3)
     implementation(libs.errorprone.annotations)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
