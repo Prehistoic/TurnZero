@@ -83,8 +83,21 @@ private fun FlipEntry(flip: CoinFlip, index: Int) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f)
         )
+        val resultStr = buildString {
+            if (flip.headsCount > 0) {
+                if (flip.coinCount == 1) append("H")
+                else append("${flip.headsCount}H")
+            }
+            if (flip.headsCount > 0 && flip.tailsCount > 0) {
+                append(" \u00B7 ")
+            }
+            if (flip.tailsCount > 0) {
+                if (flip.coinCount == 1) append("T")
+                else append("${flip.tailsCount}T")
+            }
+        }
         Text(
-            text = "${flip.headsCount}H \u00B7 ${flip.tailsCount}T",
+            text = resultStr,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary

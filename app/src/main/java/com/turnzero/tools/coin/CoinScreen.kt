@@ -65,8 +65,21 @@ fun CoinScreen(
             contentAlignment = Alignment.Center
         ) {
             if (uiState.results.isNotEmpty() && !uiState.isFlipping) {
+                val resultText = buildString {
+                    if (uiState.headsCount > 0) {
+                        if (uiState.coinCount == 1) append("Heads")
+                        else append("${uiState.headsCount} Heads")
+                    }
+                    if (uiState.headsCount > 0 && uiState.tailsCount > 0) {
+                        append(" \u00B7 ")
+                    }
+                    if (uiState.tailsCount > 0) {
+                        if (uiState.coinCount == 1) append("Tails")
+                        else append("${uiState.tailsCount} Tails")
+                    }
+                }
                 Text(
-                    text = "${uiState.headsCount} Heads \u00B7 ${uiState.tailsCount} Tails",
+                    text = resultText,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
