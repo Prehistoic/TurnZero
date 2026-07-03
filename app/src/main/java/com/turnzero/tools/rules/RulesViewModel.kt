@@ -37,6 +37,7 @@ class RulesViewModel @Inject constructor(
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
                 keywordSearchQuery = "",
+                selectedKeywordCategory = null,
             )
         }
     }
@@ -72,5 +73,18 @@ class RulesViewModel @Inject constructor(
                 expandedKeywordIndex = null,
             )
         }
+    }
+
+    fun filterCategory(category: String?) {
+        _uiState.update {
+            it.copy(
+                selectedKeywordCategory = category,
+                expandedKeywordIndex = null,
+            )
+        }
+    }
+
+    fun togglePdf() {
+        _uiState.update { it.copy(showPdf = !it.showPdf) }
     }
 }

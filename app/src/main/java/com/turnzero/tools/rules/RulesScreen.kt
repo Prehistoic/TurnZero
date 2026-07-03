@@ -21,6 +21,8 @@ fun RulesScreen(
     onToggleStep: (Int) -> Unit,
     onToggleKeyword: (Int) -> Unit,
     onSearchQueryChange: (String) -> Unit,
+    onFilterCategory: (String?) -> Unit,
+    onTogglePdf: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val config = uiState.currentConfig ?: return
@@ -38,12 +40,10 @@ fun RulesScreen(
     }
 
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }
+        snapshotFlow { pagerState.settledPage }
             .distinctUntilChanged()
             .collect { page ->
-                if (page != uiState.selectedTabIndex) {
-                    onPageChanged(page)
-                }
+                onPageChanged(page)
             }
     }
 
@@ -77,23 +77,33 @@ fun RulesScreen(
                     expandedIndex = uiState.expandedStepIndex,
                     onToggle = onToggleStep,
                 )
-                "wincons" -> RulesWinConsTab(
-                    winCons = config.winCons,
-                )
-                "sequence" -> RulesPlaySequenceTab(
+                "turn" -> RulesTurnTab(
                     steps = config.playSequence,
                     expandedIndex = uiState.expandedStepIndex,
                     onToggle = onToggleStep,
                 )
+                "victory" -> RulesVictoryTab(
+                    winCons = config.winCons,
+                )
                 "keywords" -> RulesKeywordsTab(
                     keywords = uiState.filteredKeywords,
                     searchQuery = uiState.keywordSearchQuery,
+                    selectedCategory = uiState.selectedKeywordCategory,
+                    allCategories = uiState.allKeywordCategories,
                     expandedIndex = uiState.expandedKeywordIndex,
                     onToggle = onToggleKeyword,
                     onSearchQueryChange = onSearchQueryChange,
+                    onFilterCategory = onFilterCategory,
                 )
             }
         }
+    }
+
+    if (uiState.showPdf && config.pdfUrl != null) {
+        RulesPdfSheet(
+            url = config.pdfUrl,
+            onDismiss = onTogglePdf,
+        )
     }
 }
 

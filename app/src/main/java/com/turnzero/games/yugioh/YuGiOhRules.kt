@@ -10,6 +10,7 @@ object YuGiOhRules {
     val advancedTcg = RulesConfig(
         rulesetId = "tcg-advanced",
         rulesetName = "Advanced (TCG)",
+        pdfUrl = "https://img.yugioh.com/rulebook/2023-11-17/YGO_Rulebook_EN_v10.pdf",
         setup = listOf(
             RuleStep(
                 title = "Prepare Your Deck",
@@ -132,5 +133,61 @@ object YuGiOhRules {
         ),
     )
 
-    val configs: List<RulesConfig> = listOf(advancedTcg)
+    val speedDuel = RulesConfig(
+        rulesetId = "tcg-speed-duel",
+        rulesetName = "Speed Duel",
+        setup = listOf(
+            RuleStep(
+                title = "Deck Construction",
+                summary = "20 to 30 cards in the Main Deck, up to 5 cards in the Extra Deck.",
+                detail = "[Placeholder — will be filled with actual Speed Duel setup rules]",
+            ),
+            RuleStep(
+                title = "Skill Card Setup",
+                summary = "Each player chooses 1 Skill Card to use during the Duel.",
+                detail = "[Placeholder — will be filled with actual Skill Card setup rules]",
+            ),
+        ),
+        winCons = listOf(
+            WinCondition(
+                title = "Reduce LP to 0",
+                description = "Each player starts with 4000 LP. Reduce your opponent's LP to 0 to win.",
+            ),
+            WinCondition(
+                title = "Deck Out",
+                description = "If a player cannot draw from their Main Deck, they lose.",
+            ),
+        ),
+        playSequence = listOf(
+            RuleStep(
+                title = "Draw Phase",
+                summary = "Draw 1 card from your Main Deck.",
+                detail = "[Placeholder — will be filled with actual Speed Duel turn sequence]",
+            ),
+            RuleStep(
+                title = "Main Phase",
+                summary = "Summon monsters, Set Spells/Traps, activate Skills.",
+                detail = "[Placeholder — will be filled with actual Main Phase rules]",
+            ),
+            RuleStep(
+                title = "Battle Phase",
+                summary = "Declare attacks with your monsters.",
+                detail = "[Placeholder — will be filled with actual Battle Phase rules]",
+            ),
+            RuleStep(
+                title = "End Phase",
+                summary = "Conclude your turn.",
+                detail = "[Placeholder — will be filled with actual End Phase rules]",
+            ),
+        ),
+        keywords = listOf(
+            Keyword(
+                name = "Skill Card",
+                definition = "A special card that grants a unique ability to use during the Duel. Each player can activate their Skill Card once per Duel according to its activation condition.",
+                category = "Core Mechanics",
+            ),
+        ),
+    )
+
+    val configs: List<RulesConfig> = listOf(advancedTcg, speedDuel)
 }

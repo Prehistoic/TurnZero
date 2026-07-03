@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RulesWinConsTab(
+fun RulesVictoryTab(
     winCons: List<WinCondition>,
     modifier: Modifier = Modifier,
 ) {

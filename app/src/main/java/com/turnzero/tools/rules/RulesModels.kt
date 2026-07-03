@@ -7,6 +7,7 @@ data class RulesConfig(
     val winCons: List<WinCondition>,
     val playSequence: List<RuleStep>,
     val keywords: List<Keyword>? = null,
+    val pdfUrl: String? = null,
 )
 
 data class RuleStep(
@@ -38,6 +39,8 @@ data class RulesUiState(
     val expandedStepIndex: Int? = null,
     val expandedKeywordIndex: Int? = null,
     val keywordSearchQuery: String = "",
+    val selectedKeywordCategory: String? = null,
+    val showPdf: Boolean = false,
     val isLoading: Boolean = true,
 ) {
     val currentConfig: RulesConfig?
@@ -48,8 +51,8 @@ data class RulesUiState(
             val config = currentConfig ?: return emptyList()
             return buildList {
                 add(TabInfo("setup", "Setup"))
-                add(TabInfo("wincons", "WinCons"))
-                add(TabInfo("sequence", "Sequence"))
+                add(TabInfo("turn", "Turn"))
+                add(TabInfo("victory", "Victory"))
                 if (!config.keywords.isNullOrEmpty()) {
                     add(TabInfo("keywords", "Keywords"))
                 }
@@ -60,8 +63,19 @@ data class RulesUiState(
         get() {
             val keywords = currentConfig?.keywords ?: return emptyList()
             val sorted = keywords.sortedBy { it.name.lowercase() }
-            if (keywordSearchQuery.isBlank()) return sorted
-            return sorted.filter { it.name.contains(keywordSearchQuery, ignoreCase = true) }
+            val filtered = if (keywordSearchQuery.isBlank()) sorted
+            else sorted.filter { it.name.contains(keywordSearchQuery, ignoreCase = true) }
+            return if (selectedKeywordCategory != null) {
+                filtered.filter { it.category == selectedKeywordCategory }
+            } else {
+                filtered
+            }
+        }
+
+    val allKeywordCategories: List<String>
+        get() {
+            val keywords = currentConfig?.keywords ?: return emptyList()
+            return keywords.mapNotNull { it.category }.distinct().sorted()
         }
 }
 

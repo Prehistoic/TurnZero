@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun RulesPlaySequenceTab(
+fun RulesTurnTab(
     steps: List<RuleStep>,
     expandedIndex: Int?,
     onToggle: (Int) -> Unit,

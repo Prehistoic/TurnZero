@@ -1,7 +1,11 @@
 package com.turnzero.tools.rules
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
+import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -16,6 +20,24 @@ class RulesTool : Tool {
     override val supportedGames = setOf("*")
 
     @Composable
+    override fun TopBarActions(): @Composable RowScope.() -> Unit {
+        val viewModel: RulesViewModel = hiltViewModel()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val hasPdf = uiState.currentConfig?.pdfUrl != null
+
+        return {
+            if (hasPdf) {
+                IconButton(onClick = { viewModel.togglePdf() }) {
+                    Icon(
+                        Icons.Default.PictureAsPdf,
+                        contentDescription = "Official Rules PDF",
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
     override fun Screen(onBack: () -> Unit) {
         val viewModel: RulesViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -28,6 +50,8 @@ class RulesTool : Tool {
             onToggleStep = viewModel::toggleStep,
             onToggleKeyword = viewModel::toggleKeyword,
             onSearchQueryChange = viewModel::setSearchQuery,
+            onFilterCategory = viewModel::filterCategory,
+            onTogglePdf = viewModel::togglePdf,
         )
     }
 }

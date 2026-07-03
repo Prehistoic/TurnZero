@@ -74,8 +74,8 @@ class RulesModelsTest {
         val tabs = state.visibleTabs
         assertEquals(4, tabs.size)
         assertEquals("setup", tabs[0].key)
-        assertEquals("wincons", tabs[1].key)
-        assertEquals("sequence", tabs[2].key)
+        assertEquals("turn", tabs[1].key)
+        assertEquals("victory", tabs[2].key)
         assertEquals("keywords", tabs[3].key)
     }
 
@@ -85,8 +85,8 @@ class RulesModelsTest {
         val tabs = state.visibleTabs
         assertEquals(3, tabs.size)
         assertEquals("setup", tabs[0].key)
-        assertEquals("wincons", tabs[1].key)
-        assertEquals("sequence", tabs[2].key)
+        assertEquals("turn", tabs[1].key)
+        assertEquals("victory", tabs[2].key)
     }
 
     @Test
@@ -118,8 +118,8 @@ class RulesModelsTest {
         val tabs = state.visibleTabs
         assertEquals(3, tabs.size)
         assertEquals("setup", tabs[0].key)
-        assertEquals("wincons", tabs[1].key)
-        assertEquals("sequence", tabs[2].key)
+        assertEquals("turn", tabs[1].key)
+        assertEquals("victory", tabs[2].key)
     }
 
     @Test
@@ -139,5 +139,23 @@ class RulesModelsTest {
         assertEquals("Alpha Effect", result[0].name)
         assertEquals("Quick Effect", result[1].name)
         assertEquals("Zeta Effect", result[2].name)
+    }
+
+    @Test
+    fun `filteredKeywords filters by selected category`() {
+        val state = RulesUiState(
+            configs = listOf(sampleConfig),
+            selectedKeywordCategory = "Summon",
+        )
+        val result = state.filteredKeywords
+        assertEquals(1, result.size)
+        assertEquals("Tribute Summon", result[0].name)
+    }
+
+    @Test
+    fun `allKeywordCategories returns distinct sorted categories`() {
+        val state = RulesUiState(configs = listOf(sampleConfig))
+        val categories = state.allKeywordCategories
+        assertEquals(listOf("Damage Calculation", "Effect Types", "Summon"), categories)
     }
 }
