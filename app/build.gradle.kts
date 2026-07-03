@@ -41,6 +41,10 @@ android {
         compose = true
         buildConfig = true
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 kotlin {
@@ -68,6 +72,8 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.aboutlibraries.compose)
     implementation(libs.markdown.m3)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.errorprone.annotations)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

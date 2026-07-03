@@ -100,19 +100,25 @@ class RulesViewModelTest {
     }
 
     @Test
-    fun `selectTab updates selectedTabIndex`() = runTest {
+    fun `selectTab updates selectedTabIndex and clears expanded states`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
+        vm.toggleStep(0)
         vm.selectTab(2)
         assertEquals(2, vm.uiState.value.selectedTabIndex)
+        assertNull(vm.uiState.value.expandedStepIndex)
+        assertNull(vm.uiState.value.expandedKeywordIndex)
     }
 
     @Test
-    fun `onPageChanged syncs selectedTabIndex`() = runTest {
+    fun `onPageChanged syncs selectedTabIndex and clears expanded states`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
+        vm.toggleKeyword(0)
         vm.onPageChanged(1)
         assertEquals(1, vm.uiState.value.selectedTabIndex)
+        assertNull(vm.uiState.value.expandedStepIndex)
+        assertNull(vm.uiState.value.expandedKeywordIndex)
     }
 
     @Test

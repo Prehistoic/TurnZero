@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.mikepenz.markdown.m3.Markdown
+import com.turnzero.tools.rules.MarkdownContent
 
 @Composable
 fun RulesVictoryTab(
@@ -43,7 +43,7 @@ fun RulesVictoryTab(
                         fontWeight = FontWeight.SemiBold,
                     )
                     Spacer(Modifier.height(4.dp))
-                    Markdown(
+                    MarkdownContent(
                         content = condition.description,
                     )
                 }

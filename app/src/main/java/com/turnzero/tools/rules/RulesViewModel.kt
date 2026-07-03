@@ -42,11 +42,23 @@ class RulesViewModel @Inject constructor(
     }
 
     fun selectTab(index: Int) {
-        _uiState.update { it.copy(selectedTabIndex = index) }
+        _uiState.update {
+            it.copy(
+                selectedTabIndex = index,
+                expandedStepIndex = null,
+                expandedKeywordIndex = null,
+            )
+        }
     }
 
     fun onPageChanged(index: Int) {
-        _uiState.update { it.copy(selectedTabIndex = index) }
+        _uiState.update {
+            it.copy(
+                selectedTabIndex = index,
+                expandedStepIndex = null,
+                expandedKeywordIndex = null,
+            )
+        }
     }
 
     fun toggleStep(index: Int) {
