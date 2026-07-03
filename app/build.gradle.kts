@@ -10,12 +10,11 @@ plugins {
 android {
     namespace = "com.turnzero"
     compileSdk = 37
-    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.turnzero"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 7
         versionName = "0.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
