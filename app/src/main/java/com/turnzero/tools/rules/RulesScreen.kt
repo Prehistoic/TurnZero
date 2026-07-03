@@ -6,16 +6,18 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RulesScreen(
     uiState: RulesUiState,
-    onSelectRuleset: (Int) -> Unit,
     onSelectTab: (Int) -> Unit,
     onPageChanged: (Int) -> Unit,
     onToggleStep: (Int) -> Unit,
@@ -27,11 +29,21 @@ fun RulesScreen(
 ) {
     val config = uiState.currentConfig ?: return
 
+    if (uiState.showPdf && config.pdfUrl != null) {
+        RulesPdfSheet(
+            url = config.pdfUrl,
+            onDismiss = onTogglePdf,
+        )
+        return
+    }
+
     val visibleTabs = uiState.visibleTabs
     val pagerState = rememberPagerState(
         initialPage = uiState.selectedTabIndex.coerceIn(0, (visibleTabs.size - 1).coerceAtLeast(0)),
         pageCount = { visibleTabs.size },
     )
+
+    val currentPageForTab by remember { derivedStateOf { pagerState.currentPage } }
 
     LaunchedEffect(uiState.selectedTabIndex) {
         if (uiState.selectedTabIndex in visibleTabs.indices) {
@@ -48,20 +60,18 @@ fun RulesScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        if (uiState.configs.size > 1) {
-            RulesetChipBar(
-                configs = uiState.configs,
-                selectedIndex = uiState.selectedRulesetIndex,
-                onSelect = onSelectRuleset,
-            )
-        }
-
-        TabRow(selectedTabIndex = uiState.selectedTabIndex.coerceIn(visibleTabs.indices)) {
+        TabRow(selectedTabIndex = currentPageForTab.coerceIn(visibleTabs.indices)) {
             visibleTabs.forEachIndexed { index, tab ->
                 Tab(
-                    selected = uiState.selectedTabIndex == index,
+                    selected = currentPageForTab == index,
                     onClick = { onSelectTab(index) },
-                    text = { Text(tab.title) },
+                    text = {
+                        Text(
+                            text = tab.title,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
                 )
             }
         }
@@ -96,38 +106,6 @@ fun RulesScreen(
                     onFilterCategory = onFilterCategory,
                 )
             }
-        }
-    }
-
-    if (uiState.showPdf && config.pdfUrl != null) {
-        RulesPdfSheet(
-            url = config.pdfUrl,
-            onDismiss = onTogglePdf,
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun RulesetChipBar(
-    configs: List<RulesConfig>,
-    selectedIndex: Int,
-    onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ScrollableTabRow(
-        selectedTabIndex = selectedIndex,
-        modifier = modifier,
-        edgePadding = 16.dp,
-        divider = {},
-    ) {
-        configs.forEachIndexed { index, config ->
-            FilterChip(
-                selected = index == selectedIndex,
-                onClick = { onSelect(index) },
-                label = { Text(config.rulesetName) },
-                modifier = Modifier.padding(horizontal = 4.dp),
-            )
         }
     }
 }

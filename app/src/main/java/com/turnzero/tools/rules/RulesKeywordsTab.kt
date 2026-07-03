@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RulesKeywordsTab(
     keywords: List<Keyword>,
@@ -90,11 +91,12 @@ fun RulesKeywordsTab(
             ) {
                 if (selectedCategory == null && allCategories.isNotEmpty()) {
                     item {
-                        Row(
+                        FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             allCategories.forEach { category ->
                                 SuggestionChip(
