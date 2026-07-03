@@ -13,7 +13,7 @@ import com.turnzero.core.tools.api.Tool
 
 class CoinTool : Tool {
     override val id = "coin"
-    override val name = "Coin"
+    override val name = "CoinFlip"
     override val icon = Icons.Default.Toll
     override val supportedGames = setOf("*")
 

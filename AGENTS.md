@@ -27,13 +27,20 @@ TurnZero is an Android companion app for tabletop and trading card games. It pro
 
 ## Build Commands
 
+All Gradle commands must be prefixed with `ANDROID_HOME` when running from WSL, to override the Windows-only `sdk.dir` in `local.properties`:
+
 ```bash
-./gradlew assembleDebug          # Build debug APK
-./gradlew assembleRelease        # Build release APK (R8 minification enabled)
-./gradlew testDebugUnitTest      # Run unit tests
-./gradlew connectedDebugAndroidTest  # Run instrumented tests
-./gradlew lint                   # Run Android Lint
-./gradlew clean assembleDebug    # Clean build
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew <task>
+```
+
+Full reference:
+```bash
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew assembleDebug          # Build debug APK
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew assembleRelease        # Build release APK (R8 minification enabled)
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew testDebugUnitTest      # Run unit tests
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew connectedDebugAndroidTest  # Run instrumented tests
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew lint                   # Run Android Lint
+ANDROID_HOME=/mnt/c/Users/matla/AppData/Local/Android/Sdk ./gradlew clean assembleDebug    # Clean build
 ```
 
 ## Code Conventions
