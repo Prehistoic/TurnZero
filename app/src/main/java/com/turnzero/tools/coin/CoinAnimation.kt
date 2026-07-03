@@ -1,13 +1,13 @@
 package com.turnzero.tools.coin
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,12 +17,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
@@ -37,26 +37,42 @@ fun CoinAnimation(
     triggerScale: Int = 0
 ) {
     val hasFlipped = results.isNotEmpty()
+    val scope = rememberCoroutineScope()
 
-    var displayedFaces by remember { mutableStateOf(List(coinCount) { CoinFace.HEAD }) }
+    var displayedFaces by remember(coinCount) { mutableStateOf(List(coinCount) { CoinFace.HEAD }) }
+    val rotations = remember(coinCount) { List(coinCount) { Animatable(0f) } }
 
     LaunchedEffect(isFlipping, results) {
         if (isFlipping && results.isNotEmpty()) {
+            val targets = results.map { face ->
+                val fullSpins = Random.nextInt(5, 9) * 360f
+                if (face == CoinFace.HEAD) fullSpins else fullSpins + 180f
+            }
+
+            rotations.forEachIndexed { i, anim ->
+                scope.launch {
+                    anim.snapTo(0f)
+                    anim.animateTo(
+                        targetValue = targets[i],
+                        animationSpec = tween(
+                            durationMillis = 1000 + i * 70,
+                            easing = FastOutSlowInEasing
+                        )
+                    )
+                }
+            }
+
             val fastEnd = System.currentTimeMillis() + 600
             while (System.currentTimeMillis() < fastEnd) {
                 displayedFaces = List(coinCount) { if (Random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL }
-                delay(80)
+                delay(60)
             }
-            delay(100)
-            displayedFaces = List(coinCount) { if (Random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL }
-            delay(150)
-            displayedFaces = results.mapIndexed { i, _ ->
-                if (Random.nextBoolean()) results[i] else (if (Random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL)
-            }
-            delay(250)
+            delay(80)
             displayedFaces = results
+
+            delay(400)
             onAnimationComplete()
-        } else if (!isFlipping && results.isNotEmpty() && displayedFaces != results) {
+        } else if (!isFlipping && results.isNotEmpty()) {
             displayedFaces = results
         }
     }
@@ -73,13 +89,11 @@ fun CoinAnimation(
         }
     }
 
-    val animatedScale by animateFloatAsState(
+    val animatedScale by androidx.compose.animation.core.animateFloatAsState(
         targetValue = targetScale,
         animationSpec = spring(dampingRatio = 0.5f, stiffness = 500f),
         label = "tapScale"
     )
-
-    val density = LocalDensity.current
 
     val rows = (1..coinCount).toList().chunked(4)
 
@@ -99,7 +113,7 @@ fun CoinAnimation(
 
                     CoinCard(
                         face = face,
-                        isAnimating = isFlipping,
+                        spinAngle = rotations[index].value,
                         modifier = Modifier.padding(4.dp),
                         coinSize = coinSize
                     )
@@ -112,7 +126,7 @@ fun CoinAnimation(
 @Composable
 fun CoinCard(
     face: CoinFace,
-    isAnimating: Boolean,
+    spinAngle: Float,
     modifier: Modifier = Modifier,
     coinSize: Dp
 ) {
@@ -127,35 +141,10 @@ fun CoinCard(
 
     val gradient = if (isHead) headGradient else tailGradient
     val emoji = if (isHead) "\uD83D\uDC64" else "\u2B50"
-
     val rimColor = if (isHead) Color(0xFFD4AF37) else Color(0xFFB0B0B0)
 
-    var targetRotX by remember { mutableFloatStateOf(0f) }
-    var targetRotY by remember { mutableFloatStateOf(0f) }
-
-    LaunchedEffect(isAnimating) {
-        if (isAnimating) {
-            targetRotX = Random.nextFloat() * 720f
-            targetRotY = Random.nextFloat() * 720f
-        } else {
-            targetRotX = 0f
-            targetRotY = 0f
-        }
-    }
-
     val localDensity = LocalDensity.current
-    val cameraDist = 8f * localDensity.density
-
-    val rotX by animateFloatAsState(
-        targetValue = targetRotX,
-        animationSpec = tween(durationMillis = 800),
-        label = "rotX"
-    )
-    val rotY by animateFloatAsState(
-        targetValue = targetRotY,
-        animationSpec = tween(durationMillis = 1000),
-        label = "rotY"
-    )
+    val cameraDist = 12f * localDensity.density
 
     val borderWidth = (coinSize.value / 32f).dp
 
@@ -163,8 +152,7 @@ fun CoinCard(
         modifier = modifier
             .size(coinSize)
             .graphicsLayer {
-                rotationX = rotX
-                rotationY = rotY
+                this.rotationY = spinAngle
                 cameraDistance = cameraDist
             }
             .border(borderWidth, rimColor, CircleShape)
