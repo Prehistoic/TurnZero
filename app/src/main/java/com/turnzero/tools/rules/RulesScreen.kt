@@ -78,6 +78,7 @@ fun RulesScreen(
 
         HorizontalPager(
             state = pagerState,
+            beyondViewportPageCount = 0,
             modifier = Modifier.fillMaxSize(),
         ) { page ->
             val tab = visibleTabs.getOrNull(page) ?: return@HorizontalPager

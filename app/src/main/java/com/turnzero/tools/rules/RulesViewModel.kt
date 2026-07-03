@@ -42,6 +42,7 @@ class RulesViewModel @Inject constructor(
     }
 
     fun selectTab(index: Int) {
+        if (index == _uiState.value.selectedTabIndex) return
         _uiState.update {
             it.copy(
                 selectedTabIndex = index,
