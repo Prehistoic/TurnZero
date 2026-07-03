@@ -9,9 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.1] - 2026-07-04
 
+### Added
+- Rulings Searcher tool with PDF viewer, category filter, and multiple rulesets (Standard, Speed Duel)
+- Markdown rendering for step details, win condition descriptions, and keyword definitions
+- Custom markdown image rendering via Coil 3
+- Fullscreen PDF document viewer
+
 ### Changed
 - Bump Gradle from 9.2.0 to 9.6.1 and AGP from 9.0.1 to 9.2.1
 - Target Android SDK 37 (Android 16)
+- Ruleset selector moved to TopBar dropdown with OptionsSheet
+- Replaced ExposedDropdownMenuBox with stable DropdownMenu (fixes NoSuchMethodError crash)
+- Replaced FlowRow with scrolling Row (fixes NoSuchMethodError crash)
+
+### Fixed
+- Pager tab sync when switching rulesets
+- Intermediate tabs during pager animation
+- Tab switch clearing expanded accordion states
+- Same-tab accordion re-expansion prevention
 
 ## [0.4.0] - 2026-07-03
 
