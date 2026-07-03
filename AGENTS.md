@@ -5,9 +5,9 @@
 TurnZero is an Android companion app for tabletop and trading card games. It provides a toolkit architecture where Games (e.g., Yu-Gi-Oh!) have associated Tools (e.g., Dice Roller, Life Counter, Rulings Searcher).
 
 - **Package:** `com.turnzero`
-- **Min SDK:** 28 (Android 9) — **Target/Compile SDK:** 36
+- **Min SDK:** 28 (Android 9) — **Target/Compile SDK:** 37
 - **Language:** Kotlin — **UI:** Jetpack Compose + Material 3
-- **Build:** Gradle 9.2.0 (Kotlin DSL) + AGP 9.0.1
+- **Build:** Gradle 9.6.1 (Kotlin DSL) + AGP 9.2.1
 - **Kotlin:** 2.2.10 (built into AGP 9.x — do NOT apply `org.jetbrains.kotlin.android` plugin)
 
 ## Module Structure
@@ -180,6 +180,18 @@ chore: update Compose BOM to 2025.01.00
 - PR title follows the same Conventional Commits format.
 - Ensure all checks pass (build, lint, tests) before merging.
 - **PR description must include the relevant CHANGELOG entry** for the changes being merged.
+
+### PR Creation Checklist
+When creating a pull request, the agent MUST:
+
+1. **Verify version bump** — increment `versionName` and `versionCode` in `app/build.gradle.kts`:
+   ```
+   versionCode = <previous + 1>
+   versionName = "<updated semver>"
+   ```
+2. **Verify CHANGELOG** — ensure `CHANGELOG.md` has a new version section matching the bumped version in `app/build.gradle.kts`, populated with all changes on the branch (including any changes already merged to `main` since the last release). The `## [Unreleased]` section should be empty.
+3. **Check for missed entries** — review `git log main..HEAD` and ensure all user-facing changes appear in the CHANGELOG. If prior commits on `main` were never captured, include them in the new version section.
+4. **Bump dates** — the new version section header must include the current date: `## [X.Y.Z] - YYYY-MM-DD`
 
 ### Changelog
 

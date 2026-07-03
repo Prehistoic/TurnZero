@@ -37,8 +37,8 @@ data class DicePreset(
 
 data class DiceUiState(
     val gameId: String = "*",
-    val dice: List<Die> = emptyList(),
-    val selectedColor: DiceColor = DiceColor.RED,
+    val dice: List<Die> = listOf(Die("d1", 6, DiceColor.WHITE)),
+    val selectedColor: DiceColor = DiceColor.WHITE,
     val presets: List<DicePreset> = emptyList(),
     val history: List<DiceRoll> = emptyList(),
     val isRolling: Boolean = false,

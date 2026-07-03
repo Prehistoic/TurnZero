@@ -9,15 +9,14 @@ plugins {
 
 android {
     namespace = "com.turnzero"
-    compileSdk = 36
-    buildToolsVersion = "36.0.0"
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.turnzero"
         minSdk = 28
-        targetSdk = 36
-        versionCode = 7
-        versionName = "0.4.0"
+        targetSdk = 37
+        versionCode = 8
+        versionName = "0.4.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,11 +40,16 @@ android {
         compose = true
         buildConfig = true
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xskip-metadata-version-check")
     }
 }
 
@@ -66,6 +70,10 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.aboutlibraries.compose)
+    implementation(libs.markdown.m3)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.errorprone.annotations)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)

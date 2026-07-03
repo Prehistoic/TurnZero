@@ -20,11 +20,11 @@ class DataStoreDiceRepo @Inject constructor(
 
     override suspend fun getPool(gameId: String): List<Die> {
         val key = UserPreferences.dicePoolKey(gameId)
-        val raw = dataStore.data.map { it[key] }.first() ?: return emptyList()
+        val raw = dataStore.data.map { it[key] }.first() ?: return listOf(Die("d1", 6, DiceColor.WHITE))
         return try {
             json.decodeFromString<List<Die>>(raw)
         } catch (_: Exception) {
-            emptyList()
+            listOf(Die("d1", 6, DiceColor.WHITE))
         }
     }
 
@@ -38,8 +38,8 @@ class DataStoreDiceRepo @Inject constructor(
     override suspend fun getSelectedColor(): DiceColor {
         val raw = dataStore.data.map { it[UserPreferences.DICE_SELECTED_COLOR] }.first()
         return raw?.let { name ->
-            try { DiceColor.valueOf(name) } catch (_: Exception) { DiceColor.RED }
-        } ?: DiceColor.RED
+            try { DiceColor.valueOf(name) } catch (_: Exception) { DiceColor.WHITE }
+        } ?: DiceColor.WHITE
     }
 
     override suspend fun saveSelectedColor(color: DiceColor) {
