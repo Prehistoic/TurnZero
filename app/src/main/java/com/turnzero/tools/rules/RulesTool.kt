@@ -26,7 +26,6 @@ class RulesTool : Tool {
     override val icon: ImageVector get() = Icons.AutoMirrored.Filled.MenuBook
     override val supportedGames = setOf("*")
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit {
         val viewModel: RulesViewModel = hiltViewModel()
@@ -38,13 +37,9 @@ class RulesTool : Tool {
         return {
             if (configs.size > 1) {
                 var expanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it },
-                ) {
+                Box {
                     Row(
                         modifier = Modifier
-                            .menuAnchor()
                             .clickable { expanded = true }
                             .padding(horizontal = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -59,7 +54,7 @@ class RulesTool : Tool {
                             modifier = Modifier.size(18.dp),
                         )
                     }
-                    ExposedDropdownMenu(
+                    DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {
