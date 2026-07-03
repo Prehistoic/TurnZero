@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-07-04
+
+### Changed
+- Bump Gradle from 9.2.0 to 9.6.1 and AGP from 9.0.1 to 9.2.1
+- Target Android SDK 37 (Android 16)
+
 ## [0.4.0] - 2026-07-03
 
 ### Added
