@@ -10,11 +10,13 @@ import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.games.yugioh.YuGiOhGame
 import com.turnzero.games.yugioh.YuGiOhLifeCounter
 import com.turnzero.games.yugioh.YuGiOhRulingsSearcher
+import com.turnzero.tools.coin.CoinTool
 import com.turnzero.tools.dice.DiceTool
 
 object ServiceLocator {
     val tools: Set<Tool> = setOf(
         DiceTool(),
+        CoinTool(),
         YuGiOhLifeCounter(),
         YuGiOhRulingsSearcher()
     )
