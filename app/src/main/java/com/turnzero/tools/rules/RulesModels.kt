@@ -40,17 +40,17 @@ data class RulesUiState(
     val keywordSearchQuery: String = "",
     val isLoading: Boolean = true,
 ) {
-    val currentRuleset: RulesConfig?
+    val currentConfig: RulesConfig?
         get() = configs.getOrNull(selectedRulesetIndex)
 
     val visibleTabs: List<TabInfo>
         get() {
-            val config = currentRuleset ?: return emptyList()
+            val config = currentConfig ?: return emptyList()
             return buildList {
                 add(TabInfo("setup", "Setup"))
                 add(TabInfo("wincons", "WinCons"))
                 add(TabInfo("sequence", "Sequence"))
-                if (config.keywords != null) {
+                if (!config.keywords.isNullOrEmpty()) {
                     add(TabInfo("keywords", "Keywords"))
                 }
             }
@@ -58,7 +58,7 @@ data class RulesUiState(
 
     val filteredKeywords: List<Keyword>
         get() {
-            val keywords = currentRuleset?.keywords ?: return emptyList()
+            val keywords = currentConfig?.keywords ?: return emptyList()
             val sorted = keywords.sortedBy { it.name.lowercase() }
             if (keywordSearchQuery.isBlank()) return sorted
             return sorted.filter { it.name.contains(keywordSearchQuery, ignoreCase = true) }
