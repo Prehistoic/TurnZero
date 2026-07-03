@@ -20,4 +20,8 @@ object UserPreferences {
     val DICE_HISTORY = stringPreferencesKey("dice_history")
 
     fun dicePoolKey(gameId: String) = stringPreferencesKey("dice_pool_$gameId")
+
+    val COIN_HISTORY = stringPreferencesKey("coin_history")
+
+    fun coinCountKey(gameId: String) = stringPreferencesKey("coin_count_$gameId")
 }

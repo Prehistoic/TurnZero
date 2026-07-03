@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-03
+
+### Added
+- CoinFlip tool with configurable coin count (1-8), 3D spin animation, and flip history (last 10)
+- Per-game coin presets (Yu-Gi-Oh! defaults to 1 coin)
+- Smart result display that omits zero-count sides and count prefix for single coin flips
+- Coin count persists per-game across sessions via DataStore
+
 ## [0.3.1] - 2026-06-29
 
 ### Changed
