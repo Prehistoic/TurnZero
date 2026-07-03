@@ -136,6 +136,7 @@ object YuGiOhRules {
     val speedDuel = RulesConfig(
         rulesetId = "tcg-speed-duel",
         rulesetName = "Speed Duel",
+        pdfUrl = "https://img.yugioh.com/rulebook/2023-11-17/YGO_Rulebook_EN_v10.pdf",
         setup = listOf(
             RuleStep(
                 title = "Deck Construction",
