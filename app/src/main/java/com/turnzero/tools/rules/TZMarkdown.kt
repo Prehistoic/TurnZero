@@ -11,8 +11,38 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.mikepenz.markdown.compose.components.MarkdownComponentModel
 import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.m3.Markdown
+
+private val rulesComponents = markdownComponents(
+    image = { model: MarkdownComponentModel ->
+        val url = model.content
+        if (url.startsWith("inline:")) {
+            val actualUrl = url.removePrefix("inline:")
+            AsyncImage(
+                model = actualUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(RoundedCornerShape(2.dp)),
+                contentScale = ContentScale.Fit,
+            )
+        } else {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                AsyncImage(
+                    model = url,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.FillWidth,
+                )
+            }
+        }
+    },
+)
 
 /**
  * Renders markdown content using the [Markdown] composable with custom image handling.
@@ -53,34 +83,7 @@ fun MarkdownContent(
 ) {
     Markdown(
         content = content,
-        components = markdownComponents(
-            image = { model ->
-                val url = model.content
-                if (url.startsWith("inline:")) {
-                    val actualUrl = url.removePrefix("inline:")
-                    AsyncImage(
-                        model = actualUrl,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clip(RoundedCornerShape(2.dp)),
-                        contentScale = ContentScale.Fit,
-                    )
-                } else {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        AsyncImage(
-                            model = url,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.FillWidth,
-                        )
-                    }
-                }
-            },
-        ),
+        components = rulesComponents,
         modifier = modifier,
     )
 }

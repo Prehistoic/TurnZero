@@ -115,9 +115,7 @@ fun RulesKeywordsTab(
                         keyword = keyword,
                         isExpanded = isExpanded,
                         onClick = { onToggle(index) },
-                        onCategoryClick = if (selectedCategory == null) {
-                            { category -> onFilterCategory(category) }
-                        } else null,
+                        onCategoryClick = if (selectedCategory == null) onFilterCategory else null,
                     )
                 }
                 item { Spacer(Modifier.height(16.dp)) }
@@ -131,7 +129,7 @@ private fun KeywordCard(
     keyword: Keyword,
     isExpanded: Boolean,
     onClick: () -> Unit,
-    onCategoryClick: ((String) -> Unit)?,
+    onCategoryClick: ((String?) -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Card(

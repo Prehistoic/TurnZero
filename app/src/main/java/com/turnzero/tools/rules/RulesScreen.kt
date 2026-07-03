@@ -47,7 +47,7 @@ fun RulesScreen(
 
     LaunchedEffect(uiState.selectedTabIndex) {
         if (uiState.selectedTabIndex in visibleTabs.indices) {
-            pagerState.animateScrollToPage(uiState.selectedTabIndex)
+            pagerState.scrollToPage(uiState.selectedTabIndex)
         }
     }
 
