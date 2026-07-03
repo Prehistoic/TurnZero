@@ -33,7 +33,6 @@ class RulesViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedRulesetIndex = index,
-                selectedTabIndex = 0,
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
                 keywordSearchQuery = "",

@@ -85,14 +85,15 @@ class RulesViewModelTest {
     }
 
     @Test
-    fun `selectRuleset resets tab index and expanded states`() = runTest {
+    fun `selectRuleset does not change selectedTabIndex and resets expanded states`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
+        vm.selectTab(2)
         vm.toggleStep(0)
         vm.selectRuleset(1)
         val state = vm.uiState.value
         assertEquals(1, state.selectedRulesetIndex)
-        assertEquals(0, state.selectedTabIndex)
+        assertEquals(2, state.selectedTabIndex)
         assertNull(state.expandedStepIndex)
         assertNull(state.expandedKeywordIndex)
         assertEquals("", state.keywordSearchQuery)

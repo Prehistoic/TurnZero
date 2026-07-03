@@ -104,9 +104,12 @@ class RulesTool : Tool {
         ModalBottomSheet(onDismissRequest = onDismiss) {
             Text(
                 text = "No options available for this tool.",
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(32.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
             )
         }
     }
