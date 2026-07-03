@@ -19,14 +19,16 @@ class DataStoreDiceRepoTest {
     val tempDir = TemporaryFolder()
 
     @Test
-    fun `getPool returns empty list when no data stored`() = runTest {
+    fun `getPool returns default white die when no data stored`() = runTest {
         val ds = PreferenceDataStoreFactory.create(
             scope = backgroundScope,
             produceFile = { File(tempDir.newFolder(), "test_prefs.preferences_pb") }
         )
         val repo = DataStoreDiceRepo(ds)
         val pool = repo.getPool("testgame")
-        assertTrue(pool.isEmpty())
+        assertEquals(1, pool.size)
+        assertEquals(6, pool[0].faceCount)
+        assertEquals(DiceColor.WHITE, pool[0].color)
     }
 
     @Test
