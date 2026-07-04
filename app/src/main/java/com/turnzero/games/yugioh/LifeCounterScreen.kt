@@ -74,7 +74,7 @@ fun LifeCounterScreen(
                     player = Player.PLAYER_1,
                     lp = uiState.player1Lp,
                     onClick = { onOpenCalc(Player.PLAYER_1) },
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier.weight(1f).padding(end = 4.dp)
                 )
 
                 CenterPanel(
@@ -86,14 +86,14 @@ fun LifeCounterScreen(
                     onStartPause = onStartPauseTimer,
                     onReset = onResetAll,
                     onUndo = onUndoLastChange,
-                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+                    modifier = Modifier.weight(1f).padding(horizontal = 4.dp)
                 )
 
                 PlayerLpPanel(
                     player = Player.PLAYER_2,
                     lp = uiState.player2Lp,
                     onClick = { onOpenCalc(Player.PLAYER_2) },
-                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                    modifier = Modifier.weight(1f).padding(start = 4.dp)
                 )
             }
         }
@@ -121,10 +121,7 @@ private fun PlayerLpPanel(
         Player.PLAYER_1 -> "Duellist 1"
         Player.PLAYER_2 -> "Duellist 2"
     }
-    val color = when (player) {
-        Player.PLAYER_1 -> MaterialTheme.colorScheme.primary
-        Player.PLAYER_2 -> MaterialTheme.colorScheme.secondary
-    }
+    val color = MaterialTheme.colorScheme.primary
 
     val prevLp = remember { mutableIntStateOf(lp) }
     val duration = remember(lp) {
@@ -231,7 +228,8 @@ private fun CenterPanel(
             Button(
                 onClick = onUndo,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             ) {
                 Text("Cancel")
