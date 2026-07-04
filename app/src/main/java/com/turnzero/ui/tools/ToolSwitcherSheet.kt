@@ -20,7 +20,13 @@ fun ToolSwitcherSheet(
     onToolSelected: (Tool) -> Unit,
     onDismiss: () -> Unit
 ) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.fillMaxWidth(0.6f),
+        sheetState = sheetState
+    ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(
                 text = "Switch Tool",
