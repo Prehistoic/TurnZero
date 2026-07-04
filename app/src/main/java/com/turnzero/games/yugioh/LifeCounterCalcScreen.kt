@@ -64,9 +64,9 @@ fun LifeCounterCalcScreen(
                     modifier = Modifier.weight(4f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    // Row 1: back + header
+                    // Row 1: back + header (taller)
                     Row(
-                        modifier = Modifier.weight(1.5f).fillMaxWidth(),
+                        modifier = Modifier.weight(2f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(GAP)
                     ) {
                         CalcCell(
@@ -86,11 +86,14 @@ fun LifeCounterCalcScreen(
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
                             contentAlignment = Alignment.CenterStart
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
+                                Column(
+                                    verticalArrangement = Arrangement.SpaceEvenly,
+                                    modifier = Modifier.fillMaxHeight()
+                                ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Box(
                                             modifier = Modifier
@@ -99,21 +102,20 @@ fun LifeCounterCalcScreen(
                                                     bottomStartPercent = 0, bottomEndPercent = 50
                                                 ))
                                                 .background(MaterialTheme.colorScheme.onSurface)
-                                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                                                .padding(horizontal = 12.dp, vertical = 5.dp)
                                         ) {
                                             Text(
                                                 text = "LP",
-                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                style = MaterialTheme.typography.titleSmall.copy(
                                                     fontWeight = FontWeight.Bold,
                                                     color = MaterialTheme.colorScheme.surface
-                                                ),
-                                                fontSize = 14.sp
+                                                )
                                             )
                                         }
-                                        Spacer(Modifier.width(10.dp))
+                                        Spacer(Modifier.width(12.dp))
                                         Text(
                                             text = playerLabel,
-                                            style = MaterialTheme.typography.titleSmall,
+                                            style = MaterialTheme.typography.titleMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
@@ -125,11 +127,10 @@ fun LifeCounterCalcScreen(
                                         }
                                         Text(
                                             text = currentLp.toString(),
-                                            style = MaterialTheme.typography.headlineMedium.copy(
+                                            style = MaterialTheme.typography.displaySmall.copy(
                                                 fontWeight = FontWeight.Bold,
                                                 color = MaterialTheme.colorScheme.primary
-                                            ),
-                                            fontSize = 36.sp
+                                            )
                                         )
                                         if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
                                             val symbol = when (calcState.operation) {
@@ -140,19 +141,19 @@ fun LifeCounterCalcScreen(
                                             if (calcState.operation == Operation.DIVIDE) {
                                                 Text(
                                                     text = " $symbol",
-                                                    style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                    style = MaterialTheme.typography.headlineSmall,
                                                     color = opColor
                                                 )
                                             } else {
                                                 Text(
                                                     text = " $symbol ${calcState.digits}",
-                                                    style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                    style = MaterialTheme.typography.headlineSmall,
                                                     color = opColor
                                                 )
                                                 if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
                                                     Text(
                                                         text = "0".repeat(calcState.trailingZeroCount),
-                                                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                        style = MaterialTheme.typography.headlineSmall,
                                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                                                     )
                                                 }
@@ -237,34 +238,14 @@ fun LifeCounterCalcScreen(
                     }
                 }
 
-                // Right: Column 5 big cell (rows 1-3) + = cell (rows 4-5)
+                // Right: Column 5 empty space matching total height
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
                     Box(
                         modifier = Modifier
-                            .weight(3.5f)  // rows 1-3 combined weight
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = currentLp.toString(),
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            ),
-                            fontSize = 28.sp
-                        )
-                    }
-                    CalcCell(
-                        onClick = onAction.onApply,
-                        label = "\u003d",
-                        containerColor = Color(0xFF1B4332),
-                        modifier = Modifier
-                            .weight(2f)
+                            .weight(5.5f)
                             .fillMaxWidth()
                     )
                 }
