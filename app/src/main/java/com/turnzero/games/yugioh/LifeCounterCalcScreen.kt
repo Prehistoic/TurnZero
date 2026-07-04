@@ -22,7 +22,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 private val GAP = 6.dp
-private val HORIZONTAL_PADDING = 24.dp
+private val HORIZONTAL_PADDING = 32.dp
 
 @Composable
 fun LifeCounterCalcScreen(
@@ -54,209 +54,220 @@ fun LifeCounterCalcScreen(
                 .padding(start = HORIZONTAL_PADDING, end = HORIZONTAL_PADDING, top = HORIZONTAL_PADDING, bottom = HORIZONTAL_PADDING),
             verticalArrangement = Arrangement.spacedBy(GAP)
         ) {
-            // Row 1: back | header | big cell spanning rows 2-3 too
+            // Main area: left grid + right column
             Row(
-                modifier = Modifier
-                    .weight(1.5f)
-                    .fillMaxWidth(),
+                modifier = Modifier.weight(1f).fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
-                CalcCell(
-                    onClick = onBack,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
+                // Left: 4-column grid
+                Column(
+                    modifier = Modifier.weight(4f),
+                    verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier.size(32.dp),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .weight(3f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    // Row 1: back + header
+                    Row(
+                        modifier = Modifier.weight(1.5f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
+                    ) {
+                        CalcCell(
+                            onClick = onBack,
+                            modifier = Modifier.weight(1f).fillMaxHeight()
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                modifier = Modifier.size(32.dp),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .weight(3f)
+                                .fillMaxHeight()
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(
-                                            topStartPercent = 0, topEndPercent = 50,
-                                            bottomStartPercent = 0, bottomEndPercent = 50
-                                        ))
-                                        .background(MaterialTheme.colorScheme.onSurface)
-                                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                                ) {
-                                    Text(
-                                        text = "LP",
-                                        style = MaterialTheme.typography.labelMedium.copy(
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.surface
-                                        ),
-                                        fontSize = 14.sp
-                                    )
-                                }
-                                Spacer(Modifier.width(10.dp))
-                                Text(
-                                    text = playerLabel,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                val opColor = when (calcState.operation) {
-                                    Operation.ADD -> MaterialTheme.colorScheme.primary
-                                    Operation.SUBTRACT -> MaterialTheme.colorScheme.error
-                                    Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
-                                }
-                                Text(
-                                    text = currentLp.toString(),
-                                    style = MaterialTheme.typography.headlineMedium.copy(
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary
-                                    ),
-                                    fontSize = 32.sp
-                                )
-                                if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
-                                    val symbol = when (calcState.operation) {
-                                        Operation.ADD -> "+"
-                                        Operation.SUBTRACT -> "\u2212"
-                                        Operation.DIVIDE -> "\u00f72"
-                                    }
-                                    if (calcState.operation == Operation.DIVIDE) {
-                                        Text(
-                                            text = " $symbol",
-                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
-                                            color = opColor
-                                        )
-                                    } else {
-                                        Text(
-                                            text = " $symbol ${calcState.digits}",
-                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
-                                            color = opColor
-                                        )
-                                        if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
+                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(
+                                                    topStartPercent = 0, topEndPercent = 50,
+                                                    bottomStartPercent = 0, bottomEndPercent = 50
+                                                ))
+                                                .background(MaterialTheme.colorScheme.onSurface)
+                                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                                        ) {
                                             Text(
-                                                text = "0".repeat(calcState.trailingZeroCount),
-                                                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
-                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                                text = "LP",
+                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = MaterialTheme.colorScheme.surface
+                                                ),
+                                                fontSize = 14.sp
                                             )
+                                        }
+                                        Spacer(Modifier.width(10.dp))
+                                        Text(
+                                            text = playerLabel,
+                                            style = MaterialTheme.typography.titleSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        val opColor = when (calcState.operation) {
+                                            Operation.ADD -> MaterialTheme.colorScheme.primary
+                                            Operation.SUBTRACT -> MaterialTheme.colorScheme.error
+                                            Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
+                                        }
+                                        Text(
+                                            text = currentLp.toString(),
+                                            style = MaterialTheme.typography.headlineMedium.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.primary
+                                            ),
+                                            fontSize = 36.sp
+                                        )
+                                        if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
+                                            val symbol = when (calcState.operation) {
+                                                Operation.ADD -> "+"
+                                                Operation.SUBTRACT -> "\u2212"
+                                                Operation.DIVIDE -> "\u00f72"
+                                            }
+                                            if (calcState.operation == Operation.DIVIDE) {
+                                                Text(
+                                                    text = " $symbol",
+                                                    style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                    color = opColor
+                                                )
+                                            } else {
+                                                Text(
+                                                    text = " $symbol ${calcState.digits}",
+                                                    style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                    color = opColor
+                                                )
+                                                if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
+                                                    Text(
+                                                        text = "0".repeat(calcState.trailingZeroCount),
+                                                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
+                                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                    // Row 2: EFF, 7, 8, 9
+                    Row(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
+                    ) {
+                        CalcCell(onClick = onAction.onClear, label = "EFF", modifier = Modifier.weight(1f).fillMaxHeight())
+                        CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f).fillMaxHeight())
+                        CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f).fillMaxHeight())
+                        CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f).fillMaxHeight())
+                    }
+                    // Row 3: +, 4, 5, 6
+                    Row(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
+                    ) {
+                        CalcCell(
+                            onClick = { onAction.onSetOperation(Operation.ADD) },
+                            label = "+",
+                            selected = calcState.operation == Operation.ADD,
+                            modifier = Modifier.weight(1f).fillMaxHeight()
+                        )
+                        CalcCell(onClick = { onAction.onDigit(4) }, label = "4", modifier = Modifier.weight(1f).fillMaxHeight())
+                        CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f).fillMaxHeight())
+                        CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f).fillMaxHeight())
+                    }
+                    // Rows 4-5: two rows of 4 cells
+                    Row(
+                        modifier = Modifier.weight(2f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(4f),
+                            verticalArrangement = Arrangement.spacedBy(GAP)
+                        ) {
+                            Row(
+                                modifier = Modifier.weight(1f).fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(GAP)
+                            ) {
+                                CalcCell(
+                                    onClick = { onAction.onSetOperation(Operation.SUBTRACT) },
+                                    label = "\u2212",
+                                    selected = calcState.operation == Operation.SUBTRACT,
+                                    modifier = Modifier.weight(1f).fillMaxHeight()
+                                )
+                                CalcCell(onClick = { onAction.onDigit(1) }, label = "1", modifier = Modifier.weight(1f).fillMaxHeight())
+                                CalcCell(onClick = { onAction.onDigit(2) }, label = "2", modifier = Modifier.weight(1f).fillMaxHeight())
+                                CalcCell(onClick = { onAction.onDigit(3) }, label = "3", modifier = Modifier.weight(1f).fillMaxHeight())
+                            }
+                            Row(
+                                modifier = Modifier.weight(1f).fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(GAP)
+                            ) {
+                                CalcCell(
+                                    onClick = onAction.onDivideBy2,
+                                    label = "\u00f72",
+                                    selected = calcState.operation == Operation.DIVIDE,
+                                    modifier = Modifier.weight(1f).fillMaxHeight()
+                                )
+                                CalcCell(onClick = { onAction.onDigit(0) }, label = "0", modifier = Modifier.weight(1f).fillMaxHeight())
+                                CalcCell(onClick = { onAction.onAddZeros(2) }, label = "00", modifier = Modifier.weight(1f).fillMaxHeight())
+                                CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxHeight())
+                            }
+                        }
+                        CalcCell(
+                            onClick = onAction.onApply,
+                            label = "\u003d",
+                            containerColor = Color(0xFF1B4332),
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        )
+                    }
                 }
 
-                // Big cell spanning rows 1-3 in last column
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = currentLp.toString(),
-                        style = MaterialTheme.typography.headlineSmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        ),
-                        fontSize = 28.sp
-                    )
-                }
-            }
-
-            // Row 2: EFF, 7, 8, 9, spacer
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP)
-            ) {
-                CalcCell(onClick = onAction.onClear, label = "EFF", modifier = Modifier.weight(1f).fillMaxHeight())
-                CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f).fillMaxHeight())
-                CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f).fillMaxHeight())
-                CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f).fillMaxHeight())
-                Spacer(modifier = Modifier.weight(1f))
-            }
-
-            // Row 3: +, 4, 5, 6, spacer
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP)
-            ) {
-                CalcCell(
-                    onClick = { onAction.onSetOperation(Operation.ADD) },
-                    label = "+",
-                    selected = calcState.operation == Operation.ADD,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                CalcCell(onClick = { onAction.onDigit(4) }, label = "4", modifier = Modifier.weight(1f).fillMaxHeight())
-                CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f).fillMaxHeight())
-                CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f).fillMaxHeight())
-                Spacer(modifier = Modifier.weight(1f))
-            }
-
-            // Rows 4-5 with = spanning both
-            Row(
-                modifier = Modifier
-                    .weight(2f)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP)
-            ) {
+                // Right: Column 5 big cell (rows 1-3) + = cell (rows 4-5)
                 Column(
-                    modifier = Modifier.weight(4f),
+                    modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    Row(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(GAP)
+                    Box(
+                        modifier = Modifier
+                            .weight(3.5f)  // rows 1-3 combined weight
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        contentAlignment = Alignment.Center
                     ) {
-                        CalcCell(
-                            onClick = { onAction.onSetOperation(Operation.SUBTRACT) },
-                            label = "\u2212",
-                            selected = calcState.operation == Operation.SUBTRACT,
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                        Text(
+                            text = currentLp.toString(),
+                            style = MaterialTheme.typography.headlineSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            ),
+                            fontSize = 28.sp
                         )
-                        CalcCell(onClick = { onAction.onDigit(1) }, label = "1", modifier = Modifier.weight(1f).fillMaxHeight())
-                        CalcCell(onClick = { onAction.onDigit(2) }, label = "2", modifier = Modifier.weight(1f).fillMaxHeight())
-                        CalcCell(onClick = { onAction.onDigit(3) }, label = "3", modifier = Modifier.weight(1f).fillMaxHeight())
                     }
-                    Row(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(GAP)
-                    ) {
-                        CalcCell(
-                            onClick = onAction.onDivideBy2,
-                            label = "\u00f72",
-                            selected = calcState.operation == Operation.DIVIDE,
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                        )
-                        CalcCell(onClick = { onAction.onDigit(0) }, label = "0", modifier = Modifier.weight(1f).fillMaxHeight())
-                        CalcCell(onClick = { onAction.onAddZeros(2) }, label = "00", modifier = Modifier.weight(1f).fillMaxHeight())
-                        CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxHeight())
-                    }
+                    CalcCell(
+                        onClick = onAction.onApply,
+                        label = "\u003d",
+                        containerColor = Color(0xFF1B4332),
+                        modifier = Modifier
+                            .weight(2f)
+                            .fillMaxWidth()
+                    )
                 }
-                CalcCell(
-                    onClick = onAction.onApply,
-                    label = "\u003d",
-                    containerColor = Color(0xFF1B4332),
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
             }
         }
     }

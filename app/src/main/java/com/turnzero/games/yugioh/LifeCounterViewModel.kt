@@ -113,31 +113,8 @@ class LifeCounterViewModel @Inject constructor(
     fun inputDigit(d: Int) {
         _uiState.update { state ->
             val newDigits = state.calcState.digits + d.toString()
-            val result = if (state.calcState.lockedIn) {
-                (newDigits.toIntOrNull() ?: 0) to 0
-            } else {
-                computePreview(newDigits)
-            }
-            state.copy(
-                calcState = state.calcState.copy(
-                    digits = newDigits,
-                    previewValue = result.first,
-                    trailingZeroCount = result.second
-                )
-            )
-        }
-    }
-
-    fun clearInput() {
-        _uiState.update {
-            it.copy(calcState = it.calcState.copy(digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
-        }
-    }
-
-    fun addZeros(count: Int) {
-        _uiState.update { state ->
-            val newDigits = state.calcState.digits + "0".repeat(count)
-            val result = if (state.calcState.lockedIn) {
+            val isZero = d == 0
+            val result = if (state.calcState.lockedIn || isZero) {
                 (newDigits.toIntOrNull() ?: 0) to 0
             } else {
                 computePreview(newDigits)
@@ -147,9 +124,31 @@ class LifeCounterViewModel @Inject constructor(
                     digits = newDigits,
                     previewValue = result.first,
                     trailingZeroCount = result.second,
+                    lockedIn = state.calcState.lockedIn || isZero
+                )
+            )
+        }
+    }
+
+    fun addZeros(count: Int) {
+        _uiState.update { state ->
+            if (state.calcState.digits.isEmpty()) return@update state
+            val newDigits = state.calcState.digits + "0".repeat(count)
+            val result = (newDigits.toIntOrNull() ?: 0) to 0
+            state.copy(
+                calcState = state.calcState.copy(
+                    digits = newDigits,
+                    previewValue = result.first,
+                    trailingZeroCount = result.second,
                     lockedIn = true
                 )
             )
+        }
+    }
+
+    fun clearInput() {
+        _uiState.update {
+            it.copy(calcState = it.calcState.copy(digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
         }
     }
 

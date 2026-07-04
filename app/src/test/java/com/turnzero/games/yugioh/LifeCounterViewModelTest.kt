@@ -159,8 +159,9 @@ class LifeCounterViewModelTest {
         vm.inputDigit(0)
         val cs = vm.uiState.value.calcState
         assertEquals("530", cs.digits)
-        assertEquals(5300, cs.previewValue)
-        assertEquals(1, cs.trailingZeroCount)
+        assertEquals(530, cs.previewValue)
+        assertEquals(0, cs.trailingZeroCount)
+        assertTrue(cs.lockedIn)
     }
 
     @Test
@@ -172,6 +173,19 @@ class LifeCounterViewModelTest {
         assertEquals("1234", cs.digits)
         assertEquals(1234, cs.previewValue)
         assertEquals(0, cs.trailingZeroCount)
+    }
+
+    @Test
+    fun `inputDigit locks after pressing zero`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        assertFalse(vm.uiState.value.calcState.lockedIn)
+        vm.inputDigit(0)
+        assertTrue(vm.uiState.value.calcState.lockedIn)
+        vm.inputDigit(3)
+        assertEquals("503", vm.uiState.value.calcState.digits)
+        assertEquals(503, vm.uiState.value.calcState.previewValue)
     }
 
     @Test
@@ -187,23 +201,46 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `addZeros locks input and prevents auto-multiply`() = runTest {
+    fun `inputDigit 0 locks input`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.inputDigit(0)
+        val cs = vm.uiState.value.calcState
+        assertEquals("50", cs.digits)
+        assertEquals(50, cs.previewValue)
+        assertEquals(0, cs.trailingZeroCount)
+        assertTrue(cs.lockedIn)
+    }
+
+    @Test
+    fun `addZeros ignores when digits empty`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.openCalc(Player.PLAYER_1)
         vm.addZeros(2)
-        assertTrue(vm.uiState.value.calcState.lockedIn)
-        assertEquals("00", vm.uiState.value.calcState.digits)
+        assertEquals("", vm.uiState.value.calcState.digits)
         assertEquals(0, vm.uiState.value.calcState.previewValue)
+    }
+
+    @Test
+    fun `addZeros after digit works correctly`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.addZeros(2)
+        assertEquals("500", vm.uiState.value.calcState.digits)
+        assertEquals(500, vm.uiState.value.calcState.previewValue)
+        assertTrue(vm.uiState.value.calcState.lockedIn)
     }
 
     @Test
     fun `inputDigit after addZeros uses raw value`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(3)
         vm.addZeros(2)
-        vm.inputDigit(5)
-        assertEquals("005", vm.uiState.value.calcState.digits)
-        assertEquals(5, vm.uiState.value.calcState.previewValue)
+        assertEquals("300", vm.uiState.value.calcState.digits)
+        assertEquals(300, vm.uiState.value.calcState.previewValue)
     }
 
     @Test
@@ -238,7 +275,7 @@ class LifeCounterViewModelTest {
         vm.applyCalcChange()
         val state = vm.uiState.value
         assertEquals(8000, state.player1Lp)
-        assertEquals(11000, state.player2Lp)
+        assertEquals(8300, state.player2Lp)
     }
 
     @Test
