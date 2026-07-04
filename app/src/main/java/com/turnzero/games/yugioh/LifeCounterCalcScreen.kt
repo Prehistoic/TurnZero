@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
@@ -54,25 +53,20 @@ fun LifeCounterCalcScreen(
                 .padding(start = HORIZONTAL_PADDING, end = HORIZONTAL_PADDING, top = HORIZONTAL_PADDING, bottom = HORIZONTAL_PADDING),
             verticalArrangement = Arrangement.spacedBy(GAP)
         ) {
-            // Main area: left grid + right column
             Row(
                 modifier = Modifier.weight(1f).fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
-                // Left: 4-column grid
+                // Columns 1-4: grid
                 Column(
                     modifier = Modifier.weight(4f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    // Row 1: back + header (taller)
                     Row(
                         modifier = Modifier.weight(2f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(GAP)
                     ) {
-                        CalcCell(
-                            onClick = onBack,
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                        ) {
+                        CalcCell(onClick = onBack, modifier = Modifier.weight(1f).fillMaxHeight()) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
@@ -89,74 +83,72 @@ fun LifeCounterCalcScreen(
                                 .padding(horizontal = 16.dp, vertical = 10.dp),
                             contentAlignment = Alignment.CenterStart
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
-                                Column(
-                                    verticalArrangement = Arrangement.SpaceEvenly,
-                                    modifier = Modifier.fillMaxHeight()
-                                ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Box(
-                                            modifier = Modifier
-                                                .clip(RoundedCornerShape(
-                                                    topStartPercent = 0, topEndPercent = 50,
-                                                    bottomStartPercent = 0, bottomEndPercent = 50
-                                                ))
-                                                .background(MaterialTheme.colorScheme.onSurface)
-                                                .padding(horizontal = 12.dp, vertical = 5.dp)
-                                        ) {
-                                            Text(
-                                                text = "LP",
-                                                style = MaterialTheme.typography.titleSmall.copy(
-                                                    fontWeight = FontWeight.Bold,
-                                                    color = MaterialTheme.colorScheme.surface
-                                                )
-                                            )
-                                        }
-                                        Spacer(Modifier.width(12.dp))
+                            Column(
+                                verticalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxHeight()
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(
+                                                topStartPercent = 0, topEndPercent = 50,
+                                                bottomStartPercent = 0, bottomEndPercent = 50
+                                            ))
+                                            .background(MaterialTheme.colorScheme.onSurface)
+                                            .padding(horizontal = 12.dp, vertical = 5.dp)
+                                    ) {
                                         Text(
-                                            text = playerLabel,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            text = "LP",
+                                            style = MaterialTheme.typography.titleSmall.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.surface
+                                            )
                                         )
                                     }
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        val opColor = when (calcState.operation) {
-                                            Operation.ADD -> MaterialTheme.colorScheme.primary
-                                            Operation.SUBTRACT -> MaterialTheme.colorScheme.error
-                                            Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
-                                        }
-                                        Text(
-                                            text = currentLp.toString(),
-                                            style = MaterialTheme.typography.displaySmall.copy(
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
+                                    Spacer(Modifier.width(12.dp))
+                                    Text(
+                                        text = playerLabel,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    val opColor = when (calcState.operation) {
+                                        Operation.ADD -> MaterialTheme.colorScheme.primary
+                                        Operation.SUBTRACT -> MaterialTheme.colorScheme.error
+                                        Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
+                                    }
+                                    Text(
+                                        text = currentLp.toString(),
+                                        style = MaterialTheme.typography.displaySmall.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.primary
                                         )
-                                        if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
-                                            val symbol = when (calcState.operation) {
-                                                Operation.ADD -> "+"
-                                                Operation.SUBTRACT -> "\u2212"
-                                                Operation.DIVIDE -> "\u00f72"
-                                            }
-                                            if (calcState.operation == Operation.DIVIDE) {
+                                    )
+                                    if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
+                                        val symbol = when (calcState.operation) {
+                                            Operation.ADD -> "+"
+                                            Operation.SUBTRACT -> "\u2212"
+                                            Operation.DIVIDE -> "\u00f72"
+                                        }
+                                        if (calcState.operation == Operation.DIVIDE) {
+                                            Text(
+                                                text = " $symbol",
+                                                style = MaterialTheme.typography.headlineSmall,
+                                                color = opColor
+                                            )
+                                        } else {
+                                            Text(
+                                                text = " $symbol ${calcState.digits}",
+                                                style = MaterialTheme.typography.headlineSmall,
+                                                color = opColor
+                                            )
+                                            if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
                                                 Text(
-                                                    text = " $symbol",
+                                                    text = "0".repeat(calcState.trailingZeroCount),
                                                     style = MaterialTheme.typography.headlineSmall,
-                                                    color = opColor
+                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                                                 )
-                                            } else {
-                                                Text(
-                                                    text = " $symbol ${calcState.digits}",
-                                                    style = MaterialTheme.typography.headlineSmall,
-                                                    color = opColor
-                                                )
-                                                if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
-                                                    Text(
-                                                        text = "0".repeat(calcState.trailingZeroCount),
-                                                        style = MaterialTheme.typography.headlineSmall,
-                                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                                                    )
-                                                }
                                             }
                                         }
                                     }
@@ -164,7 +156,7 @@ fun LifeCounterCalcScreen(
                             }
                         }
                     }
-                    // Row 2: EFF, 7, 8, 9
+
                     Row(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(GAP)
@@ -174,7 +166,7 @@ fun LifeCounterCalcScreen(
                         CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f).fillMaxHeight())
                         CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f).fillMaxHeight())
                     }
-                    // Row 3: +, 4, 5, 6
+
                     Row(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(GAP)
@@ -189,7 +181,7 @@ fun LifeCounterCalcScreen(
                         CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f).fillMaxHeight())
                         CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f).fillMaxHeight())
                     }
-                    // Rows 4-5: two rows of 4 cells
+
                     Row(
                         modifier = Modifier.weight(2f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(GAP)
@@ -227,26 +219,21 @@ fun LifeCounterCalcScreen(
                                 CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxHeight())
                             }
                         }
-                        CalcCell(
-                            onClick = onAction.onApply,
-                            label = "\u003d",
-                            containerColor = Color(0xFF1B4332),
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                        )
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
 
-                // Right: Column 5 empty space matching total height
+                // Column 5: big empty cell (rows 1-3) + = (rows 4-5)
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(5.5f)
-                            .fillMaxWidth()
+                    Box(modifier = Modifier.weight(4f).fillMaxWidth())
+                    CalcCell(
+                        onClick = onAction.onApply,
+                        label = "\u003d",
+                        containerColor = Color(0xFF1B4332),
+                        modifier = Modifier.weight(2f).fillMaxWidth()
                     )
                 }
             }
