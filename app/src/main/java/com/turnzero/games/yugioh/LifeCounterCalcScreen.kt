@@ -187,7 +187,7 @@ fun LifeCounterCalcScreen(
                         horizontalArrangement = Arrangement.spacedBy(GAP)
                     ) {
                         Column(
-                            modifier = Modifier.weight(4f),
+                            modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.spacedBy(GAP)
                         ) {
                             Row(
@@ -219,16 +219,18 @@ fun LifeCounterCalcScreen(
                                 CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxHeight())
                             }
                         }
-                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
 
-                // Column 5: big empty cell (rows 1-3) + = (rows 4-5)
+                // Column 5: empty cell (rows 1-3) + = (rows 4-5)
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    Box(modifier = Modifier.weight(4f).fillMaxWidth())
+                    CalcCell(
+                        onClick = {},
+                        modifier = Modifier.weight(4f).fillMaxWidth()
+                    )
                     CalcCell(
                         onClick = onAction.onApply,
                         label = "\u003d",
