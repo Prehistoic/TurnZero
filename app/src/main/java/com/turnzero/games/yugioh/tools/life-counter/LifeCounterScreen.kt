@@ -74,7 +74,7 @@ fun LifeCounterScreen(
                     player = Player.PLAYER_1,
                     lp = uiState.player1Lp,
                     onClick = { onOpenCalc(Player.PLAYER_1) },
-                    modifier = Modifier.weight(1f).padding(end = 4.dp)
+                    modifier = Modifier.weight(1f)
                 )
 
                 CenterPanel(
@@ -86,14 +86,14 @@ fun LifeCounterScreen(
                     onStartPause = onStartPauseTimer,
                     onReset = onResetAll,
                     onUndo = onUndoLastChange,
-                    modifier = Modifier.weight(1f).padding(horizontal = 4.dp)
+                    modifier = Modifier.weight(1f)
                 )
 
                 PlayerLpPanel(
                     player = Player.PLAYER_2,
                     lp = uiState.player2Lp,
                     onClick = { onOpenCalc(Player.PLAYER_2) },
-                    modifier = Modifier.weight(1f).padding(start = 4.dp)
+                    modifier = Modifier.weight(1f)
                 )
             }
         }

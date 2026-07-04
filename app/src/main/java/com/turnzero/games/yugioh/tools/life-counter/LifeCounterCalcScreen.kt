@@ -135,19 +135,22 @@ fun LifeCounterCalcScreen(
                                             Text(
                                                 text = " $symbol",
                                                 style = MaterialTheme.typography.headlineSmall,
-                                                color = opColor
+                                                color = opColor,
+                                                modifier = Modifier.padding(top = 2.dp)
                                             )
                                         } else {
                                             Text(
                                                 text = " $symbol ${calcState.digits}",
                                                 style = MaterialTheme.typography.headlineSmall,
-                                                color = opColor
+                                                color = opColor,
+                                                modifier = Modifier.padding(top = 2.dp)
                                             )
                                             if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
                                                 Text(
                                                     text = "0".repeat(calcState.trailingZeroCount),
                                                     style = MaterialTheme.typography.headlineSmall,
-                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                                                    modifier = Modifier.padding(top = 2.dp)
                                                 )
                                             }
                                         }
@@ -234,7 +237,7 @@ fun LifeCounterCalcScreen(
                     CalcCell(
                         onClick = onAction.onApply,
                         label = "\u003d",
-                        containerColor = Color(0xFF1B4332),
+                        containerColor = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.weight(2f).fillMaxWidth()
                     )
                 }
