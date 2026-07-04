@@ -48,7 +48,8 @@ fun LifeCounterCalcScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .statusBarsPadding()
-                .displayCutoutPadding(),
+                .displayCutoutPadding()
+                .navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
             Column(
