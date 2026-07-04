@@ -24,8 +24,8 @@ fun LifeCounterOptionsSheet(
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth(0.5f)
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

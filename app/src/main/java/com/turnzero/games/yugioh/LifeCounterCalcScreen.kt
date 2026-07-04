@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
-private const val GAP = 4
+private val GAP = 6.dp
+private val HORIZONTAL_PADDING = 24.dp
 
 @Composable
 fun LifeCounterCalcScreen(
@@ -50,16 +51,16 @@ fun LifeCounterCalcScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 12.dp)
+                .padding(start = HORIZONTAL_PADDING, end = HORIZONTAL_PADDING, top = HORIZONTAL_PADDING, bottom = HORIZONTAL_PADDING),
+            verticalArrangement = Arrangement.spacedBy(GAP)
         ) {
-            // Row 1: back | header | big cell
+            // Row 1: back | header | big cell spanning rows 2-3 too
             Row(
                 modifier = Modifier
                     .weight(1.5f)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
-                // Column 1: back button
                 CalcCell(
                     onClick = onBack,
                     modifier = Modifier.weight(1f).fillMaxHeight()
@@ -67,23 +68,22 @@ fun LifeCounterCalcScreen(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        modifier = Modifier.size(28.dp),
+                        modifier = Modifier.size(32.dp),
                         tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
-                // Columns 2-4 merged: LP header
                 Box(
                     modifier = Modifier
                         .weight(3f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(
                                     modifier = Modifier
@@ -92,7 +92,7 @@ fun LifeCounterCalcScreen(
                                             bottomStartPercent = 0, bottomEndPercent = 50
                                         ))
                                         .background(MaterialTheme.colorScheme.onSurface)
-                                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                                        .padding(horizontal = 10.dp, vertical = 4.dp)
                                 ) {
                                     Text(
                                         text = "LP",
@@ -100,13 +100,13 @@ fun LifeCounterCalcScreen(
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.surface
                                         ),
-                                        fontSize = 13.sp
+                                        fontSize = 14.sp
                                     )
                                 }
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(10.dp))
                                 Text(
                                     text = playerLabel,
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
@@ -118,11 +118,11 @@ fun LifeCounterCalcScreen(
                                 }
                                 Text(
                                     text = currentLp.toString(),
-                                    style = MaterialTheme.typography.headlineSmall.copy(
+                                    style = MaterialTheme.typography.headlineMedium.copy(
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary
                                     ),
-                                    fontSize = 24.sp
+                                    fontSize = 32.sp
                                 )
                                 if (calcState.digits.isNotEmpty() || calcState.operation == Operation.DIVIDE) {
                                     val symbol = when (calcState.operation) {
@@ -133,19 +133,19 @@ fun LifeCounterCalcScreen(
                                     if (calcState.operation == Operation.DIVIDE) {
                                         Text(
                                             text = " $symbol",
-                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
+                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
                                             color = opColor
                                         )
                                     } else {
                                         Text(
                                             text = " $symbol ${calcState.digits}",
-                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
+                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
                                             color = opColor
                                         )
                                         if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
                                             Text(
                                                 text = "0".repeat(calcState.trailingZeroCount),
-                                                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
+                                                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 28.sp),
                                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                                             )
                                         }
@@ -156,7 +156,7 @@ fun LifeCounterCalcScreen(
                     }
                 }
 
-                // Column 5: big cell spanning rows 1-3
+                // Big cell spanning rows 1-3 in last column
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -171,7 +171,7 @@ fun LifeCounterCalcScreen(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
                         ),
-                        fontSize = 24.sp
+                        fontSize = 28.sp
                     )
                 }
             }
@@ -181,7 +181,7 @@ fun LifeCounterCalcScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
                 CalcCell(onClick = onAction.onClear, label = "EFF", modifier = Modifier.weight(1f).fillMaxHeight())
                 CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f).fillMaxHeight())
@@ -195,7 +195,7 @@ fun LifeCounterCalcScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
                 CalcCell(
                     onClick = { onAction.onSetOperation(Operation.ADD) },
@@ -209,22 +209,20 @@ fun LifeCounterCalcScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            // Rows 4-5 combined with = spanning both
+            // Rows 4-5 with = spanning both
             Row(
                 modifier = Modifier
                     .weight(2f)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                horizontalArrangement = Arrangement.spacedBy(GAP)
             ) {
                 Column(
                     modifier = Modifier.weight(4f),
-                    verticalArrangement = Arrangement.spacedBy(GAP.dp)
+                    verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
                     Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
                     ) {
                         CalcCell(
                             onClick = { onAction.onSetOperation(Operation.SUBTRACT) },
@@ -237,10 +235,8 @@ fun LifeCounterCalcScreen(
                         CalcCell(onClick = { onAction.onDigit(3) }, label = "3", modifier = Modifier.weight(1f).fillMaxHeight())
                     }
                     Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(GAP.dp)
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(GAP)
                     ) {
                         CalcCell(
                             onClick = onAction.onDivideBy2,
