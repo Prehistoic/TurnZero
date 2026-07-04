@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-04
+
+### Added
+- **Life Counter tool** for Yu-Gi-Oh! with full LP tracking and editing
+  - Dual-player LP counters with counting animation on change
+  - Configurable timer (count-up or count-down) with vibration alert at 00:00:00
+  - Calculator overlay for LP edits: auto-multiply logic (×100/×10/×1), zero-locking
+  - Operation preview with dimmed trailing zeros and divide-by-2 support
+  - Multi-undo history with colored entries and clear option
+  - Options sheet: starting LP (8000/4000), timer mode, duration slider (30-60 min)
+  - Forced landscape orientation with screen-on wake lock
+  - State persists across navigation (scoped to Activity)
+- **Tool interface** extended with `showBottomBar` property for fullscreen tools
+- **CompositionLocal** for tool-to-nav communication (tool switcher, options sheet)
+- **Bottom sheets** constrained to 60% width in landscape, 70% max height with scrolling
+- **Tool switcher** supports scrolling for 5+ tools
+
+### Changed
+- Reorganized Yugioh package: `tools/`, `rules/` subdirectories per tool and ruleset
+- Landscape tools get zero horizontal padding on top bar and content
+- Bottom sheets now use `LazyColumn` for consistent scroll behavior
+
+### Fixed
+- Calc screen properly respects safe areas (status bar, navigation bar, display cutout)
+- Timer pauses when leaving screen, labels show Chrono/Paused/Running states
+- Options changes reset both LP and timer immediately
+- Removed bottom navbar for landscape tools (Tools/Options moved to top bar)
+
 ## [0.4.1] - 2026-07-04
 
 ### Added
