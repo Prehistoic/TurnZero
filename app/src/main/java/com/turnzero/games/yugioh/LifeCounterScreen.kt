@@ -101,8 +101,7 @@ fun LifeCounterScreen(
                 calcState = uiState.calcState,
                 currentLp = if (uiState.activePlayer == Player.PLAYER_1) uiState.player1Lp else uiState.player2Lp,
                 onBack = onCloseCalc,
-                onAction = onCalcAction,
-                modifier = Modifier.fillMaxSize()
+                onAction = onCalcAction
             )
         }
     }
@@ -140,11 +139,11 @@ private fun PlayerLpPanel(
             Spacer(Modifier.height(8.dp))
             Text(
                 text = lp.toString(),
-                style = MaterialTheme.typography.displayMedium.copy(
-                    fontSize = 48.sp,
+                style = MaterialTheme.typography.displayLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = color
-                )
+                ),
+                fontSize = 72.sp
             )
             Text(
                 text = "LP",

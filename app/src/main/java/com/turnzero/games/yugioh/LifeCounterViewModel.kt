@@ -106,19 +106,23 @@ class LifeCounterViewModel @Inject constructor(
 
     fun setOperation(op: Operation) {
         _uiState.update {
-            it.copy(calcState = it.calcState.copy(operation = op, digits = "", previewValue = 0, trailingZeroCount = 0))
+            it.copy(calcState = it.calcState.copy(operation = op, digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
         }
     }
 
     fun inputDigit(d: Int) {
         _uiState.update { state ->
             val newDigits = state.calcState.digits + d.toString()
-            val (preview, trailingZeros) = computePreview(newDigits)
+            val result = if (state.calcState.lockedIn) {
+                (newDigits.toIntOrNull() ?: 0) to 0
+            } else {
+                computePreview(newDigits)
+            }
             state.copy(
                 calcState = state.calcState.copy(
                     digits = newDigits,
-                    previewValue = preview,
-                    trailingZeroCount = trailingZeros
+                    previewValue = result.first,
+                    trailingZeroCount = result.second
                 )
             )
         }
@@ -126,19 +130,24 @@ class LifeCounterViewModel @Inject constructor(
 
     fun clearInput() {
         _uiState.update {
-            it.copy(calcState = it.calcState.copy(digits = "", previewValue = 0, trailingZeroCount = 0))
+            it.copy(calcState = it.calcState.copy(digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
         }
     }
 
     fun addZeros(count: Int) {
         _uiState.update { state ->
             val newDigits = state.calcState.digits + "0".repeat(count)
-            val (preview, trailingZeros) = computePreview(newDigits)
+            val result = if (state.calcState.lockedIn) {
+                (newDigits.toIntOrNull() ?: 0) to 0
+            } else {
+                computePreview(newDigits)
+            }
             state.copy(
                 calcState = state.calcState.copy(
                     digits = newDigits,
-                    previewValue = preview,
-                    trailingZeroCount = trailingZeros
+                    previewValue = result.first,
+                    trailingZeroCount = result.second,
+                    lockedIn = true
                 )
             )
         }
@@ -157,10 +166,9 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun divideBy2() {
-        val state = _uiState.value
-        val currentLp = activePlayerLp(state)
-        val newLp = currentLp / 2
-        recordChangeAndClose(Operation.DIVIDE, currentLp - newLp, newLp)
+        _uiState.update {
+            it.copy(calcState = CalcInputState(operation = Operation.DIVIDE, lockedIn = true))
+        }
     }
 
     fun resetAll() {

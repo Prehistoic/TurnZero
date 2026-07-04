@@ -187,12 +187,32 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `addZeros appends zeros with correct auto-multiply`() = runTest {
+    fun `addZeros locks input and prevents auto-multiply`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.openCalc(Player.PLAYER_1)
         vm.addZeros(2)
+        assertTrue(vm.uiState.value.calcState.lockedIn)
         assertEquals("00", vm.uiState.value.calcState.digits)
         assertEquals(0, vm.uiState.value.calcState.previewValue)
+    }
+
+    @Test
+    fun `inputDigit after addZeros uses raw value`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.addZeros(2)
+        vm.inputDigit(5)
+        assertEquals("005", vm.uiState.value.calcState.digits)
+        assertEquals(5, vm.uiState.value.calcState.previewValue)
+    }
+
+    @Test
+    fun `applyCalcChange with divide halves LP`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.divideBy2()
+        vm.applyCalcChange()
+        assertEquals(4000, vm.uiState.value.player1Lp)
     }
 
     @Test
@@ -234,15 +254,19 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `divideBy2 immediately halves LP`() = runTest {
+    fun `divideBy2 sets operation to divide and requires apply`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.openCalc(Player.PLAYER_1)
         vm.divideBy2()
         val state = vm.uiState.value
-        assertEquals(4000, state.player1Lp)
-        assertEquals(1, state.history.size)
-        assertEquals(Operation.DIVIDE, state.history[0].operation)
-        assertFalse(state.showCalcSheet)
+        assertEquals(Operation.DIVIDE, state.calcState.operation)
+        assertTrue(state.calcState.lockedIn)
+        assertTrue(state.showCalcSheet)
+        vm.applyCalcChange()
+        assertEquals(4000, vm.uiState.value.player1Lp)
+        assertEquals(1, vm.uiState.value.history.size)
+        assertEquals(Operation.DIVIDE, vm.uiState.value.history[0].operation)
+        assertFalse(vm.uiState.value.showCalcSheet)
     }
 
     @Test

@@ -19,7 +19,8 @@ data class CalcInputState(
     val operation: Operation = Operation.SUBTRACT,
     val digits: String = "",
     val previewValue: Int = 0,
-    val trailingZeroCount: Int = 0
+    val trailingZeroCount: Int = 0,
+    val lockedIn: Boolean = false
 )
 
 data class LifeCounterUiState(
