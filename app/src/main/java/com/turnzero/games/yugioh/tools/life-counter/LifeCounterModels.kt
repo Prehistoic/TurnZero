@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.tools.lifecounter
 
 enum class TimerMode { COUNT_UP, COUNT_DOWN }
 

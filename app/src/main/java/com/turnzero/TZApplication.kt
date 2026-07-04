@@ -1,7 +1,7 @@
 package com.turnzero
 
 import android.app.Application
-import com.turnzero.games.yugioh.YuGiOhRules
+import com.turnzero.games.yugioh.rules.YuGiOhRules
 import com.turnzero.tools.rules.InMemoryRulesProvider
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject

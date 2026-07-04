@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

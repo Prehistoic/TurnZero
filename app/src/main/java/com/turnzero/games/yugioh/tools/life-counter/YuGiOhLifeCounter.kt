@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.RowScope
