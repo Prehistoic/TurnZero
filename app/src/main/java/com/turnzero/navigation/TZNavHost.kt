@@ -95,7 +95,8 @@ fun TZNavHost(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute?.startsWith("tool/") == true && currentRoute?.contains("ygo-life-counter") != true) {
+            val isLpCounter = navBackStackEntry?.arguments?.getString("toolId") == "ygo-life-counter"
+            if (currentRoute?.startsWith("tool/") == true && !isLpCounter) {
                 ToolBottomNavBar(
                     onToolsClick = { toolShowSwitcher = true },
                     onOptionsClick = { toolShowOptions = true }
