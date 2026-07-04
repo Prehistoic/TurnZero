@@ -6,9 +6,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,10 @@ fun LifeCounterHistorySheet(
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
+
+    val nestedScrollConnection = remember {
+        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {}
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -57,7 +62,9 @@ fun LifeCounterHistorySheet(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             } else {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.nestedScroll(nestedScrollConnection)
+                ) {
                     itemsIndexed(history) { index, change ->
                         LpChangeEntry(change = change, index = history.size - index)
                         if (index < history.lastIndex) {

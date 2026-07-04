@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Tool
 
@@ -28,6 +29,10 @@ fun ToolSwitcherSheet(
     else
         Modifier
 
+    val nestedScrollConnection = remember {
+        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {}
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         modifier = sheetModifier,
@@ -40,7 +45,9 @@ fun ToolSwitcherSheet(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.nestedScroll(nestedScrollConnection)
+            ) {
                 items(tools, key = { it.id }) { tool ->
                     val isCurrent = tool.id == currentToolId
                     Card(
