@@ -386,6 +386,7 @@ fun TZNavHost(
                     ToolSwitcherSheet(
                         tools = allTools,
                         currentToolId = toolId,
+                        isLandscape = currentTool?.showBottomBar == false,
                         onToolSelected = { selected ->
                             toolShowSwitcher = false
                             navController.navigate(

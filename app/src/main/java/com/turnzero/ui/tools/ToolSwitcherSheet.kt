@@ -17,14 +17,20 @@ import com.turnzero.core.tools.api.Tool
 fun ToolSwitcherSheet(
     tools: List<Tool>,
     currentToolId: String,
+    isLandscape: Boolean = false,
     onToolSelected: (Tool) -> Unit,
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
 
+    val sheetModifier = if (isLandscape)
+        Modifier.fillMaxWidth(0.6f).fillMaxHeight(0.6f)
+    else
+        Modifier
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = Modifier.fillMaxWidth(0.6f).fillMaxHeight(0.6f),
+        modifier = sheetModifier,
         sheetState = sheetState
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
