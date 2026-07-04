@@ -1,5 +1,6 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
+import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.tools.api.Tool
 import com.turnzero.navigation.LocalToolSheetActions
 
+@SuppressLint("ContextCastToActivity")
 class YuGiOhLifeCounter : Tool {
     override val id = "ygo-life-counter"
     override val name = "LP Counter"

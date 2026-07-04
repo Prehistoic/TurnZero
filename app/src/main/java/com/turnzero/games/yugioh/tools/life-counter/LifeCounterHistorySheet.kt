@@ -1,5 +1,6 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun LifeCounterHistorySheet(
     history: List<LpChange>,

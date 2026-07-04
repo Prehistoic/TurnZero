@@ -1,5 +1,6 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun LifeCounterOptionsSheet(
     timerMode: TimerMode,

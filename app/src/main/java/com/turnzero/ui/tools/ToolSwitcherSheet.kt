@@ -1,5 +1,6 @@
 package com.turnzero.ui.tools
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Tool
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun ToolSwitcherSheet(
     tools: List<Tool>,

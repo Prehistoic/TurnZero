@@ -1,11 +1,14 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -23,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.abs
 
+@SuppressLint("MissingPermission")
 @Composable
 fun LifeCounterScreen(
     uiState: LifeCounterUiState,
@@ -53,9 +57,13 @@ fun LifeCounterScreen(
     LaunchedEffect(uiState.flashZero) {
         if (uiState.flashZero) {
             try {
-                val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
-                val vibrator = vibratorManager?.defaultVibrator
-                vibrator?.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    vibrateApi31(context)
+                } else {
+                    @Suppress("DEPRECATION")
+                    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                    vibrator?.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+                }
             } catch (_: Exception) {}
             onConsumedFlashZero()
         }
@@ -195,7 +203,7 @@ private fun CenterPanel(
             val hours = displaySeconds / 3600
             val minutes = (displaySeconds % 3600) / 60
             val seconds = displaySeconds % 60
-            val timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            val timeText = String.format(java.util.Locale.ROOT, "%02d:%02d:%02d", hours, minutes, seconds)
 
             val statusLabel = when {
                 isRunning -> "Running"
@@ -244,6 +252,13 @@ private fun CenterPanel(
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+@SuppressLint("MissingPermission")
+private fun vibrateApi31(context: Context) {
+    val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+    vibratorManager?.defaultVibrator?.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
 }
 
 data class LifeCounterCalcActions(
