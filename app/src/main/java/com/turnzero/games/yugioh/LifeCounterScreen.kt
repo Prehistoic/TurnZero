@@ -3,8 +3,6 @@ package com.turnzero.games.yugioh
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
-import android.os.Handler
-import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -41,19 +39,14 @@ fun LifeCounterScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val activity = context as? Activity
-    val originalOrientation = remember { activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED }
+    val savedOrientation = remember { activity?.requestedOrientation }
 
     DisposableEffect(Unit) {
-        val handler = Handler(Looper.getMainLooper())
-        handler.removeCallbacksAndMessages(null)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         view.keepScreenOn = true
         onDispose {
             onPauseTimer()
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-            handler.postDelayed({
-                activity?.requestedOrientation = originalOrientation
-            }, 100)
+            savedOrientation?.let { activity?.requestedOrientation = it }
             view.keepScreenOn = false
         }
     }
