@@ -1,5 +1,6 @@
 package com.turnzero.games.yugioh
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.tools.api.Tool
@@ -38,7 +40,8 @@ class YuGiOhLifeCounter : Tool {
 
     @Composable
     override fun Screen(onBack: () -> Unit) {
-        val viewModel: LifeCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LifeCounterViewModel = hiltViewModel(activity)
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
         val calcActions = LifeCounterCalcActions(
@@ -73,7 +76,8 @@ class YuGiOhLifeCounter : Tool {
 
     @Composable
     override fun OptionsSheet(onDismiss: () -> Unit) {
-        val viewModel: LifeCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LifeCounterViewModel = hiltViewModel(activity)
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
         LifeCounterOptionsSheet(

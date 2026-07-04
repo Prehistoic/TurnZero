@@ -11,9 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,8 +63,6 @@ fun LifeCounterHistorySheet(
 
 @Composable
 private fun LpChangeEntry(change: LpChange, index: Int) {
-    val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-    val timeStr = timeFormat.format(Date(change.timestamp))
     val playerLabel = when (change.player) {
         Player.PLAYER_1 -> "D1"
         Player.PLAYER_2 -> "D2"
@@ -77,7 +72,8 @@ private fun LpChangeEntry(change: LpChange, index: Int) {
         Operation.SUBTRACT -> "\u2212"
         Operation.DIVIDE -> "\u00f72"
     }
-    val isPositive = change.operation == Operation.ADD
+    val onSurface = MaterialTheme.colorScheme.onSurface
+    val primary = MaterialTheme.colorScheme.primary
 
     Row(
         modifier = Modifier
@@ -87,29 +83,10 @@ private fun LpChangeEntry(change: LpChange, index: Int) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "#$index  $playerLabel",
+            text = "#$index  $playerLabel  ${change.previousLp}  $opSymbol${change.delta}  =  ${change.newLp}",
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(0.5f)
-        )
-        Text(
-            text = "$opSymbol ${change.delta}",
-            style = MaterialTheme.typography.labelMedium,
-            color = if (isPositive) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.error,
-            modifier = Modifier.weight(0.5f)
-        )
-        Text(
-            text = "${change.newLp}",
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(0.4f)
-        )
-        Text(
-            text = timeStr,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(0.6f)
+            modifier = Modifier.weight(1f)
         )
     }
 }

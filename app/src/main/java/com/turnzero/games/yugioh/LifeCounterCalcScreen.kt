@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ fun LifeCounterCalcScreen(
         Operation.SUBTRACT -> "\u2212"
         Operation.DIVIDE -> "\u00f72"
     }
+    val statusBarHeight = with(LocalDensity.current) { 24.dp } // safe top inset
 
     Dialog(
         onDismissRequest = {},
@@ -47,204 +49,206 @@ fun LifeCounterCalcScreen(
             decorFitsSystemWindows = false
         )
     ) {
-        Row(
+        Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                .statusBarsPadding()
+                .navigationBarsPadding()
         ) {
-            // Column 1: back, EFF, +, -, ÷2
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            Spacer(modifier = Modifier.height(statusBarHeight))
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                CalcCell(
-                    onClick = onBack,
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
+                // Column 1: back, EFF, +, -, ÷2
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier.size(28.dp),
-                        tint = MaterialTheme.colorScheme.onSurface
+                    Box(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .clickable(onClick = onBack),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(28.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    CalcCell(
+                        onClick = onAction.onClear,
+                        label = "EFF",
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
+                    CalcCell(
+                        onClick = { onAction.onSetOperation(Operation.ADD) },
+                        label = "+",
+                        selected = calcState.operation == Operation.ADD,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
+                    CalcCell(
+                        onClick = { onAction.onSetOperation(Operation.SUBTRACT) },
+                        label = "\u2212",
+                        selected = calcState.operation == Operation.SUBTRACT,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
+                    CalcCell(
+                        onClick = onAction.onDivideBy2,
+                        label = "\u00f72",
+                        selected = calcState.operation == Operation.DIVIDE,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
                     )
                 }
-                CalcCell(
-                    onClick = onAction.onClear,
-                    label = "EFF",
-                    modifier = Modifier.weight(1f).fillMaxWidth()
-                )
-                CalcCell(
-                    onClick = { onAction.onSetOperation(Operation.ADD) },
-                    label = "+",
-                    selected = calcState.operation == Operation.ADD,
-                    modifier = Modifier.weight(1f).fillMaxWidth()
-                )
-                CalcCell(
-                    onClick = { onAction.onSetOperation(Operation.SUBTRACT) },
-                    label = "\u2212",
-                    selected = calcState.operation == Operation.SUBTRACT,
-                    modifier = Modifier.weight(1f).fillMaxWidth()
-                )
-                CalcCell(
-                    onClick = onAction.onDivideBy2,
-                    label = "\u00f72",
-                    selected = calcState.operation == Operation.DIVIDE,
-                    modifier = Modifier.weight(1f).fillMaxWidth()
-                )
-            }
 
-            // Columns 2-4: header + digits
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(4.dp),
-                    contentAlignment = Alignment.Center
+                // Columns 2-4 merged header + digits
+                Column(
+                    modifier = Modifier.weight(2f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(
-                        text = playerLabel,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(4) }, label = "4", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(1) }, label = "1", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(0) }, label = "0", modifier = Modifier.weight(1f).fillMaxWidth())
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(4.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "LP",
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(2) }, label = "2", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onAddZeros(2) }, label = "00", modifier = Modifier.weight(1f).fillMaxWidth())
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(4.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(
-                                    topStartPercent = 0, topEndPercent = 50,
-                                    bottomStartPercent = 0, bottomEndPercent = 50
-                                ))
-                                .background(MaterialTheme.colorScheme.onSurface)
-                                .padding(horizontal = 8.dp, vertical = 3.dp)
-                        ) {
-                            Text(
-                                text = "LP",
-                                style = MaterialTheme.typography.labelMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.surface
-                                ),
-                                fontSize = 13.sp
-                            )
-                        }
-                        val opColor = when (calcState.operation) {
-                            Operation.ADD -> MaterialTheme.colorScheme.primary
-                            Operation.SUBTRACT -> MaterialTheme.colorScheme.error
-                            Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
-                        }
-                        if (calcState.digits.isNotEmpty()) {
-                            Text(
-                                text = "$opSymbol ",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = opColor
-                            )
-                            Text(
-                                text = calcState.digits,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .padding(horizontal = 10.dp, vertical = 6.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(
+                                            topStartPercent = 0, topEndPercent = 50,
+                                            bottomStartPercent = 0, bottomEndPercent = 50
+                                        ))
+                                        .background(MaterialTheme.colorScheme.onSurface)
+                                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                                ) {
+                                    Text(
+                                        text = "LP",
+                                        style = MaterialTheme.typography.labelMedium.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.surface
+                                        ),
+                                        fontSize = 13.sp
+                                    )
+                                }
+                                Spacer(Modifier.width(8.dp))
                                 Text(
-                                    text = "0".repeat(calcState.trailingZeroCount),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                    text = playerLabel,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                val opColor = when (calcState.operation) {
+                                    Operation.ADD -> MaterialTheme.colorScheme.primary
+                                    Operation.SUBTRACT -> MaterialTheme.colorScheme.error
+                                    Operation.DIVIDE -> MaterialTheme.colorScheme.tertiary
+                                }
+                                Text(
+                                    text = currentLp.toString(),
+                                    style = MaterialTheme.typography.headlineSmall.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    ),
+                                    fontSize = 24.sp
+                                )
+                                if (calcState.digits.isNotEmpty()) {
+                                    Text(
+                                        text = " $opSymbol ${calcState.digits}",
+                                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
+                                        color = opColor
+                                    )
+                                    if (!calcState.lockedIn && calcState.trailingZeroCount > 0) {
+                                        Text(
+                                            text = "0".repeat(calcState.trailingZeroCount),
+                                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp),
+                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
+                    Row(
+                        modifier = Modifier.weight(2f),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(4) }, label = "4", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(1) }, label = "1", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(0) }, label = "0", modifier = Modifier.weight(1f).fillMaxWidth())
+                        }
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(2) }, label = "2", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onAddZeros(2) }, label = "00", modifier = Modifier.weight(1f).fillMaxWidth())
+                        }
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onDigit(3) }, label = "3", modifier = Modifier.weight(1f).fillMaxWidth())
+                            CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxWidth())
+                        }
+                    }
                 }
-                CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onDigit(3) }, label = "3", modifier = Modifier.weight(1f).fillMaxWidth())
-                CalcCell(onClick = { onAction.onAddZeros(3) }, label = "000", modifier = Modifier.weight(1f).fillMaxWidth())
-            }
 
-            // Column 5: current LP display + empty rows + =
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1.5f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(4.dp),
-                    contentAlignment = Alignment.Center
+                // Column 5: current LP + empty + =
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(
-                        text = currentLp.toString(),
-                        style = MaterialTheme.typography.headlineSmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        ),
-                        fontSize = 24.sp
+                    Box(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .padding(4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = currentLp.toString(),
+                            style = MaterialTheme.typography.headlineSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            ),
+                            fontSize = 24.sp
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(2f))
+                    CalcCell(
+                        onClick = onAction.onApply,
+                        label = "\u003d",
+                        containerColor = Color(0xFF1B4332),
+                        modifier = Modifier
+                            .weight(2f)
+                            .fillMaxWidth()
                     )
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.weight(1f))
-                CalcCell(
-                    onClick = onAction.onApply,
-                    label = "\u003d",
-                    containerColor = Color(0xFF1B4332),
-                    modifier = Modifier
-                        .weight(2f)
-                        .fillMaxWidth()
-                )
             }
         }
     }
