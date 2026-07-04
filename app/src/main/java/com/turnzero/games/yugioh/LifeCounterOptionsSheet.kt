@@ -25,7 +25,7 @@ fun LifeCounterOptionsSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = Modifier.fillMaxWidth(0.6f).fillMaxHeight(0.6f),
+        modifier = Modifier.fillMaxWidth(0.6f),
         sheetState = sheetState
     ) {
         Column(

@@ -24,7 +24,7 @@ fun ToolSwitcherSheet(
     val sheetState = rememberModalBottomSheetState()
 
     val sheetModifier = if (isLandscape)
-        Modifier.fillMaxWidth(0.6f).fillMaxHeight(0.6f)
+        Modifier.fillMaxWidth(0.6f)
     else
         Modifier
 
