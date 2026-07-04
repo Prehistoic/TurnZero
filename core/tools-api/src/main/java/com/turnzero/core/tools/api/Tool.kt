@@ -9,6 +9,7 @@ interface Tool {
     val name: String
     val icon: ImageVector
     val supportedGames: Set<String>
+    val showBottomBar: Boolean get() = true
 
     @Composable
     fun Screen(onBack: () -> Unit)

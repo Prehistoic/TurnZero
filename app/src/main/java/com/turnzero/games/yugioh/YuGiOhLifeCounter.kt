@@ -19,6 +19,7 @@ class YuGiOhLifeCounter : Tool {
     override val name = "LP Counter"
     override val icon = Icons.Default.Favorite
     override val supportedGames = setOf("yugioh")
+    override val showBottomBar = false
 
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {

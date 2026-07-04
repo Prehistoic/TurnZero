@@ -93,55 +93,64 @@ fun TZNavHost(
         toolShowOptions = false
     }
 
+    val currentToolId = navBackStackEntry?.arguments?.getString("toolId")
+    val currentTool = remember(currentToolId) { if (currentToolId != null) toolRegistry.getToolById(currentToolId) else null }
+
     Scaffold(
         bottomBar = {
-            val isLpCounter = navBackStackEntry?.arguments?.getString("toolId") == "ygo-life-counter"
-            if (currentRoute?.startsWith("tool/") == true && !isLpCounter) {
-                ToolBottomNavBar(
-                    onToolsClick = { toolShowSwitcher = true },
-                    onOptionsClick = { toolShowOptions = true }
-                )
-            } else if (selectedToolId != null) {
-                NavigationBar {
-                    val isFavorited = selectedToolId in favoriteToolIds
-                    NavigationBarItem(
-                        selected = isFavorited,
-                        onClick = {
-                            val toolId = selectedToolId ?: return@NavigationBarItem
-                            val updated = if (isFavorited) {
-                                favoriteToolIds - toolId
-                            } else {
-                                favoriteToolIds + toolId
-                            }
-                            favoriteToolIds = updated
-                            if (isFavorited) {
-                                selectedToolId = null
-                            }
-                            scope.launch {
-                                dataStore.edit { prefs ->
-                                    prefs[UserPreferences.FAVORITE_TOOLS] = updated
-                                }
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                contentDescription = if (isFavorited) "Remove from favorites" else "Add to favorites"
-                            )
-                        },
-                        label = { Text(if (isFavorited) "Favorited" else "Favorite") },
-                        colors = navItemColors
+            when {
+                currentRoute?.startsWith("tool/") == true && currentTool?.showBottomBar != false -> {
+                    ToolBottomNavBar(
+                        onToolsClick = { toolShowSwitcher = true },
+                        onOptionsClick = { toolShowOptions = true }
                     )
                 }
-            } else {
-                TZBottomNavBar(
-                    currentRoute = currentRoute,
-                    onItemClick = { screen ->
-                        navController.navigate(screen.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
+                currentRoute?.startsWith("tool/") == true -> {
+                    // Landscape tool — no bottom bar
+                }
+                selectedToolId != null -> {
+                    NavigationBar {
+                        val isFavorited = selectedToolId in favoriteToolIds
+                        NavigationBarItem(
+                            selected = isFavorited,
+                            onClick = {
+                                val toolId = selectedToolId ?: return@NavigationBarItem
+                                val updated = if (isFavorited) {
+                                    favoriteToolIds - toolId
+                                } else {
+                                    favoriteToolIds + toolId
+                                }
+                                favoriteToolIds = updated
+                                if (isFavorited) {
+                                    selectedToolId = null
+                                }
+                                scope.launch {
+                                    dataStore.edit { prefs ->
+                                        prefs[UserPreferences.FAVORITE_TOOLS] = updated
+                                    }
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    contentDescription = if (isFavorited) "Remove from favorites" else "Add to favorites"
+                                )
+                            },
+                            label = { Text(if (isFavorited) "Favorited" else "Favorite") },
+                            colors = navItemColors
+                        )
                     }
-                )
+                }
+                else -> {
+                    TZBottomNavBar(
+                        currentRoute = currentRoute,
+                        onItemClick = { screen ->
+                            navController.navigate(screen.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    )
+                }
             }
         }
     ) { innerPadding ->
