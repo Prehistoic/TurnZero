@@ -147,7 +147,6 @@ fun LifeCounterCalcScreen(
             CalcCell(onClick = { onAction.onDigit(7) }, label = "7", modifier = Modifier.weight(1f))
             CalcCell(onClick = { onAction.onDigit(8) }, label = "8", modifier = Modifier.weight(1f))
             CalcCell(onClick = { onAction.onDigit(9) }, label = "9", modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.weight(0f))
         }
 
         Row(
@@ -163,7 +162,6 @@ fun LifeCounterCalcScreen(
             CalcCell(onClick = { onAction.onDigit(4) }, label = "4", modifier = Modifier.weight(1f))
             CalcCell(onClick = { onAction.onDigit(5) }, label = "5", modifier = Modifier.weight(1f))
             CalcCell(onClick = { onAction.onDigit(6) }, label = "6", modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.weight(0f))
         }
 
         Row(

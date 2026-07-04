@@ -95,7 +95,7 @@ fun TZNavHost(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute?.startsWith("tool/") == true) {
+            if (currentRoute?.startsWith("tool/") == true && currentRoute?.contains("ygo-life-counter") != true) {
                 ToolBottomNavBar(
                     onToolsClick = { toolShowSwitcher = true },
                     onOptionsClick = { toolShowOptions = true }
@@ -348,15 +348,22 @@ fun TZNavHost(
                 val allTools = remember(gameId) { toolRegistry.getToolsForGame(gameId) }
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
-                Column {
-                    TZTopBar(
-                        title = tool.name,
-                        showBackButton = true,
-                        onBackClick = { navController.popBackStack() },
-                        actions = tool.TopBarActions()
+                CompositionLocalProvider(
+                    LocalToolSheetActions provides ToolSheetActions(
+                        onOpenTools = { toolShowSwitcher = true },
+                        onOpenOptions = { toolShowOptions = true }
                     )
-                    Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                        tool.Screen(onBack = { navController.popBackStack() })
+                ) {
+                    Column {
+                        TZTopBar(
+                            title = tool.name,
+                            showBackButton = true,
+                            onBackClick = { navController.popBackStack() },
+                            actions = tool.TopBarActions()
+                        )
+                        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                            tool.Screen(onBack = { navController.popBackStack() })
+                        }
                     }
                 }
 

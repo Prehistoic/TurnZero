@@ -29,7 +29,7 @@ data class LifeCounterUiState(
     val elapsedSeconds: Long = 0,
     val remainingSeconds: Long = 0,
     val timerMode: TimerMode = TimerMode.COUNT_DOWN,
-    val timerStartValueMinutes: Int = 30,
+    val timerStartValueMinutes: Int = 45,
     val startingLp: Int = 8000,
     val history: List<LpChange> = emptyList(),
     val showHistory: Boolean = false,

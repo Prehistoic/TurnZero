@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.tools.api.Tool
+import com.turnzero.navigation.LocalToolSheetActions
 
 class YuGiOhLifeCounter : Tool {
     override val id = "ygo-life-counter"
@@ -19,9 +22,16 @@ class YuGiOhLifeCounter : Tool {
 
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {
+        val sheetActions = LocalToolSheetActions.current
         val viewModel: LifeCounterViewModel = hiltViewModel()
         IconButton(onClick = { viewModel.toggleHistory() }) {
             Icon(Icons.Default.History, contentDescription = "History")
+        }
+        IconButton(onClick = { sheetActions?.onOpenTools?.invoke() }) {
+            Icon(Icons.Default.SwapHoriz, contentDescription = "Tools")
+        }
+        IconButton(onClick = { sheetActions?.onOpenOptions?.invoke() }) {
+            Icon(Icons.Default.Settings, contentDescription = "Options")
         }
     }
 

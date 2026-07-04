@@ -19,7 +19,9 @@ class LifeCounterViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LifeCounterUiState())
+    private val _uiState = MutableStateFlow(
+        LifeCounterUiState(remainingSeconds = 45 * 60L)
+    )
     val uiState: StateFlow<LifeCounterUiState> = _uiState.asStateFlow()
 
     internal fun tick() {
@@ -188,11 +190,23 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun setTimerStartValue(minutes: Int) {
-        _uiState.update { it.copy(timerStartValueMinutes = minutes) }
+        timerJob?.cancel()
+        timerJob = null
+        _uiState.update {
+            it.copy(
+                timerStartValueMinutes = minutes,
+                isRunning = false,
+                remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
+                elapsedSeconds = 0,
+                flashZero = false
+            )
+        }
     }
 
     fun setStartingLp(lp: Int) {
-        _uiState.update { it.copy(startingLp = lp) }
+        _uiState.update {
+            it.copy(startingLp = lp, player1Lp = lp, player2Lp = lp, history = emptyList())
+        }
     }
 
     fun toggleHistory() {

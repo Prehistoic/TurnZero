@@ -20,12 +20,12 @@ class LifeCounterViewModelTest {
         assertEquals(8000, state.player1Lp)
         assertEquals(8000, state.player2Lp)
         assertEquals(TimerMode.COUNT_DOWN, state.timerMode)
-        assertEquals(30, state.timerStartValueMinutes)
+        assertEquals(45, state.timerStartValueMinutes)
         assertEquals(8000, state.startingLp)
         assertFalse(state.isRunning)
         assertFalse(state.showCalcSheet)
         assertEquals(0L, state.elapsedSeconds)
-        assertEquals(0L, state.remainingSeconds)
+        assertEquals(45 * 60L, state.remainingSeconds)
     }
 
     @Test
@@ -83,11 +83,11 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `setTimerStartValue updates remainingSeconds on reset`() = runTest {
+    fun `setTimerStartValue updates remainingSeconds immediately`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerStartValue(45)
-        vm.resetTimer()
         assertEquals(45 * 60, vm.uiState.value.remainingSeconds)
+        assertEquals(45, vm.uiState.value.timerStartValueMinutes)
     }
 
     @Test
@@ -296,11 +296,11 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `setStartingLp updates both players on reset`() = runTest {
+    fun `setStartingLp updates both players and resets LP immediately`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setStartingLp(4000)
-        vm.resetAll()
         assertEquals(4000, vm.uiState.value.player1Lp)
+        assertEquals(4000, vm.uiState.value.player2Lp)
         assertEquals(4000, vm.uiState.value.startingLp)
     }
 
