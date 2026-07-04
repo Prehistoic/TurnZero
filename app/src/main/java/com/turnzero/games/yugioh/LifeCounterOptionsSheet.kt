@@ -21,11 +21,11 @@ fun LifeCounterOptionsSheet(
     onSetStartingLp: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = Modifier.fillMaxWidth(0.6f),
+        modifier = Modifier.fillMaxWidth(0.6f).fillMaxHeight(0.6f),
         sheetState = sheetState
     ) {
         Column(
