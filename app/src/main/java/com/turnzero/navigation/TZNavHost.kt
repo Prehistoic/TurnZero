@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -93,54 +94,68 @@ fun TZNavHost(
         toolShowOptions = false
     }
 
+    val currentToolId = navBackStackEntry?.arguments?.getString("toolId")
+    val currentTool = remember(currentToolId) { if (currentToolId != null) toolRegistry.getToolById(currentToolId) else null }
+
     Scaffold(
+        contentWindowInsets = if (currentTool?.showBottomBar == false)
+            WindowInsets(0.dp)
+        else
+            ScaffoldDefaults.contentWindowInsets,
         bottomBar = {
-            if (currentRoute?.startsWith("tool/") == true) {
-                ToolBottomNavBar(
-                    onToolsClick = { toolShowSwitcher = true },
-                    onOptionsClick = { toolShowOptions = true }
-                )
-            } else if (selectedToolId != null) {
-                NavigationBar {
-                    val isFavorited = selectedToolId in favoriteToolIds
-                    NavigationBarItem(
-                        selected = isFavorited,
-                        onClick = {
-                            val toolId = selectedToolId ?: return@NavigationBarItem
-                            val updated = if (isFavorited) {
-                                favoriteToolIds - toolId
-                            } else {
-                                favoriteToolIds + toolId
-                            }
-                            favoriteToolIds = updated
-                            if (isFavorited) {
-                                selectedToolId = null
-                            }
-                            scope.launch {
-                                dataStore.edit { prefs ->
-                                    prefs[UserPreferences.FAVORITE_TOOLS] = updated
-                                }
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                contentDescription = if (isFavorited) "Remove from favorites" else "Add to favorites"
-                            )
-                        },
-                        label = { Text(if (isFavorited) "Favorited" else "Favorite") },
-                        colors = navItemColors
+            when {
+                currentRoute?.startsWith("tool/") == true && currentTool?.showBottomBar != false -> {
+                    ToolBottomNavBar(
+                        onToolsClick = { toolShowSwitcher = true },
+                        onOptionsClick = { toolShowOptions = true }
                     )
                 }
-            } else {
-                TZBottomNavBar(
-                    currentRoute = currentRoute,
-                    onItemClick = { screen ->
-                        navController.navigate(screen.route) {
-                            popUpTo(0) { inclusive = true }
-                        }
+                currentRoute?.startsWith("tool/") == true -> {
+                    // Landscape tool — no bottom bar
+                }
+                selectedToolId != null -> {
+                    NavigationBar {
+                        val isFavorited = selectedToolId in favoriteToolIds
+                        NavigationBarItem(
+                            selected = isFavorited,
+                            onClick = {
+                                val toolId = selectedToolId ?: return@NavigationBarItem
+                                val updated = if (isFavorited) {
+                                    favoriteToolIds - toolId
+                                } else {
+                                    favoriteToolIds + toolId
+                                }
+                                favoriteToolIds = updated
+                                if (isFavorited) {
+                                    selectedToolId = null
+                                }
+                                scope.launch {
+                                    dataStore.edit { prefs ->
+                                        prefs[UserPreferences.FAVORITE_TOOLS] = updated
+                                    }
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    contentDescription = if (isFavorited) "Remove from favorites" else "Add to favorites"
+                                )
+                            },
+                            label = { Text(if (isFavorited) "Favorited" else "Favorite") },
+                            colors = navItemColors
+                        )
                     }
-                )
+                }
+                else -> {
+                    TZBottomNavBar(
+                        currentRoute = currentRoute,
+                        onItemClick = { screen ->
+                            navController.navigate(screen.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -348,15 +363,36 @@ fun TZNavHost(
                 val allTools = remember(gameId) { toolRegistry.getToolsForGame(gameId) }
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
-                Column {
-                    TZTopBar(
-                        title = tool.name,
-                        showBackButton = true,
-                        onBackClick = { navController.popBackStack() },
-                        actions = tool.TopBarActions()
+                CompositionLocalProvider(
+                    LocalToolSheetActions provides ToolSheetActions(
+                        onOpenTools = { toolShowSwitcher = true },
+                        onOpenOptions = { toolShowOptions = true }
                     )
-                    Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                        tool.Screen(onBack = { navController.popBackStack() })
+                ) {
+                    Column {
+                        TZTopBar(
+                            title = tool.name,
+                            showBackButton = true,
+                            onBackClick = { navController.popBackStack() },
+                            actions = tool.TopBarActions(),
+                            modifier = if (currentTool?.showBottomBar == false) 
+                                Modifier.padding(horizontal = 0.dp) 
+                            else 
+                                Modifier
+                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .then(
+                                    if (currentTool?.showBottomBar == false) 
+                                        Modifier.padding(horizontal = 0.dp) 
+                                    else 
+                                        Modifier
+                                )
+                        ) {
+                            tool.Screen(onBack = { navController.popBackStack() })
+                        }
                     }
                 }
 
@@ -364,6 +400,7 @@ fun TZNavHost(
                     ToolSwitcherSheet(
                         tools = allTools,
                         currentToolId = toolId,
+                        isLandscape = currentTool?.showBottomBar == false,
                         onToolSelected = { selected ->
                             toolShowSwitcher = false
                             navController.navigate(

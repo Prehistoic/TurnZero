@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.rules
 
 import org.junit.Assert.*
 import org.junit.Test

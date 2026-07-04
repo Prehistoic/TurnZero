@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.tools.rulingssearcher
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search

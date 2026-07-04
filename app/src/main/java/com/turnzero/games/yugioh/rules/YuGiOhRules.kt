@@ -1,4 +1,4 @@
-package com.turnzero.games.yugioh
+package com.turnzero.games.yugioh.rules
 
 import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.RuleStep

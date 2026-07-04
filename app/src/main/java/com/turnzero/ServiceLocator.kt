@@ -8,8 +8,8 @@ import com.turnzero.core.tools.api.Game
 import com.turnzero.core.tools.api.Tool
 import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.games.yugioh.YuGiOhGame
-import com.turnzero.games.yugioh.YuGiOhLifeCounter
-import com.turnzero.games.yugioh.YuGiOhRulingsSearcher
+import com.turnzero.games.yugioh.tools.lifecounter.YuGiOhLifeCounter
+import com.turnzero.games.yugioh.tools.rulingssearcher.YuGiOhRulingsSearcher
 import com.turnzero.tools.coin.CoinTool
 import com.turnzero.tools.dice.DiceTool
 import com.turnzero.tools.rules.RulesTool
