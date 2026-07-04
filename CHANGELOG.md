@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-07-04
+
+### Fixed
+- Home screen icons becoming unresponsive after using the Life Counter tool (orientation lock not released when app goes to background)
+
 ## [0.5.0] - 2026-07-04
 
 ### Added
