@@ -98,10 +98,6 @@ fun TZNavHost(
     val currentTool = remember(currentToolId) { if (currentToolId != null) toolRegistry.getToolById(currentToolId) else null }
 
     Scaffold(
-        contentWindowInsets = if (currentTool?.showBottomBar == false)
-            WindowInsets(0.dp)
-        else
-            ScaffoldDefaults.contentWindowInsets,
         bottomBar = {
             when {
                 currentRoute?.startsWith("tool/") == true && currentTool?.showBottomBar != false -> {
