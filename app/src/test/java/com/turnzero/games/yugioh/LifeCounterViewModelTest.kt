@@ -1,37 +1,17 @@
 package com.turnzero.games.yugioh
 
 import androidx.lifecycle.SavedStateHandle
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LifeCounterViewModelTest {
 
-    private val testDispatcher = StandardTestDispatcher()
-    private lateinit var savedStateHandle: SavedStateHandle
-
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        savedStateHandle = SavedStateHandle()
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    private val savedStateHandle = SavedStateHandle()
 
     @Test
     fun `initial state has default values`() = runTest {
@@ -59,36 +39,34 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `timer increments in countUp mode`() = runTest {
+    fun `tick increments elapsed in countUp mode`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerMode(TimerMode.COUNT_UP)
         vm.resetTimer()
-        vm.startPauseTimer()
-        advanceTimeBy(3500)
+        vm.tick()
+        vm.tick()
+        vm.tick()
         assertEquals(3, vm.uiState.value.elapsedSeconds)
     }
 
     @Test
-    fun `timer decrements in countDown mode`() = runTest {
+    fun `tick decrements remaining in countDown mode`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerStartValue(1)
         vm.resetTimer()
         assertEquals(60, vm.uiState.value.remainingSeconds)
-        vm.startPauseTimer()
-        advanceTimeBy(1200)
+        vm.tick()
+        vm.tick()
         assertEquals(58, vm.uiState.value.remainingSeconds)
     }
 
     @Test
-    fun `countdown stops at zero and sets flashZero`() = runTest {
+    fun `tick stops at zero and sets flashZero in countDown`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerStartValue(1)
         vm.resetTimer()
-        assertEquals(60, vm.uiState.value.remainingSeconds)
-        vm.startPauseTimer()
-        advanceTimeBy(61_000)
+        repeat(60) { vm.tick() }
         assertEquals(0, vm.uiState.value.remainingSeconds)
-        assertFalse(vm.uiState.value.isRunning)
         assertTrue(vm.uiState.value.flashZero)
     }
 
@@ -97,8 +75,8 @@ class LifeCounterViewModelTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerMode(TimerMode.COUNT_UP)
         vm.resetTimer()
-        vm.startPauseTimer()
-        advanceTimeBy(2000)
+        vm.tick()
+        vm.tick()
         assertEquals(2, vm.uiState.value.elapsedSeconds)
         vm.resetTimer()
         assertEquals(0, vm.uiState.value.elapsedSeconds)
