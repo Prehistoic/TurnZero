@@ -26,7 +26,8 @@ class YuGiOhLifeCounter : Tool {
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {
         val sheetActions = LocalToolSheetActions.current
-        val viewModel: LifeCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LifeCounterViewModel = hiltViewModel(activity)
         IconButton(onClick = { sheetActions?.onOpenTools?.invoke() }) {
             Icon(Icons.Default.SwapHoriz, contentDescription = "Tools")
         }
