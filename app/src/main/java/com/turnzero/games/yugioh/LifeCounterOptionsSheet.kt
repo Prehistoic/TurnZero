@@ -1,6 +1,8 @@
 package com.turnzero.games.yugioh
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,7 +35,8 @@ fun LifeCounterOptionsSheet(
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .heightIn(max = maxHeight),
+                .heightIn(max = maxHeight)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
