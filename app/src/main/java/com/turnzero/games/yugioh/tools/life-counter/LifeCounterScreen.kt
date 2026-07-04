@@ -61,7 +61,7 @@ fun LifeCounterScreen(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize().navigationBarsPadding()) {
+    Box(modifier = modifier.fillMaxSize().displayCutoutPadding()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier
