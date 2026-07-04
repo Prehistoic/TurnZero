@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,6 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.abs
 
 @Composable
 fun LifeCounterScreen(
@@ -123,6 +126,18 @@ private fun PlayerLpPanel(
         Player.PLAYER_2 -> MaterialTheme.colorScheme.secondary
     }
 
+    val prevLp = remember { mutableIntStateOf(lp) }
+    val duration = remember(lp) {
+        val delta = abs(lp - prevLp.intValue)
+        prevLp.intValue = lp
+        (delta / 10).coerceIn(200, 1500)
+    }
+    val displayLp by animateIntAsState(
+        targetValue = lp,
+        animationSpec = tween(durationMillis = duration),
+        label = "lp"
+    )
+
     Box(
         modifier = modifier
             .fillMaxHeight()
@@ -138,7 +153,7 @@ private fun PlayerLpPanel(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = lp.toString(),
+                text = displayLp.toString(),
                 style = MaterialTheme.typography.displayLarge.copy(
                     fontWeight = FontWeight.Bold,
                     color = color
