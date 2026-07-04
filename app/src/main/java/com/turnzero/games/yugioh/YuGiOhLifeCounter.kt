@@ -24,11 +24,11 @@ class YuGiOhLifeCounter : Tool {
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {
         val sheetActions = LocalToolSheetActions.current
         val viewModel: LifeCounterViewModel = hiltViewModel()
-        IconButton(onClick = { viewModel.toggleHistory() }) {
-            Icon(Icons.Default.History, contentDescription = "History")
-        }
         IconButton(onClick = { sheetActions?.onOpenTools?.invoke() }) {
             Icon(Icons.Default.SwapHoriz, contentDescription = "Tools")
+        }
+        IconButton(onClick = { viewModel.toggleHistory() }) {
+            Icon(Icons.Default.History, contentDescription = "History")
         }
         IconButton(onClick = { sheetActions?.onOpenOptions?.invoke() }) {
             Icon(Icons.Default.Settings, contentDescription = "Options")
@@ -52,6 +52,7 @@ class YuGiOhLifeCounter : Tool {
         LifeCounterScreen(
             uiState = uiState,
             onStartPauseTimer = viewModel::startPauseTimer,
+            onPauseTimer = viewModel::pauseTimer,
             onResetAll = viewModel::resetAll,
             onUndoLastChange = viewModel::undoLastChange,
             onOpenCalc = viewModel::openCalc,

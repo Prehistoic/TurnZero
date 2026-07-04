@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 fun LifeCounterScreen(
     uiState: LifeCounterUiState,
     onStartPauseTimer: () -> Unit,
+    onPauseTimer: () -> Unit,
     onResetAll: () -> Unit,
     onUndoLastChange: () -> Unit,
     onOpenCalc: (Player) -> Unit,
@@ -40,6 +41,7 @@ fun LifeCounterScreen(
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         view.keepScreenOn = true
         onDispose {
+            onPauseTimer()
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             view.keepScreenOn = false
         }
@@ -77,6 +79,7 @@ fun LifeCounterScreen(
                     remainingSeconds = uiState.remainingSeconds,
                     timerMode = uiState.timerMode,
                     isRunning = uiState.isRunning,
+                    hasEverStarted = uiState.hasEverStarted,
                     onStartPause = onStartPauseTimer,
                     onReset = onResetAll,
                     onUndo = onUndoLastChange,
@@ -158,6 +161,7 @@ private fun CenterPanel(
     remainingSeconds: Long,
     timerMode: TimerMode,
     isRunning: Boolean,
+    hasEverStarted: Boolean,
     onStartPause: () -> Unit,
     onReset: () -> Unit,
     onUndo: () -> Unit,
@@ -182,9 +186,15 @@ private fun CenterPanel(
             val seconds = displaySeconds % 60
             val timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
+            val statusLabel = when {
+                isRunning -> "Running"
+                hasEverStarted -> "Paused"
+                else -> "Chrono"
+            }
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = if (isRunning) "Running" else "Chrono",
+                    text = statusLabel,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

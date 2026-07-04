@@ -36,5 +36,6 @@ data class LifeCounterUiState(
     val showCalcSheet: Boolean = false,
     val activePlayer: Player = Player.PLAYER_1,
     val calcState: CalcInputState = CalcInputState(),
-    val flashZero: Boolean = false
+    val flashZero: Boolean = false,
+    val hasEverStarted: Boolean = false
 )

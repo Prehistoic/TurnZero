@@ -57,13 +57,21 @@ class LifeCounterViewModel @Inject constructor(
             timerJob?.cancel()
             timerJob = null
         } else {
-            _uiState.update { it.copy(isRunning = true) }
+            _uiState.update { it.copy(isRunning = true, hasEverStarted = true) }
             timerJob = viewModelScope.launch {
                 while (isActive) {
                     delay(1000)
                     tick()
                 }
             }
+        }
+    }
+
+    fun pauseTimer() {
+        if (_uiState.value.isRunning) {
+            _uiState.update { it.copy(isRunning = false) }
+            timerJob?.cancel()
+            timerJob = null
         }
     }
 
@@ -76,7 +84,8 @@ class LifeCounterViewModel @Inject constructor(
                 isRunning = false,
                 elapsedSeconds = 0,
                 remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
-                flashZero = false
+                flashZero = false,
+                hasEverStarted = false
             )
         }
     }
@@ -167,6 +176,7 @@ class LifeCounterViewModel @Inject constructor(
                 elapsedSeconds = 0,
                 remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
                 flashZero = false,
+                hasEverStarted = false,
                 history = emptyList()
             )
         }
@@ -186,26 +196,60 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun setTimerMode(mode: TimerMode) {
-        _uiState.update { it.copy(timerMode = mode) }
+        timerJob?.cancel()
+        timerJob = null
+        val lp = _uiState.value.startingLp
+        val minutes = _uiState.value.timerStartValueMinutes
+        _uiState.update {
+            it.copy(
+                timerMode = mode,
+                isRunning = false,
+                player1Lp = lp,
+                player2Lp = lp,
+                elapsedSeconds = 0,
+                remainingSeconds = if (mode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
+                flashZero = false,
+                hasEverStarted = false,
+                history = emptyList()
+            )
+        }
     }
 
     fun setTimerStartValue(minutes: Int) {
         timerJob?.cancel()
         timerJob = null
+        val lp = _uiState.value.startingLp
         _uiState.update {
             it.copy(
                 timerStartValueMinutes = minutes,
                 isRunning = false,
-                remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
+                player1Lp = lp,
+                player2Lp = lp,
                 elapsedSeconds = 0,
-                flashZero = false
+                remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
+                flashZero = false,
+                hasEverStarted = false,
+                history = emptyList()
             )
         }
     }
 
     fun setStartingLp(lp: Int) {
+        timerJob?.cancel()
+        timerJob = null
+        val minutes = _uiState.value.timerStartValueMinutes
         _uiState.update {
-            it.copy(startingLp = lp, player1Lp = lp, player2Lp = lp, history = emptyList())
+            it.copy(
+                startingLp = lp,
+                player1Lp = lp,
+                player2Lp = lp,
+                isRunning = false,
+                elapsedSeconds = 0,
+                remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
+                flashZero = false,
+                hasEverStarted = false,
+                history = emptyList()
+            )
         }
     }
 

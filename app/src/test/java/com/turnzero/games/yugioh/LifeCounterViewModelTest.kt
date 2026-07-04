@@ -24,18 +24,21 @@ class LifeCounterViewModelTest {
         assertEquals(8000, state.startingLp)
         assertFalse(state.isRunning)
         assertFalse(state.showCalcSheet)
+        assertFalse(state.hasEverStarted)
         assertEquals(0L, state.elapsedSeconds)
         assertEquals(45 * 60L, state.remainingSeconds)
     }
 
     @Test
-    fun `startPauseTimer toggles isRunning`() = runTest {
+    fun `startPauseTimer toggles isRunning and sets hasEverStarted`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         assertFalse(vm.uiState.value.isRunning)
         vm.startPauseTimer()
         assertTrue(vm.uiState.value.isRunning)
+        assertTrue(vm.uiState.value.hasEverStarted)
         vm.startPauseTimer()
         assertFalse(vm.uiState.value.isRunning)
+        assertTrue(vm.uiState.value.hasEverStarted)
     }
 
     @Test
@@ -71,23 +74,31 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `resetTimer resets elapsed and remaining based on mode`() = runTest {
+    fun `resetTimer resets elapsed, remaining, and hasEverStarted`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerMode(TimerMode.COUNT_UP)
         vm.resetTimer()
+        vm.startPauseTimer()
+        assertTrue(vm.uiState.value.hasEverStarted)
         vm.tick()
         vm.tick()
         assertEquals(2, vm.uiState.value.elapsedSeconds)
         vm.resetTimer()
         assertEquals(0, vm.uiState.value.elapsedSeconds)
+        assertFalse(vm.uiState.value.hasEverStarted)
     }
 
     @Test
-    fun `setTimerStartValue updates remainingSeconds immediately`() = runTest {
+    fun `setTimerStartValue resets timer and LP`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(3)
+        vm.applyCalcChange()
+        assertEquals(7700, vm.uiState.value.player1Lp)
         vm.setTimerStartValue(45)
-        assertEquals(45 * 60, vm.uiState.value.remainingSeconds)
         assertEquals(45, vm.uiState.value.timerStartValueMinutes)
+        assertEquals(45 * 60, vm.uiState.value.remainingSeconds)
+        assertEquals(8000, vm.uiState.value.player1Lp)
     }
 
     @Test
@@ -289,6 +300,28 @@ class LifeCounterViewModelTest {
     }
 
     @Test
+    fun `setTimerMode resets LP and timer`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        assertEquals(7500, vm.uiState.value.player1Lp)
+        vm.setTimerMode(TimerMode.COUNT_UP)
+        assertEquals(TimerMode.COUNT_UP, vm.uiState.value.timerMode)
+        assertEquals(8000, vm.uiState.value.player1Lp)
+        assertEquals(0, vm.uiState.value.elapsedSeconds)
+    }
+
+    @Test
+    fun `pauseTimer stops running timer`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.startPauseTimer()
+        assertTrue(vm.uiState.value.isRunning)
+        vm.pauseTimer()
+        assertFalse(vm.uiState.value.isRunning)
+    }
+
+    @Test
     fun `setTimerMode switches mode`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.setTimerMode(TimerMode.COUNT_UP)
@@ -296,12 +329,17 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `setStartingLp updates both players and resets LP immediately`() = runTest {
+    fun `setStartingLp resets both players LP and timer`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(3)
+        vm.applyCalcChange()
+        assertEquals(7700, vm.uiState.value.player1Lp)
         vm.setStartingLp(4000)
         assertEquals(4000, vm.uiState.value.player1Lp)
         assertEquals(4000, vm.uiState.value.player2Lp)
         assertEquals(4000, vm.uiState.value.startingLp)
+        assertEquals(45 * 60, vm.uiState.value.remainingSeconds)
     }
 
     @Test
