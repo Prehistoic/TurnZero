@@ -214,6 +214,15 @@ class LifeCounterViewModelTest {
     }
 
     @Test
+    fun `inputDigit 0 ignored when digits empty`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(0)
+        assertEquals("", vm.uiState.value.calcState.digits)
+        assertEquals(0, vm.uiState.value.calcState.previewValue)
+    }
+
+    @Test
     fun `addZeros ignores when digits empty`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
         vm.openCalc(Player.PLAYER_1)

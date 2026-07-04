@@ -112,6 +112,7 @@ class LifeCounterViewModel @Inject constructor(
 
     fun inputDigit(d: Int) {
         _uiState.update { state ->
+            if (d == 0 && state.calcState.digits.isEmpty()) return@update state
             val newDigits = state.calcState.digits + d.toString()
             val isZero = d == 0
             val result = if (state.calcState.lockedIn || isZero) {
