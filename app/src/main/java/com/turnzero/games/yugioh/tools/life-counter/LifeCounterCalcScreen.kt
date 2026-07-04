@@ -21,7 +21,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 private val GAP = 6.dp
-private val HORIZONTAL_PADDING = 32.dp
 
 @Composable
 fun LifeCounterCalcScreen(
@@ -44,15 +43,18 @@ fun LifeCounterCalcScreen(
             decorFitsSystemWindows = false
         )
     ) {
-        Column(
+        Box(
             modifier = modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(start = HORIZONTAL_PADDING, end = HORIZONTAL_PADDING, top = HORIZONTAL_PADDING, bottom = HORIZONTAL_PADDING),
-            verticalArrangement = Arrangement.spacedBy(GAP)
+                .navigationBarsPadding(),
+            contentAlignment = Alignment.Center
         ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.9f).fillMaxHeight(0.9f),
+                verticalArrangement = Arrangement.spacedBy(GAP)
+            ) {
             Row(
                 modifier = Modifier.weight(1f).fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(GAP)
@@ -244,6 +246,7 @@ fun LifeCounterCalcScreen(
                         modifier = Modifier.weight(2f).fillMaxWidth()
                     )
                 }
+            }
             }
         }
     }
