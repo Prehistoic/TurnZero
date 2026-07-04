@@ -45,7 +45,7 @@ fun LifeCounterScreen(
         view.keepScreenOn = true
         onDispose {
             onPauseTimer()
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_BEHIND
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             view.keepScreenOn = false
         }
     }

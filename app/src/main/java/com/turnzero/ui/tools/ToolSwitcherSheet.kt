@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Tool
 
@@ -38,7 +39,12 @@ fun ToolSwitcherSheet(
         modifier = sheetModifier,
         sheetState = sheetState
     ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.7f
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .heightIn(max = maxHeight)
+        ) {
             Text(
                 text = "Switch Tool",
                 style = MaterialTheme.typography.titleLarge,

@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,8 +35,11 @@ fun LifeCounterHistorySheet(
         modifier = Modifier.fillMaxWidth(0.6f),
         sheetState = sheetState
     ) {
+        val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.7f
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .heightIn(max = maxHeight)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

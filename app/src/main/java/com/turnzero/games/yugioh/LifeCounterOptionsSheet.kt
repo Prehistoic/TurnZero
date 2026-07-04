@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,9 +29,11 @@ fun LifeCounterOptionsSheet(
         modifier = Modifier.fillMaxWidth(0.6f),
         sheetState = sheetState
     ) {
+        val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.7f
         Column(
             modifier = Modifier
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .heightIn(max = maxHeight),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
