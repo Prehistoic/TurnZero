@@ -230,9 +230,12 @@ fun LifeCounterCalcScreen(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(GAP)
                 ) {
-                    CalcCell(
-                        onClick = {},
-                        modifier = Modifier.weight(4f).fillMaxWidth()
+                    Box(
+                        modifier = Modifier
+                            .weight(4f)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                     )
                     CalcCell(
                         onClick = onAction.onApply,
