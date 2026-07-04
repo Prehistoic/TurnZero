@@ -41,16 +41,19 @@ fun LifeCounterScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val activity = context as? Activity
+    val originalOrientation = remember { activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED }
 
     DisposableEffect(Unit) {
+        val handler = Handler(Looper.getMainLooper())
+        handler.removeCallbacksAndMessages(null)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         view.keepScreenOn = true
         onDispose {
             onPauseTimer()
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-            Handler(Looper.getMainLooper()).post {
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            }
+            handler.postDelayed({
+                activity?.requestedOrientation = originalOrientation
+            }, 100)
             view.keepScreenOn = false
         }
     }
