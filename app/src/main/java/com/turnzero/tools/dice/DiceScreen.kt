@@ -17,7 +17,6 @@ fun DiceScreen(
     onSetSelectedColor: (DiceColor) -> Unit,
     onRoll: () -> Unit,
     onAnimationComplete: () -> Unit,
-    onSettled: () -> Unit,
     onLoadPreset: (DicePreset) -> Unit,
     onClearHistory: () -> Unit,
     onToggleHistory: () -> Unit,
@@ -54,7 +53,6 @@ fun DiceScreen(
                 results = uiState.results,
                 isRolling = uiState.isRolling,
                 onAnimationComplete = onAnimationComplete,
-                onSettled = onSettled,
                 onRoll = onRoll,
                 dieSize = dieSize,
                 triggerScale = tapCount
@@ -67,7 +65,7 @@ fun DiceScreen(
                 .weight(0.25f),
             contentAlignment = Alignment.Center
         ) {
-            if (uiState.total != null && uiState.showTotal) {
+            if (uiState.total != null && !uiState.isRolling) {
                 Text(
                     text = "Total: ${uiState.total}",
                     style = MaterialTheme.typography.headlineMedium,

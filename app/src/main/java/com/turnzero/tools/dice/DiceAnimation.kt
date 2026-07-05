@@ -27,7 +27,6 @@ fun DiceAnimation(
     results: List<Int>?,
     isRolling: Boolean,
     onAnimationComplete: () -> Unit,
-    onSettled: () -> Unit = {},
     modifier: Modifier = Modifier,
     dieSize: Dp,
     onRoll: () -> Unit = {},
@@ -36,43 +35,20 @@ fun DiceAnimation(
     val hasRolled = results != null
 
     var displayedNumbers by remember(dice.size) { mutableStateOf(List(dice.size) { 1 }) }
-    var previousDisplayedNumbers by remember(dice.size) { mutableStateOf(List(dice.size) { -1 }) }
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
-            val totalDuration = 1500L
-            val startTime = System.currentTimeMillis()
-            var settledFired = false
+            val intervalMs = 80L
+            val totalFrames = 12
+            var previousNumbers = List(dice.size) { -1 }
 
-            while (true) {
-                val elapsed = System.currentTimeMillis() - startTime
-                if (elapsed >= totalDuration) break
-
-                val t = elapsed.toFloat() / totalDuration.toFloat()
-                val easedT = 1f - (1f - t) * (1f - t) * (1f - t)
-                val settling = easedT >= 0.8f
-
-                displayedNumbers = dice.mapIndexed { i, die ->
-                    val previous = previousDisplayedNumbers.getOrElse(i) { -1 }
-                    val showResult = Random.nextFloat() < easedT
-
-                    if (showResult && settling) {
-                        results.getOrElse(i) { randomNoRepeat(die.faceCount, previous) }
-                    } else if (showResult && results.getOrElse(i) { -1 } != previous) {
-                        results[i]
-                    } else {
-                        randomNoRepeat(die.faceCount, previous)
-                    }
+            repeat(totalFrames) {
+                val current = dice.mapIndexed { i, die ->
+                    randomNoRepeat(die.faceCount, previousNumbers[i])
                 }
-                previousDisplayedNumbers = displayedNumbers
-
-                if (!settledFired && easedT >= 0.97f) {
-                    settledFired = true
-                    onSettled()
-                }
-
-                val delayMs = (30 + (easedT * 170).toLong()).coerceAtMost(200)
-                delay(delayMs)
+                displayedNumbers = current
+                previousNumbers = current
+                delay(intervalMs)
             }
 
             displayedNumbers = results

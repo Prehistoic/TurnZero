@@ -68,11 +68,7 @@ class DiceViewModel @Inject constructor(
         if (dice.isEmpty()) return
         val results = dice.map { Random.nextInt(1, it.faceCount + 1) }
         val total = results.sum()
-        _uiState.update { it.copy(isRolling = true, results = results, total = total, showTotal = false) }
-    }
-
-    fun onSettled() {
-        _uiState.update { it.copy(showTotal = true) }
+        _uiState.update { it.copy(isRolling = true, results = results, total = total) }
     }
 
     fun animationComplete() {
