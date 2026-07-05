@@ -35,8 +35,8 @@ fun DiceAnimation(
 ) {
     val hasRolled = results != null
 
-    var displayedNumbers by remember { mutableStateOf(List(dice.size) { 1 }) }
-    var previousDisplayedNumbers by remember { mutableStateOf(List(dice.size) { -1 }) }
+    var displayedNumbers by remember(dice.size) { mutableStateOf(List(dice.size) { 1 }) }
+    var previousDisplayedNumbers by remember(dice.size) { mutableStateOf(List(dice.size) { -1 }) }
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
@@ -53,9 +53,9 @@ fun DiceAnimation(
 
                 displayedNumbers = dice.mapIndexed { i, die ->
                     if (Random.nextFloat() < easedT) {
-                        results[i]
+                        results.getOrElse(i) { Random.nextInt(1, die.faceCount + 1) }
                     } else {
-                        val previous = previousDisplayedNumbers[i]
+                        val previous = previousDisplayedNumbers.getOrElse(i) { -1 }
                         var next = Random.nextInt(1, die.faceCount + 1)
                         while (die.faceCount > 1 && next == previous) {
                             next = Random.nextInt(1, die.faceCount + 1)
@@ -100,7 +100,7 @@ fun DiceAnimation(
         label = "tapScale"
     )
 
-    val rows = dice.chunked(4)
+    val rows = remember(dice) { dice.chunked(4) }
 
     Column(
         modifier = modifier.scale(animatedScale),
