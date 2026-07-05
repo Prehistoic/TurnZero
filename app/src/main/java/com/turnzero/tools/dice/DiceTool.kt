@@ -36,6 +36,7 @@ class DiceTool : Tool {
             onSetSelectedColor = viewModel::setSelectedColor,
             onRoll = viewModel::roll,
             onAnimationComplete = viewModel::animationComplete,
+            onSettled = viewModel::onSettled,
             onLoadPreset = viewModel::loadPreset,
             onClearHistory = viewModel::clearHistory,
             onToggleHistory = viewModel::toggleHistory

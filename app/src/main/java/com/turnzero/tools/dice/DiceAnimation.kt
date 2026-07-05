@@ -27,6 +27,7 @@ fun DiceAnimation(
     results: List<Int>?,
     isRolling: Boolean,
     onAnimationComplete: () -> Unit,
+    onSettled: () -> Unit = {},
     modifier: Modifier = Modifier,
     dieSize: Dp,
     onRoll: () -> Unit = {},
@@ -40,6 +41,7 @@ fun DiceAnimation(
         if (isRolling && results != null) {
             val totalDuration = 1500L
             val startTime = System.currentTimeMillis()
+            var settledFired = false
 
             while (true) {
                 val elapsed = System.currentTimeMillis() - startTime
@@ -51,6 +53,11 @@ fun DiceAnimation(
                 displayedNumbers = dice.mapIndexed { i, die ->
                     if (Random.nextFloat() < easedT) results[i]
                     else Random.nextInt(1, die.faceCount + 1)
+                }
+
+                if (!settledFired && easedT >= 0.9f) {
+                    settledFired = true
+                    onSettled()
                 }
 
                 val delayMs = (30 + (easedT * 170).toLong()).coerceAtMost(200)
