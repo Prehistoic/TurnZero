@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-07-05
+
+### Changed
+- Dice roll animation is now smoother with decelerating number shuffle and progressive reveal of final values
+
 ## [0.6.2] - 2026-07-05
 
 ### Fixed

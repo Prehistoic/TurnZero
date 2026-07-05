@@ -34,24 +34,23 @@ fun DiceAnimation(
 ) {
     val hasRolled = results != null
 
-    var displayedNumbers by remember { mutableStateOf(List(dice.size) { 1 }) }
+    var displayedNumbers by remember(dice.size) { mutableStateOf(List(dice.size) { 1 }) }
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
-            val fastEnd = System.currentTimeMillis() + 600
-            while (System.currentTimeMillis() < fastEnd) {
-                displayedNumbers = dice.map { Random.nextInt(1, it.faceCount + 1) }
-                delay(50)
+            val intervalMs = 80L
+            val totalFrames = 12
+            var previousNumbers = List(dice.size) { -1 }
+
+            repeat(totalFrames) {
+                val current = dice.mapIndexed { i, die ->
+                    randomNoRepeat(die.faceCount, previousNumbers[i])
+                }
+                displayedNumbers = current
+                previousNumbers = current
+                delay(intervalMs)
             }
-            delay(100)
-            displayedNumbers = dice.mapIndexed { i, _ ->
-                if (Random.nextBoolean()) results[i] else Random.nextInt(1, dice[i].faceCount + 1)
-            }
-            delay(200)
-            displayedNumbers = dice.mapIndexed { i, _ ->
-                if (Random.nextBoolean()) results[i] else Random.nextInt(1, dice[i].faceCount + 1)
-            }
-            delay(400)
+
             displayedNumbers = results
             onAnimationComplete()
         } else if (!isRolling && results != null && displayedNumbers != results) {
@@ -78,7 +77,7 @@ fun DiceAnimation(
         label = "tapScale"
     )
 
-    val rows = dice.chunked(4)
+    val rows = remember(dice) { dice.chunked(4) }
 
     Column(
         modifier = modifier.scale(animatedScale),
@@ -159,4 +158,13 @@ fun DieCard(
             textAlign = TextAlign.Center
         )
     }
+}
+
+private fun randomNoRepeat(faceCount: Int, previous: Int): Int {
+    if (faceCount <= 1) return 1
+    var next = Random.nextInt(1, faceCount + 1)
+    while (next == previous) {
+        next = Random.nextInt(1, faceCount + 1)
+    }
+    return next
 }
