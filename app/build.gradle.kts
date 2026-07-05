@@ -37,6 +37,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    androidResources {
+        noCompress.add("db")
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true

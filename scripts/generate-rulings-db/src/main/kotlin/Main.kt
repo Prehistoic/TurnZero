@@ -72,7 +72,7 @@ private val FORMATS = setOf(
 
 fun main() {
     val repoPath = Path.of("mikaRulings")
-    val outputDb = Path.of("../app/src/main/assets/databases/rulings.db")
+    val outputDb = Path.of("../../app/src/main/assets/databases/rulings.db")
     val imageCacheFile = Path.of("image_urls_cache.json")
 
     if (repoPath.exists()) {
@@ -177,6 +177,8 @@ fun main() {
 
     val conn: Connection = DriverManager.getConnection("jdbc:sqlite:${outputDb.toAbsolutePath()}")
     conn.createStatement().use { stmt ->
+        stmt.execute("PRAGMA journal_mode=OFF")
+        stmt.execute("PRAGMA synchronous=OFF")
         stmt.execute("""
             CREATE TABLE cards (
                 id INTEGER PRIMARY KEY NOT NULL,
@@ -208,14 +210,16 @@ fun main() {
         """.trimIndent())
     }
 
+    conn.autoCommit = false
+
     val insertCardPs = conn.prepareStatement(
-        "INSERT OR REPLACE INTO cards(id, name, type, frameType, atk, def, level, race, attribute, desc, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO cards(id, name, type, frameType, atk, def, level, race, attribute, desc, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     )
     val insertRulingPs = conn.prepareStatement(
-        "INSERT OR REPLACE INTO rulings(card_id, format, ruling_text) VALUES (?, ?, ?)"
+        "INSERT INTO rulings(card_id, format, ruling_text) VALUES (?, ?, ?)"
     )
 
-    records.forEach { record ->
+    records.forEachIndexed { index, record ->
         insertCardPs.setInt(1, record.id)
         insertCardPs.setString(2, record.name)
         insertCardPs.setString(3, record.type)
@@ -235,12 +239,19 @@ fun main() {
             insertRulingPs.setString(3, text)
             insertRulingPs.executeUpdate()
         }
+
+        if (index % 500 == 0) {
+            conn.commit()
+            println("  Inserted $index/${records.size} cards...")
+        }
     }
 
     insertCardPs.close()
     insertRulingPs.close()
+    conn.commit()
 
     conn.createStatement().execute("INSERT INTO cards_fts(cards_fts) VALUES('rebuild')")
+    conn.autoCommit = true
     conn.close()
 
     println("Done! rulings.db generated at ${outputDb.toAbsolutePath()}")
