@@ -200,8 +200,7 @@ fun main() {
                 card_id INTEGER NOT NULL,
                 format TEXT NOT NULL,
                 ruling_text TEXT NOT NULL,
-                PRIMARY KEY (card_id, format),
-                FOREIGN KEY (card_id) REFERENCES cards(id)
+                PRIMARY KEY (card_id, format)
             )
         """.trimIndent())
 
