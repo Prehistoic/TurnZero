@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,6 +28,7 @@ class RulesTool : Tool {
     override val icon: ImageVector get() = Icons.AutoMirrored.Filled.MenuBook
     override val supportedGames = setOf("*")
 
+    @Suppress("ComposableNaming")
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit {
         val viewModel: RulesViewModel = hiltViewModel()
@@ -49,7 +52,7 @@ class RulesTool : Tool {
                             style = MaterialTheme.typography.labelLarge,
                         )
                         Icon(
-                            Icons.Default.ArrowDropDown,
+                            Icons.Filled.ArrowDropDown,
                             contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
@@ -73,7 +76,7 @@ class RulesTool : Tool {
             if (hasPdf) {
                 IconButton(onClick = { viewModel.togglePdf() }) {
                     Icon(
-                        Icons.Default.PictureAsPdf,
+                        Icons.Filled.PictureAsPdf,
                         contentDescription = "Official Rules PDF",
                     )
                 }
@@ -104,9 +107,9 @@ class RulesTool : Tool {
         ModalBottomSheet(onDismissRequest = onDismiss) {
             Text(
                 text = "No options available for this tool.",
-                style = MaterialTheme.typography.bodyLarge.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
+                style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(32.dp),

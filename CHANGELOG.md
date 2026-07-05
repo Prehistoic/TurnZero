@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-05
+
+### Fixed
+- Deprecated `Icons.Default` references replaced with `Icons.Filled` in RulesTool
+- Removed deprecated `statusBarColor` call in Theme (dead code with edge-to-edge enabled)
+
 ## [0.5.1] - 2026-07-04
 
 ### Fixed
