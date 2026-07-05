@@ -48,4 +48,11 @@ data class CardRulingsDetail(
 data class FormatRule(
     val title: String,
     val description: String,
+    val isSpecial: Boolean = false,
+    val subSections: List<RuleSubSection> = emptyList(),
+)
+
+data class RuleSubSection(
+    val title: String,
+    val body: String,
 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -36,12 +37,22 @@ fun RulingsScreen(
         return
     }
 
-    Scaffold { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
+    if (state.showOcrCardNotFound != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissOcrCardNotFound() },
+            title = { Text("No Card Found") },
+            text = {
+                Text("No card found matching \"${state.showOcrCardNotFound}\". Try again!")
+            },
+            confirmButton = {
+                TextButton(onClick = { viewModel.dismissOcrCardNotFound() }) {
+                    Text("OK")
+                }
+            },
+        )
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
             RulingsSearchBar(
                 query = state.searchQuery,
                 onQueryChange = { viewModel.setSearchQuery(it) },
@@ -58,10 +69,6 @@ fun RulingsScreen(
                         CircularProgressIndicator()
                     }
                 }
-                state.selectedCard != null -> {
-                    val card = state.selectedCard!!
-                    RulingsCardDetail(card = card)
-                }
                 state.isSearching || state.searchQuery.isNotBlank() -> {
                     if (state.searchResults.isEmpty()) {
                         TZEmptyState(message = "No cards found for \"${state.searchQuery}\"")
@@ -75,13 +82,35 @@ fun RulingsScreen(
                         )
                     }
                 }
-                else -> {
-                    RulingsGeneralRules(
-                        rules = state.generalRules,
-                        expandedRuleIndex = state.expandedRuleIndex,
-                        onToggleRule = { viewModel.toggleGeneralRule(it) },
-                    )
+                state.selectedCard != null -> {
+                val card = state.selectedCard!!
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TextButton(onClick = {
+                        viewModel.clearSelectedCard()
+                        viewModel.setSearchQuery("")
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Back to Rules")
+                    }
                 }
+                RulingsCardDetail(card = card)
+            }
+                else -> {
+                RulingsGeneralRules(
+                    rules = state.generalRules,
+                    expandedRuleIndex = state.expandedRuleIndex,
+                    onToggleRule = { viewModel.toggleGeneralRule(it) },
+                )
             }
         }
     }
@@ -97,13 +126,13 @@ private fun RulingsSearchBar(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shadowElevation = 4.dp,
+        shadowElevation = 2.dp,
         color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             OutlinedTextField(
@@ -117,7 +146,9 @@ private fun RulingsSearchBar(
                 },
                 trailingIcon = {
                     if (query.isNotEmpty()) {
-                        IconButton(onClick = { onQueryChange("") }) {
+                        IconButton(onClick = {
+                            onQueryChange("")
+                        }) {
                             Icon(Icons.Default.Clear, contentDescription = "Clear")
                         }
                     }
@@ -133,15 +164,16 @@ private fun RulingsSearchBar(
             FilledIconButton(
                 onClick = onOcrClick,
                 enabled = enabled,
-                modifier = Modifier.size(48.dp),
+                modifier = Modifier.size(40.dp),
                 shape = CircleShape,
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 ),
             ) {
-                Icon(Icons.Default.CameraAlt, contentDescription = "Scan card with camera")
+                Icon(Icons.Default.CameraAlt, contentDescription = "Scan card with camera", modifier = Modifier.size(20.dp))
             }
+
         }
     }
 }

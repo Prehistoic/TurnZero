@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -28,20 +27,25 @@ class RulingsTool : Tool {
     @Composable
     override fun Screen(onBack: () -> Unit) {
         val viewModel: RulingsViewModel = hiltViewModel()
-        val state by viewModel.uiState.collectAsStateWithLifecycle()
 
         RulingsScreen(
             onBack = onBack,
             viewModel = viewModel,
         )
+    }
 
-        if (state.showOptionsSheet) {
-            RulingsOptionsSheet(
-                allFormatsWithStatus = viewModel.allFormatsWithStatus,
-                onToggleFormat = { viewModel.toggleFormatEnabled(it) },
-                onDismiss = { viewModel.hideOptionsSheet() },
-            )
-        }
+    @Composable
+    override fun OptionsSheet(onDismiss: () -> Unit) {
+        val viewModel: RulingsViewModel = hiltViewModel()
+        val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+        RulingsOptionsSheet(
+            allFormatsWithStatus = viewModel.allFormatsWithStatus,
+            defaultFormat = state.defaultFormat,
+            onSetDefaultFormat = { viewModel.setDefaultFormat(it) },
+            onToggleFormat = { viewModel.toggleFormatEnabled(it) },
+            onDismiss = onDismiss,
+        )
     }
 
     @Suppress("ComposableNaming")
@@ -52,7 +56,6 @@ class RulingsTool : Tool {
 
         return {
             var formatExpanded by remember { mutableStateOf(false) }
-            var menuExpanded by remember { mutableStateOf(false) }
 
             Row(
                 modifier = Modifier.clickable { formatExpanded = true },
@@ -80,22 +83,6 @@ class RulingsTool : Tool {
                         },
                     )
                 }
-            }
-
-            IconButton(onClick = { menuExpanded = true }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Options")
-            }
-            DropdownMenu(
-                expanded = menuExpanded,
-                onDismissRequest = { menuExpanded = false },
-            ) {
-                DropdownMenuItem(
-                    text = { Text("Manage Formats") },
-                    onClick = {
-                        menuExpanded = false
-                        viewModel.showOptionsSheet()
-                    },
-                )
             }
         }
     }
