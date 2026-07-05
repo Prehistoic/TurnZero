@@ -185,23 +185,24 @@ class LifeCounterViewModel @Inject constructor(
                 remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
                 flashZero = false,
                 hasEverStarted = false,
-                history = emptyList()
+                history = emptyList(),
+                snapLpAnimation = true
             )
         }
     }
 
     fun undoLastChange() {
-        val history = _uiState.value.history
-        if (history.isEmpty()) return
-        val last = history.first()
-        _uiState.update {
-            val updated = if (last.player == Player.PLAYER_1)
-                it.copy(player1Lp = last.previousLp)
-            else
-                it.copy(player2Lp = last.previousLp)
-            updated.copy(history = history.drop(1))
-        }
+    val history = _uiState.value.history
+    if (history.isEmpty()) return
+    val last = history.first()
+    _uiState.update {
+        val updated = if (last.player == Player.PLAYER_1)
+            it.copy(player1Lp = last.previousLp)
+        else
+            it.copy(player2Lp = last.previousLp)
+        updated.copy(history = history.drop(1), snapLpAnimation = true)
     }
+}
 
     fun setTimerMode(mode: TimerMode) {
         timerJob?.cancel()
@@ -218,7 +219,8 @@ class LifeCounterViewModel @Inject constructor(
                 remainingSeconds = if (mode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
                 flashZero = false,
                 hasEverStarted = false,
-                history = emptyList()
+                history = emptyList(),
+                snapLpAnimation = true
             )
         }
     }
@@ -237,7 +239,8 @@ class LifeCounterViewModel @Inject constructor(
                 remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
                 flashZero = false,
                 hasEverStarted = false,
-                history = emptyList()
+                history = emptyList(),
+                snapLpAnimation = true
             )
         }
     }
@@ -256,7 +259,8 @@ class LifeCounterViewModel @Inject constructor(
                 remainingSeconds = if (it.timerMode == TimerMode.COUNT_DOWN) minutes * 60L else 0,
                 flashZero = false,
                 hasEverStarted = false,
-                history = emptyList()
+                history = emptyList(),
+                snapLpAnimation = true
             )
         }
     }
@@ -271,6 +275,10 @@ class LifeCounterViewModel @Inject constructor(
 
     fun consumedFlashZero() {
         _uiState.update { it.copy(flashZero = false) }
+    }
+
+    fun consumedSnapLpAnimation() {
+        _uiState.update { it.copy(snapLpAnimation = false) }
     }
 
     private fun activePlayerLp(state: LifeCounterUiState): Int {

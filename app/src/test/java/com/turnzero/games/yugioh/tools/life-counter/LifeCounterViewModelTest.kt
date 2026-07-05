@@ -325,6 +325,7 @@ class LifeCounterViewModelTest {
         vm.undoLastChange()
         assertEquals(8000, vm.uiState.value.player1Lp)
         assertTrue(vm.uiState.value.history.isEmpty())
+        assertTrue(vm.uiState.value.snapLpAnimation)
     }
 
     @Test
@@ -367,6 +368,7 @@ class LifeCounterViewModelTest {
         assertFalse(vm.uiState.value.isRunning)
         assertEquals(0, vm.uiState.value.elapsedSeconds)
         assertEquals(30 * 60, vm.uiState.value.remainingSeconds)
+        assertTrue(vm.uiState.value.snapLpAnimation)
     }
 
     @Test
@@ -418,5 +420,38 @@ class LifeCounterViewModelTest {
         assertFalse(vm.uiState.value.showHistory)
         vm.toggleHistory()
         assertTrue(vm.uiState.value.showHistory)
+    }
+
+    @Test
+    fun `snapLpAnimation is true after setTimerMode and consumed sets it false`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.setTimerMode(TimerMode.COUNT_UP)
+        assertTrue(vm.uiState.value.snapLpAnimation)
+        vm.consumedSnapLpAnimation()
+        assertFalse(vm.uiState.value.snapLpAnimation)
+    }
+
+    @Test
+    fun `snapLpAnimation is true after setTimerStartValue`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.setTimerStartValue(30)
+        assertTrue(vm.uiState.value.snapLpAnimation)
+    }
+
+    @Test
+    fun `snapLpAnimation is true after setStartingLp`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.setStartingLp(4000)
+        assertTrue(vm.uiState.value.snapLpAnimation)
+    }
+
+    @Test
+    fun `snapLpAnimation is false by default and not set by regular LP change`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        assertFalse(vm.uiState.value.snapLpAnimation)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        assertFalse(vm.uiState.value.snapLpAnimation)
     }
 }

@@ -38,5 +38,6 @@ data class LifeCounterUiState(
     val activePlayer: Player = Player.PLAYER_1,
     val calcState: CalcInputState = CalcInputState(),
     val flashZero: Boolean = false,
-    val hasEverStarted: Boolean = false
+    val hasEverStarted: Boolean = false,
+    val snapLpAnimation: Boolean = false
 )
