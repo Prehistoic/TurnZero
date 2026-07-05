@@ -26,6 +26,7 @@ object UserPreferences {
     val LIFE_COUNTER_TIMER_MODE = stringPreferencesKey("life_counter_timer_mode")
     val LIFE_COUNTER_TIMER_START = stringPreferencesKey("life_counter_timer_start")
     val LIFE_COUNTER_STARTING_LP = stringPreferencesKey("life_counter_starting_lp")
+    val RULINGS_ENABLED_FORMATS = stringSetPreferencesKey("rulings_enabled_formats")
 
     fun coinCountKey(gameId: String) = stringPreferencesKey("coin_count_$gameId")
 }
