@@ -25,7 +25,7 @@ fun ToolSwitcherSheet(
     onToolSelected: (Tool) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val sheetModifier = if (isLandscape)
         Modifier.fillMaxWidth(0.6f)

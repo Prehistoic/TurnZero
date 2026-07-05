@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-07-05
+
+### Fixed
+- Bottom sheets in landscape screens now open fully expanded instead of half-height
+
 ## [0.6.3] - 2026-07-05
 
 ### Changed
