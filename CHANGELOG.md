@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-07-06
+
+### Added
+- New Yu-Gi-Oh! Rulings tool with card search and OCR camera scanning
+- Pre-built rulings database with ~13,000 cards and ~198,000 official rulings
+- Card detail screen showing all official rulings for a searched card
+- OCR camera screen using ML Kit Text Recognition for scanning card names
+- Format Rules screen with comprehensive rules for Goat, Edison, Tengu, REDU, and HAT formats
+- Format selection with chronological sorting and enabled/disabled toggle
+- Expandable rule cards with numbered labels, special rule highlighting, and markdown-style formatting
+- SubSections support within rules for structured examples, steps, and notes
+- DB generation script for rebuilding the rulings database from source data
+
+### Changed
+- Rulings tool parent box colors now match the Rules tool (surfaceContainer)
+- Rulings tool subbox colors use lighter surfaceContainerLow/Lowest for visual hierarchy
+
+### Fixed
+- Removed foreign key constraint from rulings table for Room compatibility
+
 ## [0.6.4] - 2026-07-05
 
 ### Fixed
