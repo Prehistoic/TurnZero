@@ -1,11 +1,12 @@
 package com.turnzero.games.yugioh.tools.rulingssearcher
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.turnzero.core.tools.api.Tool
+import com.turnzero.games.yugioh.tools.rulings.RulingsScreen
+import com.turnzero.games.yugioh.tools.rulings.RulingsTool
 
 class YuGiOhRulingsSearcher : Tool {
     override val id = "ygo-rulings-searcher"
@@ -15,9 +16,13 @@ class YuGiOhRulingsSearcher : Tool {
 
     @Composable
     override fun Screen(onBack: () -> Unit) {
-        Text(
-            text = "Rulings Searcher — Coming Soon",
-            style = MaterialTheme.typography.titleMedium
-        )
+        RulingsScreen(onBack = onBack)
+    }
+
+    @Suppress("ComposableNaming")
+    @Composable
+    override fun TopBarActions(): @Composable RowScope.() -> Unit {
+        val impl = RulingsTool()
+        return impl.TopBarActions()
     }
 }
