@@ -36,6 +36,7 @@ fun DiceAnimation(
     val hasRolled = results != null
 
     var displayedNumbers by remember { mutableStateOf(List(dice.size) { 1 }) }
+    var previousDisplayedNumbers by remember { mutableStateOf(List(dice.size) { -1 }) }
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
@@ -51,9 +52,18 @@ fun DiceAnimation(
                 val easedT = 1f - (1f - t) * (1f - t) * (1f - t)
 
                 displayedNumbers = dice.mapIndexed { i, die ->
-                    if (Random.nextFloat() < easedT) results[i]
-                    else Random.nextInt(1, die.faceCount + 1)
+                    if (Random.nextFloat() < easedT) {
+                        results[i]
+                    } else {
+                        val previous = previousDisplayedNumbers[i]
+                        var next = Random.nextInt(1, die.faceCount + 1)
+                        while (die.faceCount > 1 && next == previous) {
+                            next = Random.nextInt(1, die.faceCount + 1)
+                        }
+                        next
+                    }
                 }
+                previousDisplayedNumbers = displayedNumbers
 
                 if (!settledFired && easedT >= 0.9f) {
                     settledFired = true
