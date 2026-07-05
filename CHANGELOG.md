@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Bottom sheets in landscape screens now open fully expanded instead of half-height
+- System back button now works correctly from Life Counter screen (was just rotating orientation)
 
 ## [0.6.3] - 2026-07-05
 
