@@ -50,22 +50,23 @@ fun DiceAnimation(
 
                 val t = elapsed.toFloat() / totalDuration.toFloat()
                 val easedT = 1f - (1f - t) * (1f - t) * (1f - t)
+                val settling = easedT >= 0.8f
 
                 displayedNumbers = dice.mapIndexed { i, die ->
-                    if (Random.nextFloat() < easedT) {
-                        results.getOrElse(i) { Random.nextInt(1, die.faceCount + 1) }
+                    val previous = previousDisplayedNumbers.getOrElse(i) { -1 }
+                    val showResult = Random.nextFloat() < easedT
+
+                    if (showResult && settling) {
+                        results.getOrElse(i) { randomNoRepeat(die.faceCount, previous) }
+                    } else if (showResult && results.getOrElse(i) { -1 } != previous) {
+                        results[i]
                     } else {
-                        val previous = previousDisplayedNumbers.getOrElse(i) { -1 }
-                        var next = Random.nextInt(1, die.faceCount + 1)
-                        while (die.faceCount > 1 && next == previous) {
-                            next = Random.nextInt(1, die.faceCount + 1)
-                        }
-                        next
+                        randomNoRepeat(die.faceCount, previous)
                     }
                 }
                 previousDisplayedNumbers = displayedNumbers
 
-                if (!settledFired && easedT >= 0.9f) {
+                if (!settledFired && easedT >= 0.97f) {
                     settledFired = true
                     onSettled()
                 }
@@ -181,4 +182,13 @@ fun DieCard(
             textAlign = TextAlign.Center
         )
     }
+}
+
+private fun randomNoRepeat(faceCount: Int, previous: Int): Int {
+    if (faceCount <= 1) return 1
+    var next = Random.nextInt(1, faceCount + 1)
+    while (next == previous) {
+        next = Random.nextInt(1, faceCount + 1)
+    }
+    return next
 }
