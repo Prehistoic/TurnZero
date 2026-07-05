@@ -38,20 +38,25 @@ fun DiceAnimation(
 
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
-            val fastEnd = System.currentTimeMillis() + 600
-            while (System.currentTimeMillis() < fastEnd) {
-                displayedNumbers = dice.map { Random.nextInt(1, it.faceCount + 1) }
-                delay(50)
+            val totalDuration = 1500L
+            val startTime = System.currentTimeMillis()
+
+            while (true) {
+                val elapsed = System.currentTimeMillis() - startTime
+                if (elapsed >= totalDuration) break
+
+                val t = elapsed.toFloat() / totalDuration.toFloat()
+                val easedT = 1f - (1f - t) * (1f - t) * (1f - t)
+
+                displayedNumbers = dice.mapIndexed { i, die ->
+                    if (Random.nextFloat() < easedT) results[i]
+                    else Random.nextInt(1, die.faceCount + 1)
+                }
+
+                val delayMs = (30 + (easedT * 170).toLong()).coerceAtMost(200)
+                delay(delayMs)
             }
-            delay(100)
-            displayedNumbers = dice.mapIndexed { i, _ ->
-                if (Random.nextBoolean()) results[i] else Random.nextInt(1, dice[i].faceCount + 1)
-            }
-            delay(200)
-            displayedNumbers = dice.mapIndexed { i, _ ->
-                if (Random.nextBoolean()) results[i] else Random.nextInt(1, dice[i].faceCount + 1)
-            }
-            delay(400)
+
             displayedNumbers = results
             onAnimationComplete()
         } else if (!isRolling && results != null && displayedNumbers != results) {
