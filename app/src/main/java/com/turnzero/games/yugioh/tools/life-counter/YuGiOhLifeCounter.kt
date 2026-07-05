@@ -64,6 +64,7 @@ class YuGiOhLifeCounter : Tool {
             onUndoLastChange = viewModel::undoLastChange,
             onOpenCalc = viewModel::openCalc,
             onConsumedFlashZero = viewModel::consumedFlashZero,
+            onConsumedSnapLpAnimation = viewModel::consumedSnapLpAnimation,
             onCloseCalc = viewModel::closeCalc,
             onCalcAction = calcActions
         )

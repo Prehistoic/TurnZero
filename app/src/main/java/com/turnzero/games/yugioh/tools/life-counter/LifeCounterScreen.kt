@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ fun LifeCounterScreen(
     onUndoLastChange: () -> Unit,
     onOpenCalc: (Player) -> Unit,
     onConsumedFlashZero: () -> Unit,
+    onConsumedSnapLpAnimation: () -> Unit,
     onCloseCalc: () -> Unit,
     onCalcAction: LifeCounterCalcActions,
     modifier: Modifier = Modifier
@@ -46,6 +48,8 @@ fun LifeCounterScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val activity = context as? Activity
+
+    var showResetDialog by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -90,6 +94,12 @@ fun LifeCounterScreen(
         }
     }
 
+    LaunchedEffect(uiState.snapLpAnimation) {
+        if (uiState.snapLpAnimation) {
+            onConsumedSnapLpAnimation()
+        }
+    }
+
     Box(modifier = modifier.fillMaxSize().displayCutoutPadding().navigationBarsPadding()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -102,6 +112,7 @@ fun LifeCounterScreen(
                 PlayerLpPanel(
                     player = Player.PLAYER_1,
                     lp = uiState.player1Lp,
+                    snapLpAnimation = uiState.snapLpAnimation,
                     onClick = { onOpenCalc(Player.PLAYER_1) },
                     modifier = Modifier.weight(1f)
                 )
@@ -113,7 +124,7 @@ fun LifeCounterScreen(
                     isRunning = uiState.isRunning,
                     hasEverStarted = uiState.hasEverStarted,
                     onStartPause = onStartPauseTimer,
-                    onReset = onResetAll,
+                    onReset = { showResetDialog = true },
                     onUndo = onUndoLastChange,
                     modifier = Modifier.weight(1f)
                 )
@@ -121,6 +132,7 @@ fun LifeCounterScreen(
                 PlayerLpPanel(
                     player = Player.PLAYER_2,
                     lp = uiState.player2Lp,
+                    snapLpAnimation = uiState.snapLpAnimation,
                     onClick = { onOpenCalc(Player.PLAYER_2) },
                     modifier = Modifier.weight(1f)
                 )
@@ -137,12 +149,34 @@ fun LifeCounterScreen(
             )
         }
     }
+
+    if (showResetDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetDialog = false },
+            title = { Text("Reset the Duel") },
+            text = { Text("Reset ?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showResetDialog = false
+                    onResetAll()
+                }) {
+                    Text("Reset")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 @Composable
 private fun PlayerLpPanel(
     player: Player,
     lp: Int,
+    snapLpAnimation: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -150,19 +184,31 @@ private fun PlayerLpPanel(
         Player.PLAYER_1 -> "Duellist 1"
         Player.PLAYER_2 -> "Duellist 2"
     }
-    val color = MaterialTheme.colorScheme.primary
+    val defaultColor = MaterialTheme.colorScheme.primary
 
     val prevLp = remember { mutableIntStateOf(lp) }
+    val lpChangeDirection = remember { mutableIntStateOf(0) }
+    val wasSnapped = remember { mutableStateOf(false) }
+
     val duration = remember(lp) {
         val delta = abs(lp - prevLp.intValue)
+        lpChangeDirection.intValue = lp.compareTo(prevLp.intValue)
         prevLp.intValue = lp
-        (delta / 10).coerceIn(200, 1500)
+        wasSnapped.value = snapLpAnimation
+        if (snapLpAnimation) 0 else (delta / 10).coerceIn(200, 1500)
     }
     val displayLp by animateIntAsState(
         targetValue = lp,
         animationSpec = tween(durationMillis = duration),
         label = "lp"
     )
+
+    val color = when {
+        wasSnapped.value -> defaultColor
+        lpChangeDirection.intValue > 0 -> Color(0xFF4CAF50)
+        lpChangeDirection.intValue < 0 -> Color(0xFFF44336)
+        else -> defaultColor
+    }
 
     Box(
         modifier = modifier

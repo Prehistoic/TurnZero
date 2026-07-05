@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-05
+
+### Added
+- Reset confirmation dialog on LP Counter ("Reset the Duel" / "Reset ?" with Cancel/Reset buttons)
+
+### Changed
+- LP Counter text turns green on LP increase, red on LP decrease during counting animation
+
+### Fixed
+- LP Counter no longer animates LP changes for reset, undo, and options changes (instant snap instead)
+
 ## [0.6.0] - 2026-07-05
 
 ### Fixed
