@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-07-10
+
+### Added
+- Card PSCT/description displayed in the Rulings card detail screen (#33)
+- Localized card name search for OCR: French, German, Italian, and Portuguese card names now resolve via YGOPRODeck translations (#30)
+- Auto-scroll to expanded rule accordion in Format Rules screen (#31)
+
+### Changed
+- OCR scan overlay now card-shaped (proper YGO proportions) instead of a narrow text bar
+- OCR now filters text blocks by element size to isolate card name from surrounding text
+- Options Sheet format list shows gradient fade for scrollable content (#32)
+
+### Fixed
+- OCR error text is now centered on screen
+- OCR close button repositioned closer to the status bar
+
 ## [0.7.0] - 2026-07-06
 
 ### Added
