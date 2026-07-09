@@ -25,6 +25,7 @@ class YuGiOhLifeCounter : Tool {
     override val supportedGames = setOf("yugioh")
     override val showBottomBar = false
 
+    @Suppress("ComposableNaming")
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {
         val sheetActions = LocalToolSheetActions.current

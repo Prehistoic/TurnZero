@@ -12,8 +12,14 @@ class RulingsRepository(private val dao: RulingsDao) {
                 "JOIN cards c ON fts.rowid = c.rowid " +
                 "WHERE cards_fts MATCH ? " +
                 "AND EXISTS (SELECT 1 FROM rulings r WHERE r.card_id = c.id AND r.format = ?) " +
+                "UNION " +
+                "SELECT c.id, c.name, c.type, c.image_url FROM names_fts nf " +
+                "JOIN localized_names ln ON nf.rowid = ln.rowid " +
+                "JOIN cards c ON ln.card_id = c.id " +
+                "WHERE names_fts MATCH ? " +
+                "AND EXISTS (SELECT 1 FROM rulings r WHERE r.card_id = c.id AND r.format = ?) " +
                 "LIMIT ?",
-            arrayOf("$sanitized*", format, limit),
+            arrayOf<Any>("$sanitized*", format, "$sanitized*", format, limit),
         )
         return dao.searchCards(sqlQuery)
     }

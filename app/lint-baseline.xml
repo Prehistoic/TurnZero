@@ -24,39 +24,6 @@
     </issue>
 
     <issue
-        id="AndroidGradlePluginVersion"
-        message="A newer version of Gradle than 9.2.0 is available: 9.6.1"
-        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-9.2.0-bin.zip"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../gradle/wrapper/gradle-wrapper.properties"
-            line="3"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="AndroidGradlePluginVersion"
-        message="A newer version of com.android.application than 9.0.1 is available: 9.2.1"
-        errorLine1="agp = &quot;9.0.1&quot;"
-        errorLine2="      ~~~~~~~">
-        <location
-            file="../gradle/libs.versions.toml"
-            line="2"
-            column="7"/>
-    </issue>
-
-    <issue
-        id="AndroidGradlePluginVersion"
-        message="A newer version of com.android.library than 9.0.1 is available: 9.2.1"
-        errorLine1="agp = &quot;9.0.1&quot;"
-        errorLine2="      ~~~~~~~">
-        <location
-            file="../gradle/libs.versions.toml"
-            line="2"
-            column="7"/>
-    </issue>
-
-    <issue
         id="GradleDependency"
         message="A newer version of androidx.compose:compose-bom than 2024.12.01 is available: 2026.06.01"
         errorLine1="compose-bom = &quot;2024.12.01&quot;"
@@ -179,28 +146,6 @@
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of com.mikepenz.aboutlibraries.plugin.android than 14.2.1 is available: 15.0.2"
-        errorLine1="aboutlibraries = &quot;14.2.1&quot;"
-        errorLine2="                 ~~~~~~~~">
-        <location
-            file="../gradle/libs.versions.toml"
-            line="15"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of com.mikepenz:aboutlibraries-compose-m3 than 14.2.1 is available: 15.0.2"
-        errorLine1="aboutlibraries = &quot;14.2.1&quot;"
-        errorLine2="                 ~~~~~~~~">
-        <location
-            file="../gradle/libs.versions.toml"
-            line="15"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
         message="A newer version of org.jetbrains.kotlinx:kotlinx-serialization-json than 1.7.3 is available: 1.11.0"
         errorLine1="kotlinx-serialization-json = { group = &quot;org.jetbrains.kotlinx&quot;, name = &quot;kotlinx-serialization-json&quot;, version = &quot;1.7.3&quot; }"
         errorLine2="                                                                                                               ~~~~~~~">
@@ -240,17 +185,6 @@
         <location
             file="src/main/java/com/turnzero/tools/dice/DiceTool.kt"
             line="21"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ComposableNaming"
-        message="Composable functions with a return type should start with a lowercase letter"
-        errorLine1="    override fun TopBarActions(): @Composable RowScope.() -> Unit {"
-        errorLine2="                 ~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/com/turnzero/tools/rules/RulesTool.kt"
-            line="30"
             column="18"/>
     </issue>
 

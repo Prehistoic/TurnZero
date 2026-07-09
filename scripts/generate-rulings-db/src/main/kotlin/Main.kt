@@ -18,6 +18,7 @@ data class CardJson(
     val name: String,
     val Stats: CardStats? = null,
     val Rulings: Map<String, String> = emptyMap(),
+    val PSCT: Map<String, String> = emptyMap(),
 )
 
 @Serializable
@@ -38,6 +39,7 @@ data class YgoApiResponse(val data: List<YgoCard>? = null)
 @Serializable
 data class YgoCard(
     val id: Int,
+    val name: String = "",
     @SerialName("card_images")
     val cardImages: List<CardImage>? = null,
 )
@@ -69,6 +71,8 @@ private val FORMATS = setOf(
     "TeleDAD", "Gladiator", "ReturnDAD", "Trooper",
     "Circle", "Stein", "Base",
 )
+
+private val OCR_LANGUAGES = listOf("fr", "de", "it", "pt")
 
 fun main() {
     val repoPath = Path.of("mikaRulings")
@@ -103,7 +107,9 @@ fun main() {
                     level = card.Stats?.level?.toInt(),
                     race = card.Stats?.race ?: "",
                     attribute = card.Stats?.attribute,
-                    desc = card.Stats?.desc ?: "",
+                    desc = card.Stats?.desc?.takeIf { it.isNotBlank() }
+                        ?: card.PSCT["Base"]?.takeIf { it.isNotBlank() && !it.startsWith("No") }
+                        ?: "",
                     imageUrl = null,
                     rulings = card.Rulings.filterKeys { it in FORMATS },
                 )
@@ -207,6 +213,19 @@ fun main() {
         stmt.execute("""
             CREATE VIRTUAL TABLE cards_fts USING fts4(content="cards", name)
         """.trimIndent())
+
+        stmt.execute("""
+            CREATE TABLE localized_names (
+                card_id INTEGER NOT NULL,
+                language TEXT NOT NULL,
+                name TEXT NOT NULL,
+                PRIMARY KEY (card_id, language)
+            )
+        """.trimIndent())
+
+        stmt.execute("""
+            CREATE VIRTUAL TABLE names_fts USING fts4(content="localized_names", name)
+        """.trimIndent())
     }
 
     conn.autoCommit = false
@@ -249,7 +268,46 @@ fun main() {
     insertRulingPs.close()
     conn.commit()
 
+    println("Fetching localized card names from YGOPRODeck API for ${OCR_LANGUAGES.size} languages...")
+    val insertNamePs = conn.prepareStatement(
+        "INSERT OR IGNORE INTO localized_names(card_id, language, name) VALUES (?, ?, ?)"
+    )
+    val batchIds = records.map { it.id }
+    val nameBatchSize = 50
+
+    OCR_LANGUAGES.forEachIndexed { langIdx, lang ->
+        println("  Language: $lang (${langIdx + 1}/${OCR_LANGUAGES.size})")
+        batchIds.chunked(nameBatchSize).forEachIndexed { batchIdx, idBatch ->
+            val idList = idBatch.joinToString(",")
+            try {
+                val request = Request.Builder()
+                    .url("https://db.ygoprodeck.com/api/v7/cardinfo.php?id=$idList&language=$lang")
+                    .build()
+                val response = client.newCall(request).execute()
+                val body = response.body?.string() ?: ""
+                val apiResponse = json.decodeFromString<YgoApiResponse>(body)
+                apiResponse.data?.forEach { card ->
+                    insertNamePs.setInt(1, card.id)
+                    insertNamePs.setString(2, lang)
+                    insertNamePs.setString(3, card.name)
+                    insertNamePs.executeUpdate()
+                }
+                response.close()
+            } catch (e: Exception) {
+                println("    Error batch $batchIdx: ${e.message}")
+            }
+            if (batchIdx % 10 == 0) {
+                conn.commit()
+                Thread.sleep(1200)
+                println("    Progress: ${batchIdx * nameBatchSize}/${records.size}")
+            }
+        }
+        conn.commit()
+    }
+    insertNamePs.close()
+
     conn.createStatement().execute("INSERT INTO cards_fts(cards_fts) VALUES('rebuild')")
+    conn.createStatement().execute("INSERT INTO names_fts(names_fts) VALUES('rebuild')")
     conn.autoCommit = true
     conn.close()
 

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.min
 import javax.inject.Inject
 
 private const val TAG = "TZ/RulingsVM"
@@ -206,16 +207,38 @@ class RulingsViewModel @Inject constructor(
                 .map { it.replace(Regex("[^\\p{L}0-9\\s\\-']"), "").trim() }
                 .filter { it.length > 3 }
             Log.d(TAG, "OCR clean lines: $cleanLines")
+
+            val format = _uiState.value.selectedFormat
+
             for (line in cleanLines) {
                 Log.d(TAG, "OCR searching for: '$line'")
-                val result = repository.searchCards(line, _uiState.value.selectedFormat, 1)
+                val result = repository.searchCards(line, format, 1)
                 if (result.isNotEmpty()) {
-                    Log.d(TAG, "OCR match found: ${result[0].name} (id=${result[0].id})")
-                    val detail = repository.getCardRulings(result[0].id, _uiState.value.selectedFormat)
-                    _uiState.update { it.copy(selectedCard = detail, searchQuery = "", searchResults = emptyList(), isSearching = false) }
+                    Log.d(TAG, "OCR exact match: ${result[0].name} (id=${result[0].id})")
+                    loadOcrCard(result[0].id, format)
+                    return@launch
+                }
+
+                val variants = generateOcrVariants(line)
+                for (variant in variants) {
+                    if (variant == line) continue
+                    val variantResult = repository.searchCards(variant, format, 1)
+                    if (variantResult.isNotEmpty()) {
+                        Log.d(TAG, "OCR variant match: '${variantResult[0].name}' from '$variant' (original: '$line')")
+                        loadOcrCard(variantResult[0].id, format)
+                        return@launch
+                    }
+                }
+
+                val fuzzyResults = fuzzySearch(line, format)
+                if (fuzzyResults.isNotEmpty()) {
+                    val best = fuzzyResults.first()
+                    Log.d(TAG, "OCR fuzzy match: '${best.name}' (score=${best.score}, original: '$line')")
+                    loadOcrCard(best.id, format)
                     return@launch
                 }
             }
+
             val fallbackQuery = text.take(50).trim()
             Log.w(TAG, "OCR no match found, fallback query: '$fallbackQuery'")
             _uiState.update { it.copy(showOcrCardNotFound = fallbackQuery) }
@@ -231,4 +254,115 @@ class RulingsViewModel @Inject constructor(
             it.copy(expandedRuleIndex = if (it.expandedRuleIndex == index) null else index)
         }
     }
+
+    private suspend fun loadOcrCard(cardId: Int, format: String) {
+        val detail = repository.getCardRulings(cardId, format)
+        _uiState.update {
+            it.copy(selectedCard = detail, searchQuery = "", searchResults = emptyList(), isSearching = false)
+        }
+    }
+
+    private suspend fun fuzzySearch(
+        query: String,
+        format: String,
+    ): List<FuzzyCardResult> {
+        val words = query.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (words.isEmpty()) return emptyList()
+
+        val allResults = mutableListOf<CardSearchResult>()
+        val seen = mutableSetOf<Int>()
+        for (word in words) {
+            if (word.length <= 2) continue
+            val results = repository.searchCards(word, format, 10)
+            for (r in results) {
+                if (seen.add(r.id)) {
+                    allResults.add(r)
+                }
+            }
+        }
+
+        val normalizedQuery = query.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
+        return allResults
+            .map { result ->
+                val normalizedName = result.name.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
+                val score = levenshteinDistance(normalizedQuery, normalizedName)
+                FuzzyCardResult(result.id, result.name, score)
+            }
+            .sortedBy { it.score }
+            .filter { it.score <= min(normalizedQuery.length / 2, 5) }
+    }
+
+    companion object {
+        private val OCR_SUBSTITUTIONS = mapOf(
+            '0' to listOf('O', 'D'),
+            'O' to listOf('0'),
+            '1' to listOf('l', 'I', 'i'),
+            'l' to listOf('1', 'I'),
+            'I' to listOf('1', 'l'),
+            '5' to listOf('S'),
+            'S' to listOf('5'),
+            '8' to listOf('B'),
+            'B' to listOf('8'),
+            '2' to listOf('Z'),
+            'Z' to listOf('2'),
+            '6' to listOf('G'),
+            'G' to listOf('6'),
+            '9' to listOf('g', 'q'),
+            'C' to listOf('G', 'O'),
+            'U' to listOf('V'),
+            'V' to listOf('U'),
+            '\u00d1' to listOf('N'),
+            '\u00f1' to listOf('n'),
+            '\u00e9' to listOf('e'),
+            '\u00e8' to listOf('e'),
+            '\u00ea' to listOf('e'),
+            '\u00e0' to listOf('a'),
+            '\u00e1' to listOf('a'),
+            '\u00e2' to listOf('a'),
+            '\u00f6' to listOf('o'),
+            '\u00fc' to listOf('u'),
+        )
+
+        fun generateOcrVariants(text: String): List<String> {
+            val variants = mutableListOf(text)
+            val chars = text.toCharArray()
+            for (i in chars.indices) {
+                val subs = OCR_SUBSTITUTIONS[chars[i]] ?: continue
+                for (sub in subs) {
+                    val variant = chars.copyOf().also { it[i] = sub }.concatToString()
+                    variants.add(variant)
+                }
+            }
+            return variants.distinct().take(30)
+        }
+
+        fun levenshteinDistance(a: String, b: String): Int {
+            if (a.isEmpty()) return b.length
+            if (b.isEmpty()) return a.length
+
+            var prev = IntArray(b.length + 1) { it }
+            var curr = IntArray(b.length + 1)
+
+            for (i in 1..a.length) {
+                curr[0] = i
+                for (j in 1..b.length) {
+                    curr[j] = if (a[i - 1] == b[j - 1]) {
+                        prev[j - 1]
+                    } else {
+                        1 + minOf(prev[j], curr[j - 1], prev[j - 1])
+                    }
+                }
+                val temp = prev
+                prev = curr
+                curr = temp
+            }
+            return prev[b.length]
+        }
+    }
+
+    private data class FuzzyCardResult(
+        val id: Int,
+        val name: String,
+        val score: Int,
+    )
 }

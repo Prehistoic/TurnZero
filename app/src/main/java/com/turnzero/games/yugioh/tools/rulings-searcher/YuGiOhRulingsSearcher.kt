@@ -11,7 +11,7 @@ import com.turnzero.games.yugioh.tools.rulings.RulingsOptionsSheet
 import com.turnzero.games.yugioh.tools.rulings.RulingsScreen
 import com.turnzero.games.yugioh.tools.rulings.RulingsTool
 import com.turnzero.games.yugioh.tools.rulings.RulingsViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 class YuGiOhRulingsSearcher : Tool {
     override val id = "ygo-rulings-searcher"

@@ -16,7 +16,10 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -75,7 +78,11 @@ fun RulingsGeneralRules(
 
     LaunchedEffect(expandedRuleIndex) {
         if (expandedRuleIndex != null) {
-            listState.animateScrollToItem(expandedRuleIndex, scrollOffset = 0)
+            snapshotFlow {
+                listState.layoutInfo.visibleItemsInfo
+                    .firstOrNull { it.index == expandedRuleIndex }
+            }.filterNotNull().first()
+            listState.animateScrollToItem(expandedRuleIndex)
         }
     }
 

@@ -25,7 +25,7 @@ object RulingsModule {
             "rulings.db",
         )
             .createFromAsset("databases/rulings.db")
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
 

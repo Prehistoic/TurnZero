@@ -255,11 +255,11 @@ fun LifeCounterCalcScreen(
 
 @Composable
 private fun CalcCell(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     label: String? = null,
     selected: Boolean = false,
     containerColor: Color = Color.Unspecified,
-    modifier: Modifier = Modifier,
     content: @Composable (() -> Unit)? = null
 ) {
     val bg = when {
