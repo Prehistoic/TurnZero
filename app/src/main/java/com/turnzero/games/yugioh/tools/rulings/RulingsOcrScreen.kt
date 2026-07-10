@@ -1,11 +1,12 @@
 package com.turnzero.games.yugioh.tools.rulings
 
 import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -48,7 +49,20 @@ import java.util.concurrent.Executors
 
 private const val TAG = "TZ/RulingsOCR"
 
-@Suppress("UnsafeOptInUsageError")
+private object ScanZone {
+    const val WIDTH_FRACTION = 0.56f
+    const val CARD_RATIO = 3.5f / 2.5f
+    const val TOP_FRACTION = 0.20f
+    val LEFT_FRACTION get() = (1f - WIDTH_FRACTION) / 2f
+}
+
+private fun ImageProxy.toJpegBitmap(): Bitmap {
+    val buffer = planes[0].buffer
+    val bytes = ByteArray(buffer.remaining())
+    buffer.get(bytes)
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+}
+
 @Composable
 fun RulingsOcrScreen(
     selectedFormat: String,
@@ -150,11 +164,19 @@ fun RulingsOcrScreen(
                     isProcessing = true
                     capture.takePicture(cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
                         override fun onCaptureSuccess(image: ImageProxy) {
-                            val inputImage = InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
+                            val bitmap = image.toJpegBitmap()
+                            image.close()
+                            val cropLeft = (bitmap.width * ScanZone.LEFT_FRACTION).toInt().coerceAtLeast(0)
+                            val cropTop = (bitmap.height * ScanZone.TOP_FRACTION).toInt().coerceAtLeast(0)
+                            val cropWidth = (bitmap.width * ScanZone.WIDTH_FRACTION).toInt()
+                                .coerceAtMost(bitmap.width - cropLeft)
+                            val cropHeight = (cropWidth * ScanZone.CARD_RATIO).toInt()
+                                .coerceAtMost(bitmap.height - cropTop)
+                            val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropWidth, cropHeight)
+                            val inputImage = InputImage.fromBitmap(croppedBitmap, 0)
                             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
                             recognizer.process(inputImage)
                                 .addOnSuccessListener { visionText ->
-                                    image.close()
                                     isProcessing = false
                                     val blocks = visionText.textBlocks.filter { it.text.isNotBlank() }
                                     val scoringBlock = blocks.maxByOrNull { block ->
@@ -171,7 +193,6 @@ fun RulingsOcrScreen(
                                     }
                                 }
                                 .addOnFailureListener {
-                                    image.close()
                                     isProcessing = false
                                     errorMessage = "Text recognition failed. Try again."
                                 }
@@ -225,11 +246,10 @@ private fun ScanZoneOverlay(modifier: Modifier = Modifier) {
         val canvasWidth = size.width
         val canvasHeight = size.height
 
-        val cardRatio = 3.5f / 2.5f
-        val zoneWidth = canvasWidth * 0.56f
-        val zoneHeight = zoneWidth * cardRatio
+        val zoneWidth = canvasWidth * ScanZone.WIDTH_FRACTION
+        val zoneHeight = zoneWidth * ScanZone.CARD_RATIO
         val zoneLeft = (canvasWidth - zoneWidth) / 2f
-        val zoneTop = canvasHeight * 0.20f
+        val zoneTop = canvasHeight * ScanZone.TOP_FRACTION
 
         val zoneRect = Rect(zoneLeft, zoneTop, zoneLeft + zoneWidth, zoneTop + zoneHeight)
 

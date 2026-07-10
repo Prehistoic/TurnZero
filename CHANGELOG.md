@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-07-10
+
+### Fixed
+- OCR now crops the captured image to the card-shaped scan overlay bounds before text recognition, preventing surrounding text from interfering with card name detection (#35)
+- Rulings search no longer flashes "No cards found" message while the search is in progress
+
 ## [0.7.1] - 2026-07-10
 
 ### Added
