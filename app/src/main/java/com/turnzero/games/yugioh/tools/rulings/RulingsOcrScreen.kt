@@ -3,6 +3,10 @@ package com.turnzero.games.yugioh.tools.rulings
 import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +16,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Canvas as ComposeCanvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -56,11 +60,11 @@ private object ScanZone {
     val LEFT_FRACTION get() = (1f - WIDTH_FRACTION) / 2f
 }
 
-private fun ImageProxy.toJpegBitmap(): Bitmap {
-    val buffer = planes[0].buffer
-    val bytes = ByteArray(buffer.remaining())
-    buffer.get(bytes)
-    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+private object CardNameRegion {
+    const val LEFT_FRACTION = 0.22f
+    const val TOP_FRACTION = 0.20f
+    const val RIGHT_FRACTION = 0.64f
+    const val BOTTOM_FRACTION = 0.32f
 }
 
 @Composable
@@ -164,38 +168,10 @@ fun RulingsOcrScreen(
                     isProcessing = true
                     capture.takePicture(cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
                         override fun onCaptureSuccess(image: ImageProxy) {
-                            val bitmap = image.toJpegBitmap()
-                            image.close()
-                            val cropLeft = (bitmap.width * ScanZone.LEFT_FRACTION).toInt().coerceAtLeast(0)
-                            val cropTop = (bitmap.height * ScanZone.TOP_FRACTION).toInt().coerceAtLeast(0)
-                            val cropWidth = (bitmap.width * ScanZone.WIDTH_FRACTION).toInt()
-                                .coerceAtMost(bitmap.width - cropLeft)
-                            val cropHeight = (cropWidth * ScanZone.CARD_RATIO).toInt()
-                                .coerceAtMost(bitmap.height - cropTop)
-                            val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropWidth, cropHeight)
-                            val inputImage = InputImage.fromBitmap(croppedBitmap, 0)
-                            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-                            recognizer.process(inputImage)
-                                .addOnSuccessListener { visionText ->
-                                    isProcessing = false
-                                    val blocks = visionText.textBlocks.filter { it.text.isNotBlank() }
-                                    val scoringBlock = blocks.maxByOrNull { block ->
-                                        val heights = block.lines.flatMap { it.elements }
-                                            .mapNotNull { it.boundingBox?.height() }
-                                        if (heights.isEmpty()) -1f
-                                        else heights.sorted()[heights.size / 2].toFloat()
-                                    }
-                                    val text = scoringBlock?.text ?: visionText.text
-                                    if (text.isBlank()) {
-                                        errorMessage = "No text detected. Try again with better lighting."
-                                    } else {
-                                        onTextRecognized(text)
-                                    }
-                                }
-                                .addOnFailureListener {
-                                    isProcessing = false
-                                    errorMessage = "Text recognition failed. Try again."
-                                }
+                            processCapture(image, isProcessing = { isProcessing = false }) { text ->
+                                isProcessing = false
+                                onTextRecognized(text)
+                            }
                         }
 
                         override fun onError(exception: ImageCaptureException) {
@@ -232,6 +208,94 @@ fun RulingsOcrScreen(
     }
 }
 
+private fun processCapture(
+    image: ImageProxy,
+    isProcessing: () -> Unit,
+    onTextRecognized: (String) -> Unit,
+) {
+    val bitmap = image.toJpegBitmap()
+    image.close()
+
+    val preprocessed = bitmap.toGrayscaleEnhanced()
+    bitmap.recycle()
+
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+    fun tryRegion(cropped: Bitmap?): String? {
+        if (cropped == null) return null
+        val inputImage = InputImage.fromBitmap(cropped, 0)
+        return try {
+            val visionText = com.google.android.gms.tasks.Tasks.await(recognizer.process(inputImage))
+            val blocks = visionText.textBlocks.filter { it.text.isNotBlank() }
+            val scoringBlock = blocks.maxByOrNull { block ->
+                val heights = block.lines.flatMap { it.elements }
+                    .mapNotNull { it.boundingBox?.height() }
+                if (heights.isEmpty()) -1f
+                else heights.sorted()[heights.size / 2].toFloat()
+            }
+            scoringBlock?.text?.takeIf { it.isNotBlank() } ?: visionText.text.takeIf { it.isNotBlank() }
+        } catch (e: Exception) {
+            Log.w(TAG, "ML Kit processing failed", e)
+            null
+        }
+    }
+
+    val nameBitmap = preprocessed.cropToCardNameRegion()
+    val nameText = tryRegion(nameBitmap)
+    nameBitmap?.recycle()
+
+    if (!nameText.isNullOrBlank()) {
+        onTextRecognized(nameText)
+        preprocessed.recycle()
+        return
+    }
+
+    val fullText = tryRegion(preprocessed)
+    preprocessed.recycle()
+
+    if (!fullText.isNullOrBlank()) {
+        onTextRecognized(fullText)
+    } else {
+        isProcessing()
+    }
+}
+
+private fun ImageProxy.toJpegBitmap(): Bitmap {
+    val buffer = planes[0].buffer
+    val bytes = ByteArray(buffer.remaining())
+    buffer.get(bytes)
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+}
+
+private fun Bitmap.toGrayscaleEnhanced(): Bitmap {
+    val contrast = 1.8f
+    val offset = 255f * (1f - contrast) / 2f
+    val cm = ColorMatrix(floatArrayOf(
+        contrast, 0f, 0f, 0f, offset,
+        0f, contrast, 0f, 0f, offset,
+        0f, 0f, contrast, 0f, offset,
+        0f, 0f, 0f, 1f, 0f,
+    ))
+    val grayMatrix = ColorMatrix().apply { setSaturation(0f) }
+    cm.postConcat(grayMatrix)
+
+    val paint = Paint().apply { colorFilter = ColorMatrixColorFilter(cm) }
+    val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    Canvas(result).drawBitmap(this, 0f, 0f, paint)
+    return result
+}
+
+private fun Bitmap.cropToCardNameRegion(): Bitmap? {
+    val left = (width * CardNameRegion.LEFT_FRACTION).toInt().coerceAtLeast(0)
+    val top = (height * CardNameRegion.TOP_FRACTION).toInt().coerceAtLeast(0)
+    val right = (width * CardNameRegion.RIGHT_FRACTION).toInt().coerceAtMost(width)
+    val bottom = (height * CardNameRegion.BOTTOM_FRACTION).toInt().coerceAtMost(height)
+    val cropWidth = right - left
+    val cropHeight = bottom - top
+    if (cropWidth <= 0 || cropHeight <= 0) return null
+    return Bitmap.createBitmap(this, left, top, cropWidth, cropHeight)
+}
+
 @Composable
 private fun ScanZoneOverlay(modifier: Modifier = Modifier) {
     val scrimColor = Color.Black.copy(alpha = 0.55f)
@@ -242,7 +306,7 @@ private fun ScanZoneOverlay(modifier: Modifier = Modifier) {
     val bracketLength = with(density) { 24.dp.toPx() }
     val bracketThickness = with(density) { 3.dp.toPx() }
 
-    Canvas(modifier = modifier) {
+    ComposeCanvas(modifier = modifier) {
         val canvasWidth = size.width
         val canvasHeight = size.height
 

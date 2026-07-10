@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-07-10
+
+### Changed
+- OCR now crops to the card name region (top strip) before text recognition, using known Yu-Gi-Oh! card proportions
+- Added grayscale conversion and contrast enhancement preprocessing to improve foil/shiny card readability (#29)
+
 ## [0.7.2] - 2026-07-10
 
 ### Fixed
