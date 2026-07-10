@@ -131,9 +131,16 @@ class RulingsViewModel @Inject constructor(
         _uiState.update { it.copy(isSearching = true) }
         searchJob = viewModelScope.launch {
             delay(300)
+            val currentQuery = _uiState.value.searchQuery
             val format = _uiState.value.selectedFormat
-            val results = repository.searchCards(query, format, 20)
-            _uiState.update { it.copy(searchResults = results, isSearching = true) }
+            val results = repository.searchCards(currentQuery, format, 20)
+            _uiState.update { state ->
+                if (state.searchQuery == currentQuery) {
+                    state.copy(searchResults = results, isSearching = false)
+                } else {
+                    state
+                }
+            }
         }
     }
 

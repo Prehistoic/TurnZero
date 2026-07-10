@@ -69,18 +69,17 @@ fun RulingsScreen(
                         CircularProgressIndicator()
                     }
                 }
-                state.isSearching || state.searchQuery.isNotBlank() -> {
-                    if (state.searchResults.isEmpty()) {
-                        TZEmptyState(message = "No cards found for \"${state.searchQuery}\"")
-                    } else {
-                        RulingsSearchResults(
-                            results = state.searchResults,
-                            onCardClick = { result ->
-                                focusManager.clearFocus()
-                                viewModel.selectCard(result.id)
-                            },
-                        )
-                    }
+                state.searchQuery.isNotBlank() && state.searchResults.isNotEmpty() -> {
+                    RulingsSearchResults(
+                        results = state.searchResults,
+                        onCardClick = { result ->
+                            focusManager.clearFocus()
+                            viewModel.selectCard(result.id)
+                        },
+                    )
+                }
+                state.searchQuery.isNotBlank() && !state.isSearching -> {
+                    TZEmptyState(message = "No cards found for \"${state.searchQuery}\"")
                 }
                 state.selectedCard != null -> {
                 val card = state.selectedCard!!
