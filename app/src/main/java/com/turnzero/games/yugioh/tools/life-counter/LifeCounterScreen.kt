@@ -11,6 +11,7 @@ import android.os.VibratorManager
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -53,13 +54,13 @@ fun LifeCounterScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
         view.keepScreenOn = true
 
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
-                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
                     view.keepScreenOn = true
                 }
                 Lifecycle.Event.ON_PAUSE -> {
@@ -195,13 +196,20 @@ private fun PlayerLpPanel(
         lpChangeDirection.intValue = lp.compareTo(prevLp.intValue)
         prevLp.intValue = lp
         wasSnapped.value = snapLpAnimation
-        if (snapLpAnimation) 0 else (delta / 10).coerceIn(200, 1500)
+        if (snapLpAnimation) 0 else (delta / 5).coerceIn(1000, 2000)
     }
     val displayLp by animateIntAsState(
         targetValue = lp,
         animationSpec = tween(durationMillis = duration),
         label = "lp"
     )
+
+    LaunchedEffect(lp) {
+        if (!snapLpAnimation && duration > 0) {
+            delay(duration.toLong())
+            lpChangeDirection.intValue = 0
+        }
+    }
 
     val color = when {
         wasSnapped.value -> defaultColor
@@ -312,7 +320,8 @@ private fun CenterPanel(
             Button(
                 onClick = onReset,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
                 )
             ) {
                 Text("Reset")
