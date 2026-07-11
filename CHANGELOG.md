@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.8.1] - 2026-07-11
 
 ### Changed
-- Life Counter orientation locked to reverse landscape (180\u00b0) instead of auto-rotating between both sides
+- Life Counter orientation locked to standard landscape instead of auto-rotating between both sides
 - Life Counter LP animation minimum duration increased to 1 second for smoother counting
 
 ### Fixed
