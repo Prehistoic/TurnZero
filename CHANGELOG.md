@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-07-11
+
+### Changed
+- Life Counter orientation locked to standard landscape instead of auto-rotating between both sides
+- Life Counter LP animation minimum duration increased to 1 second for smoother counting
+
+### Fixed
+- Life Counter LP text now reverts to theme color after counting animation completes instead of staying red/green
+- Life Counter reset button appearance improved in dark mode
+
 ## [0.8.0] - 2026-07-10
 
 ### Changed
