@@ -1,5 +1,6 @@
 package com.turnzero.games.yugioh.tools.rulings
 
+import com.turnzero.games.yugioh.tools.rulings.data.CardDescriptionEntity
 import com.turnzero.games.yugioh.tools.rulings.data.CardEntity
 import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 import com.turnzero.games.yugioh.tools.rulings.data.CardSearchResult
@@ -57,11 +58,56 @@ class RulingsRepositoryTest {
     }
 
     @Test
+    fun `getCardRulings uses format-specific description when available`() = runTest {
+        val card = CardEntity(1, "Pot of Greed", "Spell Card", "spell", null, null, null, "Normal", null, "Draw 2 cards.", null)
+        val ruling = RulingEntity(1, "Goat", "Pot of Greed rulings...")
+        val desc = CardDescriptionEntity(1, "Goat", "Draw 2 cards (Goat format).")
+        coEvery { dao.getCard(1) } returns card
+        coEvery { dao.getRuling(1, "Goat") } returns ruling
+        coEvery { dao.getCardDescription(1, "Goat") } returns desc
+
+        val result = repository.getCardRulings(1, "Goat")
+
+        assertNotNull(result)
+        assertEquals("Draw 2 cards (Goat format).", result!!.desc)
+    }
+
+    @Test
+    fun `getCardRulings falls back to card desc when no format-specific description`() = runTest {
+        val card = CardEntity(1, "Pot of Greed", "Spell Card", "spell", null, null, null, "Normal", null, "Draw 2 cards.", null)
+        val ruling = RulingEntity(1, "Goat", "Pot of Greed rulings...")
+        coEvery { dao.getCard(1) } returns card
+        coEvery { dao.getRuling(1, "Goat") } returns ruling
+        coEvery { dao.getCardDescription(1, "Goat") } returns null
+
+        val result = repository.getCardRulings(1, "Goat")
+
+        assertNotNull(result)
+        assertEquals("Draw 2 cards.", result!!.desc)
+    }
+
+    @Test
+    fun `getCardRulings falls back to card desc when format desc is blank`() = runTest {
+        val card = CardEntity(1, "Pot of Greed", "Spell Card", "spell", null, null, null, "Normal", null, "Draw 2 cards.", null)
+        val ruling = RulingEntity(1, "Goat", "Pot of Greed rulings...")
+        val desc = CardDescriptionEntity(1, "Goat", "")
+        coEvery { dao.getCard(1) } returns card
+        coEvery { dao.getRuling(1, "Goat") } returns ruling
+        coEvery { dao.getCardDescription(1, "Goat") } returns desc
+
+        val result = repository.getCardRulings(1, "Goat")
+
+        assertNotNull(result)
+        assertEquals("Draw 2 cards.", result!!.desc)
+    }
+
+    @Test
     fun `getCardRulings returns detail when both card and ruling exist`() = runTest {
         val card = CardEntity(1, "Pot of Greed", "Spell Card", "spell", null, null, null, "Normal", null, "Draw 2 cards.", null)
         val ruling = RulingEntity(1, "Goat", "Pot of Greed rulings...")
         coEvery { dao.getCard(1) } returns card
         coEvery { dao.getRuling(1, "Goat") } returns ruling
+        coEvery { dao.getCardDescription(1, "Goat") } returns null
 
         val result = repository.getCardRulings(1, "Goat")
 
