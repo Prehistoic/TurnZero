@@ -29,9 +29,9 @@ fun RulesScreen(
 ) {
     val config = uiState.currentConfig ?: return
 
-    if (uiState.showPdf && config.pdfUrl != null) {
+    if (uiState.showPdf && config.pdfAsset != null) {
         RulesPdfSheet(
-            url = config.pdfUrl,
+            assetPath = config.pdfAsset,
             onDismiss = onTogglePdf,
         )
         return

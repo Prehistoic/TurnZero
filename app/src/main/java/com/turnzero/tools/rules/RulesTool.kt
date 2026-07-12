@@ -33,7 +33,7 @@ class RulesTool : Tool {
     override fun TopBarActions(): @Composable RowScope.() -> Unit {
         val viewModel: RulesViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-        val hasPdf = uiState.currentConfig?.pdfUrl != null
+        val hasPdf = uiState.currentConfig?.pdfAsset != null
         val configs = uiState.configs
         val selectedIndex = uiState.selectedRulesetIndex
 
@@ -104,16 +104,43 @@ class RulesTool : Tool {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun OptionsSheet(onDismiss: () -> Unit) {
+        val viewModel: RulesViewModel = hiltViewModel()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val configs = uiState.configs
+        var expanded by remember { mutableStateOf(false) }
+
         ModalBottomSheet(onDismissRequest = onDismiss) {
-            Text(
-                text = "No options available for this tool.",
-                style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-            )
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+            ) {
+                Text(
+                    text = "Default Format",
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Spacer(Modifier.height(12.dp))
+                Box {
+                    OutlinedButton(onClick = { expanded = true }) {
+                        Text(configs.getOrNull(uiState.defaultRulesetIndex)?.rulesetName ?: "")
+                        Spacer(Modifier.width(8.dp))
+                        Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                    ) {
+                        configs.forEachIndexed { index, config ->
+                            DropdownMenuItem(
+                                text = { Text(config.rulesetName) },
+                                onClick = {
+                                    viewModel.setDefaultRuleset(index)
+                                    expanded = false
+                                },
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(32.dp))
+            }
         }
     }
 }
