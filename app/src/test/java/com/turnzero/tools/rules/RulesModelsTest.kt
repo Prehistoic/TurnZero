@@ -6,23 +6,23 @@ import org.junit.Test
 class RulesModelsTest {
 
     private val sampleKeywords = listOf(
-        Keyword("Piercing Battle Damage", "Inflicts difference as damage", "Damage Calculation"),
-        Keyword("Quick Effect", "Spell Speed 2 effect", "Effect Types"),
-        Keyword("Tribute Summon", "Requires tributing monsters", "Summon"),
+        Keyword("Piercing Battle Damage", listOf(ContentBlock.Paragraph("Inflicts difference as damage")), "Damage Calculation"),
+        Keyword("Quick Effect", listOf(ContentBlock.Paragraph("Spell Speed 2 effect")), "Effect Types"),
+        Keyword("Tribute Summon", listOf(ContentBlock.Paragraph("Requires tributing monsters")), "Summon"),
     )
 
     private val sampleConfig = RulesConfig(
         rulesetId = "tcg-advanced",
         rulesetName = "Advanced (TCG)",
         setup = listOf(
-            RuleStep("Shuffle", "Shuffle your deck", "Full shuffle details..."),
-            RuleStep("Draw", "Draw 5 cards", "Full draw details..."),
+            RuleStep("Shuffle", "Shuffle your deck", listOf(ContentBlock.Paragraph("Full shuffle details..."))),
+            RuleStep("Draw", "Draw 5 cards", listOf(ContentBlock.Paragraph("Full draw details..."))),
         ),
         winCons = listOf(
-            WinCondition("Reduce LP", "Reduce opponent LP to 0"),
+            WinCondition("Reduce LP", listOf(ContentBlock.Paragraph("Reduce opponent LP to 0"))),
         ),
         playSequence = listOf(
-            RuleStep("Draw Phase", "Draw 1 card", "Full draw phase details..."),
+            RuleStep("Draw Phase", "Draw 1 card", listOf(ContentBlock.Paragraph("Full draw phase details..."))),
         ),
         keywords = sampleKeywords,
     )
@@ -125,9 +125,9 @@ class RulesModelsTest {
     @Test
     fun `filteredKeywords maintains sort order when filtered`() {
         val keywordsWithMultipleMatches = listOf(
-            Keyword("Zeta Effect", ""),
-            Keyword("Quick Effect", ""),
-            Keyword("Alpha Effect", ""),
+            Keyword("Zeta Effect", listOf(ContentBlock.Paragraph("")), null),
+            Keyword("Quick Effect", listOf(ContentBlock.Paragraph("")), null),
+            Keyword("Alpha Effect", listOf(ContentBlock.Paragraph("")), null),
         )
         val configWithMany = sampleConfig.copy(keywords = keywordsWithMultipleMatches)
         val state = RulesUiState(
