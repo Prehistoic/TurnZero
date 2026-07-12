@@ -63,10 +63,11 @@ data class CardRecord(
     val desc: String,
     val imageUrl: String?,
     val rulings: Map<String, String>,
+    val psct: Map<String, String>,
 )
 
 private val FORMATS = setOf(
-    "Goat", "Edison", "Tengu", "REDU", "HAT",
+    "Goat", "Edison", "Tengu", "HAT",
     "Vegas", "Meadowlands", "FireWater", "Cat",
     "TeleDAD", "Gladiator", "ReturnDAD", "Trooper",
     "Circle", "Stein", "Base",
@@ -112,6 +113,8 @@ fun main() {
                         ?: "",
                     imageUrl = null,
                     rulings = card.Rulings.filterKeys { it in FORMATS },
+                    psct = card.PSCT.filterKeys { it in FORMATS }
+                        .filterValues { it.isNotBlank() && !it.startsWith("No") },
                 )
             )
         } catch (e: Exception) {
@@ -211,6 +214,16 @@ fun main() {
         """.trimIndent())
 
         stmt.execute("""
+            CREATE TABLE card_descriptions (
+                card_id INTEGER NOT NULL,
+                format TEXT NOT NULL,
+                description TEXT NOT NULL,
+                PRIMARY KEY (card_id, format),
+                FOREIGN KEY (card_id) REFERENCES cards(id)
+            )
+        """.trimIndent())
+
+        stmt.execute("""
             CREATE VIRTUAL TABLE cards_fts USING fts4(content="cards", name)
         """.trimIndent())
 
@@ -236,6 +249,9 @@ fun main() {
     val insertRulingPs = conn.prepareStatement(
         "INSERT INTO rulings(card_id, format, ruling_text) VALUES (?, ?, ?)"
     )
+    val insertDescPs = conn.prepareStatement(
+        "INSERT INTO card_descriptions(card_id, format, description) VALUES (?, ?, ?)"
+    )
 
     records.forEachIndexed { index, record ->
         insertCardPs.setInt(1, record.id)
@@ -258,6 +274,13 @@ fun main() {
             insertRulingPs.executeUpdate()
         }
 
+        record.psct.forEach { (format, description) ->
+            insertDescPs.setInt(1, record.id)
+            insertDescPs.setString(2, format)
+            insertDescPs.setString(3, description)
+            insertDescPs.executeUpdate()
+        }
+
         if (index % 500 == 0) {
             conn.commit()
             println("  Inserted $index/${records.size} cards...")
@@ -266,6 +289,7 @@ fun main() {
 
     insertCardPs.close()
     insertRulingPs.close()
+    insertDescPs.close()
     conn.commit()
 
     println("Fetching localized card names from YGOPRODeck API for ${OCR_LANGUAGES.size} languages...")
@@ -314,4 +338,5 @@ fun main() {
     println("Done! rulings.db generated at ${outputDb.toAbsolutePath()}")
     println("Total cards: ${records.size}")
     println("Total rulings: ${records.sumOf { it.rulings.size }}")
+    println("Total format-specific descriptions: ${records.sumOf { it.psct.size }}")
 }

@@ -27,11 +27,13 @@ class RulingsRepository(private val dao: RulingsDao) {
     suspend fun getCardRulings(cardId: Int, format: String): CardRulingsDetail? {
         val card = dao.getCard(cardId) ?: return null
         val ruling = dao.getRuling(cardId, format) ?: return null
+        val formatDesc = dao.getCardDescription(cardId, format)
+        val desc = formatDesc?.description?.takeIf { it.isNotBlank() } ?: card.desc
         return CardRulingsDetail(
             id = card.id,
             name = card.name,
             type = card.type,
-            desc = card.desc,
+            desc = desc,
             imageUrl = card.imageUrl,
             rulingsText = ruling.rulingText,
         )

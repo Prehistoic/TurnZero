@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [CardEntity::class, RulingEntity::class],
-    version = 2,
+    entities = [CardEntity::class, RulingEntity::class, CardDescriptionEntity::class],
+    version = 3,
     exportSchema = false,
 )
 abstract class RulingsDatabase : RoomDatabase() {
