@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.turnzero.tools.rules.MarkdownContent
+
 
 @Composable
 fun RulesSetupTab(
@@ -112,8 +112,8 @@ private fun StepCard(
                 )
                 Spacer(Modifier.height(4.dp))
                 if (isExpanded) {
-                    MarkdownContent(
-                        content = step.detail,
+                    ContentBlockRenderer(
+                        blocks = step.contents,
                     )
                 } else {
                     Text(

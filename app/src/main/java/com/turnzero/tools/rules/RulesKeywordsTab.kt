@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.turnzero.tools.rules.MarkdownContent
+
 
 @Composable
 fun RulesKeywordsTab(
@@ -178,8 +178,8 @@ private fun KeywordCard(
 
             if (isExpanded) {
                 Spacer(Modifier.height(8.dp))
-                MarkdownContent(
-                    content = keyword.definition,
+                ContentBlockRenderer(
+                    blocks = keyword.contents,
                 )
             }
         }
