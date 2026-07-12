@@ -91,12 +91,14 @@ When adding new features or refactoring existing ones, follow these patterns:
 ## Testing
 
 ### Requirements
-- **Every new feature must include tests.** No exceptions.
+- **Every new feature or behavioral change MUST include tests.** This is non-negotiable. Tests are written as part of the development work, not as a separate step. If you touch code that changes behavior, you add or update tests.
+- **Tests MUST pass before any commit.** Run `testDebugUnitTest` after every set of changes. Do not commit broken tests.
 - Unit tests go in `src/test/java/` — use JUnit 4 + MockK.
 - Instrumented tests go in `src/androidTest/java/` — use AndroidX Test + Compose Test.
 - ViewModels: test state transitions, error handling, and side effects.
 - Repositories: test data transformations and caching logic.
 - Compose UI: test critical user flows with `createComposeRule()`.
+- Rule/config data: verify configuration lists are well-formed and have expected properties.
 
 ### Test Naming
 ```
@@ -216,7 +218,14 @@ The project maintains a `CHANGELOG.md` at the repository root following [Keep a 
 - Tool tiles now have uniform height in grid layout
 ```
 
-## Dependency Management
+## Documentation
+
+### Requirements
+
+- **Mandatory at PR time** — When creating a pull request to `main`, the agent MUST produce a written summary of what changed and why. This goes in the PR description (not committed to the repo).
+- The PR description must describe all user-facing and architectural changes on the branch, organized logically. Use the same structure as the CHANGELOG (Added / Changed / Removed / Fixed) for consistency.
+- For complex features or refactors, include a brief architecture note explaining design decisions (why approach X was chosen over Y).
+- Documentation is NOT required for in-progress development — only when work is ready for review/merge.
 
 - All dependency versions are centralized in `gradle/libs.versions.toml`.
 - Use version references (`version.ref`) for shared versions across multiple artifacts.
