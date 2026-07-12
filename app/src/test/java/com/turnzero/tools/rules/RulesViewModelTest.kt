@@ -1,8 +1,14 @@
 package com.turnzero.tools.rules
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.lifecycle.SavedStateHandle
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -20,10 +26,12 @@ import org.junit.Test
 class RulesViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
+    private val dataStore = mockk<DataStore<Preferences>>(relaxed = true)
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        every { dataStore.data } returns flowOf(emptyPreferences())
     }
 
     @After
@@ -62,7 +70,7 @@ class RulesViewModelTest {
         val provider = FakeRulesProvider().apply {
             register("yugioh", configs)
         }
-        return RulesViewModel(provider, savedStateHandle)
+        return RulesViewModel(provider, dataStore, savedStateHandle)
     }
 
     @Test
@@ -88,7 +96,7 @@ class RulesViewModelTest {
     fun `init uses defaultRulesetIndex from SavedStateHandle`() = runTest {
         val sh = SavedStateHandle(mapOf("gameId" to "yugioh", "defaultRulesetIndex" to 1))
         val provider = FakeRulesProvider().apply { register("yugioh", configs) }
-        val vm = RulesViewModel(provider, sh)
+        val vm = RulesViewModel(provider, dataStore, sh)
         advanceUntilIdle()
         assertEquals(1, vm.uiState.value.selectedRulesetIndex)
         assertEquals(1, vm.uiState.value.defaultRulesetIndex)
