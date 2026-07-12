@@ -1,5 +1,8 @@
 package com.turnzero.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
@@ -164,7 +167,11 @@ fun TZNavHost(
             startDestination = Screen.Games.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Games.route) {
+            composable(
+                route = Screen.Games.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 GamesScreen(
                     toolRegistry = toolRegistry,
                     currentLayout = gamesLayoutState,
@@ -182,7 +189,11 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.Favorites.route) {
+            composable(
+                route = Screen.Favorites.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 val favoriteEntries = remember(favoriteToolIds) {
                     toolRegistry.getFavoriteEntries(favoriteToolIds)
                 }
@@ -202,7 +213,11 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.Settings.route) {
+            composable(
+                route = Screen.Settings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 SettingsScreen(
                     onSearchClick = {
                         navController.navigate(Screen.SearchSettings.route)
@@ -216,7 +231,11 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.AppearanceSettings.route) {
+            composable(
+                route = Screen.AppearanceSettings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 AppearanceSettingsScreen(
                     currentTheme = themeModeState,
                     selectedColorThemeId = selectedColorThemeId,
@@ -254,7 +273,11 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.LanguageSettings.route) {
+            composable(
+                route = Screen.LanguageSettings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 LanguageSelectionScreen(
                     currentLanguage = currentLanguage,
                     onLanguageSelected = { code ->
@@ -271,7 +294,9 @@ fun TZNavHost(
 
             composable(
                 route = Screen.DisplaySettings.route,
-                arguments = listOf(navArgument("type") { type = NavType.StringType })
+                arguments = listOf(navArgument("type") { type = NavType.StringType }),
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type") ?: return@composable
                 val layout = if (type == "games") gamesLayoutState else toolsLayoutState
@@ -299,13 +324,21 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.SearchSettings.route) {
+            composable(
+                route = Screen.SearchSettings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 SearchSettingsScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
 
-            composable(Screen.AboutSettings.route) {
+            composable(
+                route = Screen.AboutSettings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 AboutSettingsScreen(
                     onBack = { navController.popBackStack() },
                     onLicensesClick = {
@@ -314,7 +347,11 @@ fun TZNavHost(
                 )
             }
 
-            composable(Screen.LicensesSettings.route) {
+            composable(
+                route = Screen.LicensesSettings.route,
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
+            ) {
                 LicensesScreen(
                     onBack = { navController.popBackStack() }
                 )
@@ -322,7 +359,9 @@ fun TZNavHost(
 
             composable(
                 route = Screen.Tools.route,
-                arguments = listOf(navArgument("gameId") { type = NavType.StringType })
+                arguments = listOf(navArgument("gameId") { type = NavType.StringType }),
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) { backStackEntry ->
                 val gameId = backStackEntry.arguments?.getString("gameId") ?: return@composable
                 ToolsScreen(
@@ -356,7 +395,9 @@ fun TZNavHost(
                 arguments = listOf(
                     navArgument("gameId") { type = NavType.StringType },
                     navArgument("toolId") { type = NavType.StringType }
-                )
+                ),
+                enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
+                exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) { backStackEntry ->
                 val gameId = backStackEntry.arguments?.getString("gameId") ?: return@composable
                 val toolId = backStackEntry.arguments?.getString("toolId") ?: return@composable
