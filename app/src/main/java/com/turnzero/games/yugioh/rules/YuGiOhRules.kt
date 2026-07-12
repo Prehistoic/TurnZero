@@ -11,7 +11,6 @@ object YuGiOhRules {
     private fun p(text: String) = ContentBlock.Paragraph(text)
     private fun sh(text: String) = ContentBlock.SubHeading(text)
     private fun bl(items: List<String>) = ContentBlock.BulletList(items)
-    private fun img(uri: String) = ContentBlock.Image(uri)
 
     private val victory = listOf(
         WinCondition("Reduce LP to 0", listOf(p("Each player starts with 8000 Life Points. Reduce your opponent's LP to 0 through battle damage and effect damage to win."))),
@@ -103,16 +102,21 @@ object YuGiOhRules {
         "Declare attacks with your monsters and deal battle damage.",
         listOf(
             p("The Battle Phase is divided into 4 steps. The player going first cannot conduct a Battle Phase on their first turn."),
-            sh("**Start Step:** Announce you are entering the Battle Phase."),
-            sh("**Battle Step:** Select 1 Attack Position monster to attack with and 1 target. Each Attack Position monster can declare 1 attack per turn. If your opponent controls no monsters, you may attack directly."),
-            sh("**Damage Step:** Calculate battle damage. Only Counter Traps and ATK/DEF-modifying effects may be activated here, and only before damage calculation."),
+            sh("**Start Step:**"),
+            p("Announce you are entering the Battle Phase."),
+            sh("**Battle Step:**"),
+            p("Select 1 Attack Position monster to attack with and 1 target. Each Attack Position monster can declare 1 attack per turn. If your opponent controls no monsters, you may attack directly."),
+            sh("**Damage Step:**"),
+            p("Calculate battle damage. Only Counter Traps and ATK/DEF-modifying effects may be activated here, and only before damage calculation."),
             bl(listOf(
                 "**vs Attack Position** (ATK vs ATK): Higher ATK wins, difference is battle damage. Equal = both destroyed, no damage.",
                 "**vs Defense Position** (ATK vs DEF): ATK > DEF = destroy defender, no damage. ATK \u2264 DEF = neither destroyed, difference dealt to attacker as damage.",
                 "**Direct Attack:** Full ATK as battle damage.",
             )),
-            sh("**Replay:** If the attack target leaves the field before the Damage Step, you may re-select a target or cancel the attack."),
-            sh("**End Step:** Announce the end of your Battle Phase."),
+            sh("**Replay:**"),
+            p("If the attack target leaves the field before the Damage Step, you may re-select a target or cancel the attack."),
+            sh("**End Step:**"),
+            p("Announce the end of your Battle Phase."),
         ),
     )
 
@@ -139,12 +143,7 @@ object YuGiOhRules {
         ),
     )
 
-    private fun makeSetup(
-        image: String,
-        fusionDeck: RuleStep,
-        zoneBullets: List<String>,
-        firstTurnDraws: Boolean,
-    ) = listOf(
+    private fun makeSetup(firstTurnDraws: Boolean) = listOf(
         RuleStep(
             "Prepare Your Deck",
             "Your Main Deck must contain 40 to 60 cards.",
@@ -153,20 +152,6 @@ object YuGiOhRules {
                 p("You can have up to 3 copies of any card in your Deck."),
                 p("Some cards are Forbidden or Limited in official tournaments."),
             ),
-        ),
-        RuleStep(
-            "Side Deck",
-            "A separate deck of cards swapped between Duels in a Match.",
-            listOf(
-                p("A separate Deck used to change your strategy during a Match. After each Duel, you can swap any card from your Side Deck with a card from your Main Deck."),
-                p("The number of cards must remain exactly the same after swapping."),
-            ),
-        ),
-        fusionDeck,
-        RuleStep(
-            "Game Mat",
-            "The field is divided into zones where cards are placed.",
-            listOf(img("asset:$image"), bl(zoneBullets)),
         ),
         RuleStep(
             "Shuffle & Cut",
@@ -198,58 +183,7 @@ object YuGiOhRules {
         ),
     )
 
-    private val fusionDeckStep = RuleStep(
-        "Fusion Deck",
-        "Separate deck for Fusion Monsters, no card limit.",
-        listOf(
-            p("All your Fusion Monsters go in a separate Fusion Deck, placed face-down in the Fusion Deck Zone."),
-            p("Cards in the Fusion Deck are not counted toward the 40-card minimum of your Main Deck. There is no maximum limit."),
-        ),
-    )
-
-    private val extraDeckStep = RuleStep(
-        "Extra Deck",
-        "0 to 15 cards containing Fusion and Synchro Monsters.",
-        listOf(
-            p("The Extra Deck (formerly the Fusion Deck) contains your Fusion Monsters and Synchro Monsters. You may have up to 15 cards in your Extra Deck."),
-            p("These cards are not counted toward the 40-card minimum of your Main Deck."),
-            p("Any card effects that applied to the Fusion Deck now apply to the Extra Deck."),
-        ),
-    )
-
-    private val extraDeckStep2 = RuleStep(
-        "Extra Deck",
-        "0 to 15 cards containing Fusion, Synchro, and Xyz Monsters.",
-        listOf(
-            p("The Extra Deck contains your Fusion, Synchro, and Xyz Monsters. You may have up to 15 cards in your Extra Deck."),
-            p("These cards are not counted toward the 40-card minimum of your Main Deck."),
-        ),
-    )
-
-    private val extraDeckStep3 = RuleStep(
-        "Extra Deck",
-        "0 to 15 cards containing Fusion, Synchro, Xyz, and Pendulum Monsters.",
-        listOf(
-            p("The Extra Deck contains your Fusion, Synchro, Xyz, and Pendulum Monsters. You may have up to 15 cards in your Extra Deck."),
-            p("These cards are not counted toward the 40-card minimum of your Main Deck. Face-up Pendulum Monsters rest on top of the Extra Deck."),
-        ),
-    )
-
-    private val extraDeckStep4 = RuleStep(
-        "Extra Deck",
-        "0 to 15 cards containing Fusion, Synchro, Xyz, Link, and Pendulum Monsters.",
-        listOf(
-            p("The Extra Deck contains your Fusion, Synchro, Xyz, Link, and Pendulum Monsters. You may have up to 15 cards in your Extra Deck."),
-            p("These cards are not counted toward the 40-card minimum of your Main Deck. Face-up Pendulum Monsters rest on top of the Extra Deck."),
-        ),
-    )
-
-    private val v56Setup = makeSetup(
-        "rulebooks/images/field-v6.png", fusionDeckStep,
-        listOf("**Monster Card Zone (5)** \u2014 Where you place your monsters. Placed vertically (Attack) or horizontally (Defense).", "**Spell & Trap Zone (5)** \u2014 Where you play Spell and Trap Cards. If all 5 are occupied, no further Spells can be activated.", "**Graveyard** \u2014 Destroyed monsters and used cards go here face-up.", "**Deck Zone** \u2014 Your Main Deck goes here face-down.", "**Field Card Zone** \u2014 Field Spell Cards go here. Only 1 active at a time.", "**Fusion Deck Zone** \u2014 Your Fusion Deck goes here."),
-        firstTurnDraws = true,
-    )
-
+    private val v56Setup = makeSetup(firstTurnDraws = true)
     private val v56Turn = listOf(drawPhaseLegacy, standbyPhase, mainPhase56, battlePhase, mainPhase2, endPhase)
     private val v56Keywords = coreKeywords
 
@@ -276,12 +210,7 @@ object YuGiOhRules {
         ),
     )
 
-    private val v7Setup = makeSetup(
-        "rulebooks/images/field-v7.png", extraDeckStep,
-        listOf("**Monster Card Zone (5)** \u2014 Where you place your monsters.", "**Spell & Trap Zone (5)** \u2014 Where you play Spell and Trap Cards.", "**Graveyard** \u2014 Destroyed monsters and used cards go here face-up.", "**Deck Zone** \u2014 Your Main Deck goes here face-down.", "**Field Card Zone** \u2014 Field Spell Cards go here.", "**Extra Deck Zone** \u2014 Your Extra Deck goes here. You may look at your own Extra Deck. Formerly the Fusion Deck Zone."),
-        firstTurnDraws = true,
-    ).map { if (it.title == "Side Deck") RuleStep("Side Deck", "0 to 15 cards swapped between Duels.", listOf(p("A separate Deck for swapping cards with your Main and Extra Deck between Duels in a Match."))) else it }
-
+    private val v7Setup = makeSetup(firstTurnDraws = true)
     private val v7Turn = listOf(drawPhaseLegacy, standbyPhase, mainPhaseV7, battlePhase, mainPhase2, endPhase)
 
     private val v7Keywords = coreKeywords + listOf(
@@ -315,12 +244,7 @@ object YuGiOhRules {
         ),
     )
 
-    private val v8Setup = makeSetup(
-        "rulebooks/images/field-v8.png", extraDeckStep2,
-        listOf("**Monster Card Zone (5)** \u2014 Where you place your monsters.", "**Spell & Trap Zone (5)** \u2014 Where you play Spell and Trap Cards.", "**Graveyard** \u2014 Destroyed monsters and used cards go here face-up.", "**Deck Zone** \u2014 Your Main Deck goes here face-down.", "**Field Card Zone** \u2014 Field Spell Cards go here.", "**Extra Deck Zone** \u2014 Your Extra Deck (Fusion, Synchro, Xyz) goes here."),
-        firstTurnDraws = true,
-    ).map { if (it.title == "Side Deck") RuleStep("Side Deck", "0 to 15 cards swapped between Duels.", listOf(p("A separate Deck for swapping cards with your Main and Extra Deck between Duels in a Match."))) else it }
-
+    private val v8Setup = makeSetup(firstTurnDraws = true)
     private val v8Turn = listOf(drawPhaseLegacy, standbyPhase, mainPhaseV8, battlePhase, mainPhase2, endPhase)
 
     private val v8Keywords = v7Keywords + listOf(
@@ -366,12 +290,7 @@ object YuGiOhRules {
         ),
     )
 
-    private val v9Setup = makeSetup(
-        "rulebooks/images/field-v9.png", extraDeckStep3,
-        listOf("**Monster Card Zone (5)** \u2014 Where you place your monsters.", "**Spell & Trap Zone (5)** \u2014 The 1st and 5th slots on each side also serve as **Pendulum Zones**.", "**Pendulum Zones** \u2014 The outermost S/T slots. Pendulum Cards activated as Spells go here and do **not** count toward the 5-card S/T limit.", "**Graveyard** \u2014 Destroyed monsters and used cards go here face-up.", "**Deck Zone** \u2014 Your Main Deck goes here face-down.", "**Field Card Zone** \u2014 Field Spell Cards go here.", "**Extra Deck Zone** \u2014 Your Extra Deck goes here. Face-up Pendulum Monsters rest on top."),
-        firstTurnDraws = false,
-    )
-
+    private val v9Setup = makeSetup(firstTurnDraws = false)
     private val v9Turn = listOf(drawPhaseModern, standbyPhase, mainPhaseV9, battlePhase, mainPhase2, endPhase)
 
     private val v9Keywords = v8Keywords + listOf(
@@ -407,12 +326,7 @@ object YuGiOhRules {
         ),
     )
 
-    private val v10Setup = makeSetup(
-        "rulebooks/images/field-v10.png", extraDeckStep4,
-        listOf("**Extra Monster Zone (1)** \u2014 A shared zone in the center of the field. All monsters from the Extra Deck must be placed here or in a Main Monster Zone a Link Arrow points to.", "**Main Monster Zone (5)** \u2014 Where you place your monsters. Can host Extra Deck monsters if a Link Arrow points to it.", "**Spell & Trap Zone (5)** \u2014 The outermost slots double as Pendulum Zones when a Pendulum Card is activated there.", "**Graveyard** \u2014 Destroyed monsters and used cards go here face-up.", "**Deck Zone** \u2014 Your Main Deck goes here face-down.", "**Field Zone** \u2014 Field Spell Cards go here.", "**Extra Deck Zone** \u2014 Your Extra Deck goes here."),
-        firstTurnDraws = false,
-    )
-
+    private val v10Setup = makeSetup(firstTurnDraws = false)
     private val v10Turn = listOf(drawPhaseModern, standbyPhase, mainPhaseV10, battlePhase, mainPhase2, endPhase)
 
     private val v10Keywords = v9Keywords + listOf(
