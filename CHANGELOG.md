@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-07-13
+
+### Added
+- Rules tool content now uses structured ContentBlock model with explicit paragraph spacing between sections
+- Default Format setting persists across sessions via DataStore
+
+### Changed
+- Screen transitions use fast 150ms fade instead of default animation
+- Rules tool OptionsSheet provides Default Format picker
+- Setup steps simplified: Game Mat, Side Deck, and Extra Deck removed for all formats
+- Battle Phase step titles are bolded separately from descriptions
+
+### Removed
+- `multiplatform-markdown-renderer-m3` dependency, replaced by native Compose rendering
+
 ## [0.8.1] - 2026-07-11
 
 ### Changed

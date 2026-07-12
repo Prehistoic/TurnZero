@@ -2,6 +2,8 @@ package com.turnzero.games.yugioh.tools.rulings.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "cards")
@@ -27,6 +29,23 @@ data class RulingEntity(
     @ColumnInfo(name = "card_id") val cardId: Int,
     val format: String,
     @ColumnInfo(name = "ruling_text") val rulingText: String,
+)
+
+@Entity(
+    tableName = "card_descriptions",
+    primaryKeys = ["card_id", "format"],
+    foreignKeys = [ForeignKey(
+        entity = CardEntity::class,
+        parentColumns = ["id"],
+        childColumns = ["card_id"],
+        onDelete = ForeignKey.NO_ACTION
+    )],
+    indices = [Index("card_id")]
+)
+data class CardDescriptionEntity(
+    @ColumnInfo(name = "card_id") val cardId: Int,
+    val format: String,
+    val description: String,
 )
 
 data class CardSearchResult(

@@ -1,67 +1,182 @@
 package com.turnzero.tools.rules
 
-import android.annotation.SuppressLint
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
+import android.os.ParcelFileDescriptor
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import java.io.File
+import java.io.FileOutputStream
+import kotlin.math.abs
 
 @Composable
 fun RulesPdfSheet(
-    url: String,
+    assetPath: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
+    val cachedPath by remember(assetPath) { mutableStateOf(copyAssetToCache(context, assetPath)) }
+    val pdfState = remember { mutableStateOf<PdfState?>(null) }
+    var pageCount by remember { mutableIntStateOf(0) }
+    var currentPage by remember { mutableIntStateOf(0) }
+
+    DisposableEffect(cachedPath) {
+        if (cachedPath == null) return@DisposableEffect onDispose {}
+        try {
+            val fd = ParcelFileDescriptor.open(File(cachedPath), ParcelFileDescriptor.MODE_READ_ONLY)
+            val renderer = PdfRenderer(fd)
+            pdfState.value = PdfState(renderer, fd)
+            pageCount = renderer.pageCount
+        } catch (_: Exception) { }
+        onDispose {
+            pdfState.value?.renderer?.close()
+            pdfState.value?.fd?.close()
+            pdfState.value = null
+        }
+    }
+
+    val state = pdfState.value
+    val bitmap = remember(state, currentPage) {
+        if (state == null || currentPage >= pageCount) return@remember null
+        try {
+            val pdfPage = state.renderer.openPage(currentPage)
+            val sf = 2.0
+            val w = (pdfPage.width * sf).toInt()
+            val h = (pdfPage.height * sf).toInt()
+            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            pdfPage.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            pdfPage.close()
+            bmp
+        } catch (_: Exception) { null }
+    }
+
+    var scale by remember { mutableFloatStateOf(1f) }
+    var panOffset by remember { mutableStateOf(Offset.Zero) }
+    var wasPinching by remember { mutableStateOf(false) }
+    var swipeAccum by remember { mutableFloatStateOf(0f) }
 
     Column(modifier = modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp, vertical = 8.dp),
+                .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = onDismiss) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Close",
-                )
+            TextButton(onClick = onDismiss) { Text("Done") }
+            if (pageCount > 1) {
+                Text("${currentPage + 1} / $pageCount", style = MaterialTheme.typography.labelLarge)
             }
-            Text(
-                text = "Official Rules",
-                style = MaterialTheme.typography.titleMedium,
-            )
-            IconButton(onClick = { uriHandler.openUri(url) }) {
-                Icon(
-                    Icons.Default.OpenInBrowser,
-                    contentDescription = "Open in browser",
+            Row {
+                IconButton(
+                    onClick = { currentPage--; scale = 1f; panOffset = Offset.Zero },
+                    enabled = currentPage > 0,
+                ) { Icon(Icons.Default.KeyboardArrowLeft, "Previous page") }
+                IconButton(
+                    onClick = { currentPage++; scale = 1f; panOffset = Offset.Zero },
+                    enabled = currentPage < pageCount - 1,
+                ) { Icon(Icons.Default.KeyboardArrowRight, "Next page") }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .clipToBounds()
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onDoubleTap = {
+                            scale = if (scale > 1f) 1f else 2f
+                            panOffset = Offset.Zero
+                        },
+                    )
+                }
+                .pointerInput(Unit) {
+                    detectTransformGestures { _, pan, zoom, _ ->
+                        if (zoom != 1f) wasPinching = true
+                        if (scale > 1f || zoom != 1f) {
+                            val newScale = (scale * zoom).coerceIn(1f, 5f)
+                            val scaleChange = newScale / scale
+                            panOffset = (panOffset + pan) * scaleChange
+                            scale = newScale
+                        } else {
+                            swipeAccum += pan.x
+                        }
+                    }
+                }
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            if (event.changes.all { !it.pressed }) {
+                                if (!wasPinching && scale == 1f && abs(swipeAccum) > 80f) {
+                                    if (swipeAccum > 0 && currentPage > 0) currentPage--
+                                    else if (swipeAccum < 0 && currentPage < pageCount - 1) currentPage++
+                                }
+                                wasPinching = false
+                                swipeAccum = 0f
+                            }
+                        }
+                    }
+                },
+        ) {
+            if (bitmap != null) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "Page ${currentPage + 1}",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationX = panOffset.x,
+                            translationY = panOffset.y,
+                        ),
                 )
             }
         }
-        HorizontalDivider()
+    }
+}
 
-        AndroidView(
-            factory = { context ->
-                WebView(context).apply {
-                    @SuppressLint("SetJavaScriptEnabled")
-                    settings.javaScriptEnabled = true
-                    settings.builtInZoomControls = true
-                    settings.displayZoomControls = false
-                    webViewClient = WebViewClient()
-                    loadUrl("https://docs.google.com/gview?embedded=true&url=$url")
+private data class PdfState(
+    val renderer: PdfRenderer,
+    val fd: ParcelFileDescriptor,
+)
+
+private fun copyAssetToCache(context: Context, assetPath: String): String? {
+    return try {
+        val cacheDir = File(context.cacheDir, "rulebooks")
+        cacheDir.mkdirs()
+        val fileName = assetPath.substringAfterLast('/')
+        val cachedFile = File(cacheDir, fileName)
+        if (!cachedFile.exists()) {
+            context.assets.open(assetPath).use { input ->
+                FileOutputStream(cachedFile).use { output ->
+                    input.copyTo(output)
                 }
-            },
-            modifier = Modifier.fillMaxSize(),
-        )
+            }
+        }
+        cachedFile.absolutePath
+    } catch (_: Exception) {
+        null
     }
 }

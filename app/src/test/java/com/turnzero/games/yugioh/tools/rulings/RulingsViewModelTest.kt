@@ -154,4 +154,44 @@ class RulingsViewModelTest {
         vm.hideOptionsSheet()
         assertFalse(vm.uiState.first().showOptionsSheet)
     }
+
+    @Test
+    fun `setDefaultFormat updates defaultFormat and persists`() = runTest {
+        coEvery { repository.getAllFormats() } returns listOf("Goat", "Edison", "Stein")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.setDefaultFormat("Edison")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals("Edison", state.defaultFormat)
+    }
+
+    @Test
+    fun `allFormatsWithStatus returns formats in chronological order`() = runTest {
+        coEvery { repository.getAllFormats() } returns listOf("HAT", "Goat", "Edison")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val statuses = vm.allFormatsWithStatus
+        assertEquals(3, statuses.size)
+        assertEquals("Goat", statuses[0].first)
+        assertEquals("Edison", statuses[1].first)
+        assertEquals("HAT", statuses[2].first)
+    }
+
+    @Test
+    fun `toggleFormatEnabled disables last enabled format but does not break`() = runTest {
+        coEvery { repository.getAllFormats() } returns listOf("Goat", "HAT")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+        vm.toggleFormatEnabled("Goat")
+        testDispatcher.scheduler.advanceUntilIdle()
+        vm.toggleFormatEnabled("HAT")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals(0, state.enabledFormats.size)
+    }
 }

@@ -16,8 +16,8 @@ android {
         applicationId = "com.turnzero"
         minSdk = 28
         targetSdk = 37
-        versionCode = 20
-        versionName = "0.8.1"
+        versionCode = 21
+        versionName = "0.9.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.aboutlibraries.compose)
-    implementation(libs.markdown.m3)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.errorprone.annotations)

@@ -16,6 +16,9 @@ interface RulingsDao {
     @Query("SELECT * FROM cards WHERE id = :cardId")
     suspend fun getCard(cardId: Int): CardEntity?
 
+    @Query("SELECT * FROM card_descriptions WHERE card_id = :cardId AND format = :format")
+    suspend fun getCardDescription(cardId: Int, format: String): CardDescriptionEntity?
+
     @Query("SELECT * FROM rulings WHERE card_id = :cardId AND format = :format")
     suspend fun getRuling(cardId: Int, format: String): RulingEntity?
 

@@ -9,9 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turnzero.games.yugioh.tools.rulings.data.FormatRulesData
@@ -85,22 +82,9 @@ fun RulingsOptionsSheet(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
-            val sheetSurfaceColor = MaterialTheme.colorScheme.surface
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 340.dp)
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(
-                            brush = Brush.verticalGradient(
-                                0f to Color.Transparent,
-                                0.85f to Color.Transparent,
-                                1f to sheetSurfaceColor,
-                            ),
-                        )
-                    },
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
             ) {
                 items(allFormatsWithStatus, key = { it.first }) { (formatKey, isEnabled) ->
                     Row(
