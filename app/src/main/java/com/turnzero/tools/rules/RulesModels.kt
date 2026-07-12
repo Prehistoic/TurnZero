@@ -7,25 +7,32 @@ data class RulesConfig(
     val winCons: List<WinCondition>,
     val playSequence: List<RuleStep>,
     val keywords: List<Keyword>? = null,
-    val pdfUrl: String? = null,
+    val pdfAsset: String? = null,
 )
 
 data class RuleStep(
     val title: String,
     val summary: String,
-    val detail: String,
+    val contents: List<ContentBlock>,
 )
 
 data class WinCondition(
     val title: String,
-    val description: String,
+    val contents: List<ContentBlock>,
 )
 
 data class Keyword(
     val name: String,
-    val definition: String,
+    val contents: List<ContentBlock>,
     val category: String? = null,
 )
+
+sealed interface ContentBlock {
+    data class Paragraph(val text: String) : ContentBlock
+    data class SubHeading(val text: String) : ContentBlock
+    data class BulletList(val items: List<String>) : ContentBlock
+    data class Image(val uri: String) : ContentBlock
+}
 
 interface RulesProvider {
     fun getConfigs(gameId: String): List<RulesConfig>
@@ -42,6 +49,8 @@ data class RulesUiState(
     val selectedKeywordCategory: String? = null,
     val showPdf: Boolean = false,
     val isLoading: Boolean = true,
+    val showOptionsSheet: Boolean = false,
+    val defaultRulesetIndex: Int = 0,
 ) {
     val currentConfig: RulesConfig?
         get() = configs.getOrNull(selectedRulesetIndex)
