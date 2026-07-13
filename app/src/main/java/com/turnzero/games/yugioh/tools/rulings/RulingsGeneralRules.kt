@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import kotlinx.coroutines.flow.filterNotNull
@@ -92,7 +93,7 @@ fun RulingsGeneralRules(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        itemsIndexed(rules) { index, rule ->
+        itemsIndexed(rules, key = { _, rule -> "${rule.title}-${rule.description}" }) { index, rule ->
             val isExpanded = expandedRuleIndex == index
             val isSpecial = rule.isSpecial
 
@@ -158,16 +159,22 @@ fun RulingsGeneralRules(
                                 modifier = Modifier.padding(bottom = 8.dp),
                             )
                             if (rule.description.isNotBlank()) {
+                                val parsedDesc = remember(rule.description, primaryColor) {
+                                    rule.description.parseRuleText(primaryColor)
+                                }
                                 Text(
-                                text = rule.description.parseRuleText(primaryColor),
+                                text = parsedDesc,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                                 Spacer(modifier = Modifier.height(8.dp))
                             }
-                        } else if (rule.subSections.isNotEmpty() && rule.description.isNotBlank()) {
+                        } else                         if (rule.subSections.isNotEmpty() && rule.description.isNotBlank()) {
+                            val parsedDesc = remember(rule.description, primaryColor) {
+                                rule.description.parseRuleText(primaryColor)
+                            }
                             Text(
-                                text = rule.description.parseRuleText(primaryColor),
+                                text = parsedDesc,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -191,8 +198,11 @@ fun RulingsGeneralRules(
                             ) {
                                 Column(modifier = Modifier.padding(10.dp)) {
                                     if (subSection.title.isNotBlank()) {
+                                        val parsedTitle = remember(subSection.title, primaryColor) {
+                                            subSection.title.parseRuleText(primaryColor)
+                                        }
                                         Text(
-                                            text = subSection.title.parseRuleText(primaryColor),
+                                            text = parsedTitle,
                                             style = MaterialTheme.typography.titleSmall,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.primary,
@@ -200,8 +210,11 @@ fun RulingsGeneralRules(
                                         Spacer(modifier = Modifier.height(4.dp))
                                     }
                                     if (subSection.body.isNotBlank()) {
+                                        val parsedBody = remember(subSection.body, primaryColor) {
+                                            subSection.body.parseRuleText(primaryColor)
+                                        }
                                         Text(
-                                            text = subSection.body.parseRuleText(primaryColor),
+                                            text = parsedBody,
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
@@ -211,8 +224,11 @@ fun RulingsGeneralRules(
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                         if (rule.subSections.isEmpty() && !isSpecial) {
+                            val parsedDesc = remember(rule.description, primaryColor) {
+                                rule.description.parseRuleText(primaryColor)
+                            }
                             Text(
-                                text = rule.description.parseRuleText(primaryColor),
+                                text = parsedDesc,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

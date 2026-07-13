@@ -1,5 +1,7 @@
 package com.turnzero.tools.rules
 
+import androidx.compose.runtime.Stable
+
 data class RulesConfig(
     val rulesetId: String,
     val rulesetName: String,
@@ -38,6 +40,7 @@ interface RulesProvider {
     fun getConfigs(gameId: String): List<RulesConfig>
 }
 
+@Stable
 data class RulesUiState(
     val gameId: String = "",
     val configs: List<RulesConfig> = emptyList(),

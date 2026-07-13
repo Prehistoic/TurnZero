@@ -1,5 +1,6 @@
 package com.turnzero.tools.dice
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,6 +36,7 @@ data class DicePreset(
     val dice: List<Die>
 )
 
+@Stable
 data class DiceUiState(
     val gameId: String = "*",
     val dice: List<Die> = listOf(Die("d1", 6, DiceColor.WHITE)),

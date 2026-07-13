@@ -25,6 +25,7 @@ fun DiceScreen(
     val canRoll = uiState.dice.isNotEmpty() && !uiState.isRolling
 
     var tapCount by remember { mutableIntStateOf(0) }
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column(modifier = modifier.fillMaxSize()) {
         BoxWithConstraints(
@@ -33,7 +34,7 @@ fun DiceScreen(
                 .fillMaxWidth()
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     enabled = canRoll
                 ) { tapCount++ },
             contentAlignment = Alignment.Center

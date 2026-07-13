@@ -1,6 +1,7 @@
 package com.turnzero.games.yugioh.tools.rulings
 
 import android.util.Log
+import androidx.compose.runtime.Stable
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -26,6 +27,7 @@ import javax.inject.Inject
 
 private const val TAG = "TZ/RulingsVM"
 
+@Stable
 data class RulingsUiState(
     val formats: List<String> = emptyList(),
     val enabledFormats: List<String> = emptyList(),

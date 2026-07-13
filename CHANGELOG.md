@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-07-13
+
+### Changed
+- Cached `AnnotatedString` parsing results with `remember` in ContentBlockRenderer and RulingsGeneralRules to avoid redundant string processing on every recomposition
+- Consolidated five separate DataStore reads at app startup into a single read pass for faster cold start
+- Added stable `key` parameter to `itemsIndexed` in RulingsGeneralRules for proper item identity tracking
+- Added `@Stable` annotation to all UI state data classes (DiceUiState, CoinUiState, LifeCounterUiState, RulesUiState, RulingsUiState) for optimized recomposition skipping
+- Reused `MutableInteractionSource` instance in DiceScreen and CoinScreen clickable areas instead of recreating on each tap
+
 ## [0.10.0] - 2026-07-13
 
 ### Added
