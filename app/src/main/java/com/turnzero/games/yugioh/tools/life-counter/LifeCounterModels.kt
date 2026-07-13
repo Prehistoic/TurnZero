@@ -1,5 +1,7 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
+import androidx.compose.runtime.Stable
+
 enum class TimerMode { COUNT_UP, COUNT_DOWN }
 
 enum class Player { PLAYER_1, PLAYER_2 }
@@ -23,6 +25,7 @@ data class CalcInputState(
     val lockedIn: Boolean = false
 )
 
+@Stable
 data class LifeCounterUiState(
     val isRunning: Boolean = false,
     val player1Lp: Int = 8000,

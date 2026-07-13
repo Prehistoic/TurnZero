@@ -34,32 +34,40 @@ fun ContentBlockRenderer(
     Column(modifier = modifier) {
         blocks.forEachIndexed { index, block ->
             if (index > 0) {
-                Spacer(
-                    Modifier.height(
-                        when (block) {
-                            is ContentBlock.SubHeading -> 12.dp
-                            is ContentBlock.Image -> 12.dp
-                            else -> 8.dp
-                        }
-                    )
-                )
+                val spacerHeight = remember(block) {
+                    when (block) {
+                        is ContentBlock.SubHeading -> 12.dp
+                        is ContentBlock.Image -> 12.dp
+                        else -> 8.dp
+                    }
+                }
+                Spacer(Modifier.height(spacerHeight))
             }
             when (block) {
-                is ContentBlock.Paragraph -> Text(
-                    text = parseBoldText(block.text),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                is ContentBlock.SubHeading -> Text(
-                    text = parseBoldText(block.text),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
+                is ContentBlock.Paragraph -> {
+                    val parsed = remember(block.text) { parseBoldText(block.text) }
+                    Text(
+                        text = parsed,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                is ContentBlock.SubHeading -> {
+                    val parsed = remember(block.text) { parseBoldText(block.text) }
+                    Text(
+                        text = parsed,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
                 is ContentBlock.BulletList -> Column {
                     block.items.forEach { item ->
+                        val parsed = remember(item) { parseBoldText(item) }
                         Text(
-                            text = buildAnnotatedString {
-                                append("\u2022 ")
-                                append(parseBoldText(item))
+                            text = remember(item) {
+                                buildAnnotatedString {
+                                    append("\u2022 ")
+                                    append(parseBoldText(item))
+                                }
                             },
                             style = MaterialTheme.typography.bodyMedium,
                         )

@@ -1,5 +1,6 @@
 package com.turnzero.tools.coin
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.flow.Flow
 
@@ -26,6 +27,7 @@ data class CoinPreset(
     val coinCount: Int
 )
 
+@Stable
 data class CoinUiState(
     val gameId: String = "*",
     val coinCount: Int = 1,

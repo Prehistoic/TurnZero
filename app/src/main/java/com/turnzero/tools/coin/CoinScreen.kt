@@ -24,6 +24,7 @@ fun CoinScreen(
     val canFlip = !uiState.isFlipping
 
     var tapCount by remember { mutableIntStateOf(0) }
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column(modifier = modifier.fillMaxSize()) {
         BoxWithConstraints(
@@ -32,7 +33,7 @@ fun CoinScreen(
                 .fillMaxWidth()
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     enabled = canFlip
                 ) { tapCount++ },
             contentAlignment = Alignment.Center

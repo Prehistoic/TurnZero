@@ -37,7 +37,6 @@ import com.turnzero.ui.settings.ThemeMode
 import com.turnzero.ui.tools.ToolSwitcherSheet
 import com.turnzero.ui.tools.ToolsScreen
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,35 +55,23 @@ fun TZNavHost(
     val systemIsDark = isSystemInDarkTheme()
 
     var gamesLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
+    var toolsLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
+    var themeModeState by remember { mutableStateOf(ThemeMode.SYSTEM) }
+    var favoriteToolIds by remember { mutableStateOf(emptySet<String>()) }
+    var currentLanguage by remember { mutableStateOf("en") }
+
     LaunchedEffect(Unit) {
-        dataStore.data.map { it[UserPreferences.LAYOUT_GAMES] }.first()?.let {
+        val prefs = dataStore.data.first()
+        prefs[UserPreferences.LAYOUT_GAMES]?.let {
             try { gamesLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
         }
-    }
-
-    var toolsLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
-    LaunchedEffect(Unit) {
-        dataStore.data.map { it[UserPreferences.LAYOUT_TOOLS] }.first()?.let {
+        prefs[UserPreferences.LAYOUT_TOOLS]?.let {
             try { toolsLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
         }
-    }
-
-    var themeModeState by remember { mutableStateOf(ThemeMode.SYSTEM) }
-    LaunchedEffect(Unit) {
-        val mode = dataStore.data.map { it[UserPreferences.THEME_MODE] }.first() ?: "system"
+        val mode = prefs[UserPreferences.THEME_MODE] ?: "system"
         themeModeState = try { ThemeMode.valueOf(mode.uppercase()) } catch (_: Exception) { ThemeMode.SYSTEM }
-    }
-
-    var favoriteToolIds by remember { mutableStateOf(emptySet<String>()) }
-    LaunchedEffect(Unit) {
-        val favs = dataStore.data.map { it[UserPreferences.FAVORITE_TOOLS] }.first() ?: emptySet()
-        favoriteToolIds = favs
-    }
-
-    var currentLanguage by remember { mutableStateOf("en") }
-    LaunchedEffect(Unit) {
-        val lang = dataStore.data.map { it[UserPreferences.LANGUAGE] }.first() ?: "en"
-        currentLanguage = lang
+        favoriteToolIds = prefs[UserPreferences.FAVORITE_TOOLS] ?: emptySet()
+        currentLanguage = prefs[UserPreferences.LANGUAGE] ?: "en"
     }
 
     var selectedToolId by remember { mutableStateOf<String?>(null) }
