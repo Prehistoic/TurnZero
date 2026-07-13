@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-07-13
+
+### Added
+- Tap page number indicator in PDF viewer to jump directly to a specific page via keyboard input
+
+### Changed
+- Documentation files (`docs/superpowers/`) no longer tracked in version control
+
 ## [0.9.0] - 2026-07-13
 
 ### Added
