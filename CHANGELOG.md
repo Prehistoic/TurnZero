@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-07-13
+
+### Added
+- Yu-Gi-Oh! game logo displayed on game tiles in grid and list layout modes (#41)
+
 ## [0.11.0] - 2026-07-13
 
 ### Changed
