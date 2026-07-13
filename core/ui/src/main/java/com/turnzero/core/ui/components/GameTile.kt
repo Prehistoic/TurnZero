@@ -1,5 +1,6 @@
 package com.turnzero.core.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.tools.api.Game
@@ -50,11 +53,23 @@ private fun GameTileGrid(game: Game, onClick: () -> Unit, modifier: Modifier) {
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = game.name.firstOrNull()?.toString() ?: "?",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                val logoRes = game.logoRes
+                if (logoRes != null) {
+                    Image(
+                        painter = painterResource(id = logoRes),
+                        contentDescription = game.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    Text(
+                        text = game.name.firstOrNull()?.toString() ?: "?",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
@@ -98,11 +113,23 @@ private fun GameTileList(game: Game, onClick: () -> Unit, modifier: Modifier) {
                     .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = game.name.firstOrNull()?.toString() ?: "?",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                val logoRes = game.logoRes
+                if (logoRes != null) {
+                    Image(
+                        painter = painterResource(id = logoRes),
+                        contentDescription = game.name,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(6.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    Text(
+                        text = game.name.firstOrNull()?.toString() ?: "?",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {

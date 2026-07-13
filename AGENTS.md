@@ -183,10 +183,19 @@ chore: update Compose BOM to 2025.01.00
 - Ensure all checks pass (build, lint, tests) before merging.
 - **PR description must include the relevant CHANGELOG entry** for the changes being merged.
 
+### Version Bumping
+When preparing a PR, the agent MUST bump the version according to semantic versioning (X.Y.Z):
+
+- **Major bump (X.0.0):** A new major release of the app (significant redesign, architecture overhaul, breaking changes)
+- **Medium bump (0.Y.0):** A new major feature (new tool, new game, substantial new capability)
+- **Minor bump (0.0.Z):** A small change (bug fix, minor UI tweak, small improvement)
+
+The agent determines the appropriate bump level based on the scope of changes on the branch.
+
 ### PR Creation Checklist
 When creating a pull request, the agent MUST:
 
-1. **Verify version bump** — increment `versionName` and `versionCode` in `app/build.gradle.kts`:
+1. **Verify version bump** — increment `versionName` and `versionCode` in `app/build.gradle.kts` according to the version bumping rules above:
    ```
    versionCode = <previous + 1>
    versionName = "<updated semver>"
