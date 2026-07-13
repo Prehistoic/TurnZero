@@ -5,9 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -21,6 +24,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import java.io.File
 import java.io.FileOutputStream
@@ -73,6 +78,68 @@ fun RulesPdfSheet(
     var wasPinching by remember { mutableStateOf(false) }
     var swipeAccum by remember { mutableFloatStateOf(0f) }
 
+    var showPageDialog by remember { mutableStateOf(false) }
+    var pageInput by remember { mutableStateOf("") }
+    var pageInputError by remember { mutableStateOf(false) }
+
+    if (showPageDialog) {
+        AlertDialog(
+            onDismissRequest = { showPageDialog = false },
+            title = { Text("Go to page") },
+            text = {
+                OutlinedTextField(
+                    value = pageInput,
+                    onValueChange = {
+                        pageInput = it
+                        pageInputError = false
+                    },
+                    label = { Text("Page number (1-$pageCount)") },
+                    isError = pageInputError,
+                    supportingText = if (pageInputError) {
+                        { Text("Enter a number between 1 and $pageCount") }
+                    } else null,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            val num = pageInput.toIntOrNull()
+                            if (num != null && num in 1..pageCount) {
+                                currentPage = num - 1
+                                scale = 1f
+                                panOffset = Offset.Zero
+                                showPageDialog = false
+                            } else {
+                                pageInputError = true
+                            }
+                        }
+                    ),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val num = pageInput.toIntOrNull()
+                        if (num != null && num in 1..pageCount) {
+                            currentPage = num - 1
+                            scale = 1f
+                            panOffset = Offset.Zero
+                            showPageDialog = false
+                        } else {
+                            pageInputError = true
+                        }
+                    }
+                ) { Text("Go") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPageDialog = false }) { Text("Cancel") }
+            },
+        )
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -83,7 +150,15 @@ fun RulesPdfSheet(
         ) {
             TextButton(onClick = onDismiss) { Text("Done") }
             if (pageCount > 1) {
-                Text("${currentPage + 1} / $pageCount", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    "${currentPage + 1} / $pageCount",
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.clickable {
+                        pageInput = "${currentPage + 1}"
+                        pageInputError = false
+                        showPageDialog = true
+                    },
+                )
             }
             Row {
                 IconButton(
