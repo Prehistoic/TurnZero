@@ -95,10 +95,12 @@ fun RulesScreen(
                     selected = currentPageForTab == index,
                     onClick = { onSelectTab(index) },
                     text = {
+                        val selected = currentPageForTab == index
                         Text(
                             text = tab.title,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                            softWrap = false,
+                            overflow = if (selected) TextOverflow.Visible else TextOverflow.Ellipsis,
                         )
                     },
                 )
