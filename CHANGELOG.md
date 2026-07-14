@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-07-14
+
+### Fixed
+- FaB Classic Constructed and Silver Age format rules now show only their own specific rules instead of mixed text
+- PDF pages now render with a white background fill, fixing unreadable transparent-background documents
+- Pager snap-back during swipe gestures in the Rules tool prevented with current-page guard in LaunchedEffect
+- Deprecated Icons.Default.KeyboardArrowLeft/Right replaced with AutoMirrored variants
+- Java type mismatch warning fixed in RulesPdfSheet cachedPath null-safety
+- Rules tab row switched to ScrollableTabRow so all tab names display fully without truncation
+
 ## [0.14.0] - 2026-07-14
 
 ### Added
