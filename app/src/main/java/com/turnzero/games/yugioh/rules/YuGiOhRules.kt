@@ -2,6 +2,7 @@ package com.turnzero.games.yugioh.rules
 
 import com.turnzero.tools.rules.ContentBlock
 import com.turnzero.tools.rules.Keyword
+import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
 import com.turnzero.tools.rules.WinCondition
@@ -340,11 +341,11 @@ object YuGiOhRules {
     )
 
     val configs: List<RulesConfig> = listOf(
-        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, "rulebooks/v6-gx.pdf"),
-        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, "rulebooks/v6-gx.pdf"),
-        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, "rulebooks/v7-5ds.pdf"),
-        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, "rulebooks/v8-zexal.pdf"),
-        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, "rulebooks/v9-arcv.pdf"),
-        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, "rulebooks/v10-vrains.pdf"),
+        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf"))),
+        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf"))),
+        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v7-5ds.pdf"))),
+        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v8-zexal.pdf"))),
+        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v9-arcv.pdf"))),
+        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v10-vrains.pdf"))),
     )
 }

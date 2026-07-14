@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-07-14
+
+### Added
+- Star Wars Unlimited rules with five tabs: Setup, Turn, Victory, Field (play area layout and ground/space arenas), and Keywords (16 keywords across 5 categories)
+- Multi-PDF support in Rules tool with selector dialog when multiple rulebooks are available for a game
+- Field tab in the Rules system for describing play area layout, ground/space arenas, and ready/exhausted mechanics
+- Star Wars Unlimited rulebook PDFs bundled with the app (Quickstart Rules and Comprehensive Rules 8.0)
+
+### Changed
+- Migrated RulesConfig pdfAsset field to pdfAssets list to support multiple PDFs per ruleset
+
 ## [0.12.1] - 2026-07-14
 
 ### Fixed

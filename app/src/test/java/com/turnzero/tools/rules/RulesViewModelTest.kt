@@ -55,6 +55,9 @@ class RulesViewModelTest {
         keywords = listOf(
             Keyword("Quick Effect", listOf(ContentBlock.Paragraph("Spell Speed 2"))),
         ),
+        pdfAssets = listOf(
+            PdfAsset("Rulebook", "rulebooks/v6-gx.pdf"),
+        ),
     )
 
     private val configWithoutKeywords = sampleConfig.copy(
@@ -240,6 +243,7 @@ class RulesViewModelTest {
     fun `setDefaultRuleset does not change other uiState properties`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
+        vm.selectRuleset(1)
         vm.togglePdf()
         vm.setDefaultRuleset(0)
         val state = vm.uiState.value

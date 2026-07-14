@@ -79,16 +79,22 @@ class YuGiOhRulesTest {
     }
 
     @Test
-    fun `all pdfAsset paths point to rulebooks directory`() {
+    fun `all pdfAssets point to rulebooks directory`() {
         for (config in YuGiOhRules.configs) {
             assertNotNull(
-                "Config ${config.rulesetId} has null pdfAsset",
-                config.pdfAsset
+                "Config ${config.rulesetId} has null pdfAssets",
+                config.pdfAssets
             )
             assertTrue(
-                "Config ${config.rulesetId} pdfAsset '${config.pdfAsset}' doesn't start with rulebooks/",
-                config.pdfAsset!!.startsWith("rulebooks/")
+                "Config ${config.rulesetId} has empty pdfAssets",
+                config.pdfAssets!!.isNotEmpty()
             )
+            for (pdf in config.pdfAssets!!) {
+                assertTrue(
+                    "Config ${config.rulesetId} pdfAsset '${pdf.assetPath}' doesn't start with rulebooks/",
+                    pdf.assetPath.startsWith("rulebooks/")
+                )
+            }
         }
     }
 

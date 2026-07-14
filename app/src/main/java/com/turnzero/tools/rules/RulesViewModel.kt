@@ -119,7 +119,25 @@ class RulesViewModel @Inject constructor(
     }
 
     fun togglePdf() {
-        _uiState.update { it.copy(showPdf = !it.showPdf) }
+        val current = _uiState.value
+        if (current.showPdf) {
+            _uiState.update { it.copy(showPdf = false, selectedPdfAssetPath = null) }
+            return
+        }
+        val pdfs = current.currentConfig?.pdfAssets ?: return
+        if (pdfs.size == 1) {
+            _uiState.update { it.copy(showPdf = true, selectedPdfAssetPath = pdfs.first().assetPath) }
+        } else {
+            _uiState.update { it.copy(showPdfSelector = true) }
+        }
+    }
+
+    fun selectPdfAsset(path: String) {
+        _uiState.update { it.copy(showPdfSelector = false, showPdf = true, selectedPdfAssetPath = path) }
+    }
+
+    fun dismissPdfSelector() {
+        _uiState.update { it.copy(showPdfSelector = false, selectedTabIndex = 0) }
     }
 
     fun toggleOptionsSheet() {

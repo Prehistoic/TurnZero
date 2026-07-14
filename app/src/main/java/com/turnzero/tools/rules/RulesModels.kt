@@ -2,6 +2,11 @@ package com.turnzero.tools.rules
 
 import androidx.compose.runtime.Stable
 
+data class PdfAsset(
+    val name: String,
+    val assetPath: String,
+)
+
 data class RulesConfig(
     val rulesetId: String,
     val rulesetName: String,
@@ -9,7 +14,8 @@ data class RulesConfig(
     val winCons: List<WinCondition>,
     val playSequence: List<RuleStep>,
     val keywords: List<Keyword>? = null,
-    val pdfAsset: String? = null,
+    val pdfAssets: List<PdfAsset>? = null,
+    val fieldContent: List<ContentBlock>? = null,
 )
 
 data class RuleStep(
@@ -51,12 +57,20 @@ data class RulesUiState(
     val keywordSearchQuery: String = "",
     val selectedKeywordCategory: String? = null,
     val showPdf: Boolean = false,
+    val showPdfSelector: Boolean = false,
+    val selectedPdfAssetPath: String? = null,
     val isLoading: Boolean = true,
     val showOptionsSheet: Boolean = false,
     val defaultRulesetIndex: Int = 0,
 ) {
     val currentConfig: RulesConfig?
         get() = configs.getOrNull(selectedRulesetIndex)
+
+    val hasPdf: Boolean
+        get() = !currentConfig?.pdfAssets.isNullOrEmpty()
+
+    val isSinglePdf: Boolean
+        get() = currentConfig?.pdfAssets?.size == 1
 
     val visibleTabs: List<TabInfo>
         get() {
@@ -65,6 +79,9 @@ data class RulesUiState(
                 add(TabInfo("setup", "Setup"))
                 add(TabInfo("turn", "Turn"))
                 add(TabInfo("victory", "Victory"))
+                if (!config.fieldContent.isNullOrEmpty()) {
+                    add(TabInfo("field", "Field"))
+                }
                 if (!config.keywords.isNullOrEmpty()) {
                     add(TabInfo("keywords", "Keywords"))
                 }
