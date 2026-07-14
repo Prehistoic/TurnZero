@@ -75,8 +75,8 @@ fun RulesScreen(
     val currentPageForTab by remember { derivedStateOf { pagerState.currentPage } }
 
     LaunchedEffect(uiState.selectedTabIndex) {
-        if (uiState.selectedTabIndex in visibleTabs.indices) {
-            pagerState.scrollToPage(uiState.selectedTabIndex)
+        if (uiState.selectedTabIndex in visibleTabs.indices && pagerState.currentPage != uiState.selectedTabIndex) {
+            pagerState.animateScrollToPage(uiState.selectedTabIndex)
         }
     }
 
