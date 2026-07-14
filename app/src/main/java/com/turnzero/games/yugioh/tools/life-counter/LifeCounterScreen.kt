@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -20,7 +21,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -47,7 +47,6 @@ fun LifeCounterScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val view = LocalView.current
     val activity = context as? Activity
 
     var showResetDialog by remember { mutableStateOf(false) }
@@ -55,18 +54,18 @@ fun LifeCounterScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        view.keepScreenOn = true
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    view.keepScreenOn = true
+                    activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
                 Lifecycle.Event.ON_PAUSE -> {
                     onPauseTimer()
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                    view.keepScreenOn = false
+                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
                 else -> {}
             }
@@ -76,7 +75,7 @@ fun LifeCounterScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
             onPauseTimer()
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            view.keepScreenOn = false
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 

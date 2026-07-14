@@ -123,6 +123,7 @@ private class TestGame(
     override val name: String
 ) : Game {
     override val description = "Test game"
+    override val category = GameCategory.TCG
     override val toolIds = emptyList<String>()
 }
 

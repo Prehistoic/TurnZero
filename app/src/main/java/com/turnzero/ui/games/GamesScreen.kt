@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import com.turnzero.R
+import com.turnzero.core.tools.api.GameCategory
 import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.core.ui.components.*
 
@@ -27,13 +28,17 @@ fun GamesScreen(
     onGameClick: (String) -> Unit
 ) {
     var showLayoutSheet by remember { mutableStateOf(false) }
+    var showCategorySheet by remember { mutableStateOf(false) }
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    var selectedCategory: GameCategory? by remember { mutableStateOf(null) }
     val allGames = remember { toolRegistry.getGames() }
-    val games = if (searchQuery.isEmpty()) {
-        allGames
-    } else {
-        allGames.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    val filteredGames = remember(searchQuery, selectedCategory) {
+        allGames.filter { game ->
+            val matchesSearch = searchQuery.isEmpty() || game.name.contains(searchQuery, ignoreCase = true)
+            val matchesCategory = selectedCategory == null || game.category == selectedCategory
+            matchesSearch && matchesCategory
+        }
     }
 
     Scaffold(
@@ -43,10 +48,12 @@ fun GamesScreen(
                 logoPainter = painterResource(id = R.drawable.ic_tz_logo),
                 showLayoutButton = true,
                 showSearchButton = true,
+                showCategoryFilter = true,
                 isSearchActive = isSearchActive,
                 searchQuery = searchQuery,
                 onLayoutClick = { showLayoutSheet = true },
                 onSearchClick = { isSearchActive = true },
+                onCategoryFilterClick = { showCategorySheet = true },
                 onSearchQueryChange = { searchQuery = it },
                 onSearchClose = {
                     isSearchActive = false
@@ -55,7 +62,7 @@ fun GamesScreen(
             )
         }
     ) { padding ->
-        if (isSearchActive && searchQuery.isNotEmpty() && games.isEmpty()) {
+        if (isSearchActive && searchQuery.isNotEmpty() && filteredGames.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -72,7 +79,7 @@ fun GamesScreen(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(games, key = { it.id }) { game ->
+                        items(filteredGames, key = { it.id }) { game ->
                             GameTile(
                                 game = game,
                                 layoutMode = currentLayout,
@@ -89,7 +96,7 @@ fun GamesScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(games, key = { it.id }) { game ->
+                        items(filteredGames, key = { it.id }) { game ->
                             GameTile(
                                 game = game,
                                 layoutMode = currentLayout,
@@ -110,6 +117,17 @@ fun GamesScreen(
                 showLayoutSheet = false
             },
             onDismiss = { showLayoutSheet = false }
+        )
+    }
+
+    if (showCategorySheet) {
+        CategoryFilterSheet(
+            selectedCategory = selectedCategory,
+            onCategorySelected = {
+                selectedCategory = it
+                showCategorySheet = false
+            },
+            onDismiss = { showCategorySheet = false }
         )
     }
 }

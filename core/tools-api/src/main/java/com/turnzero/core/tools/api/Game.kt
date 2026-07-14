@@ -6,6 +6,7 @@ interface Game {
     val id: String
     val name: String
     val description: String
+    val category: GameCategory
     val toolIds: List<String>
     val logoRes: Int?
         @DrawableRes get() = null

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-07-14
+
+### Added
+- Seven new TCG games: Magic: The Gathering, Star Wars Unlimited, Digimon Card Game, Flesh and Blood, Cardfight!! Vanguard, Pokemon TCG, and One Piece Card Game, each with Dice and Coin tools
+- Game category system with TCG and Board Game types
+- Category filter button in the home screen top bar to filter games by category
+
+### Fixed
+- Screen no longer stays awake on all screens; keep-screen-on is now scoped only to the Life Counter tool using window-level flags
+
 ## [0.11.1] - 2026-07-13
 
 ### Added
