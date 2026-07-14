@@ -7,6 +7,13 @@ import com.turnzero.core.data.dataStore
 import com.turnzero.core.tools.api.Game
 import com.turnzero.core.tools.api.Tool
 import com.turnzero.core.tools.api.ToolRegistry
+import com.turnzero.games.digimon.DigimonGame
+import com.turnzero.games.fab.FabGame
+import com.turnzero.games.mtg.MtgGame
+import com.turnzero.games.onepiece.OnePieceGame
+import com.turnzero.games.pokemon.PokemonGame
+import com.turnzero.games.swu.SwuGame
+import com.turnzero.games.vanguard.VanguardGame
 import com.turnzero.games.yugioh.YuGiOhGame
 import com.turnzero.games.yugioh.tools.lifecounter.YuGiOhLifeCounter
 import com.turnzero.games.yugioh.tools.rulingssearcher.YuGiOhRulingsSearcher
@@ -24,7 +31,14 @@ object ServiceLocator {
     )
 
     val games: Set<Game> = setOf(
-        YuGiOhGame
+        YuGiOhGame,
+        MtgGame,
+        SwuGame,
+        DigimonGame,
+        FabGame,
+        VanguardGame,
+        PokemonGame,
+        OnePieceGame
     )
 
     val toolRegistry = ToolRegistry(games, tools)

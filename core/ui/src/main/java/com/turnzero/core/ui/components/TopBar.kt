@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -26,11 +27,13 @@ fun TZTopBar(
     showBackButton: Boolean = false,
     showLayoutButton: Boolean = false,
     showSearchButton: Boolean = false,
+    showCategoryFilter: Boolean = false,
     isSearchActive: Boolean = false,
     searchQuery: String = "",
     onBackClick: () -> Unit = {},
     onLayoutClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
+    onCategoryFilterClick: () -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
     onSearchClose: () -> Unit = {},
     logoPainter: Painter? = null,
@@ -116,6 +119,14 @@ fun TZTopBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search"
+                    )
+                }
+            }
+            if (showCategoryFilter && !isSearchActive) {
+                IconButton(onClick = onCategoryFilterClick) {
+                    Icon(
+                        imageVector = Icons.Default.Category,
+                        contentDescription = "Filter by category"
                     )
                 }
             }
