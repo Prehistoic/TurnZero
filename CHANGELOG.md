@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-07-14
+
+### Added
+- Flesh and Blood rules with five tabs: Setup, Turn, Victory, Field (play area layout with playmat image), and Keywords (49 keywords across 7 categories)
+- Classic Constructed and Silver Age formats for Flesh and Blood, with format-specific rules highlighted inline in Setup
+- Flesh and Blood playmat diagram image in the Field tab
+- Flesh and Blood Comprehensive Rules PDF bundled with the app
+
 ## [0.13.0] - 2026-07-14
 
 ### Added
