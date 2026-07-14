@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-07-14
+
+### Fixed
+- Screen-keep-awake flag now uses the Activity lifecycle instead of NavBackStackEntry lifecycle, preventing the flag from leaking permanently when Compose Navigation skips lifecycle events during transitions
+
 ## [0.12.0] - 2026-07-14
 
 ### Added
