@@ -75,8 +75,8 @@ fun RulesScreen(
     val currentPageForTab by remember { derivedStateOf { pagerState.currentPage } }
 
     LaunchedEffect(uiState.selectedTabIndex) {
-        if (uiState.selectedTabIndex in visibleTabs.indices) {
-            pagerState.scrollToPage(uiState.selectedTabIndex)
+        if (uiState.selectedTabIndex in visibleTabs.indices && pagerState.currentPage != uiState.selectedTabIndex) {
+            pagerState.animateScrollToPage(uiState.selectedTabIndex)
         }
     }
 
@@ -89,7 +89,10 @@ fun RulesScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = currentPageForTab.coerceIn(visibleTabs.indices)) {
+        ScrollableTabRow(
+            selectedTabIndex = currentPageForTab.coerceIn(visibleTabs.indices),
+            edgePadding = 16.dp,
+        ) {
             visibleTabs.forEachIndexed { index, tab ->
                 Tab(
                     selected = currentPageForTab == index,
@@ -98,7 +101,8 @@ fun RulesScreen(
                         Text(
                             text = tab.title,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                            softWrap = false,
+                            overflow = TextOverflow.Visible,
                         )
                     },
                 )

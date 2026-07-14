@@ -2,6 +2,8 @@ package com.turnzero.tools.rules
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import androidx.compose.foundation.Image
@@ -12,8 +14,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,9 +46,9 @@ fun RulesPdfSheet(
     var currentPage by remember { mutableIntStateOf(0) }
 
     DisposableEffect(cachedPath) {
-        if (cachedPath == null) return@DisposableEffect onDispose {}
+        val path = cachedPath ?: return@DisposableEffect onDispose {}
         try {
-            val fd = ParcelFileDescriptor.open(File(cachedPath), ParcelFileDescriptor.MODE_READ_ONLY)
+            val fd = ParcelFileDescriptor.open(File(path), ParcelFileDescriptor.MODE_READ_ONLY)
             val renderer = PdfRenderer(fd)
             pdfState.value = PdfState(renderer, fd)
             pageCount = renderer.pageCount
@@ -67,6 +69,7 @@ fun RulesPdfSheet(
             val w = (pdfPage.width * sf).toInt()
             val h = (pdfPage.height * sf).toInt()
             val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            Canvas(bmp).drawColor(Color.WHITE)
             pdfPage.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             pdfPage.close()
             bmp
@@ -164,11 +167,11 @@ fun RulesPdfSheet(
                 IconButton(
                     onClick = { currentPage--; scale = 1f; panOffset = Offset.Zero },
                     enabled = currentPage > 0,
-                ) { Icon(Icons.Default.KeyboardArrowLeft, "Previous page") }
+                ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Previous page") }
                 IconButton(
                     onClick = { currentPage++; scale = 1f; panOffset = Offset.Zero },
                     enabled = currentPage < pageCount - 1,
-                ) { Icon(Icons.Default.KeyboardArrowRight, "Next page") }
+                ) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Next page") }
             }
         }
 

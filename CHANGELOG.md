@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-07-14
+
+### Fixed
+- FaB Classic Constructed and Silver Age format rules now show only their own specific rules instead of mixed text
+- PDF pages now render with a white background fill, fixing unreadable transparent-background documents
+- Pager snap-back during swipe gestures in the Rules tool prevented with current-page guard in LaunchedEffect
+- Deprecated Icons.Default.KeyboardArrowLeft/Right replaced with AutoMirrored variants
+- Java type mismatch warning fixed in RulesPdfSheet cachedPath null-safety
+- Rules tab row switched to ScrollableTabRow so all tab names display fully without truncation
+
+## [0.14.0] - 2026-07-14
+
+### Added
+- Flesh and Blood rules with five tabs: Setup, Turn, Victory, Field (play area layout with playmat image), and Keywords (49 keywords across 7 categories)
+- Classic Constructed and Silver Age formats for Flesh and Blood, with format-specific rules highlighted inline in Setup
+- Flesh and Blood playmat diagram image in the Field tab
+- Flesh and Blood Comprehensive Rules PDF bundled with the app
+
 ## [0.13.0] - 2026-07-14
 
 ### Added
