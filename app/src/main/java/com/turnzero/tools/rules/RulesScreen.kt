@@ -89,18 +89,20 @@ fun RulesScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = currentPageForTab.coerceIn(visibleTabs.indices)) {
+        ScrollableTabRow(
+            selectedTabIndex = currentPageForTab.coerceIn(visibleTabs.indices),
+            edgePadding = 16.dp,
+        ) {
             visibleTabs.forEachIndexed { index, tab ->
                 Tab(
                     selected = currentPageForTab == index,
                     onClick = { onSelectTab(index) },
                     text = {
-                        val selected = currentPageForTab == index
                         Text(
                             text = tab.title,
                             maxLines = 1,
                             softWrap = false,
-                            overflow = if (selected) TextOverflow.Visible else TextOverflow.Ellipsis,
+                            overflow = TextOverflow.Visible,
                         )
                     },
                 )
