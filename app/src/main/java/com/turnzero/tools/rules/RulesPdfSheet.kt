@@ -2,6 +2,8 @@ package com.turnzero.tools.rules
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import androidx.compose.foundation.Image
@@ -67,6 +69,7 @@ fun RulesPdfSheet(
             val w = (pdfPage.width * sf).toInt()
             val h = (pdfPage.height * sf).toInt()
             val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            Canvas(bmp).drawColor(Color.WHITE)
             pdfPage.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             pdfPage.close()
             bmp
