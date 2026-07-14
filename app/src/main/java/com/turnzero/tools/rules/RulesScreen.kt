@@ -3,6 +3,8 @@ package com.turnzero.tools.rules
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,13 +28,39 @@ fun RulesScreen(
     onSearchQueryChange: (String) -> Unit,
     onFilterCategory: (String?) -> Unit,
     onTogglePdf: () -> Unit,
+    onSelectPdfAsset: (String) -> Unit,
+    onDismissPdfSelector: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val config = uiState.currentConfig ?: return
 
-    if (uiState.showPdf && config.pdfAsset != null) {
+    if (uiState.showPdfSelector && config.pdfAssets != null) {
+        AlertDialog(
+            onDismissRequest = { onDismissPdfSelector() },
+            title = { Text("Choose Rules PDF") },
+            text = {
+                Column {
+                    config.pdfAssets.forEach { pdf ->
+                        TextButton(
+                            onClick = { onSelectPdfAsset(pdf.assetPath) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(pdf.name, modifier = Modifier.fillMaxWidth())
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { onDismissPdfSelector() }) { Text("Cancel") }
+            },
+        )
+        return
+    }
+
+    if (uiState.showPdf && uiState.selectedPdfAssetPath != null) {
         RulesPdfSheet(
-            assetPath = config.pdfAsset,
+            assetPath = uiState.selectedPdfAssetPath!!,
             onDismiss = onTogglePdf,
         )
         return
@@ -106,6 +135,16 @@ fun RulesScreen(
                     onSearchQueryChange = onSearchQueryChange,
                     onFilterCategory = onFilterCategory,
                 )
+                "field" -> Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp),
+                ) {
+                    ContentBlockRenderer(
+                        blocks = config.fieldContent ?: emptyList(),
+                    )
+                }
             }
         }
     }

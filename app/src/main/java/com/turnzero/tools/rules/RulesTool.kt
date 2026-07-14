@@ -33,7 +33,7 @@ class RulesTool : Tool {
     override fun TopBarActions(): @Composable RowScope.() -> Unit {
         val viewModel: RulesViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-        val hasPdf = uiState.currentConfig?.pdfAsset != null
+        val hasPdf = uiState.hasPdf
         val configs = uiState.configs
         val selectedIndex = uiState.selectedRulesetIndex
 
@@ -98,6 +98,8 @@ class RulesTool : Tool {
             onSearchQueryChange = viewModel::setSearchQuery,
             onFilterCategory = viewModel::filterCategory,
             onTogglePdf = viewModel::togglePdf,
+            onSelectPdfAsset = viewModel::selectPdfAsset,
+            onDismissPdfSelector = viewModel::dismissPdfSelector,
         )
     }
 
