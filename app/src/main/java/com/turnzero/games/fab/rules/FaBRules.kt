@@ -30,13 +30,12 @@ object FaBRules {
         ),
     )
 
-    private val ccSetup = listOf(
+    private val baseSetupStart = listOf(
         RuleStep(
             "Reveal Heroes",
             "Each player places their hero card face-up in their hero zone.",
             listOf(
                 p("Your hero determines your class, talents, life total, and intellect (cards drawn at end of turn)."),
-                p("In Classic Constructed, you must use a non-young hero. In Silver Age, you must use a young hero."),
             ),
         ),
         RuleStep(
@@ -54,15 +53,27 @@ object FaBRules {
                 p("Your choice stays hidden until the game begins."),
             ),
         ),
-        RuleStep(
-            "Build Your Deck",
-            "Select your starting deck from the remaining cards.",
-            listOf(
-                p("In Classic Constructed: Choose at least 60 cards from your 80-card card-pool to form your deck. You may include up to 3 copies of each unique card (same name AND color)."),
-                p("In Silver Age: Use exactly 40 cards from your 55-card card-pool. All cards must be common, rare, or basic rarity. You may include up to 2 copies of each unique card."),
-                p("Unused cards become your inventory — you can swap between games in a match."),
-            ),
+    )
+
+    private val ccDeckBuild = RuleStep(
+        "Build Your Deck",
+        "Select at least 60 cards from your 80-card card-pool to form your deck.",
+        listOf(
+            p("You must use a non-young hero. You may include up to 3 copies of each unique card (same name AND color). Unused cards become your inventory — you can swap between games in a match."),
+            p("Cards must match your hero's class and talents. Generic cards can go in any deck."),
         ),
+    )
+
+    private val sageDeckBuild = RuleStep(
+        "Build Your Deck",
+        "Select exactly 40 cards from your 55-card card-pool to form your deck.",
+        listOf(
+            p("You must use a young hero. All cards must be common, rare, or basic rarity. You may include up to 2 copies of each unique card (same name AND color). Unused cards become your inventory."),
+            p("Cards must match your hero's class and talents. Generic cards can go in any deck."),
+        ),
+    )
+
+    private val setupEnd = listOf(
         RuleStep(
             "Shuffle & Cut",
             "Shuffle your deck and present it to your opponent to shuffle or cut.",
@@ -80,10 +91,8 @@ object FaBRules {
         ),
     )
 
-    private val cardPoolNote = listOf(
-        p("Cards in your card-pool must match your hero's class and talents. Generic cards can go in any deck. Class/talent cards can only be included if your hero shares that class/talent."),
-        p("In Classic Constructed, your card-pool is 80 cards with a 60+ card deck. In Silver Age, it's 55 cards with exactly a 40-card deck."),
-    )
+    private val ccSetup = baseSetupStart + ccDeckBuild + setupEnd
+    private val sageSetup = baseSetupStart + sageDeckBuild + setupEnd
 
     private val turnStructure = listOf(
         RuleStep(
@@ -523,10 +532,10 @@ object FaBRules {
             rulesetName = "Classic Constructed",
             setup = ccSetup + listOf(
                 RuleStep(
-                    "Card-Pool Rules",
-                    "Your deck, equipment, and weapons come from your card-pool.",
-                    cardPoolNote + listOf(
-                        p("Classic Constructed: 80-card card-pool, minimum 60-card deck. Up to 3 copies of each unique card. 55-minute rounds, best of 1."),
+                    "Match Format",
+                    "55-minute rounds, best of 1.",
+                    listOf(
+                        p("Classic Constructed tournaments use best-of-1 matches with 55-minute rounds. If time expires, the turn player finishes their turn plus one additional turn. If still no winner, the game is a draw."),
                     ),
                 ),
             ),
@@ -541,12 +550,12 @@ object FaBRules {
         RulesConfig(
             rulesetId = "silver-age",
             rulesetName = "Silver Age",
-            setup = ccSetup + listOf(
+            setup = sageSetup + listOf(
                 RuleStep(
-                    "Card-Pool Rules",
-                    "Your deck, equipment, and weapons come from your card-pool.",
-                    cardPoolNote + listOf(
-                        p("Silver Age: 55-card card-pool, exactly 40-card deck. Only common, rare, and basic rarity cards allowed. Up to 2 copies of each unique card. 35-minute rounds, best of 1."),
+                    "Match Format",
+                    "35-minute rounds, best of 1.",
+                    listOf(
+                        p("Silver Age tournaments use best-of-1 matches with 35-minute rounds. If time expires, the turn player finishes their turn plus one additional turn. If still no winner, the game is a draw."),
                     ),
                 ),
             ),
