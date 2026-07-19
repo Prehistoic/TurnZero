@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2025-07-19
+
+### Added
+- One Piece Card Game rules with five tabs: Setup, Turn, Victory, Field (play area layout with official diagram), and Keywords (22 keywords across 6 categories)
+- Official One Piece TCG Rule Manual and Comprehensive Rules PDFs bundled with the app
+- Play area diagram extracted from the official rule manual displayed in the Field tab
+- Detailed Battle flow in the Turn tab with five numbered sub-steps (Attack Declaration, Block, Counter, Damage, End of Battle)
+
 ## [0.14.1] - 2026-07-14
 
 ### Fixed
