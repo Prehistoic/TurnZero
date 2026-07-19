@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object SwuRules {
 
@@ -14,21 +14,21 @@ object SwuRules {
     private fun bl(items: List<String>) = ContentBlock.BulletList(items)
 
     private val victory = listOf(
-        WinCondition(
+        InfoCard(
             "Reduce the Enemy Base to 0 HP",
             listOf(
                 p("Each base starts with 30 HP. Deal enough damage to the enemy base to reduce it to 0 HP and you win the game."),
                 p("If both bases reach 0 HP at the same time, the game is a draw."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Empty Deck",
             listOf(
                 p("If you run out of cards in your deck, you keep playing. Each time you would draw a card from an empty deck, you instead deal 3 damage to your base per card."),
                 p("For example, drawing 2 cards during the regroup phase with an empty deck deals 6 damage to your base."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Concession",
             listOf(
                 p("You may concede at any time. Simply announce that you concede and you lose immediately."),
@@ -244,6 +244,31 @@ object SwuRules {
         ),
     )
 
+    private val deckRules = listOf(
+        InfoCard(
+            "Card Limits",
+            listOf(
+                p("Minimum 50 cards (no maximum limit) in Premier/Eternal format."),
+                p("Exactly 1 Leader and 1 Base — these exist alongside your deck and don't count toward the minimum."),
+                p("Up to 3 copies of any unit, event, or upgrade card."),
+            ),
+        ),
+        InfoCard(
+            "Aspect Rules",
+            listOf(
+                p("You may include cards of ANY aspect in your deck, regardless of your Leader and Base aspects."),
+                p("When playing a card with aspect icons beyond those provided by your Leader and Base, you must pay 2 extra resources per unmatched icon — this is the \"aspect penalty.\""),
+                p("Neutral cards (gray border, no aspect icons) never incur the aspect penalty."),
+            ),
+        ),
+        InfoCard(
+            "Sideboard",
+            listOf(
+                p("Up to 10 cards to swap between games in a match."),
+            ),
+        ),
+    )
+
     private val fieldContent = listOf(
         sh("Play Area Layout"),
         p("Your play area is arranged as follows:"),
@@ -273,10 +298,11 @@ object SwuRules {
             rulesetId = "v8-comprehensive",
             rulesetName = "v8.0 - Comprehensive",
             setup = setup,
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
             fieldContent = fieldContent,
+            deckRules = deckRules,
             pdfAssets = listOf(
                 PdfAsset("Quickstart Rules", "rulebooks/swu-quickstart.pdf"),
                 PdfAsset("Comprehensive Rules 8.0", "rulebooks/swu-comprehensive-v8.pdf"),

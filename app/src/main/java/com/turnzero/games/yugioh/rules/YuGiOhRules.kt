@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object YuGiOhRules {
 
@@ -14,9 +14,9 @@ object YuGiOhRules {
     private fun bl(items: List<String>) = ContentBlock.BulletList(items)
 
     private val victory = listOf(
-        WinCondition("Reduce LP to 0", listOf(p("Each player starts with 8000 Life Points. Reduce your opponent's LP to 0 through battle damage and effect damage to win."))),
-        WinCondition("Deck Out", listOf(p("If a player is unable to draw a card from their Main Deck when required, they lose the Duel."))),
-        WinCondition("Alternative Win Conditions", listOf(p("Some cards have effects that declare an automatic win when their conditions are met (e.g., Exodia the Forbidden One, Final Countdown)."))),
+        InfoCard("Reduce LP to 0", listOf(p("Each player starts with 8000 Life Points. Reduce your opponent's LP to 0 through battle damage and effect damage to win."))),
+        InfoCard("Deck Out", listOf(p("If a player is unable to draw a card from their Main Deck when required, they lose the Duel."))),
+        InfoCard("Alternative Win Conditions", listOf(p("Some cards have effects that declare an automatic win when their conditions are met (e.g., Exodia the Forbidden One, Final Countdown)."))),
     )
 
     private val coreKeywords = listOf(
@@ -145,15 +145,6 @@ object YuGiOhRules {
     )
 
     private fun makeSetup(firstTurnDraws: Boolean) = listOf(
-        RuleStep(
-            "Prepare Your Deck",
-            "Your Main Deck must contain 40 to 60 cards.",
-            listOf(
-                p("Your Deck must have at least 40 cards. Try to keep your Deck close to the 40-card minimum."),
-                p("You can have up to 3 copies of any card in your Deck."),
-                p("Some cards are Forbidden or Limited in official tournaments."),
-            ),
-        ),
         RuleStep(
             "Shuffle & Cut",
             "Both players shuffle their decks, then the opponent may cut.",
@@ -340,12 +331,127 @@ object YuGiOhRules {
         Keyword("PSCT Structure", listOf(p("Problem Solving Card Text uses punctuation to indicate timing:"), bl(listOf("Before colon (:) = activation conditions", "Before semi-colon (;) = actions at activation (costs, targeting)", "After semi-colon = effect at resolution"))), "Core Mechanics"),
     )
 
+    private val v56DeckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("Minimum 40 cards (no upper limit)."),
+                p("Max 3 copies of any card (Main Deck + Side Deck combined)."),
+            ),
+        ),
+        InfoCard(
+            "Fusion Deck",
+            listOf(
+                p("Contains only Fusion Monsters."),
+                p("No size limit — you may include as many Fusion Monsters as you want."),
+                p("Cards in the Fusion Deck are not counted toward the 40-card minimum."),
+                p("Max 3 copies of the same card."),
+            ),
+        ),
+        InfoCard(
+            "Side Deck",
+            listOf(
+                p("Exactly 15 cards."),
+                p("Swap cards between Side Deck and Main Deck between Duels in a Match."),
+                p("Must remain exactly 15 cards after swapping."),
+            ),
+        ),
+    )
+
+    private val v7DeckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("40 to 60 cards."),
+                p("Max 3 copies of any card (Main Deck + Extra Deck + Side Deck combined)."),
+            ),
+        ),
+        InfoCard(
+            "Extra Deck",
+            listOf(
+                p("0 to 15 cards."),
+                p("Contains Synchro Monsters and Fusion Monsters."),
+                p("Not counted toward the 40-card minimum."),
+            ),
+        ),
+        InfoCard(
+            "Side Deck",
+            listOf(
+                p("0 to 15 cards."),
+                p("Swap cards between Side Deck, Main Deck, and Extra Deck between Duels."),
+            ),
+        ),
+    )
+
+    private val v8DeckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("40 to 60 cards."),
+                p("Max 3 copies of any card (Main Deck + Extra Deck + Side Deck combined)."),
+            ),
+        ),
+        InfoCard(
+            "Extra Deck",
+            listOf(
+                p("0 to 15 cards."),
+                p("Contains Xyz Monsters, Synchro Monsters, and Fusion Monsters."),
+            ),
+        ),
+        InfoCard(
+            "Side Deck",
+            listOf(p("0 to 15 cards.")),
+        ),
+    )
+
+    private val v9DeckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("40 to 60 cards."),
+                p("Max 3 copies of any card (Main Deck + Extra Deck + Side Deck combined)."),
+            ),
+        ),
+        InfoCard(
+            "Extra Deck",
+            listOf(
+                p("0 to 15 cards."),
+                p("Contains Pendulum Monsters (face-up), Xyz, Synchro, and Fusion Monsters."),
+            ),
+        ),
+        InfoCard(
+            "Side Deck",
+            listOf(p("0 to 15 cards.")),
+        ),
+    )
+
+    private val v10DeckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("40 to 60 cards."),
+                p("Max 3 copies of any card (Main Deck + Extra Deck + Side Deck combined)."),
+            ),
+        ),
+        InfoCard(
+            "Extra Deck",
+            listOf(
+                p("0 to 15 cards."),
+                p("Contains Link Monsters, Pendulum Monsters (face-up), Xyz, Synchro, and Fusion Monsters."),
+            ),
+        ),
+        InfoCard(
+            "Side Deck",
+            listOf(p("0 to 15 cards.")),
+        ),
+    )
+
     val configs: List<RulesConfig> = listOf(
-        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf"))),
-        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf"))),
-        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v7-5ds.pdf"))),
-        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v8-zexal.pdf"))),
-        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v9-arcv.pdf"))),
-        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v10-vrains.pdf"))),
+        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf")), deckRules = v56DeckRules),
+        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf")), deckRules = v56DeckRules),
+        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v7-5ds.pdf")), deckRules = v7DeckRules),
+        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v8-zexal.pdf")), deckRules = v8DeckRules),
+        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v9-arcv.pdf")), deckRules = v9DeckRules),
+        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v10-vrains.pdf")), deckRules = v10DeckRules),
     )
 }

@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RulesVictoryTab(
-    winCons: List<WinCondition>,
+    cards: List<InfoCard>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -23,7 +23,7 @@ fun RulesVictoryTab(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        for (condition in winCons) {
+        for (card in cards) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 border = BorderStroke(
@@ -38,13 +38,13 @@ fun RulesVictoryTab(
                     modifier = Modifier.padding(16.dp),
                 ) {
                     Text(
-                        text = condition.title,
+                        text = card.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Spacer(Modifier.height(4.dp))
                     ContentBlockRenderer(
-                        blocks = condition.contents,
+                        blocks = card.contents,
                     )
                 }
             }

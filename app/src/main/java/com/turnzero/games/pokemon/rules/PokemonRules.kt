@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object PokemonRules {
 
@@ -15,28 +15,28 @@ object PokemonRules {
     private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
-        WinCondition(
+        InfoCard(
             "Take All Prize Cards",
             listOf(
                 p("Each player starts with 6 face-down Prize cards. Every time you Knock Out an opponent's Pokemon, you take 1 Prize card into your hand (2 for Pokemon ex/V/GX, 3 for VMAX/TAG TEAM/Mega ex)."),
                 p("The first player to take all 6 of their Prize cards wins the game. This is the primary win condition."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "No Pokemon in Play",
             listOf(
                 p("If your opponent has no Pokemon left in play (no Active Pokemon and no Benched Pokemon), you immediately win the game."),
                 p("This typically happens when their last Pokemon is Knocked Out and they have no Bench replacements."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Empty Deck at Start of Turn",
             listOf(
                 p("If your opponent has no cards left in their deck at the beginning of their turn and cannot draw a card, you win the game."),
                 p("Note: losing the ability to draw due to a card effect during your turn does not cause a loss."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Concession",
             listOf(
                 p("Either player may concede at any time. Announce your concession and you lose immediately."),
@@ -47,9 +47,8 @@ object PokemonRules {
     private val setup = listOf(
         RuleStep(
             "Shuffle & Determine First Player",
-            "Shuffle your 60-card deck. Flip a coin — the winner decides who goes first.",
+            "Shuffle your deck. Flip a coin — the winner decides who goes first.",
             listOf(
-                p("Your deck must have exactly 60 cards. Except for Basic Energy, you can have at most 4 copies of any card with the same name."),
                 p("Flip a coin. The winner chooses to go first or second."),
             ),
         ),
@@ -154,6 +153,25 @@ object PokemonRules {
                 ),
                 p("Apply any effects from Abilities or Trainer cards that specify they happen during Pokemon Checkup."),
                 p("After both players complete checks, any Pokemon reduced to 0 HP is Knocked Out and the opponent takes a Prize card. Then the next turn begins."),
+            ),
+        ),
+    )
+
+    private val deckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("Exactly 60 cards — no more, no less."),
+                p("You may have at most 4 copies of any card with the same name. Basic Energy cards are unlimited."),
+                p("Your deck must contain at least 1 Basic Pokemon."),
+            ),
+        ),
+        InfoCard(
+            "Special Card Limits",
+            listOf(
+                p("You may have only 1 total ACE SPEC card per deck."),
+                p("You may have only 1 Radiant Pokemon per deck."),
+                p("You may have only 1 copy of each Prism Star card per deck."),
             ),
         ),
     )
@@ -452,10 +470,11 @@ object PokemonRules {
             rulesetId = "2026-standard",
             rulesetName = "2026 — Standard",
             setup = setup,
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
             fieldContent = fieldContent,
+            deckRules = deckRules,
             pdfAssets = listOf(
                 PdfAsset("Official Rulebook", "rulebooks/pokemon-rulebook.pdf"),
             ),

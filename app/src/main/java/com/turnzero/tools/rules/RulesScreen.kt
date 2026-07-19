@@ -127,7 +127,10 @@ fun RulesScreen(
                     onToggle = onToggleStep,
                 )
                 "victory" -> RulesVictoryTab(
-                    winCons = config.winCons,
+                    cards = config.victoryRules,
+                )
+                "deck" -> RulesVictoryTab(
+                    cards = config.deckRules ?: emptyList(),
                 )
                 "keywords" -> RulesKeywordsTab(
                     keywords = uiState.filteredKeywords,

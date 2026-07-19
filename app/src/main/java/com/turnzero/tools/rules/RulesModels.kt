@@ -11,11 +11,12 @@ data class RulesConfig(
     val rulesetId: String,
     val rulesetName: String,
     val setup: List<RuleStep>,
-    val winCons: List<WinCondition>,
+    val victoryRules: List<InfoCard>,
     val playSequence: List<RuleStep>,
     val keywords: List<Keyword>? = null,
     val pdfAssets: List<PdfAsset>? = null,
     val fieldContent: List<ContentBlock>? = null,
+    val deckRules: List<InfoCard>? = null,
 )
 
 data class RuleStep(
@@ -24,7 +25,7 @@ data class RuleStep(
     val contents: List<ContentBlock>,
 )
 
-data class WinCondition(
+data class InfoCard(
     val title: String,
     val contents: List<ContentBlock>,
 )
@@ -59,6 +60,7 @@ data class RulesUiState(
     val showPdf: Boolean = false,
     val showPdfSelector: Boolean = false,
     val selectedPdfAssetPath: String? = null,
+    val previousTabIndex: Int? = null,
     val isLoading: Boolean = true,
     val showOptionsSheet: Boolean = false,
     val defaultRulesetIndex: Int = 0,
@@ -79,6 +81,9 @@ data class RulesUiState(
                 add(TabInfo("setup", "Setup"))
                 add(TabInfo("turn", "Turn"))
                 add(TabInfo("victory", "Victory"))
+                if (!config.deckRules.isNullOrEmpty()) {
+                    add(TabInfo("deck", "Deck"))
+                }
                 if (!config.fieldContent.isNullOrEmpty()) {
                     add(TabInfo("field", "Field"))
                 }

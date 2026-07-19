@@ -50,15 +50,20 @@ class RulesViewModel @Inject constructor(
     }
 
     fun selectRuleset(index: Int) {
+        val current = _uiState.value
+        val newConfig = current.configs.getOrNull(index)
+        val visibleTabs = newConfig?.let { computeVisibleTabCount(it) } ?: 0
+        val clampedTab = current.selectedTabIndex.coerceAtMost(visibleTabs - 1).coerceAtLeast(0)
         _uiState.update {
             it.copy(
                 selectedRulesetIndex = index,
-                selectedTabIndex = 0,
+                selectedTabIndex = clampedTab,
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
                 keywordSearchQuery = "",
                 selectedKeywordCategory = null,
                 showPdf = false,
+                previousTabIndex = null,
             )
         }
     }
@@ -121,23 +126,44 @@ class RulesViewModel @Inject constructor(
     fun togglePdf() {
         val current = _uiState.value
         if (current.showPdf) {
-            _uiState.update { it.copy(showPdf = false, selectedPdfAssetPath = null) }
+            _uiState.update {
+                it.copy(
+                    showPdf = false,
+                    selectedPdfAssetPath = null,
+                    selectedTabIndex = it.previousTabIndex ?: 0,
+                    previousTabIndex = null,
+                )
+            }
             return
         }
         val pdfs = current.currentConfig?.pdfAssets ?: return
         if (pdfs.size == 1) {
-            _uiState.update { it.copy(showPdf = true, selectedPdfAssetPath = pdfs.first().assetPath) }
+            _uiState.update {
+                it.copy(
+                    showPdf = true,
+                    selectedPdfAssetPath = pdfs.first().assetPath,
+                    previousTabIndex = it.selectedTabIndex,
+                )
+            }
         } else {
             _uiState.update { it.copy(showPdfSelector = true) }
         }
     }
 
     fun selectPdfAsset(path: String) {
-        _uiState.update { it.copy(showPdfSelector = false, showPdf = true, selectedPdfAssetPath = path) }
+        val current = _uiState.value
+        _uiState.update {
+            it.copy(
+                showPdfSelector = false,
+                showPdf = true,
+                selectedPdfAssetPath = path,
+                previousTabIndex = it.selectedTabIndex,
+            )
+        }
     }
 
     fun dismissPdfSelector() {
-        _uiState.update { it.copy(showPdfSelector = false, selectedTabIndex = 0) }
+        _uiState.update { it.copy(showPdfSelector = false) }
     }
 
     fun toggleOptionsSheet() {
@@ -150,16 +176,28 @@ class RulesViewModel @Inject constructor(
                 prefs[UserPreferences.RULES_DEFAULT_RULESET] = index.toString()
             }
         }
+        val current = _uiState.value
+        val newConfig = current.configs.getOrNull(index)
+        val visibleTabs = newConfig?.let { computeVisibleTabCount(it) } ?: 0
+        val clampedTab = current.selectedTabIndex.coerceAtMost(visibleTabs - 1).coerceAtLeast(0)
         _uiState.update {
             it.copy(
                 defaultRulesetIndex = index,
                 selectedRulesetIndex = index,
-                selectedTabIndex = 0,
+                selectedTabIndex = clampedTab,
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
                 keywordSearchQuery = "",
                 selectedKeywordCategory = null,
             )
         }
+    }
+
+    private fun computeVisibleTabCount(config: RulesConfig): Int {
+        var count = 3
+        if (!config.deckRules.isNullOrEmpty()) count++
+        if (!config.fieldContent.isNullOrEmpty()) count++
+        if (!config.keywords.isNullOrEmpty()) count++
+        return count
     }
 }

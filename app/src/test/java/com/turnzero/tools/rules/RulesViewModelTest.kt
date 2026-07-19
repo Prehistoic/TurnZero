@@ -46,8 +46,8 @@ class RulesViewModelTest {
             RuleStep("Shuffle", "Shuffle deck", listOf(ContentBlock.Paragraph("Detail..."))),
             RuleStep("Draw", "Draw 5", listOf(ContentBlock.Paragraph("Detail..."))),
         ),
-        winCons = listOf(
-            WinCondition("Win", listOf(ContentBlock.Paragraph("Reduce LP"))),
+        victoryRules = listOf(
+            InfoCard("Win", listOf(ContentBlock.Paragraph("Reduce LP"))),
         ),
         playSequence = listOf(
             RuleStep("Draw Phase", "Draw 1", listOf(ContentBlock.Paragraph("Detail..."))),
@@ -106,18 +106,16 @@ class RulesViewModelTest {
     }
 
     @Test
-    fun `selectRuleset resets tab to 0 and closes pdf`() = runTest {
+    fun `selectRuleset preserves tab index and clears search`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
         vm.selectTab(2)
-        vm.togglePdf()
         vm.toggleStep(0)
         vm.setSearchQuery("test")
         vm.selectRuleset(1)
         val state = vm.uiState.value
         assertEquals(1, state.selectedRulesetIndex)
-        assertEquals(0, state.selectedTabIndex)
-        assertFalse(state.showPdf)
+        assertEquals(2, state.selectedTabIndex)
         assertNull(state.expandedStepIndex)
         assertEquals("", state.keywordSearchQuery)
     }

@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-07-19
+
+### Added
+- Deck tab in the Rules tool for all TCGs explaining deck construction rules (card counts, copy limits, extra decks, color/aspect restrictions)
+- Format-specific Yu-Gi-Oh! deck rules: v5/v6 (Fusion Deck, no size limit), v7+ (Extra Deck 0-15, 40-60 main deck)
+- Star Wars Unlimited deck rules with aspect penalty explanation (2 extra resources per off-aspect icon)
+- Flesh and Blood format-separated deck rules (Classic Constructed vs Silver Age)
+
+### Changed
+- Renamed WinCondition data class to InfoCard for reuse across Victory and Deck tabs
+- Deck tab uses the same card-box visual style as the Victory tab
+- Tab order unified across all TCGs: Setup, Turn, Victory, Deck, Field, Keywords
+- Changing ruleset format now preserves the current tab instead of resetting to the first tab
+- PDF viewer now returns to the previously active tab instead of resetting to Setup
+- Removed deck construction info from Setup steps across all games (moved to Deck tab)
+- OPTCG: removed empty "Prepare Your Decks" step from Setup
+- Digimon: renamed first Setup step to "Init Memory Gauge"
+
+### Fixed
+- SWU deck construction rules were completely missing (now properly documented with aspect penalty rules)
+- FaB deck construction rules now separated by format instead of showing both in all formats
+
 ## [0.16.0] - 2026-07-19
 
 ### Added
