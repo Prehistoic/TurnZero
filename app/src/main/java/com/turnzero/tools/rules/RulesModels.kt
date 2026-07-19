@@ -52,6 +52,7 @@ data class RulesUiState(
     val gameId: String = "",
     val configs: List<RulesConfig> = emptyList(),
     val selectedRulesetIndex: Int = 0,
+    val selectedRulesetId: String = "",
     val selectedTabIndex: Int = 0,
     val expandedStepIndex: Int? = null,
     val expandedKeywordIndex: Int? = null,
@@ -61,12 +62,20 @@ data class RulesUiState(
     val showPdfSelector: Boolean = false,
     val selectedPdfAssetPath: String? = null,
     val previousTabIndex: Int? = null,
+    val enabledRulesets: Set<String> = emptySet(),
     val isLoading: Boolean = true,
     val showOptionsSheet: Boolean = false,
     val defaultRulesetIndex: Int = 0,
+    val defaultRulesetId: String = "",
 ) {
     val currentConfig: RulesConfig?
         get() = configs.getOrNull(selectedRulesetIndex)
+
+    val visibleConfigs: List<RulesConfig>
+        get() {
+            if (enabledRulesets.isEmpty()) return configs
+            return configs.filter { it.rulesetId in enabledRulesets }
+        }
 
     val hasPdf: Boolean
         get() = !currentConfig?.pdfAssets.isNullOrEmpty()

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-07-19
+
+### Added
+- Magic: The Gathering rules with 9 formats (Standard, Modern, Pioneer, Legacy, Vintage, Premodern, Pauper, Commander, Duel Commander)
+- Commander-specific rules: command zone, 40 life, commander tax, commander damage, color identity, 4-player setup
+- Format visibility system: toggle which formats appear in the dropdown via Options sheet
+- Format selector now uses ruleset IDs, preserving correct selection across visible/hidden formats
+- Complete MtG keyword database: 150+ keywords across Keyword Ability, Keyword Action, and Core Concept categories
+- Field tab battlemat image for all non-Commander MtG formats
+- SWU play area diagram added to Field tab
+
+### Changed
+- All MtG keyword names use consistent angle-bracket format, alphabetically ordered
+- Each MtG format has fully self-contained rules (no cross-format references)
+- RulesViewModel selectRuleset/setDefaultRuleset now operate on ruleset IDs for correct visible format mapping
+
 ## [0.17.0] - 2026-07-19
 
 ### Added

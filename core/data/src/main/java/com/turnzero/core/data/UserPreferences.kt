@@ -29,6 +29,7 @@ object UserPreferences {
     val RULINGS_ENABLED_FORMATS = stringSetPreferencesKey("rulings_enabled_formats")
     val RULINGS_DEFAULT_FORMAT = stringPreferencesKey("rulings_default_format")
     val RULES_DEFAULT_RULESET = stringPreferencesKey("rules_default_ruleset")
+    val RULES_ENABLED_RULESETS = stringSetPreferencesKey("rules_enabled_rulesets")
 
     fun coinCountKey(gameId: String) = stringPreferencesKey("coin_count_$gameId")
 }

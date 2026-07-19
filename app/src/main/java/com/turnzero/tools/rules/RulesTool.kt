@@ -34,8 +34,8 @@ class RulesTool : Tool {
         val viewModel: RulesViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         val hasPdf = uiState.hasPdf
-        val configs = uiState.configs
-        val selectedIndex = uiState.selectedRulesetIndex
+        val configs = uiState.visibleConfigs
+        val selectedId = uiState.selectedRulesetId
 
         return {
             if (configs.size > 1) {
@@ -48,25 +48,25 @@ class RulesTool : Tool {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = configs.getOrNull(selectedIndex)?.rulesetName ?: "",
+                            text = configs.firstOrNull { it.rulesetId == selectedId }?.rulesetName ?: "",
                             style = MaterialTheme.typography.labelLarge,
                         )
                         Icon(
                             Icons.Filled.ArrowDropDown,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
+                            contentDescription = "Select format",
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {
-                        configs.forEachIndexed { index, config ->
+                        configs.forEach { config ->
                             DropdownMenuItem(
                                 text = { Text(config.rulesetName) },
                                 onClick = {
-                                    viewModel.selectRuleset(index)
                                     expanded = false
+                                    viewModel.selectRuleset(config.rulesetId)
                                 },
                             )
                         }
@@ -109,12 +109,45 @@ class RulesTool : Tool {
         val viewModel: RulesViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         val configs = uiState.configs
+        val enabledRulesets = uiState.enabledRulesets
         var expanded by remember { mutableStateOf(false) }
 
         ModalBottomSheet(onDismissRequest = onDismiss) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .padding(bottom = 32.dp),
             ) {
+                Text(
+                    text = "Visible Formats",
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Spacer(Modifier.height(8.dp))
+                configs.forEach { config ->
+                    val isEnabled = enabledRulesets.isEmpty() || config.rulesetId in enabledRulesets
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.toggleRulesetEnabled(config.rulesetId, !isEnabled)
+                            }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Checkbox(
+                            checked = isEnabled,
+                            onCheckedChange = { viewModel.toggleRulesetEnabled(config.rulesetId, it) },
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = config.rulesetName,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+                HorizontalDivider()
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = "Default Format",
                     style = MaterialTheme.typography.titleLarge,
@@ -122,7 +155,7 @@ class RulesTool : Tool {
                 Spacer(Modifier.height(12.dp))
                 Box {
                     OutlinedButton(onClick = { expanded = true }) {
-                        Text(configs.getOrNull(uiState.defaultRulesetIndex)?.rulesetName ?: "")
+                        Text(configs.firstOrNull { it.rulesetId == uiState.defaultRulesetId }?.rulesetName ?: "")
                         Spacer(Modifier.width(8.dp))
                         Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
                     }
@@ -130,11 +163,11 @@ class RulesTool : Tool {
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {
-                        configs.forEachIndexed { index, config ->
+                        configs.forEach { config ->
                             DropdownMenuItem(
                                 text = { Text(config.rulesetName) },
                                 onClick = {
-                                    viewModel.setDefaultRuleset(index)
+                                    viewModel.setDefaultRuleset(config.rulesetId)
                                     expanded = false
                                 },
                             )

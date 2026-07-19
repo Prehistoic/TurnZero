@@ -12,6 +12,7 @@ object SwuRules {
     private fun p(text: String) = ContentBlock.Paragraph(text)
     private fun sh(text: String) = ContentBlock.SubHeading(text)
     private fun bl(items: List<String>) = ContentBlock.BulletList(items)
+    private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
         InfoCard(
@@ -270,6 +271,7 @@ object SwuRules {
     )
 
     private val fieldContent = listOf(
+        img("rulebooks/images/swu-field.png"),
         sh("Play Area Layout"),
         p("Your play area is arranged as follows:"),
         bl(
