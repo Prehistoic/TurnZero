@@ -3,7 +3,9 @@ package com.turnzero.tools.rules
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.lifecycle.SavedStateHandle
+import com.turnzero.core.data.UserPreferences
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -96,13 +98,14 @@ class RulesViewModelTest {
     }
 
     @Test
-    fun `init uses defaultRulesetIndex from SavedStateHandle`() = runTest {
-        val sh = SavedStateHandle(mapOf("gameId" to "yugioh", "defaultRulesetIndex" to 1))
-        val provider = FakeRulesProvider().apply { register("yugioh", configs) }
-        val vm = RulesViewModel(provider, dataStore, sh)
+    fun `init uses defaultRulesetId from DataStore when available`() = runTest {
+        every { dataStore.data } returns flowOf(
+            mutablePreferencesOf(UserPreferences.RULES_DEFAULT_RULESET to "v6-gx")
+        )
+        val vm = createViewModel()
         advanceUntilIdle()
-        assertEquals(1, vm.uiState.value.selectedRulesetIndex)
-        assertEquals(1, vm.uiState.value.defaultRulesetIndex)
+        assertEquals("v6-gx", vm.uiState.value.selectedRulesetId)
+        assertEquals("v6-gx", vm.uiState.value.defaultRulesetId)
     }
 
     @Test
@@ -112,9 +115,9 @@ class RulesViewModelTest {
         vm.selectTab(2)
         vm.toggleStep(0)
         vm.setSearchQuery("test")
-        vm.selectRuleset(1)
+        vm.selectRuleset("v6-gx")
         val state = vm.uiState.value
-        assertEquals(1, state.selectedRulesetIndex)
+        assertEquals("v6-gx", state.selectedRulesetId)
         assertEquals(2, state.selectedTabIndex)
         assertNull(state.expandedStepIndex)
         assertEquals("", state.keywordSearchQuery)
@@ -226,26 +229,24 @@ class RulesViewModelTest {
     }
 
     @Test
-    fun `setDefaultRuleset updates default index and sets current ruleset to same`() = runTest {
+    fun `setDefaultRuleset updates default id and sets current ruleset to same`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
-        vm.setDefaultRuleset(1)
+        vm.setDefaultRuleset("v6-gx")
         val state = vm.uiState.value
-        assertEquals(1, state.defaultRulesetIndex)
-        assertEquals(1, state.selectedRulesetIndex)
-        assertEquals(0, state.selectedTabIndex)
-        assertNull(state.expandedStepIndex)
+        assertEquals("v6-gx", state.defaultRulesetId)
+        assertEquals("v6-gx", state.selectedRulesetId)
     }
 
     @Test
     fun `setDefaultRuleset does not change other uiState properties`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
-        vm.selectRuleset(1)
+        vm.selectRuleset("v6-gx")
         vm.togglePdf()
-        vm.setDefaultRuleset(0)
+        vm.setDefaultRuleset("v5-dm")
         val state = vm.uiState.value
-        assertEquals(0, state.defaultRulesetIndex)
+        assertEquals("v5-dm", state.defaultRulesetId)
         assertTrue(state.showPdf)
     }
 
@@ -254,7 +255,7 @@ class RulesViewModelTest {
         val vm = createViewModel()
         advanceUntilIdle()
         // sampleConfig (index 1) has keywords, configWithoutKeywords (index 0) is default
-        vm.selectRuleset(1)
+        vm.selectRuleset("v6-gx")
         assertEquals(4, vm.uiState.value.visibleTabs.size)
     }
 

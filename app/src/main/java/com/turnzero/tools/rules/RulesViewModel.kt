@@ -34,29 +34,42 @@ class RulesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val configs = rulesProvider.getConfigs(gameId)
-            val savedDefaultIndex = dataStore.data.map { it[UserPreferences.RULES_DEFAULT_RULESET] }
-                .first()?.toIntOrNull()
-                ?: savedStateHandle.get<Int>("defaultRulesetIndex") ?: 0
-            val clampedIndex = savedDefaultIndex.coerceIn(0, (configs.size - 1).coerceAtLeast(0))
+            val savedDefaultId = dataStore.data.map { it[UserPreferences.RULES_DEFAULT_RULESET] }
+                .first()
+            val enabledRulesets = dataStore.data.map { it[UserPreferences.RULES_ENABLED_RULESETS] }
+                .first()?.let { loaded ->
+                    if (loaded.isEmpty()) defaultEnabledRulesets(gameId, configs) else loaded
+                } ?: defaultEnabledRulesets(gameId, configs)
+            val visibleIds = computeVisibleIds(configs, enabledRulesets)
+            val selectedId = if (savedDefaultId != null && savedDefaultId in visibleIds) {
+                savedDefaultId
+            } else {
+                visibleIds.firstOrNull() ?: ""
+            }
+            val selectedIndex = configs.indexOfFirst { it.rulesetId == selectedId }.coerceAtLeast(0)
             _uiState.update {
                 it.copy(
                     configs = configs,
                     isLoading = configs.isEmpty(),
-                    selectedRulesetIndex = clampedIndex,
-                    defaultRulesetIndex = clampedIndex,
+                    selectedRulesetId = selectedId,
+                    selectedRulesetIndex = selectedIndex,
+                    defaultRulesetId = selectedId,
+                    enabledRulesets = enabledRulesets,
                 )
             }
         }
     }
 
-    fun selectRuleset(index: Int) {
+    fun selectRuleset(rulesetId: String) {
         val current = _uiState.value
-        val newConfig = current.configs.getOrNull(index)
-        val visibleTabs = newConfig?.let { computeVisibleTabCount(it) } ?: 0
+        val newConfig = current.configs.firstOrNull { it.rulesetId == rulesetId } ?: return
+        val newIndex = current.configs.indexOf(newConfig)
+        val visibleTabs = computeVisibleTabCount(newConfig)
         val clampedTab = current.selectedTabIndex.coerceAtMost(visibleTabs - 1).coerceAtLeast(0)
         _uiState.update {
             it.copy(
-                selectedRulesetIndex = index,
+                selectedRulesetId = rulesetId,
+                selectedRulesetIndex = newIndex,
                 selectedTabIndex = clampedTab,
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
@@ -151,7 +164,6 @@ class RulesViewModel @Inject constructor(
     }
 
     fun selectPdfAsset(path: String) {
-        val current = _uiState.value
         _uiState.update {
             it.copy(
                 showPdfSelector = false,
@@ -170,21 +182,55 @@ class RulesViewModel @Inject constructor(
         _uiState.update { it.copy(showOptionsSheet = !it.showOptionsSheet) }
     }
 
-    fun setDefaultRuleset(index: Int) {
+    fun setDefaultRuleset(rulesetId: String) {
         viewModelScope.launch {
             dataStore.edit { prefs ->
-                prefs[UserPreferences.RULES_DEFAULT_RULESET] = index.toString()
+                prefs[UserPreferences.RULES_DEFAULT_RULESET] = rulesetId
             }
         }
         val current = _uiState.value
-        val newConfig = current.configs.getOrNull(index)
-        val visibleTabs = newConfig?.let { computeVisibleTabCount(it) } ?: 0
+        val newConfig = current.configs.firstOrNull { it.rulesetId == rulesetId } ?: return
+        val newIndex = current.configs.indexOf(newConfig)
+        val visibleTabs = computeVisibleTabCount(newConfig)
         val clampedTab = current.selectedTabIndex.coerceAtMost(visibleTabs - 1).coerceAtLeast(0)
         _uiState.update {
             it.copy(
-                defaultRulesetIndex = index,
-                selectedRulesetIndex = index,
+                defaultRulesetId = rulesetId,
+                selectedRulesetId = rulesetId,
+                selectedRulesetIndex = newIndex,
                 selectedTabIndex = clampedTab,
+                expandedStepIndex = null,
+                expandedKeywordIndex = null,
+                keywordSearchQuery = "",
+                selectedKeywordCategory = null,
+            )
+        }
+    }
+
+    fun toggleRulesetEnabled(rulesetId: String, enabled: Boolean) {
+        val current = _uiState.value
+        val newEnabled = if (enabled) {
+            current.enabledRulesets + rulesetId
+        } else {
+            current.enabledRulesets - rulesetId
+        }
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[UserPreferences.RULES_ENABLED_RULESETS] = newEnabled
+            }
+        }
+        val visibleIds = computeVisibleIds(current.configs, newEnabled)
+        val selectedId = if (current.selectedRulesetId in visibleIds) {
+            current.selectedRulesetId
+        } else {
+            visibleIds.firstOrNull() ?: ""
+        }
+        val selectedIndex = current.configs.indexOfFirst { it.rulesetId == selectedId }.coerceAtLeast(0)
+        _uiState.update {
+            it.copy(
+                enabledRulesets = newEnabled,
+                selectedRulesetId = selectedId,
+                selectedRulesetIndex = selectedIndex,
                 expandedStepIndex = null,
                 expandedKeywordIndex = null,
                 keywordSearchQuery = "",
@@ -199,5 +245,17 @@ class RulesViewModel @Inject constructor(
         if (!config.fieldContent.isNullOrEmpty()) count++
         if (!config.keywords.isNullOrEmpty()) count++
         return count
+    }
+
+    private fun computeVisibleIds(configs: List<RulesConfig>, enabled: Set<String>): List<String> {
+        if (enabled.isEmpty()) return configs.map { it.rulesetId }
+        return configs.filter { it.rulesetId in enabled }.map { it.rulesetId }
+    }
+
+    private fun defaultEnabledRulesets(gameId: String, configs: List<RulesConfig>): Set<String> {
+        return when (gameId) {
+            "mtg" -> setOf("standard", "modern", "commander", "duel-commander")
+            else -> configs.map { it.rulesetId }.toSet()
+        }
     }
 }
