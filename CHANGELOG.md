@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-07-19
+
+### Added
+- Digimon Card Game rules with five tabs: Setup, Turn, Victory, Field (play area layout with official diagram), and Keywords (67 keywords across 9 categories)
+- Digimon TCG Comprehensive Rules Manual and Official Rule Manual PDFs bundled with the app, with multi-PDF selector popup
+- Pokemon TCG rules with five tabs: Setup, Turn, Victory, Field (play area layout with official playmat), and Keywords (37 keywords across 5 categories)
+- Pokemon TCG rulebook PDF bundled with the app
+- Ace cards, DNA Digivolution, DigiXros, Assembly, and all Special Conditions covered in respective keyword tabs
+- Play area diagrams extracted from official rulebooks for both Digimon and Pokemon
+
+### Changed
+- All Digimon keywords now consistently use angle-bracket format and are alphabetically ordered
+- One Piece TCG Setup and Turn step summaries now concisely mirror their detailed content
+
 ## [0.15.0] - 2025-07-19
 
 ### Added
