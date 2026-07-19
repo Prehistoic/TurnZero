@@ -2,6 +2,7 @@ package com.turnzero
 
 import android.app.Application
 import com.turnzero.games.fab.rules.FaBRules
+import com.turnzero.games.onepiece.rules.OnePieceRules
 import com.turnzero.games.swu.rules.SwuRules
 import com.turnzero.games.yugioh.rules.YuGiOhRules
 import com.turnzero.tools.rules.InMemoryRulesProvider
@@ -20,5 +21,6 @@ class TZApplication : Application() {
         rulesProvider.register("yugioh", YuGiOhRules.configs)
         rulesProvider.register("swu", SwuRules.configs)
         rulesProvider.register("fab", FaBRules.configs)
+        rulesProvider.register("onepiece", OnePieceRules.configs)
     }
 }
