@@ -212,7 +212,9 @@ class RulesViewModel @Inject constructor(
         val newEnabled = if (enabled) {
             current.enabledRulesets + rulesetId
         } else {
-            current.enabledRulesets - rulesetId
+            val afterDisable = current.enabledRulesets - rulesetId
+            if (afterDisable.isEmpty()) return
+            afterDisable
         }
         viewModelScope.launch {
             dataStore.edit { prefs ->
@@ -253,9 +255,6 @@ class RulesViewModel @Inject constructor(
     }
 
     private fun defaultEnabledRulesets(gameId: String, configs: List<RulesConfig>): Set<String> {
-        return when (gameId) {
-            "mtg" -> setOf("standard", "modern", "commander", "duel-commander")
-            else -> configs.map { it.rulesetId }.toSet()
-        }
+        return configs.map { it.rulesetId }.toSet()
     }
 }
