@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object DigimonRules {
 
@@ -15,27 +15,27 @@ object DigimonRules {
     private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
-        WinCondition(
+        InfoCard(
             "Attack With Zero Security",
             listOf(
                 p("When your Digimon attacks your opponent directly and their security stack has 0 cards, your attack is successful and you win the game."),
                 p("This is the primary win condition — reduce the opponent's security to zero, then land one more attack."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Empty Deck",
             listOf(
                 p("If a player has 0 cards in their deck and cannot draw during their draw phase, they lose the game."),
                 p("This is checked continuously — once a player's deck runs out, they meet a defeat condition."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Card Effect",
             listOf(
                 p("Some card effects can cause a player to win or lose the game. When such an effect resolves, the game ends accordingly."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Concession",
             listOf(
                 p("Either player may declare a forfeit at any time. The conceding player immediately loses."),
@@ -46,14 +46,10 @@ object DigimonRules {
 
     private val setup = listOf(
         RuleStep(
-            "Prepare Your Decks",
-            "Gather your 50-card deck, 0–5 card Digi-Egg deck, memory gauge, and marker.",
+            "Init Memory Gauge",
+            "Set up the memory gauge between players.",
             listOf(
-                p("Your main deck must contain exactly 50 cards made up of Digimon, Tamer, and Option cards."),
-                p("You can include up to 4 copies of the same card (by card number)."),
-                p("Your Digi-Egg deck can have between 0 and 5 cards — it can even start empty."),
                 p("Set the memory gauge between both players with the marker starting at 0 in the center. The left side is your memory, the right side is your opponent's. Memory can never exceed 10."),
-                p("Place the Index (quick reference guide for keyword effects) to the side of your play area, away from your other cards."),
             ),
         ),
         RuleStep(
@@ -186,6 +182,23 @@ object DigimonRules {
                 ),
                 p("If the memory moves to 0 or more on your side during end-of-turn processing, the turn end is postponed and the current phase continues."),
                 p("Once all end-of-turn processing is resolved, the turn passes to your opponent."),
+            ),
+        ),
+    )
+
+    private val deckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("Exactly 50 cards made up of Digimon, Tamer, and Option cards."),
+                p("You can include up to 4 copies of the same card (by card number)."),
+            ),
+        ),
+        InfoCard(
+            "Digi-Egg Deck",
+            listOf(
+                p("0 to 5 cards. As long as it has 5 or fewer cards, it can have as many cards as you like, or even be empty."),
+                p("Can include up to 4 copies of a card with the same card number."),
             ),
         ),
     )
@@ -727,10 +740,11 @@ object DigimonRules {
             rulesetId = "v4.1-comprehensive",
             rulesetName = "v4.1 — Comprehensive",
             setup = setup,
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
             fieldContent = fieldContent,
+            deckRules = deckRules,
             pdfAssets = listOf(
                 PdfAsset("Official Rule Manual", "rulebooks/digimon-rule-manual.pdf"),
                 PdfAsset("Comprehensive Rules", "rulebooks/digimon-comprehensive.pdf"),

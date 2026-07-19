@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object OnePieceRules {
 
@@ -15,21 +15,21 @@ object OnePieceRules {
     private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
-        WinCondition(
+        InfoCard(
             "Deliver the Finishing Blow",
             listOf(
                 p("If you attack your opponent's Leader and deal damage when they have 0 Life cards remaining, you win the game."),
                 p("This is the primary win condition — reduce the opponent's Life to zero, then land one final hit."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Empty Deck",
             listOf(
                 p("If a player has 0 cards in their deck, they lose the game at the next rule processing check."),
                 p("This is checked continuously — as soon as a player's deck runs out, they meet a defeat condition."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Concession",
             listOf(
                 p("Either player may concede at any time. Announce your concession and you lose immediately."),
@@ -39,16 +39,6 @@ object OnePieceRules {
     )
 
     private val setup = listOf(
-        RuleStep(
-            "Prepare Your Decks",
-            "Gather your Leader card, a 50-card main deck, and a 10-card DON!! deck.",
-            listOf(
-                p("Your main deck must contain exactly 50 cards made up of Character, Event, and Stage cards."),
-                p("All cards must include at least one color that matches your Leader card. Cards with colors outside your Leader's colors cannot be included."),
-                p("You can have no more than 4 cards with the same card number in your deck."),
-                p("Your DON!! deck must contain exactly 10 DON!! cards — these are your resource cards used to pay costs throughout the game."),
-            ),
-        ),
         RuleStep(
             "Shuffle & Place Deck",
             "Thoroughly shuffle your deck, then place it face-down in the deck area.",
@@ -200,6 +190,34 @@ object OnePieceRules {
                 p("[End of Your Opponent's Turn] effects then activate and resolve — the non-turn player chooses the order."),
                 p("Effects that last \"during this turn\" or \"until the end of the turn\" expire now."),
                 p("Your turn ends and your opponent's turn begins with their Refresh Phase."),
+            ),
+        ),
+    )
+
+    private val deckRules = listOf(
+        InfoCard(
+            "Main Deck",
+            listOf(
+                p("Exactly 50 cards made up of Character, Event, and Stage cards."),
+                p("You can have no more than 4 cards with the same card number."),
+            ),
+        ),
+        InfoCard(
+            "DON!! Deck",
+            listOf(
+                p("Exactly 10 DON!! cards — these are your resource cards used to pay costs."),
+            ),
+        ),
+        InfoCard(
+            "Leader Card",
+            listOf(
+                p("1 Leader card, separate from your main deck. Provides the colors that determine which cards can be included."),
+            ),
+        ),
+        InfoCard(
+            "Color Restrictions",
+            listOf(
+                p("All cards must include at least one color that matches your Leader card. Cards with colors outside your Leader's colors cannot be included."),
             ),
         ),
     )
@@ -407,9 +425,10 @@ object OnePieceRules {
             rulesetId = "v1.2-comprehensive",
             rulesetName = "v1.2.0 — Comprehensive",
             setup = setup,
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
+            deckRules = deckRules,
             fieldContent = fieldContent,
             pdfAssets = listOf(
                 PdfAsset("Official Rule Manual", "rulebooks/onepiece-rule-manual.pdf"),

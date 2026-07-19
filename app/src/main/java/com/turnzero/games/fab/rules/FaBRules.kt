@@ -5,7 +5,7 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
-import com.turnzero.tools.rules.WinCondition
+import com.turnzero.tools.rules.InfoCard
 
 object FaBRules {
 
@@ -15,14 +15,14 @@ object FaBRules {
     private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
-        WinCondition(
+        InfoCard(
             "Reduce Opponent's Life to 0",
             listOf(
                 p("Each hero starts with a life total shown on their card. Deal enough damage to reduce the opponent's life to 0 and you win."),
                 p("If both players' life totals are reduced to 0 simultaneously, the game is a draw."),
             ),
         ),
-        WinCondition(
+        InfoCard(
             "Concession",
             listOf(
                 p("You may concede at any time. Announce your concession and you lose immediately."),
@@ -55,24 +55,6 @@ object FaBRules {
         ),
     )
 
-    private val ccDeckBuild = RuleStep(
-        "Build Your Deck",
-        "Select at least 60 cards from your 80-card card-pool to form your deck.",
-        listOf(
-            p("You must use a non-young hero. You may include up to 3 copies of each unique card (same name AND color). Unused cards become your inventory — you can swap between games in a match."),
-            p("Cards must match your hero's class and talents. Generic cards can go in any deck."),
-        ),
-    )
-
-    private val sageDeckBuild = RuleStep(
-        "Build Your Deck",
-        "Select exactly 40 cards from your 55-card card-pool to form your deck.",
-        listOf(
-            p("You must use a young hero. All cards must be common, rare, or basic rarity. You may include up to 2 copies of each unique card (same name AND color). Unused cards become your inventory."),
-            p("Cards must match your hero's class and talents. Generic cards can go in any deck."),
-        ),
-    )
-
     private val setupEnd = listOf(
         RuleStep(
             "Shuffle & Cut",
@@ -91,8 +73,8 @@ object FaBRules {
         ),
     )
 
-    private val ccSetup = baseSetupStart + ccDeckBuild + setupEnd
-    private val sageSetup = baseSetupStart + sageDeckBuild + setupEnd
+    private val ccSetup = baseSetupStart + setupEnd
+    private val sageSetup = baseSetupStart + setupEnd
 
     private val turnStructure = listOf(
         RuleStep(
@@ -137,6 +119,55 @@ object FaBRules {
                     ),
                 ),
                 p("The turn ends, and the next player in clockwise order begins their turn. For the first turn of the game, all other players also draw to their intellect after the turn player's end phase."),
+            ),
+        ),
+    )
+
+    private val ccDeckRules = listOf(
+        InfoCard(
+            "Card Pool & Deck",
+            listOf(
+                p("Card pool: exactly 80 cards. Select at least 60 cards from your pool to form your deck."),
+            ),
+        ),
+        InfoCard(
+            "Hero & Restrictions",
+            listOf(
+                p("Must use a non-young (adult) hero."),
+                p("Up to 3 copies of each unique card (same name AND color)."),
+                p("Cards must match your hero's class and talents — generic cards can go in any deck."),
+            ),
+        ),
+        InfoCard(
+            "Equipment",
+            listOf(
+                p("Up to 1 card per equipment zone (Arms, Chest, Head, Legs) and weapon zone(s)."),
+                p("Unused pool cards become your inventory for sideboarding between games."),
+            ),
+        ),
+    )
+
+    private val sageDeckRules = listOf(
+        InfoCard(
+            "Card Pool & Deck",
+            listOf(
+                p("Card pool: exactly 55 cards. Select exactly 40 cards from your pool to form your deck."),
+            ),
+        ),
+        InfoCard(
+            "Hero & Restrictions",
+            listOf(
+                p("Must use a young hero."),
+                p("All cards must be common, rare, or basic rarity."),
+                p("Up to 2 copies of each unique card (same name AND color)."),
+                p("Cards must match your hero's class and talents — generic cards can go in any deck."),
+            ),
+        ),
+        InfoCard(
+            "Equipment",
+            listOf(
+                p("Up to 1 card per equipment zone (Arms, Chest, Head, Legs) and weapon zone(s)."),
+                p("Unused pool cards become your inventory for sideboarding between games."),
             ),
         ),
     )
@@ -539,13 +570,14 @@ object FaBRules {
                     ),
                 ),
             ),
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
             pdfAssets = listOf(
                 PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive.pdf"),
             ),
             fieldContent = fieldContent,
+            deckRules = ccDeckRules,
         ),
         RulesConfig(
             rulesetId = "silver-age",
@@ -559,13 +591,14 @@ object FaBRules {
                     ),
                 ),
             ),
-            winCons = victory,
+            victoryRules = victory,
             playSequence = turnStructure,
             keywords = keywords,
             pdfAssets = listOf(
                 PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive.pdf"),
             ),
             fieldContent = fieldContent,
+            deckRules = sageDeckRules,
         ),
     )
 }

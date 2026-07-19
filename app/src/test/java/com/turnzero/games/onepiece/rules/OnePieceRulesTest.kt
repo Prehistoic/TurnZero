@@ -17,11 +17,11 @@ class OnePieceRulesTest {
     }
 
     @Test
-    fun `each config has non-empty winCons`() {
+    fun `each config has non-empty victoryRules`() {
         for (config in OnePieceRules.configs) {
             assertTrue(
-                "Config ${config.rulesetId} has empty winCons",
-                config.winCons.isNotEmpty()
+                "Config ${config.rulesetId} has empty victoryRules",
+                config.victoryRules.isNotEmpty()
             )
         }
     }
@@ -135,7 +135,7 @@ class OnePieceRulesTest {
     @Test
     fun `win conditions include finishing blow and deck out`() {
         for (config in OnePieceRules.configs) {
-            val titles = config.winCons.map { it.title }
+            val titles = config.victoryRules.map { it.title }
             assertTrue(
                 "Config ${config.rulesetId} missing finishing blow win condition",
                 titles.any { it.lowercase().contains("finish") }

@@ -14,9 +14,9 @@ class PokemonRulesTest {
     }
 
     @Test
-    fun `each config has non-empty winCons`() {
+    fun `each config has non-empty victoryRules`() {
         for (config in PokemonRules.configs) {
-            assertTrue("Config ${config.rulesetId} has empty winCons", config.winCons.isNotEmpty())
+            assertTrue("Config ${config.rulesetId} has empty victoryRules", config.victoryRules.isNotEmpty())
         }
     }
 
@@ -86,7 +86,7 @@ class PokemonRulesTest {
     @Test
     fun `win conditions include prize deck and forfeit`() {
         for (config in PokemonRules.configs) {
-            val titles = config.winCons.map { it.title }
+            val titles = config.victoryRules.map { it.title }
             assertTrue("Config ${config.rulesetId} missing Prize win condition", titles.any { it.lowercase().contains("prize") })
             assertTrue("Config ${config.rulesetId} missing deck out condition", titles.any { it.lowercase().contains("deck") || it.lowercase().contains("empty") })
             assertTrue("Config ${config.rulesetId} missing concession", titles.any { it.lowercase().contains("concession") })

@@ -18,8 +18,8 @@ class RulesModelsTest {
             RuleStep("Shuffle", "Shuffle your deck", listOf(ContentBlock.Paragraph("Full shuffle details..."))),
             RuleStep("Draw", "Draw 5 cards", listOf(ContentBlock.Paragraph("Full draw details..."))),
         ),
-        winCons = listOf(
-            WinCondition("Reduce LP", listOf(ContentBlock.Paragraph("Reduce opponent LP to 0"))),
+        victoryRules = listOf(
+            InfoCard("Reduce LP", listOf(ContentBlock.Paragraph("Reduce opponent LP to 0"))),
         ),
         playSequence = listOf(
             RuleStep("Draw Phase", "Draw 1 card", listOf(ContentBlock.Paragraph("Full draw phase details..."))),
@@ -87,6 +87,38 @@ class RulesModelsTest {
         assertEquals("setup", tabs[0].key)
         assertEquals("turn", tabs[1].key)
         assertEquals("victory", tabs[2].key)
+    }
+
+    @Test
+    fun `visibleTabs includes deck tab when deckRules is not null`() {
+        val configWithDeck = sampleConfig.copy(
+            deckRules = listOf(InfoCard("Deck rules", listOf(ContentBlock.Paragraph("Rules"))))
+        )
+        val state = RulesUiState(configs = listOf(configWithDeck))
+        val tabs = state.visibleTabs
+        assertEquals(5, tabs.size)
+        assertEquals("setup", tabs[0].key)
+        assertEquals("turn", tabs[1].key)
+        assertEquals("victory", tabs[2].key)
+        assertEquals("deck", tabs[3].key)
+        assertEquals("keywords", tabs[4].key)
+    }
+
+    @Test
+    fun `visibleTabs includes deck and field in correct order`() {
+        val configWithAll = sampleConfig.copy(
+            deckRules = listOf(InfoCard("Deck", listOf(ContentBlock.Paragraph("Rules")))),
+            fieldContent = listOf(ContentBlock.Paragraph("Field rules")),
+        )
+        val state = RulesUiState(configs = listOf(configWithAll))
+        val tabs = state.visibleTabs
+        assertEquals(6, tabs.size)
+        assertEquals("setup", tabs[0].key)
+        assertEquals("turn", tabs[1].key)
+        assertEquals("victory", tabs[2].key)
+        assertEquals("deck", tabs[3].key)
+        assertEquals("field", tabs[4].key)
+        assertEquals("keywords", tabs[5].key)
     }
 
     @Test

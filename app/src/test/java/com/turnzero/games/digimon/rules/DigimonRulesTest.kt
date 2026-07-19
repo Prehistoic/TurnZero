@@ -17,11 +17,11 @@ class DigimonRulesTest {
     }
 
     @Test
-    fun `each config has non-empty winCons`() {
+    fun `each config has non-empty victoryRules`() {
         for (config in DigimonRules.configs) {
             assertTrue(
-                "Config ${config.rulesetId} has empty winCons",
-                config.winCons.isNotEmpty()
+                "Config ${config.rulesetId} has empty victoryRules",
+                config.victoryRules.isNotEmpty()
             )
         }
     }
@@ -135,7 +135,7 @@ class DigimonRulesTest {
     @Test
     fun `win conditions include security deck out and forfeit`() {
         for (config in DigimonRules.configs) {
-            val titles = config.winCons.map { it.title }
+            val titles = config.victoryRules.map { it.title }
             assertTrue(
                 "Config ${config.rulesetId} missing security win condition",
                 titles.any { it.lowercase().contains("security") }

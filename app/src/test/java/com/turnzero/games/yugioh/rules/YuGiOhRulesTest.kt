@@ -16,11 +16,11 @@ class YuGiOhRulesTest {
     }
 
     @Test
-    fun `each config has non-empty winCons`() {
+    fun `each config has non-empty victoryRules`() {
         for (config in YuGiOhRules.configs) {
             assertTrue(
-                "Config ${config.rulesetId} has empty winCons",
-                config.winCons.isNotEmpty()
+                "Config ${config.rulesetId} has empty victoryRules",
+                config.victoryRules.isNotEmpty()
             )
         }
     }
@@ -114,12 +114,15 @@ class YuGiOhRulesTest {
     }
 
     @Test
-    fun `setup includes deck preparation step`() {
+    fun `each config has non-empty deckRules`() {
         for (config in YuGiOhRules.configs) {
-            val titles = config.setup.map { it.title }
+            assertNotNull(
+                "Config ${config.rulesetId} has null deckRules",
+                config.deckRules
+            )
             assertTrue(
-                "Config ${config.rulesetId} missing deck preparation",
-                titles.any { it.lowercase().contains("deck") }
+                "Config ${config.rulesetId} has empty deckRules",
+                config.deckRules!!.isNotEmpty()
             )
         }
     }
@@ -127,7 +130,7 @@ class YuGiOhRulesTest {
     @Test
     fun `win conditions include LP to 0 and deck out`() {
         for (config in YuGiOhRules.configs) {
-            val titles = config.winCons.map { it.title }
+            val titles = config.victoryRules.map { it.title }
             assertTrue(
                 "Config ${config.rulesetId} missing LP reduction win condition",
                 titles.any { it.lowercase().contains("lp") }
