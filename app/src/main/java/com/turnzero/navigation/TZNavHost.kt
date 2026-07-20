@@ -75,13 +75,13 @@ fun TZNavHost(
                 currentRoute?.startsWith("tool/") == true -> {
                     // Landscape tool — no bottom bar
                 }
-                mainUiState.selectedTool != null -> {
-                    val toolId = mainUiState.selectedTool!!.id
-                    val isFavorited = toolId in mainUiState.favoriteToolIds
+                mainUiState.highlightedToolKey != null -> {
+                    val compositeKey = mainUiState.highlightedToolKey!!
+                    val isFavorited = compositeKey in mainUiState.favoriteToolIds
                     NavigationBar {
                         NavigationBarItem(
                             selected = isFavorited,
-                            onClick = { mainViewModel.toggleFavorite(toolId) },
+                            onClick = { mainViewModel.toggleFavorite(compositeKey) },
                             icon = {
                                 Icon(
                                     imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -139,9 +139,9 @@ fun TZNavHost(
                     onToolClick = { gameId, toolId ->
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
-                    highlightedToolId = mainUiState.selectedTool?.id,
-                    onToolLongClick = { _ -> },
-                    onTapOutside = { },
+                    highlightedToolId = mainUiState.highlightedToolKey,
+                    onToolLongClick = { mainViewModel.setHighlightedToolKey(it) },
+                    onTapOutside = { mainViewModel.clearHighlightedToolKey() },
                     layoutMode = mainUiState.toolsLayout
                 )
             }
@@ -255,9 +255,9 @@ fun TZNavHost(
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
                     onBack = { navController.popBackStack() },
-                    highlightedToolId = mainUiState.selectedTool?.id,
-                    onToolLongClick = { _ -> },
-                    onTapOutside = { }
+                    highlightedToolId = mainUiState.highlightedToolKey,
+                    onToolLongClick = { mainViewModel.setHighlightedToolKey(it) },
+                    onTapOutside = { mainViewModel.clearHighlightedToolKey() }
                 )
             }
 

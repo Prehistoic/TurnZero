@@ -26,6 +26,7 @@ data class MainUiState(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val currentLanguage: String = "en",
     val favoriteToolIds: Set<String> = emptySet(),
+    val highlightedToolKey: String? = null,
     val selectedTool: Tool? = null,
     val showToolSwitcher: Boolean = false,
     val showToolOptions: Boolean = false,
@@ -105,13 +106,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(toolId: String) {
+    fun toggleFavorite(compositeKey: String) {
         val current = _uiState.value.favoriteToolIds
-        val updated = if (toolId in current) current - toolId else current + toolId
+        val updated = if (compositeKey in current) current - compositeKey else current + compositeKey
         _uiState.update { it.copy(favoriteToolIds = updated) }
+        if (compositeKey in current) {
+            _uiState.update { it.copy(highlightedToolKey = null) }
+        }
         viewModelScope.launch {
             dataStore.edit { prefs -> prefs[UserPreferences.FAVORITE_TOOLS] = updated }
         }
+    }
+
+    fun setHighlightedToolKey(key: String) {
+        _uiState.update { it.copy(highlightedToolKey = key) }
+    }
+
+    fun clearHighlightedToolKey() {
+        _uiState.update { it.copy(highlightedToolKey = null) }
     }
 
     fun selectTool(toolId: String?, gameId: String?) {
