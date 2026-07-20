@@ -88,102 +88,39 @@ fun AppearanceSettingsScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Translate,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Language",
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = languages.firstOrNull { it.code == currentLanguage }?.label ?: "English",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+            SettingsCategoryRow(
+                icon = Icons.Outlined.Translate,
+                title = "Language",
+                description = languages.firstOrNull { it.code == currentLanguage }?.label ?: "English",
+                onClick = onLanguageClick,
+                widget = {
+                    TextButton(onClick = onLanguageClick) { Text("Change") }
                 }
-                TextButton(onClick = onLanguageClick) {
-                    Text("Change")
-                }
-            }
+            )
 
             TZDivider()
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.GridView,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Games Layout",
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = if (gamesLayout == LayoutMode.GRID) "Grid" else "List",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+            SettingsCategoryRow(
+                icon = Icons.Outlined.GridView,
+                title = "Games Layout",
+                description = if (gamesLayout == LayoutMode.GRID) "Grid" else "List",
+                onClick = onGamesLayoutClick,
+                widget = {
+                    TextButton(onClick = onGamesLayoutClick) { Text("Change") }
                 }
-                TextButton(onClick = onGamesLayoutClick) {
-                    Text("Change")
-                }
-            }
+            )
 
             TZDivider()
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.GridView,
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Tools Layout",
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = if (toolsLayout == LayoutMode.GRID) "Grid" else "List",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+            SettingsCategoryRow(
+                icon = Icons.Outlined.GridView,
+                title = "Tools Layout",
+                description = if (toolsLayout == LayoutMode.GRID) "Grid" else "List",
+                onClick = onToolsLayoutClick,
+                widget = {
+                    TextButton(onClick = onToolsLayoutClick) { Text("Change") }
                 }
-                TextButton(onClick = onToolsLayoutClick) {
-                    Text("Change")
-                }
-            }
+            )
 
             TZDivider()
         }
