@@ -270,9 +270,9 @@ object MagicRules {
         Keyword("<Wither>", listOf(p("This creature deals damage to creatures in the form of -1/-1 counters.")), "Keyword Ability"),
     )
 
-    fun std(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, baseSetup, victory, baseTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive.pdf")), deckRules = d, fieldContent = standardField)
-    fun cmd(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, commanderSetup, commanderVictory, commanderTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive.pdf")), deckRules = d, fieldContent = commanderField)
-    fun du1(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, duelCommanderSetup, commanderVictory, duelCommanderTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive.pdf")), deckRules = d, fieldContent = duelCommanderField)
+    fun std(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, baseSetup, victory, baseTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive-rulebook.pdf")), deckRules = d, fieldContent = standardField)
+    fun cmd(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, commanderSetup, commanderVictory, commanderTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive-rulebook.pdf")), deckRules = d, fieldContent = commanderField)
+    fun du1(id: String, n: String, d: List<InfoCard>) = RulesConfig(id, n, duelCommanderSetup, commanderVictory, duelCommanderTurn, keywords, listOf(PdfAsset("Comprehensive Rules", "rulebooks/mtg-comprehensive-rulebook.pdf")), deckRules = d, fieldContent = duelCommanderField)
 
     val configs: List<RulesConfig> = listOf(
         std("standard", "Standard", stdDeck),

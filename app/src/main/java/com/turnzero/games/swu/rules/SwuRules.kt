@@ -305,8 +305,8 @@ object SwuRules {
             fieldContent = fieldContent,
             deckRules = deckRules,
             pdfAssets = listOf(
-                PdfAsset("Quickstart Rules", "rulebooks/swu-quickstart.pdf"),
-                PdfAsset("Comprehensive Rules 8.0", "rulebooks/swu-comprehensive-v8.pdf"),
+                PdfAsset("Quickstart Rules", "rulebooks/swu-quickstart-rulebook.pdf"),
+                PdfAsset("Comprehensive Rules 8.0", "rulebooks/swu-comprehensive-rulebook.pdf"),
             ),
         ),
     )

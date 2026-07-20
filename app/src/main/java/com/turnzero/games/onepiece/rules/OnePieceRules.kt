@@ -430,8 +430,8 @@ object OnePieceRules {
             deckRules = deckRules,
             fieldContent = fieldContent,
             pdfAssets = listOf(
-                PdfAsset("Official Rule Manual", "rulebooks/onepiece-rule-manual.pdf"),
-                PdfAsset("Comprehensive Rules", "rulebooks/onepiece-comprehensive.pdf"),
+                PdfAsset("Official Rule Manual", "rulebooks/onepiece-rule-manual-rulebook.pdf"),
+                PdfAsset("Comprehensive Rules", "rulebooks/onepiece-comprehensive-rulebook.pdf"),
             ),
         ),
     )

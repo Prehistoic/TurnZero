@@ -573,7 +573,7 @@ object FaBRules {
             playSequence = turnStructure,
             keywords = keywords,
             pdfAssets = listOf(
-                PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive.pdf"),
+                PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive-rulebook.pdf"),
             ),
             fieldContent = fieldContent,
             deckRules = ccDeckRules,
@@ -594,7 +594,7 @@ object FaBRules {
             playSequence = turnStructure,
             keywords = keywords,
             pdfAssets = listOf(
-                PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive.pdf"),
+                PdfAsset("Comprehensive Rules", "rulebooks/fab-comprehensive-rulebook.pdf"),
             ),
             fieldContent = fieldContent,
             deckRules = sageDeckRules,

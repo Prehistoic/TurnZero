@@ -745,8 +745,8 @@ object DigimonRules {
             fieldContent = fieldContent,
             deckRules = deckRules,
             pdfAssets = listOf(
-                PdfAsset("Official Rule Manual", "rulebooks/digimon-rule-manual.pdf"),
-                PdfAsset("Comprehensive Rules", "rulebooks/digimon-comprehensive.pdf"),
+                PdfAsset("Official Rule Manual", "rulebooks/digimon-rule-manual-rulebook.pdf"),
+                PdfAsset("Comprehensive Rules", "rulebooks/digimon-comprehensive-rulebook.pdf"),
             ),
         ),
     )

@@ -48,7 +48,7 @@ class RulesViewModelTest : TZViewModelTest() {
             Keyword("Quick Effect", listOf(ContentBlock.Paragraph("Spell Speed 2"))),
         ),
         pdfAssets = listOf(
-            PdfAsset("Rulebook", "rulebooks/v6-gx.pdf"),
+            PdfAsset("Rulebook", "rulebooks/yugioh-v6-rulebook.pdf"),
         ),
     )
 

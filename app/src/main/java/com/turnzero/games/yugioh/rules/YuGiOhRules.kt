@@ -447,11 +447,11 @@ object YuGiOhRules {
     )
 
     val configs: List<RulesConfig> = listOf(
-        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf")), deckRules = v56DeckRules),
-        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v6-gx.pdf")), deckRules = v56DeckRules),
-        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v7-5ds.pdf")), deckRules = v7DeckRules),
-        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v8-zexal.pdf")), deckRules = v8DeckRules),
-        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v9-arcv.pdf")), deckRules = v9DeckRules),
-        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/v10-vrains.pdf")), deckRules = v10DeckRules),
+        RulesConfig("v5-dm", "v5.0 - DM", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v6-rulebook.pdf")), deckRules = v56DeckRules),
+        RulesConfig("v6-gx", "v6.0 - GX", v56Setup, victory, v56Turn, v56Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v6-rulebook.pdf")), deckRules = v56DeckRules),
+        RulesConfig("v7-5ds", "v7.0 - 5D's", v7Setup, victory, v7Turn, v7Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v7-rulebook.pdf")), deckRules = v7DeckRules),
+        RulesConfig("v8-zexal", "v8.0 - ZEXAL", v8Setup, victory, v8Turn, v8Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v8-rulebook.pdf")), deckRules = v8DeckRules),
+        RulesConfig("v9-arcv", "v9.0 - ARC-V", v9Setup, victory, v9Turn, v9Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v9-rulebook.pdf")), deckRules = v9DeckRules),
+        RulesConfig("v10-vrains", "v10 - VRAINS", v10Setup, victory, v10Turn, v10Keywords, listOf(PdfAsset("Official Rulebook", "rulebooks/yugioh-v10-rulebook.pdf")), deckRules = v10DeckRules),
     )
 }
