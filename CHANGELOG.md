@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-07-20
+
+### Added
+- PDF compression script (`scripts/compress-pdfs.sh`) using ghostscript
+- Coil disk cache (5%) and crossfade via `SingletonImageLoader.Factory`
+
+### Changed
+- Rulebook PDFs compressed from 132 MB to 36 MB with ghostscript
+- Rulebook PDFs renamed to `[game]-[category]-rulebook.pdf` pattern
+- Game description default restored to short "Trading Card Game" in `tcgGame()` factory
+
+### Removed
+- Dead `YuGiOhRulingsSearcher` wrapper; `RulingsTool` registered directly in Hilt
+
+### Fixed
+- Broken `ORDER BY fts.rank` in search query reverted to working UNION
+- "No result found" flash during search debounce eliminated
+- Grey card image placeholder added for missing/loading images
+- Coil forced `.size()` removed (was causing 1s load delay)
+- Coil OkHttp engine restored for network image loading
+
+### Performance
+- `noCompress("db")` removed — APK ZIP compression saves ~15-20 MB
+- ABI filter `arm64-v8a` added — removes unused native libs (~15 MB)
+- ProGuard rules tightened — targeted Hilt keeps instead of blanket rules
+- Coil 25% memory cache + 5% disk cache for instant image reloads
+
 ## [0.19.1] - 2026-07-20
 
 ### Added

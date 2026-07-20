@@ -16,8 +16,8 @@ android {
         applicationId = "com.turnzero"
         minSdk = 28
         targetSdk = 37
-        versionCode = 35
-        versionName = "0.19.1"
+        versionCode = 36
+        versionName = "0.19.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
