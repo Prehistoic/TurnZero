@@ -25,4 +25,5 @@ kotlin {
 dependencies {
     api(libs.datastore.preferences)
     implementation(libs.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 }
