@@ -12,6 +12,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
@@ -36,20 +40,27 @@ fun RulingsCardDetail(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top,
         ) {
-            card.imageUrl?.let { url ->
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(url)
-                        .size(300, 438)
-                        .build(),
-                    contentDescription = card.name,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(146.dp),
-                    contentScale = ContentScale.Fit,
-                )
-                Spacer(modifier = Modifier.width(16.dp))
+            Box(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(146.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center,
+            ) {
+                card.imageUrl?.let { url ->
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(url)
+                            .size(300, 438)
+                            .build(),
+                        contentDescription = card.name,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit,
+                    )
+                }
             }
+            Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f).heightIn(max = 146.dp)) {
                 Text(
                     text = card.name,

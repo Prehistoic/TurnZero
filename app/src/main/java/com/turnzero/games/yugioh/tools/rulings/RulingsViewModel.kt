@@ -139,7 +139,7 @@ class RulingsViewModel @Inject constructor(
     }
 
     fun setSearchQuery(query: String) {
-        _uiState.update { it.copy(searchQuery = query) }
+        _uiState.update { it.copy(searchQuery = query, isSearching = query.isNotBlank()) }
         _searchQuery.value = query
     }
 
