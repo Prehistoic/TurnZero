@@ -4,8 +4,16 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 
 class RulingsRepository(private val dao: RulingsDao) {
 
+    private fun sanitizeFts(query: String): String {
+        val cleaned = query.replace(Regex("[\"*+\\-(){}\\[\\]&|^~]"), " ")
+            .replace(Regex("\\s+"), " ")
+            .trim()
+        if (cleaned.isEmpty()) return ""
+        return "$cleaned*"
+    }
+
     suspend fun searchCards(query: String, format: String, limit: Int = 20): List<CardSearchResult> {
-        val sanitized = query.trim()
+        val sanitized = sanitizeFts(query)
         if (sanitized.isEmpty()) return emptyList()
         val sqlQuery = SimpleSQLiteQuery(
             "SELECT c.id, c.name, c.type, c.image_url FROM cards_fts fts " +
@@ -19,23 +27,22 @@ class RulingsRepository(private val dao: RulingsDao) {
                 "WHERE names_fts MATCH ? " +
                 "AND EXISTS (SELECT 1 FROM rulings r WHERE r.card_id = c.id AND r.format = ?) " +
                 "LIMIT ?",
-            arrayOf<Any>("$sanitized*", format, "$sanitized*", format, limit),
+            arrayOf<Any>(sanitized, format, sanitized, format, limit),
         )
         return dao.searchCards(sqlQuery)
     }
 
     suspend fun getCardRulings(cardId: Int, format: String): CardRulingsDetail? {
-        val card = dao.getCard(cardId) ?: return null
-        val ruling = dao.getRuling(cardId, format) ?: return null
-        val formatDesc = dao.getCardDescription(cardId, format)
-        val desc = formatDesc?.description?.takeIf { it.isNotBlank() } ?: card.desc
+        val row = dao.getCardWithRulings(cardId, format) ?: return null
         return CardRulingsDetail(
-            id = card.id,
-            name = card.name,
-            type = card.type,
-            desc = desc,
-            imageUrl = card.imageUrl,
-            rulingsText = ruling.rulingText,
+            id = row.id,
+            name = row.name,
+            type = row.type,
+            desc = row.description?.takeIf { it.isNotBlank() }
+                ?: dao.getCard(cardId)?.desc
+                ?: "",
+            imageUrl = row.imageUrl,
+            rulingsText = row.rulingText,
         )
     }
 

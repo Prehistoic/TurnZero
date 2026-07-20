@@ -7,6 +7,15 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 
+data class CardRulingsRow(
+    val id: Int,
+    val name: String,
+    val type: String,
+    val imageUrl: String?,
+    val rulingText: String,
+    val description: String?,
+)
+
 @Dao
 interface RulingsDao {
 
@@ -21,6 +30,17 @@ interface RulingsDao {
 
     @Query("SELECT * FROM rulings WHERE card_id = :cardId AND format = :format")
     suspend fun getRuling(cardId: Int, format: String): RulingEntity?
+
+    @Query("""
+        SELECT c.id, c.name, c.type, c.image_url AS imageUrl,
+               r.ruling_text AS rulingText,
+               cd.description
+        FROM cards c
+        INNER JOIN rulings r ON c.id = r.card_id AND r.format = :format
+        LEFT JOIN card_descriptions cd ON c.id = cd.card_id AND cd.format = :format
+        WHERE c.id = :cardId
+    """)
+    suspend fun getCardWithRulings(cardId: Int, format: String): CardRulingsRow?
 
     @Query("SELECT DISTINCT format FROM rulings ORDER BY format")
     suspend fun getAllFormats(): List<String>
