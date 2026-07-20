@@ -1,11 +1,6 @@
 package com.turnzero.ui.games
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -72,39 +67,18 @@ fun GamesScreen(
                 TZEmptyState(message = "No result found")
             }
         } else {
-            when (currentLayout) {
-                LayoutMode.LIST -> {
-                    LazyColumn(
-                        contentPadding = padding,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(filteredGames, key = { it.id }) { game ->
-                            GameTile(
-                                game = game,
-                                layoutMode = currentLayout,
-                                onClick = { onGameClick(game.id) }
-                            )
-                        }
-                    }
-                }
-                else -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = padding,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(filteredGames, key = { it.id }) { game ->
-                            GameTile(
-                                game = game,
-                                layoutMode = currentLayout,
-                                onClick = { onGameClick(game.id) }
-                            )
-                        }
-                    }
-                }
+            TZTileLayout(
+                tileItems = filteredGames,
+                layoutMode = currentLayout,
+                key = { it.id },
+                modifier = Modifier.padding(horizontal = 16.dp),
+                contentPadding = padding,
+            ) { game ->
+                GameTile(
+                    game = game,
+                    layoutMode = currentLayout,
+                    onClick = { onGameClick(game.id) }
+                )
             }
         }
     }

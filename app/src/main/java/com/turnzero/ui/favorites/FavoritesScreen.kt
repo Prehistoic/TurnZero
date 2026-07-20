@@ -2,11 +2,6 @@ package com.turnzero.ui.favorites
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +15,7 @@ import com.turnzero.core.ui.components.TZTopBar
 import com.turnzero.core.ui.components.TZEmptyState
 import com.turnzero.core.ui.components.ToolTile
 import com.turnzero.core.ui.components.LayoutMode
+import com.turnzero.core.ui.components.TZTileLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,46 +102,24 @@ fun FavoritesScreen(
                         }
                     )
             ) {
-                if (layoutMode == LayoutMode.GRID) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = padding,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(filteredEntries, key = { it.key }) { entry ->
-                            ToolTile(
-                                tool = entry.tool,
-                                layoutMode = layoutMode,
-                                onClick = {
-                                    onToolClick?.invoke(entry.gameId, entry.tool.id)
-                                },
-                                onLongClick = onToolLongClick?.let { { it(entry.key) } },
-                                isHighlighted = entry.key == highlightedToolId,
-                                subtitle = entry.gameName
-                            )
-                        }
-                    }
-                } else {
-                    LazyColumn(
-                        contentPadding = padding,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        items(filteredEntries, key = { it.key }) { entry ->
-                            ToolTile(
-                                tool = entry.tool,
-                                layoutMode = layoutMode,
-                                onClick = {
-                                    onToolClick?.invoke(entry.gameId, entry.tool.id)
-                                },
-                                onLongClick = onToolLongClick?.let { { it(entry.key) } },
-                                isHighlighted = entry.key == highlightedToolId,
-                                subtitle = entry.gameName
-                            )
-                        }
-                    }
+                TZTileLayout(
+                    tileItems = filteredEntries,
+                    layoutMode = layoutMode,
+                    key = { it.key },
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    contentPadding = padding,
+                    verticalSpacing = 4.dp,
+                ) { entry ->
+                    ToolTile(
+                        tool = entry.tool,
+                        layoutMode = layoutMode,
+                        onClick = {
+                            onToolClick?.invoke(entry.gameId, entry.tool.id)
+                        },
+                        onLongClick = onToolLongClick?.let { { it(entry.key) } },
+                        isHighlighted = entry.key == highlightedToolId,
+                        subtitle = entry.gameName
+                    )
                 }
             }
         }

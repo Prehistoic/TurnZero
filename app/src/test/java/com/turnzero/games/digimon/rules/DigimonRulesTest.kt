@@ -1,6 +1,6 @@
 package com.turnzero.games.digimon.rules
 
-import com.turnzero.tools.rules.ContentBlock
+import com.turnzero.core.ui.components.ContentBlock
 import org.junit.Assert.*
 import org.junit.Test
 

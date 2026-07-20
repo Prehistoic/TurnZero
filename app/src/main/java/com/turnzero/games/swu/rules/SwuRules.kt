@@ -1,6 +1,6 @@
 package com.turnzero.games.swu.rules
 
-import com.turnzero.tools.rules.ContentBlock
+import com.turnzero.core.ui.components.ContentBlock
 import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep

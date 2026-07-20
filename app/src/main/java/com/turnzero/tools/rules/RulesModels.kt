@@ -1,6 +1,7 @@
 package com.turnzero.tools.rules
 
 import androidx.compose.runtime.Stable
+import com.turnzero.core.ui.components.ContentBlock
 
 data class PdfAsset(
     val name: String,
@@ -35,13 +36,6 @@ data class Keyword(
     val contents: List<ContentBlock>,
     val category: String? = null,
 )
-
-sealed interface ContentBlock {
-    data class Paragraph(val text: String) : ContentBlock
-    data class SubHeading(val text: String) : ContentBlock
-    data class BulletList(val items: List<String>) : ContentBlock
-    data class Image(val uri: String) : ContentBlock
-}
 
 interface RulesProvider {
     fun getConfigs(gameId: String): List<RulesConfig>

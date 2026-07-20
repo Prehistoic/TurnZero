@@ -24,6 +24,19 @@ suspend inline fun <reified T> DataStore<Preferences>.readJson(
     }
 }
 
+suspend fun <T> DataStore<Preferences>.readJson(
+    key: Preferences.Key<String>,
+    serializer: KSerializer<T>,
+    default: T
+): T {
+    val raw = data.map { it[key] }.first() ?: return default
+    return try {
+        json.decodeFromString(serializer, raw)
+    } catch (_: Exception) {
+        default
+    }
+}
+
 suspend inline fun <reified T> DataStore<Preferences>.readJsonOrNull(
     key: Preferences.Key<String>
 ): T? {

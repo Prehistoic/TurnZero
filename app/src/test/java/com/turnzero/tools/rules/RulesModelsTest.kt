@@ -1,5 +1,6 @@
 package com.turnzero.tools.rules
 
+import com.turnzero.core.ui.components.ContentBlock
 import org.junit.Assert.*
 import org.junit.Test
 

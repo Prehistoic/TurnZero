@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-07-20
+
+### Added
+- `tcgGame()` factory function in core:tools-api, simplifying game definitions from ~14 lines to ~5
+- `rememberTapScale()` composable in core:ui, deduplicating tap-to-activate animation pattern
+- `TZTileLayout<T>` generic composable in core:ui, replacing duplicated LazyColumn/LazyVerticalGrid patterns in 3 screens
+- `HistoryRepository<T>` generic class in core:data for capped history with JSON serialization
+- `JsonDataStoreRepo` abstract base in core:data for DataStore-backed repositories
+- `TZViewModelTest` base class for shared Dispatcher setup in ViewModel tests
+- `@Immutable` annotation on ToolRegistry to prevent unnecessary recomposition
+
+### Changed
+- `ContentBlock` sealed interface and renderer moved from app to core:ui for reuse across modules
+- Game definition files now use `tcgGame()` factory (7 games unified)
+- DiceViewModel and CoinViewModel accept injectable `Random` instance for deterministic testing
+- CoinAnimation uses `key()` per coin for state isolation during flip animation
+- LifeCounterScreen LP change direction now computed in `LaunchedEffect` instead of `remember` side effects
+- LifeCounterCalcScreen refactored with extracted `CalcDisplay` and `CalcButtonGrid` composables
+- Rulings fuzzy search replaced with Room FTS5 built-in ranking (removed O(n²) Levenshtein)
+- 4 ViewModel test classes now extend shared `TZViewModelTest` base
+
+### Fixed
+- Long-press favorite functionality restored after ViewModel migration (follow-up from 0.19.0)
+
 ## [0.19.0] - 2026-07-20
 
 ### Added
