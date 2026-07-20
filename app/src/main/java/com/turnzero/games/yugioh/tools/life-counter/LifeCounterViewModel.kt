@@ -59,9 +59,13 @@ class LifeCounterViewModel @Inject constructor(
         } else {
             _uiState.update { it.copy(isRunning = true, hasEverStarted = true) }
             timerJob = viewModelScope.launch {
+                var nextTick = System.nanoTime() + 1_000_000_000L
                 while (isActive) {
-                    delay(1000)
+                    val now = System.nanoTime()
+                    val waitMs = ((nextTick - now) / 1_000_000).coerceAtLeast(0)
+                    delay(waitMs)
                     tick()
+                    nextTick += 1_000_000_000L
                 }
             }
         }

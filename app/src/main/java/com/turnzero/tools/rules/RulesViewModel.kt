@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,12 +33,11 @@ class RulesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val configs = rulesProvider.getConfigs(gameId)
-            val savedDefaultId = dataStore.data.map { it[UserPreferences.RULES_DEFAULT_RULESET] }
-                .first()
-            val enabledRulesets = dataStore.data.map { it[UserPreferences.RULES_ENABLED_RULESETS] }
-                .first()?.let { loaded ->
-                    if (loaded.isEmpty()) defaultEnabledRulesets(gameId, configs) else loaded
-                } ?: defaultEnabledRulesets(gameId, configs)
+            val prefs = dataStore.data.first()
+            val savedDefaultId = prefs[UserPreferences.RULES_DEFAULT_RULESET]
+            val enabledRulesets = prefs[UserPreferences.RULES_ENABLED_RULESETS]?.let { loaded ->
+                if (loaded.isEmpty()) defaultEnabledRulesets(gameId, configs) else loaded
+            } ?: defaultEnabledRulesets(gameId, configs)
             val visibleIds = computeVisibleIds(configs, enabledRulesets)
             val selectedId = if (savedDefaultId != null && savedDefaultId in visibleIds) {
                 savedDefaultId
