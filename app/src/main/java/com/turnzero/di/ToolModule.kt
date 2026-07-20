@@ -2,7 +2,7 @@ package com.turnzero.di
 
 import com.turnzero.core.tools.api.Tool
 import com.turnzero.games.yugioh.tools.lifecounter.YuGiOhLifeCounter
-import com.turnzero.games.yugioh.tools.rulingssearcher.YuGiOhRulingsSearcher
+import com.turnzero.games.yugioh.tools.rulings.RulingsTool
 import com.turnzero.tools.coin.CoinTool
 import com.turnzero.tools.dice.DiceTool
 import com.turnzero.tools.rules.RulesTool
@@ -40,5 +40,5 @@ object ToolModule {
     @Provides
     @Singleton
     @IntoSet
-    fun provideYuGiOhRulingsSearcher(): Tool = YuGiOhRulingsSearcher()
+    fun provideYuGiOhRulingsSearch(): Tool = RulingsTool()
 }
