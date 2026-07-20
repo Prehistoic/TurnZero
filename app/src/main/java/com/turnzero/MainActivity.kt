@@ -6,15 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
-import androidx.datastore.preferences.core.edit
-import dagger.hilt.android.AndroidEntryPoint
-import com.turnzero.core.data.UserPreferences
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.ui.theme.TZTheme
 import com.turnzero.core.ui.theme.colorThemes
 import com.turnzero.navigation.TZNavHost
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import com.turnzero.ui.MainViewModel
+import com.turnzero.ui.settings.ThemeMode
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -24,43 +23,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val systemDark = isSystemInDarkTheme()
-            val scope = rememberCoroutineScope()
+            val mainViewModel: MainViewModel = hiltViewModel()
+            val mainUiState by mainViewModel.uiState.collectAsStateWithLifecycle()
 
-            var isDark by remember { mutableStateOf(systemDark) }
-            LaunchedEffect(Unit) {
-                val mode = ServiceLocator.dataStore.data.map { it[UserPreferences.THEME_MODE] }.first() ?: "system"
-                isDark = when (mode) {
-                    "light" -> false
-                    "dark" -> true
-                    else -> systemDark
-                }
+            val systemDark = isSystemInDarkTheme()
+            val isDark = when (mainUiState.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> systemDark
             }
 
             var selectedColorThemeId by remember { mutableStateOf("purple") }
-            LaunchedEffect(Unit) {
-                val saved = ServiceLocator.dataStore.data.map { it[UserPreferences.COLOR_THEME] }.first() ?: "purple"
-                selectedColorThemeId = saved
-            }
             val selectedColorTheme = remember(selectedColorThemeId) {
                 colorThemes.find { it.id == selectedColorThemeId } ?: colorThemes.first()
             }
 
             TZTheme(darkTheme = isDark, colorTheme = selectedColorTheme) {
                 TZNavHost(
-                    toolRegistry = ServiceLocator.toolRegistry,
-                    dataStore = ServiceLocator.dataStore,
-                    isDarkTheme = isDark,
-                    onThemeChanged = { isDark = it },
                     selectedColorThemeId = selectedColorThemeId,
-                    onColorThemeChanged = { id ->
-                        selectedColorThemeId = id
-                        scope.launch {
-                            ServiceLocator.dataStore.edit { prefs ->
-                                prefs[UserPreferences.COLOR_THEME] = id
-                            }
-                        }
-                    }
+                    onColorThemeChanged = { id -> selectedColorThemeId = id }
                 )
             }
         }
