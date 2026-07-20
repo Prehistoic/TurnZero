@@ -62,8 +62,7 @@ fun CoinAnimation(
                 }
             }
 
-            val fastEnd = System.currentTimeMillis() + 600
-            while (System.currentTimeMillis() < fastEnd) {
+            repeat(10) {
                 displayedFaces = List(coinCount) { if (Random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL }
                 delay(60)
             }
@@ -132,21 +131,21 @@ fun CoinCard(
 ) {
     val isHead = face == CoinFace.HEAD
 
-    val headGradient = Brush.radialGradient(
+    val headGradient = remember { Brush.radialGradient(
         colors = listOf(Color(0xFFFFD700), Color(0xFFDAA520), Color(0xFFB8860B))
-    )
-    val tailGradient = Brush.radialGradient(
+    )}
+    val tailGradient = remember { Brush.radialGradient(
         colors = listOf(Color(0xFFE0E0E0), Color(0xFFC0C0C0), Color(0xFFA0A0A0))
-    )
+    )}
 
     val gradient = if (isHead) headGradient else tailGradient
     val emoji = if (isHead) "\uD83D\uDC64" else "\u2B50"
     val rimColor = if (isHead) Color(0xFFD4AF37) else Color(0xFFB0B0B0)
 
     val localDensity = LocalDensity.current
-    val cameraDist = 12f * localDensity.density
+    val cameraDist = remember { 12f * localDensity.density }
 
-    val borderWidth = (coinSize.value / 32f).dp
+    val borderWidth = remember { (coinSize.value / 32f).dp }
 
     Box(
         modifier = modifier
