@@ -16,7 +16,8 @@ import kotlin.random.Random
 @HiltViewModel
 class CoinViewModel @Inject constructor(
     private val coinRepo: CoinRepo,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val random: Random = Random,
 ) : ViewModel() {
 
     private val gameId: String = savedStateHandle.get<String>("gameId") ?: "*"
@@ -50,7 +51,7 @@ class CoinViewModel @Inject constructor(
     fun flip() {
         val coinCount = _uiState.value.coinCount
         val results = (1..coinCount).map {
-            if (Random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL
+            if (random.nextBoolean()) CoinFace.HEAD else CoinFace.TAIL
         }
         _uiState.update {
             it.copy(

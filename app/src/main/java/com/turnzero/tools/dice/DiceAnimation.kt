@@ -1,7 +1,5 @@
 package com.turnzero.tools.dice
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.turnzero.core.ui.components.rememberTapScale
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -59,22 +58,9 @@ fun DiceAnimation(
     }
 
     // Tap scale animation
-    var targetScale by remember { mutableFloatStateOf(1f) }
-
-    LaunchedEffect(triggerScale) {
-        if (triggerScale > 0) {
-            targetScale = 1.08f
-            delay(100)
-            targetScale = 1f
-            delay(80)
-            onRoll()
-        }
-    }
-
-    val animatedScale by animateFloatAsState(
-        targetValue = targetScale,
-        animationSpec = spring(dampingRatio = 0.5f, stiffness = 500f),
-        label = "tapScale"
+    val animatedScale by rememberTapScale(
+        triggerScale = triggerScale,
+        onAction = onRoll,
     )
 
     val rows = remember(dice) { dice.chunked(4) }

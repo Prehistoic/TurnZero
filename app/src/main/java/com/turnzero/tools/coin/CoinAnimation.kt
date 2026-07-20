@@ -2,7 +2,6 @@ package com.turnzero.tools.coin
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.turnzero.core.ui.components.rememberTapScale
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -76,22 +76,9 @@ fun CoinAnimation(
         }
     }
 
-    var targetScale by remember { mutableFloatStateOf(1f) }
-
-    LaunchedEffect(triggerScale) {
-        if (triggerScale > 0) {
-            targetScale = 1.08f
-            delay(100)
-            targetScale = 1f
-            delay(80)
-            onFlip()
-        }
-    }
-
-    val animatedScale by androidx.compose.animation.core.animateFloatAsState(
-        targetValue = targetScale,
-        animationSpec = spring(dampingRatio = 0.5f, stiffness = 500f),
-        label = "tapScale"
+    val animatedScale by rememberTapScale(
+        triggerScale = triggerScale,
+        onAction = onFlip,
     )
 
     val rows = (1..coinCount).toList().chunked(4)
@@ -110,12 +97,14 @@ fun CoinAnimation(
                     val index = rowIndex * 4 + colIndex
                     val face = if (isFlipping || hasFlipped) displayedFaces.getOrElse(index) { CoinFace.HEAD } else CoinFace.HEAD
 
-                    CoinCard(
-                        face = face,
-                        spinAngle = rotations[index].value,
-                        modifier = Modifier.padding(4.dp),
-                        coinSize = coinSize
-                    )
+                    key(index) {
+                        CoinCard(
+                            face = face,
+                            spinAngle = rotations[index].value,
+                            modifier = Modifier.padding(4.dp),
+                            coinSize = coinSize
+                        )
+                    }
                 }
             }
         }

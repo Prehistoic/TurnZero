@@ -16,7 +16,8 @@ import kotlin.random.Random
 @HiltViewModel
 class DiceViewModel @Inject constructor(
     private val diceRepo: DiceRepo,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val random: Random = Random,
 ) : ViewModel() {
 
     private val gameId: String = savedStateHandle.get<String>("gameId") ?: "*"
@@ -66,7 +67,7 @@ class DiceViewModel @Inject constructor(
     fun roll() {
         val dice = _uiState.value.dice
         if (dice.isEmpty()) return
-        val results = dice.map { Random.nextInt(1, it.faceCount + 1) }
+        val results = dice.map { random.nextInt(1, it.faceCount + 1) }
         val total = results.sum()
         _uiState.update { it.copy(isRolling = true, results = results, total = total) }
     }

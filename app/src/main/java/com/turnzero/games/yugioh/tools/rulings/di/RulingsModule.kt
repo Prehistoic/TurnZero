@@ -25,6 +25,7 @@ object RulingsModule {
             "rulings.db",
         )
             .createFromAsset("databases/rulings.db")
+            // DB ships as pre-populated asset — destructive migration is safe since no user data is lost
             .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }

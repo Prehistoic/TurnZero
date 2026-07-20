@@ -1,5 +1,8 @@
 package com.turnzero.core.tools.api
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 class ToolRegistry(
     private val games: Set<@JvmSuppressWildcards Game>,
     private val tools: Set<@JvmSuppressWildcards Tool>
