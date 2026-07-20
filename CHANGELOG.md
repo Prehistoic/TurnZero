@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-07-20
+
+### Added
+- Generic `TZHistorySheet<T>` composable in core:ui, replacing 3 duplicated history sheets
+- Generic `OptionSelectorSheet<T>` composable in core:ui, replacing 2 duplicated bottom sheets
+- `PreferenceSerializer` with generic DataStore read/write extensions in core:data
+- Shared `RuleContentHelpers` for game rules content creation
+- Hilt DI modules for ToolRegistry, Game, and Tool provisioning
+- `MainViewModel` for global app state (layouts, theme, favorites, tool sheets)
+
+### Changed
+- Full migration from ServiceLocator to Hilt dependency injection
+- TZNavHost refactored from 451-line monolithic composable to thin route-wiring backed by MainViewModel
+- All DataStore repositories now use PreferenceSerializer (Dice, Coin, LifeCounter)
+- SettingsCategoryRow promoted from internal to public, reused in AppearanceSettingsScreen
+
+### Fixed
+- FTS search queries now sanitized to prevent syntax errors from user input
+- Long-press favorite functionality restored after ViewModel migration
+- SQL injection risk in RulingsRepository search resolved
+- Timer drift in LifeCounter fixed with elapsed-time tracking
+- Race condition in RulesProvider fixed with ConcurrentHashMap
+- Camera executor lifecycle fixed in OCR screen
+- Games and tools now ordered alphabetically by name
+
+### Performance
+- Coin and dice animation gradients/dimensions cached with remember(), reducing per-frame allocations
+- Busy-wait loop in coin animation replaced with repeat()
+- Dice animation frames reduced from 12 to 6
+- Rulings fuzzy search parallelized with async/awaitAll
+- Rulings search debounce upgraded from manual delay to Flow.debounce()
+- Rulings getCardRulings now uses single JOIN query instead of 3 sequential DAO calls
+- Formatted text, filtered entries, and timer text now use remember() to avoid recomputation
+- Coil AsyncImage now provides size hint for efficient memory usage
+- DataStore Coin history flow now uses distinctUntilChanged() to avoid redundant JSON parsing
+
 ## [0.18.0] - 2026-07-19
 
 ### Added
