@@ -34,12 +34,14 @@ fun FavoritesScreen(
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
-    val filteredEntries = if (searchQuery.isEmpty()) {
-        favoriteEntries
-    } else {
-        favoriteEntries.filter {
-            it.tool.name.contains(searchQuery, ignoreCase = true) ||
-                it.gameName.contains(searchQuery, ignoreCase = true)
+    val filteredEntries = remember(favoriteEntries, searchQuery) {
+        if (searchQuery.isEmpty()) {
+            favoriteEntries
+        } else {
+            favoriteEntries.filter {
+                it.tool.name.contains(searchQuery, ignoreCase = true) ||
+                    it.gameName.contains(searchQuery, ignoreCase = true)
+            }
         }
     }
 
