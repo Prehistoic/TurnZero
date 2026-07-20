@@ -6,17 +6,14 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.lifecycle.SavedStateHandle
 import com.turnzero.core.data.UserPreferences
+import com.turnzero.core.ui.components.ContentBlock
+import com.turnzero.TZViewModelTest
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -25,20 +22,13 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RulesViewModelTest {
+class RulesViewModelTest : TZViewModelTest() {
 
-    private val testDispatcher = StandardTestDispatcher()
     private val dataStore = mockk<DataStore<Preferences>>(relaxed = true)
 
     @Before
     fun setup() {
-        Dispatchers.setMain(testDispatcher)
         every { dataStore.data } returns flowOf(emptyPreferences())
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     private val sampleConfig = RulesConfig(
@@ -254,7 +244,6 @@ class RulesViewModelTest {
     fun `visibleTabs includes keywords when config has keywords`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
-        // sampleConfig (index 1) has keywords, configWithoutKeywords (index 0) is default
         vm.selectRuleset("v6-gx")
         assertEquals(4, vm.uiState.value.visibleTabs.size)
     }

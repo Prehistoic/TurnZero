@@ -189,16 +189,13 @@ private fun PlayerLpPanel(
     }
     val defaultColor = MaterialTheme.colorScheme.primary
 
-    val prevLp = remember { mutableIntStateOf(lp) }
-    val lpChangeDirection = remember { mutableIntStateOf(0) }
-    val wasSnapped = remember { mutableStateOf(false) }
+    var prevLp by remember { mutableStateOf(lp) }
+    var lpChangeDirection by remember { mutableIntStateOf(0) }
+    var wasSnapped by remember { mutableStateOf(false) }
 
-    val duration = remember(lp) {
-        val delta = abs(lp - prevLp.intValue)
-        lpChangeDirection.intValue = lp.compareTo(prevLp.intValue)
-        prevLp.intValue = lp
-        wasSnapped.value = snapLpAnimation
-        if (snapLpAnimation) 0 else (delta / 5).coerceIn(1000, 2000)
+    val duration = remember(lp, snapLpAnimation) {
+        wasSnapped = snapLpAnimation
+        if (snapLpAnimation) 0 else (abs(lp - prevLp) / 5).coerceIn(1000, 2000)
     }
     val displayLp by animateIntAsState(
         targetValue = lp,
@@ -207,16 +204,18 @@ private fun PlayerLpPanel(
     )
 
     LaunchedEffect(lp) {
+        lpChangeDirection = lp.compareTo(prevLp)
+        prevLp = lp
         if (!snapLpAnimation && duration > 0) {
             delay(duration.toLong())
-            lpChangeDirection.intValue = 0
+            lpChangeDirection = 0
         }
     }
 
     val color = when {
-        wasSnapped.value -> defaultColor
-        lpChangeDirection.intValue > 0 -> Color(0xFF4CAF50)
-        lpChangeDirection.intValue < 0 -> Color(0xFFF44336)
+        wasSnapped -> defaultColor
+        lpChangeDirection > 0 -> Color(0xFF4CAF50)
+        lpChangeDirection < 0 -> Color(0xFFF44336)
         else -> defaultColor
     }
 

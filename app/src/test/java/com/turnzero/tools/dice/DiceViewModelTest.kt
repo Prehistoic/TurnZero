@@ -1,14 +1,10 @@
 package com.turnzero.tools.dice
 
 import androidx.lifecycle.SavedStateHandle
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
+import com.turnzero.TZViewModelTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -18,22 +14,15 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DiceViewModelTest {
+class DiceViewModelTest : TZViewModelTest() {
 
-    private val testDispatcher = StandardTestDispatcher()
     private lateinit var repo: FakeDiceRepo
     private lateinit var savedStateHandle: SavedStateHandle
 
     @Before
     fun setup() {
-        Dispatchers.setMain(testDispatcher)
         repo = FakeDiceRepo()
         savedStateHandle = SavedStateHandle(mapOf("gameId" to "test-game"))
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

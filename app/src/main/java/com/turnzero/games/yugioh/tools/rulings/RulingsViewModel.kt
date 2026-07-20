@@ -12,7 +12,6 @@ import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 import com.turnzero.games.yugioh.tools.rulings.data.CardSearchResult
 import com.turnzero.games.yugioh.tools.rulings.data.FormatRule
 import com.turnzero.games.yugioh.tools.rulings.data.FormatRulesData
-import com.turnzero.games.yugioh.tools.rulings.data.FuzzyCardResult
 import com.turnzero.games.yugioh.tools.rulings.data.RulingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -238,10 +237,10 @@ class RulingsViewModel @Inject constructor(
                     }
                 }
 
-                val fuzzyResults = repository.fuzzySearch(line, format)
-                if (fuzzyResults.isNotEmpty()) {
-                    val best = fuzzyResults.first()
-                    Log.d(TAG, "OCR fuzzy match: '${best.name}' (score=${best.score}, original: '$line')")
+                val results = repository.searchCards(line, format, 5)
+                if (results.isNotEmpty()) {
+                    val best = results.first()
+                    Log.d(TAG, "OCR FTS match: '${best.name}' (original: '$line')")
                     loadOcrCard(best.id, format)
                     return@launch
                 }

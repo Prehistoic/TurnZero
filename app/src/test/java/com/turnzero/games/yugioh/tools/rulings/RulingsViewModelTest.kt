@@ -6,17 +6,13 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 import com.turnzero.games.yugioh.tools.rulings.data.CardSearchResult
 import com.turnzero.games.yugioh.tools.rulings.data.RulingsRepository
+import com.turnzero.TZViewModelTest
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -26,21 +22,14 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RulingsViewModelTest {
+class RulingsViewModelTest : TZViewModelTest() {
 
     private val repository: RulingsRepository = mockk()
     private val dataStore: DataStore<Preferences> = mockk(relaxed = true)
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
+    fun setup() {
         coEvery { dataStore.data } returns flowOf(emptyPreferences())
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test
