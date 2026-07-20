@@ -16,9 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
 import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 
 @Composable
@@ -50,10 +48,7 @@ fun RulingsCardDetail(
             ) {
                 card.imageUrl?.let { url ->
                     AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(url)
-                            .size(300, 438)
-                            .build(),
+                        model = url,
                         contentDescription = card.name,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Fit,
