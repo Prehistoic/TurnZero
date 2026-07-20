@@ -30,7 +30,7 @@ class YuGiOhRulingsSearcher : Tool {
         val state by viewModel.uiState.collectAsStateWithLifecycle()
 
         RulingsOptionsSheet(
-            allFormatsWithStatus = viewModel.allFormatsWithStatus,
+            allFormatsWithStatus = state.allFormatsWithStatus,
             defaultFormat = state.defaultFormat,
             onSetDefaultFormat = { viewModel.setDefaultFormat(it) },
             onToggleFormat = { viewModel.toggleFormatEnabled(it) },

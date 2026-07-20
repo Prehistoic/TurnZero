@@ -12,17 +12,18 @@ import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 import com.turnzero.games.yugioh.tools.rulings.data.CardSearchResult
 import com.turnzero.games.yugioh.tools.rulings.data.FormatRule
 import com.turnzero.games.yugioh.tools.rulings.data.FormatRulesData
+import com.turnzero.games.yugioh.tools.rulings.data.FuzzyCardResult
 import com.turnzero.games.yugioh.tools.rulings.data.RulingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.math.min
 import javax.inject.Inject
 
 private const val TAG = "TZ/RulingsVM"
@@ -44,8 +45,10 @@ data class RulingsUiState(
     val showOptionsSheet: Boolean = false,
     val expandedRuleIndex: Int? = null,
     val isLoading: Boolean = true,
+    val allFormatsWithStatus: List<Pair<String, Boolean>> = emptyList(),
 )
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class RulingsViewModel @Inject constructor(
     private val repository: RulingsRepository,
@@ -55,7 +58,7 @@ class RulingsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(RulingsUiState())
     val uiState: StateFlow<RulingsUiState> = _uiState.asStateFlow()
 
-    private var searchJob: Job? = null
+    private val _searchQuery = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
@@ -89,21 +92,34 @@ class RulingsViewModel @Inject constructor(
                     isLoading = allFormats.isEmpty(),
                 )
             }
+            _uiState.update { it.copy(allFormatsWithStatus = computeFormatsWithStatus()) }
+        }
+
+        viewModelScope.launch {
+            _searchQuery
+                .debounce(300)
+                .collectLatest { query ->
+                    if (query.isBlank()) {
+                        _uiState.update { it.copy(searchResults = emptyList(), isSearching = false) }
+                    } else {
+                        _uiState.update { it.copy(isSearching = true) }
+                        val format = _uiState.value.selectedFormat
+                        val results = repository.searchCards(query, format, 20)
+                        _uiState.update { state ->
+                            if (state.searchQuery == query) {
+                                state.copy(searchResults = results, isSearching = false)
+                            } else state
+                        }
+                    }
+                }
         }
     }
 
     val dropdownFormats: List<Pair<String, String>>
         get() = _uiState.value.enabledFormats.map { it to FormatRulesData.getLabelWithDate(it) }
 
-    val allFormatsWithStatus: List<Pair<String, Boolean>>
-        get() {
-            val enabledSet = _uiState.value.enabledFormats.toSet()
-            return FormatRulesData.sortByChronological(_uiState.value.formats)
-                .map { it to (it in enabledSet) }
-        }
-
     fun selectFormat(format: String) {
-        searchJob?.cancel()
+        _searchQuery.value = ""
         val currentCardId = _uiState.value.selectedCard?.id
         val rules = FormatRulesData.getMeta(format)?.rules ?: emptyList()
         _uiState.update {
@@ -125,25 +141,7 @@ class RulingsViewModel @Inject constructor(
 
     fun setSearchQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
-        searchJob?.cancel()
-        if (query.isBlank()) {
-            _uiState.update { it.copy(searchResults = emptyList(), isSearching = false) }
-            return
-        }
-        _uiState.update { it.copy(isSearching = true) }
-        searchJob = viewModelScope.launch {
-            delay(300)
-            val currentQuery = _uiState.value.searchQuery
-            val format = _uiState.value.selectedFormat
-            val results = repository.searchCards(currentQuery, format, 20)
-            _uiState.update { state ->
-                if (state.searchQuery == currentQuery) {
-                    state.copy(searchResults = results, isSearching = false)
-                } else {
-                    state
-                }
-            }
-        }
+        _searchQuery.value = query
     }
 
     fun selectCard(cardId: Int) {
@@ -199,6 +197,7 @@ class RulingsViewModel @Inject constructor(
                 defaultFormat = newDefault,
             )
         }
+        _uiState.update { it.copy(allFormatsWithStatus = computeFormatsWithStatus()) }
         viewModelScope.launch {
             dataStore.edit { prefs ->
                 prefs[UserPreferences.RULINGS_ENABLED_FORMATS] = currentEnabled
@@ -239,7 +238,7 @@ class RulingsViewModel @Inject constructor(
                     }
                 }
 
-                val fuzzyResults = fuzzySearch(line, format)
+                val fuzzyResults = repository.fuzzySearch(line, format)
                 if (fuzzyResults.isNotEmpty()) {
                     val best = fuzzyResults.first()
                     Log.d(TAG, "OCR fuzzy match: '${best.name}' (score=${best.score}, original: '$line')")
@@ -271,34 +270,10 @@ class RulingsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fuzzySearch(
-        query: String,
-        format: String,
-    ): List<FuzzyCardResult> {
-        val words = query.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
-        if (words.isEmpty()) return emptyList()
-
-        val allResults = mutableListOf<CardSearchResult>()
-        val seen = mutableSetOf<Int>()
-        for (word in words) {
-            if (word.length <= 2) continue
-            val results = repository.searchCards(word, format, 10)
-            for (r in results) {
-                if (seen.add(r.id)) {
-                    allResults.add(r)
-                }
-            }
-        }
-
-        val normalizedQuery = query.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
-        return allResults
-            .map { result ->
-                val normalizedName = result.name.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
-                val score = levenshteinDistance(normalizedQuery, normalizedName)
-                FuzzyCardResult(result.id, result.name, score)
-            }
-            .sortedBy { it.score }
-            .filter { it.score <= min(normalizedQuery.length / 2, 5) }
+    private fun computeFormatsWithStatus(): List<Pair<String, Boolean>> {
+        val enabledSet = _uiState.value.enabledFormats.toSet()
+        return FormatRulesData.sortByChronological(_uiState.value.formats)
+            .map { it to (it in enabledSet) }
     }
 
     companion object {
@@ -344,34 +319,5 @@ class RulingsViewModel @Inject constructor(
             }
             return variants.distinct().take(30)
         }
-
-        fun levenshteinDistance(a: String, b: String): Int {
-            if (a.isEmpty()) return b.length
-            if (b.isEmpty()) return a.length
-
-            var prev = IntArray(b.length + 1) { it }
-            var curr = IntArray(b.length + 1)
-
-            for (i in 1..a.length) {
-                curr[0] = i
-                for (j in 1..b.length) {
-                    curr[j] = if (a[i - 1] == b[j - 1]) {
-                        prev[j - 1]
-                    } else {
-                        1 + minOf(prev[j], curr[j - 1], prev[j - 1])
-                    }
-                }
-                val temp = prev
-                prev = curr
-                curr = temp
-            }
-            return prev[b.length]
-        }
     }
-
-    private data class FuzzyCardResult(
-        val id: Int,
-        val name: String,
-        val score: Int,
-    )
 }

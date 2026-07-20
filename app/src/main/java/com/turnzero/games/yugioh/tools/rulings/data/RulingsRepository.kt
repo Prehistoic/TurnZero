@@ -1,6 +1,16 @@
 package com.turnzero.games.yugioh.tools.rulings.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlin.math.min
+
+data class FuzzyCardResult(
+    val id: Int,
+    val name: String,
+    val score: Int,
+)
 
 class RulingsRepository(private val dao: RulingsDao) {
 
@@ -32,6 +42,28 @@ class RulingsRepository(private val dao: RulingsDao) {
         return dao.searchCards(sqlQuery)
     }
 
+    suspend fun fuzzySearch(query: String, format: String): List<FuzzyCardResult> {
+        val words = query.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (words.isEmpty()) return emptyList()
+
+        val results = coroutineScope {
+            words.filter { it.length > 2 }.map { word ->
+                async { searchCards(word, format, 10) }
+            }.awaitAll()
+        }
+        val allResults = results.flatten().distinctBy { it.id }
+
+        val normalizedQuery = query.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
+        return allResults
+            .map { result ->
+                val normalizedName = result.name.uppercase().replace(Regex("[^A-Z0-9\\s]"), "").trim()
+                val score = levenshteinDistance(normalizedQuery, normalizedName)
+                FuzzyCardResult(result.id, result.name, score)
+            }
+            .sortedBy { it.score }
+            .filter { it.score <= min(normalizedQuery.length / 2, 5) }
+    }
+
     suspend fun getCardRulings(cardId: Int, format: String): CardRulingsDetail? {
         val row = dao.getCardWithRulings(cardId, format) ?: return null
         return CardRulingsDetail(
@@ -47,4 +79,29 @@ class RulingsRepository(private val dao: RulingsDao) {
     }
 
     suspend fun getAllFormats(): List<String> = dao.getAllFormats()
+
+    companion object {
+        fun levenshteinDistance(a: String, b: String): Int {
+            if (a.isEmpty()) return b.length
+            if (b.isEmpty()) return a.length
+
+            var prev = IntArray(b.length + 1) { it }
+            var curr = IntArray(b.length + 1)
+
+            for (i in 1..a.length) {
+                curr[0] = i
+                for (j in 1..b.length) {
+                    curr[j] = if (a[i - 1] == b[j - 1]) {
+                        prev[j - 1]
+                    } else {
+                        1 + minOf(prev[j], curr[j - 1], prev[j - 1])
+                    }
+                }
+                val temp = prev
+                prev = curr
+                curr = temp
+            }
+            return prev[b.length]
+        }
+    }
 }

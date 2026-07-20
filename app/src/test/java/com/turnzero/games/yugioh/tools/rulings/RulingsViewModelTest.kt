@@ -174,7 +174,7 @@ class RulingsViewModelTest {
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val statuses = vm.allFormatsWithStatus
+        val statuses = vm.uiState.first().allFormatsWithStatus
         assertEquals(3, statuses.size)
         assertEquals("Goat", statuses[0].first)
         assertEquals("Edison", statuses[1].first)
