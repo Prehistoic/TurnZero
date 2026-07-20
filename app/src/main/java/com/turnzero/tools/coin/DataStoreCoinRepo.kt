@@ -2,12 +2,14 @@ package com.turnzero.tools.coin
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.turnzero.core.data.UserPreferences
+import com.turnzero.core.data.observeInt
+import com.turnzero.core.data.observeJson
+import com.turnzero.core.data.writeInt
+import com.turnzero.core.data.writeJson
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.serialization.builtins.ListSerializer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,37 +18,23 @@ class DataStoreCoinRepo @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : CoinRepo {
 
-    private val json = Json { ignoreUnknownKeys = true }
-
     override fun getCoinCount(gameId: String): Flow<Int> {
-        val key = UserPreferences.coinCountKey(gameId)
-        return dataStore.data.map { prefs ->
-            prefs[key]?.toIntOrNull() ?: 1
-        }
+        return dataStore.observeInt(UserPreferences.coinCountKey(gameId), 1)
     }
 
     override suspend fun saveCoinCount(gameId: String, count: Int) {
-        val key = UserPreferences.coinCountKey(gameId)
-        dataStore.edit { prefs ->
-            prefs[key] = count.toString()
-        }
+        dataStore.writeInt(UserPreferences.coinCountKey(gameId), count)
     }
 
     override fun getHistory(): Flow<List<CoinFlip>> {
-        return dataStore.data.map { prefs ->
-            val raw = prefs[UserPreferences.COIN_HISTORY] ?: return@map emptyList()
-            try {
-                json.decodeFromString<List<CoinFlip>>(raw)
-            } catch (_: Exception) {
-                emptyList()
-            }
-        }
+        return dataStore.observeJson(
+            UserPreferences.COIN_HISTORY,
+            emptyList(),
+            ListSerializer(CoinFlip.serializer())
+        ).distinctUntilChanged()
     }
 
     override suspend fun saveHistory(history: List<CoinFlip>) {
-        val capped = history.take(10)
-        dataStore.edit { prefs ->
-            prefs[UserPreferences.COIN_HISTORY] = json.encodeToString(capped)
-        }
+        dataStore.writeJson(UserPreferences.COIN_HISTORY, history.take(10))
     }
 }

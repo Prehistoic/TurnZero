@@ -2,12 +2,13 @@ package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import com.turnzero.core.data.UserPreferences
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.turnzero.core.data.readEnum
+import com.turnzero.core.data.readInt
+import com.turnzero.core.data.readJson
+import com.turnzero.core.data.writeEnum
+import com.turnzero.core.data.writeInt
+import com.turnzero.core.data.writeJson
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,56 +28,35 @@ class DataStoreLifeCounterRepo @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : LifeCounterRepo {
 
-    private val json = Json { ignoreUnknownKeys = true }
-
     override suspend fun getHistory(): List<LpChange> {
-        val raw = dataStore.data.map { it[UserPreferences.LIFE_COUNTER_HISTORY] }.first()
-            ?: return emptyList()
-        return try {
-            json.decodeFromString<List<LpChange>>(raw)
-        } catch (_: Exception) {
-            emptyList()
-        }
+        return dataStore.readJson(UserPreferences.LIFE_COUNTER_HISTORY, emptyList())
     }
 
     override suspend fun saveHistory(history: List<LpChange>) {
-        dataStore.edit { prefs ->
-            prefs[UserPreferences.LIFE_COUNTER_HISTORY] = json.encodeToString(history)
-        }
+        dataStore.writeJson(UserPreferences.LIFE_COUNTER_HISTORY, history)
     }
 
     override suspend fun getTimerMode(): TimerMode {
-        val raw = dataStore.data.map { it[UserPreferences.LIFE_COUNTER_TIMER_MODE] }.first()
-        return raw?.let {
-            try { TimerMode.valueOf(it) } catch (_: Exception) { TimerMode.COUNT_DOWN }
-        } ?: TimerMode.COUNT_DOWN
+        return dataStore.readEnum(UserPreferences.LIFE_COUNTER_TIMER_MODE, TimerMode.COUNT_DOWN)
     }
 
     override suspend fun saveTimerMode(mode: TimerMode) {
-        dataStore.edit { prefs ->
-            prefs[UserPreferences.LIFE_COUNTER_TIMER_MODE] = mode.name
-        }
+        dataStore.writeEnum(UserPreferences.LIFE_COUNTER_TIMER_MODE, mode)
     }
 
     override suspend fun getTimerStartMinutes(): Int {
-        val raw = dataStore.data.map { it[UserPreferences.LIFE_COUNTER_TIMER_START] }.first()
-        return raw?.toIntOrNull() ?: 30
+        return dataStore.readInt(UserPreferences.LIFE_COUNTER_TIMER_START, 30)
     }
 
     override suspend fun saveTimerStartMinutes(minutes: Int) {
-        dataStore.edit { prefs ->
-            prefs[UserPreferences.LIFE_COUNTER_TIMER_START] = minutes.toString()
-        }
+        dataStore.writeInt(UserPreferences.LIFE_COUNTER_TIMER_START, minutes)
     }
 
     override suspend fun getStartingLp(): Int {
-        val raw = dataStore.data.map { it[UserPreferences.LIFE_COUNTER_STARTING_LP] }.first()
-        return raw?.toIntOrNull() ?: 8000
+        return dataStore.readInt(UserPreferences.LIFE_COUNTER_STARTING_LP, 8000)
     }
 
     override suspend fun saveStartingLp(lp: Int) {
-        dataStore.edit { prefs ->
-            prefs[UserPreferences.LIFE_COUNTER_STARTING_LP] = lp.toString()
-        }
+        dataStore.writeInt(UserPreferences.LIFE_COUNTER_STARTING_LP, lp)
     }
 }

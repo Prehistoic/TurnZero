@@ -6,14 +6,12 @@ import com.turnzero.tools.rules.Keyword
 import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
+import com.turnzero.tools.rules.bl
+import com.turnzero.tools.rules.img
+import com.turnzero.tools.rules.p
+import com.turnzero.tools.rules.sh
 
 object MagicRules {
-
-    private fun p(text: String) = ContentBlock.Paragraph(text)
-    private fun sh(text: String) = ContentBlock.SubHeading(text)
-    private fun bl(items: List<String>) = ContentBlock.BulletList(items)
-
-    private fun img(path: String) = ContentBlock.Image("asset:$path")
 
     private val victory = listOf(
         InfoCard("Reduce Life to 0", listOf(p("Each player starts with 20 life (40 for Commander). Reduce your opponent's life to 0 through combat damage, spell effects, or abilities to win."))),

@@ -4,12 +4,12 @@ class ToolRegistry(
     private val games: Set<@JvmSuppressWildcards Game>,
     private val tools: Set<@JvmSuppressWildcards Tool>
 ) {
-    fun getGames(): List<Game> = games.toList()
+    fun getGames(): List<Game> = games.sortedBy { it.name.lowercase() }
 
     fun getToolsForGame(gameId: String): List<Tool> =
         tools.filter { tool ->
             tool.supportedGames.contains("*") || tool.supportedGames.contains(gameId)
-        }
+        }.sortedBy { it.name.lowercase() }
 
     fun getToolsByIds(ids: Set<String>): List<Tool> =
         tools.filter { it.id in ids }

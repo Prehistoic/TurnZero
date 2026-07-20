@@ -6,12 +6,12 @@ import com.turnzero.tools.rules.PdfAsset
 import com.turnzero.tools.rules.RuleStep
 import com.turnzero.tools.rules.RulesConfig
 import com.turnzero.tools.rules.InfoCard
+import com.turnzero.tools.rules.bl
+import com.turnzero.tools.rules.img
+import com.turnzero.tools.rules.p
+import com.turnzero.tools.rules.sh
 
 object YuGiOhRules {
-
-    private fun p(text: String) = ContentBlock.Paragraph(text)
-    private fun sh(text: String) = ContentBlock.SubHeading(text)
-    private fun bl(items: List<String>) = ContentBlock.BulletList(items)
 
     private val victory = listOf(
         InfoCard("Reduce LP to 0", listOf(p("Each player starts with 8000 Life Points. Reduce your opponent's LP to 0 through battle damage and effect damage to win."))),

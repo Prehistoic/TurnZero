@@ -90,7 +90,7 @@ fun RulingsOcrScreen(
         permissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
-    DisposableEffect(lifecycleOwner) {
+    DisposableEffect(Unit) {
         onDispose { cameraExecutor.shutdown() }
     }
 
@@ -195,7 +195,7 @@ fun RulingsOcrScreen(
             Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)) {
                 Box(contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(32.dp)) {
-                        Text(errorMessage ?: "", color = MaterialTheme.colorScheme.onPrimary, textAlign = TextAlign.Center)
+                        Text(errorMessage!!, color = MaterialTheme.colorScheme.onPrimary, textAlign = TextAlign.Center)
                         Spacer(modifier = Modifier.height(16.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             OutlinedButton(onClick = { errorMessage = null }) { Text("Retry") }
@@ -240,23 +240,25 @@ private fun processCapture(
         }
     }
 
-    val nameBitmap = preprocessed.cropToCardNameRegion()
-    val nameText = tryRegion(nameBitmap)
-    nameBitmap?.recycle()
+    try {
+        val nameBitmap = preprocessed.cropToCardNameRegion()
+        val nameText = tryRegion(nameBitmap)
+        nameBitmap?.recycle()
 
-    if (!nameText.isNullOrBlank()) {
-        onTextRecognized(nameText)
+        if (!nameText.isNullOrBlank()) {
+            onTextRecognized(nameText)
+            return
+        }
+
+        val fullText = tryRegion(preprocessed)
+
+        if (!fullText.isNullOrBlank()) {
+            onTextRecognized(fullText)
+        } else {
+            isProcessing()
+        }
+    } finally {
         preprocessed.recycle()
-        return
-    }
-
-    val fullText = tryRegion(preprocessed)
-    preprocessed.recycle()
-
-    if (!fullText.isNullOrBlank()) {
-        onTextRecognized(fullText)
-    } else {
-        isProcessing()
     }
 }
 

@@ -20,7 +20,6 @@ class TZApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ServiceLocator.init(this)
         rulesProvider.register("yugioh", YuGiOhRules.configs)
         rulesProvider.register("swu", SwuRules.configs)
         rulesProvider.register("fab", FaBRules.configs)

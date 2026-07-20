@@ -39,7 +39,7 @@ fun DiceAnimation(
     LaunchedEffect(isRolling, results) {
         if (isRolling && results != null) {
             val intervalMs = 80L
-            val totalFrames = 12
+            val totalFrames = 6
             var previousNumbers = List(dice.size) { -1 }
 
             repeat(totalFrames) {
@@ -112,27 +112,31 @@ fun DieCard(
     modifier: Modifier = Modifier,
     dieSize: Dp
 ) {
-    val dieColor = Color(die.color.hex)
+    val dieColor = remember(die.color) { Color(die.color.hex) }
     val isWhite = die.color == DiceColor.WHITE
     val isBlack = die.color == DiceColor.BLACK
     val faceLabel = "d${die.faceCount}"
 
-    val borderColor = when {
-        isWhite -> Color.Black
-        isBlack -> Color.White
-        else -> dieColor
+    val borderColor = remember(isWhite, isBlack, dieColor) {
+        when {
+            isWhite -> Color.Black
+            isBlack -> Color.White
+            else -> dieColor
+        }
     }
-    val bgColor = when {
-        isWhite -> Color.White
-        isBlack -> Color.Black
-        else -> dieColor.copy(alpha = 0.12f)
+    val bgColor = remember(isWhite, isBlack, dieColor) {
+        when {
+            isWhite -> Color.White
+            isBlack -> Color.Black
+            else -> dieColor.copy(alpha = 0.12f)
+        }
     }
 
-    val borderWidth = (dieSize.value / 32f).dp
-    val innerPadding = (dieSize.value / 16f).dp
-    val labelFontSize = (dieSize.value * 0.14f).sp
-    val numberFontSize = (dieSize.value * 0.38f).sp
-    val gap = (dieSize.value / 32f).dp
+    val borderWidth = remember { (dieSize.value / 32f).dp }
+    val innerPadding = remember { (dieSize.value / 16f).dp }
+    val labelFontSize = remember { (dieSize.value * 0.14f).sp }
+    val numberFontSize = remember { (dieSize.value * 0.38f).sp }
+    val gap = remember { (dieSize.value / 32f).dp }
 
     Column(
         modifier = modifier

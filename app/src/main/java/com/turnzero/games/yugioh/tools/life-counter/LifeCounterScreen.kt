@@ -1,6 +1,5 @@
 package com.turnzero.games.yugioh.tools.lifecounter
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.abs
 
-@SuppressLint("MissingPermission")
 @Composable
 fun LifeCounterScreen(
     uiState: LifeCounterUiState,
@@ -279,10 +277,12 @@ private fun CenterPanel(
             contentAlignment = Alignment.Center
         ) {
             val displaySeconds = if (timerMode == TimerMode.COUNT_UP) elapsedSeconds else remainingSeconds
-            val hours = displaySeconds / 3600
-            val minutes = (displaySeconds % 3600) / 60
-            val seconds = displaySeconds % 60
-            val timeText = String.format(java.util.Locale.ROOT, "%02d:%02d:%02d", hours, minutes, seconds)
+            val timeText = remember(displaySeconds) {
+                val hours = displaySeconds / 3600
+                val minutes = (displaySeconds % 3600) / 60
+                val seconds = displaySeconds % 60
+                String.format(java.util.Locale.ROOT, "%02d:%02d:%02d", hours, minutes, seconds)
+            }
 
             val statusLabel = when {
                 isRunning -> "Running"
@@ -335,7 +335,6 @@ private fun CenterPanel(
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-@SuppressLint("MissingPermission")
 private fun vibrateApi31(context: Context) {
     val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
     vibratorManager?.defaultVibrator?.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))

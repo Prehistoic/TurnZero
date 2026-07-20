@@ -82,11 +82,14 @@ When adding new features or refactoring existing ones, follow these patterns:
 - Use type-safe navigation with `NavType` for path parameters.
 - Bottom nav destinations use `popUpTo` + `launchSingleTop` + `restoreState`.
 
+### Execution Preference
+- **Always prefer subagent-driven execution** for multi-task implementation plans. Dispatch a fresh subagent per task, review between tasks.
+
 ### Adding a New Game or Tool
 1. Implement the `Game` interface in `games/<name>/`
 2. Implement `Tool` interfaces in `games/<name>/` or `tools/<name>/`
-3. Register instances in `ServiceLocator.tools` and `ServiceLocator.games`
-4. The `ToolRegistry` handles discovery automatically
+3. Register instances via `@Provides @IntoSet` in `di/GameModule.kt` or `di/ToolModule.kt`
+4. The `ToolRegistry` handles discovery automatically via constructor injection
 
 ## Testing
 

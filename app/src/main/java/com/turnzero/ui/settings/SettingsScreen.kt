@@ -61,7 +61,7 @@ fun SettingsScreen(
 }
 
 @Composable
-internal fun SettingsCategoryRow(
+fun SettingsCategoryRow(
     icon: ImageVector,
     title: String,
     description: String,

@@ -90,27 +90,26 @@ class UpdateManager(private val context: Context) {
             connection.readTimeout = 30000
 
             val fileSize = connection.contentLength
-            val inputStream = connection.inputStream
 
             val updatesDir = File(context.cacheDir, "updates")
             updatesDir.mkdirs()
             val apkFile = File(updatesDir, "update.apk")
 
-            val outputStream = FileOutputStream(apkFile)
-            val buffer = ByteArray(8192)
-            var bytesRead: Int
-            var totalBytesRead: Long = 0
+            connection.inputStream.use { inputStream ->
+                FileOutputStream(apkFile).use { outputStream ->
+                    val buffer = ByteArray(8192)
+                    var bytesRead: Int
+                    var totalBytesRead: Long = 0
 
-            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
-                totalBytesRead += bytesRead
-                if (fileSize > 0) {
-                    val progress = ((totalBytesRead * 100) / fileSize).toInt()
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                        totalBytesRead += bytesRead
+                        if (fileSize > 0) {
+                            val progress = ((totalBytesRead * 100) / fileSize).toInt()
+                        }
+                    }
                 }
             }
-
-            outputStream.close()
-            inputStream.close()
             connection.disconnect()
 
             UpdateStatus.ReadyToInstall(apkFile)

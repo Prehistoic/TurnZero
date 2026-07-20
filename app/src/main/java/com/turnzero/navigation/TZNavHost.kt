@@ -4,7 +4,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -12,18 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.turnzero.core.data.UserPreferences
-import com.turnzero.core.tools.api.ToolRegistry
 import com.turnzero.core.ui.components.*
+import com.turnzero.ui.MainViewModel
 import com.turnzero.ui.favorites.FavoritesScreen
 import com.turnzero.ui.games.GamesScreen
 import com.turnzero.ui.settings.AboutSettingsScreen
@@ -33,59 +30,34 @@ import com.turnzero.ui.settings.LanguageSelectionScreen
 import com.turnzero.ui.settings.LicensesScreen
 import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
-import com.turnzero.ui.settings.ThemeMode
 import com.turnzero.ui.tools.ToolSwitcherSheet
 import com.turnzero.ui.tools.ToolsScreen
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @Composable
 fun TZNavHost(
-    toolRegistry: ToolRegistry,
-    dataStore: DataStore<Preferences>,
-    isDarkTheme: Boolean,
-    onThemeChanged: (Boolean) -> Unit,
     selectedColorThemeId: String,
     onColorThemeChanged: (String) -> Unit
 ) {
+    val mainViewModel: MainViewModel = hiltViewModel()
+    val mainUiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val scope = rememberCoroutineScope()
-    val systemIsDark = isSystemInDarkTheme()
-
-    var gamesLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
-    var toolsLayoutState by remember { mutableStateOf(LayoutMode.GRID) }
-    var themeModeState by remember { mutableStateOf(ThemeMode.SYSTEM) }
-    var favoriteToolIds by remember { mutableStateOf(emptySet<String>()) }
-    var currentLanguage by remember { mutableStateOf("en") }
-
-    LaunchedEffect(Unit) {
-        val prefs = dataStore.data.first()
-        prefs[UserPreferences.LAYOUT_GAMES]?.let {
-            try { gamesLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
-        }
-        prefs[UserPreferences.LAYOUT_TOOLS]?.let {
-            try { toolsLayoutState = LayoutMode.valueOf(it) } catch (_: Exception) {}
-        }
-        val mode = prefs[UserPreferences.THEME_MODE] ?: "system"
-        themeModeState = try { ThemeMode.valueOf(mode.uppercase()) } catch (_: Exception) { ThemeMode.SYSTEM }
-        favoriteToolIds = prefs[UserPreferences.FAVORITE_TOOLS] ?: emptySet()
-        currentLanguage = prefs[UserPreferences.LANGUAGE] ?: "en"
-    }
-
-    var selectedToolId by remember { mutableStateOf<String?>(null) }
-    var toolShowSwitcher by remember { mutableStateOf(false) }
-    var toolShowOptions by remember { mutableStateOf(false) }
-
-    LaunchedEffect(currentRoute) {
-        selectedToolId = null
-        toolShowSwitcher = false
-        toolShowOptions = false
-    }
 
     val currentToolId = navBackStackEntry?.arguments?.getString("toolId")
-    val currentTool = remember(currentToolId) { if (currentToolId != null) toolRegistry.getToolById(currentToolId) else null }
+    val currentGameId = navBackStackEntry?.arguments?.getString("gameId")
+    val currentTool = mainUiState.selectedTool
+
+    LaunchedEffect(currentToolId, currentGameId) {
+        mainViewModel.selectTool(currentToolId, currentGameId)
+    }
+
+    LaunchedEffect(currentRoute) {
+        mainViewModel.dismissAllToolSheets()
+    }
+
+    val toolRegistry = mainViewModel.toolRegistry
 
     Scaffold(
         contentWindowInsets = if (currentTool?.showBottomBar == false)
@@ -96,35 +68,20 @@ fun TZNavHost(
             when {
                 currentRoute?.startsWith("tool/") == true && currentTool?.showBottomBar != false -> {
                     ToolBottomNavBar(
-                        onToolsClick = { toolShowSwitcher = true },
-                        onOptionsClick = { toolShowOptions = true }
+                        onToolsClick = { mainViewModel.showToolSwitcher(true) },
+                        onOptionsClick = { mainViewModel.showToolOptions(true) }
                     )
                 }
                 currentRoute?.startsWith("tool/") == true -> {
                     // Landscape tool — no bottom bar
                 }
-                selectedToolId != null -> {
+                mainUiState.highlightedToolKey != null -> {
+                    val compositeKey = mainUiState.highlightedToolKey!!
+                    val isFavorited = compositeKey in mainUiState.favoriteToolIds
                     NavigationBar {
-                        val isFavorited = selectedToolId in favoriteToolIds
                         NavigationBarItem(
                             selected = isFavorited,
-                            onClick = {
-                                val toolId = selectedToolId ?: return@NavigationBarItem
-                                val updated = if (isFavorited) {
-                                    favoriteToolIds - toolId
-                                } else {
-                                    favoriteToolIds + toolId
-                                }
-                                favoriteToolIds = updated
-                                if (isFavorited) {
-                                    selectedToolId = null
-                                }
-                                scope.launch {
-                                    dataStore.edit { prefs ->
-                                        prefs[UserPreferences.FAVORITE_TOOLS] = updated
-                                    }
-                                }
-                            },
+                            onClick = { mainViewModel.toggleFavorite(compositeKey) },
                             icon = {
                                 Icon(
                                     imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -161,15 +118,8 @@ fun TZNavHost(
             ) {
                 GamesScreen(
                     toolRegistry = toolRegistry,
-                    currentLayout = gamesLayoutState,
-                    onLayoutSelected = { mode ->
-                        gamesLayoutState = mode
-                        scope.launch {
-                            dataStore.edit { prefs ->
-                                prefs[UserPreferences.LAYOUT_GAMES] = mode.name
-                            }
-                        }
-                    },
+                    currentLayout = mainUiState.gamesLayout,
+                    onLayoutSelected = mainViewModel::setGamesLayout,
                     onGameClick = { gameId ->
                         navController.navigate(Screen.Tools.createRoute(gameId))
                     }
@@ -181,22 +131,18 @@ fun TZNavHost(
                 enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
-                val favoriteEntries = remember(favoriteToolIds) {
-                    toolRegistry.getFavoriteEntries(favoriteToolIds)
+                val favoriteEntries = remember(mainUiState.favoriteToolIds) {
+                    toolRegistry.getFavoriteEntries(mainUiState.favoriteToolIds)
                 }
                 FavoritesScreen(
                     favoriteEntries = favoriteEntries,
                     onToolClick = { gameId, toolId ->
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
-                    highlightedToolId = selectedToolId,
-                    onToolLongClick = { compositeKey ->
-                        selectedToolId = compositeKey
-                    },
-                    onTapOutside = {
-                        selectedToolId = null
-                    },
-                    layoutMode = toolsLayoutState
+                    highlightedToolId = mainUiState.highlightedToolKey,
+                    onToolLongClick = { mainViewModel.setHighlightedToolKey(it) },
+                    onTapOutside = { mainViewModel.clearHighlightedToolKey() },
+                    layoutMode = mainUiState.toolsLayout
                 )
             }
 
@@ -206,15 +152,9 @@ fun TZNavHost(
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
                 SettingsScreen(
-                    onSearchClick = {
-                        navController.navigate(Screen.SearchSettings.route)
-                    },
-                    onAppearanceClick = {
-                        navController.navigate(Screen.AppearanceSettings.route)
-                    },
-                    onAboutClick = {
-                        navController.navigate(Screen.AboutSettings.route)
-                    }
+                    onSearchClick = { navController.navigate(Screen.SearchSettings.route) },
+                    onAppearanceClick = { navController.navigate(Screen.AppearanceSettings.route) },
+                    onAboutClick = { navController.navigate(Screen.AboutSettings.route) }
                 )
             }
 
@@ -224,38 +164,19 @@ fun TZNavHost(
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
                 AppearanceSettingsScreen(
-                    currentTheme = themeModeState,
+                    currentTheme = mainUiState.themeMode,
                     selectedColorThemeId = selectedColorThemeId,
-                    currentLanguage = currentLanguage,
-                    gamesLayout = gamesLayoutState,
-                    toolsLayout = toolsLayoutState,
+                    currentLanguage = mainUiState.currentLanguage,
+                    gamesLayout = mainUiState.gamesLayout,
+                    toolsLayout = mainUiState.toolsLayout,
                     onThemeModeSelected = { mode ->
-                        themeModeState = mode
-                        scope.launch {
-                            dataStore.edit { prefs ->
-                                prefs[UserPreferences.THEME_MODE] = mode.name.lowercase()
-                            }
-                        }
-                        onThemeChanged(
-                            when (mode) {
-                                ThemeMode.LIGHT -> false
-                                ThemeMode.DARK -> true
-                                ThemeMode.SYSTEM -> systemIsDark
-                            }
-                        )
+                        mainViewModel.setThemeMode(mode)
+                        onColorThemeChanged(selectedColorThemeId)
                     },
-                    onColorThemeSelected = { id ->
-                        onColorThemeChanged(id)
-                    },
-                    onLanguageClick = {
-                        navController.navigate(Screen.LanguageSettings.route)
-                    },
-                    onGamesLayoutClick = {
-                        navController.navigate(Screen.DisplaySettings.createRoute("games"))
-                    },
-                    onToolsLayoutClick = {
-                        navController.navigate(Screen.DisplaySettings.createRoute("tools"))
-                    },
+                    onColorThemeSelected = onColorThemeChanged,
+                    onLanguageClick = { navController.navigate(Screen.LanguageSettings.route) },
+                    onGamesLayoutClick = { navController.navigate(Screen.DisplaySettings.createRoute("games")) },
+                    onToolsLayoutClick = { navController.navigate(Screen.DisplaySettings.createRoute("tools")) },
                     onBack = { navController.popBackStack() }
                 )
             }
@@ -266,15 +187,8 @@ fun TZNavHost(
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
                 LanguageSelectionScreen(
-                    currentLanguage = currentLanguage,
-                    onLanguageSelected = { code ->
-                        currentLanguage = code
-                        scope.launch {
-                            dataStore.edit { prefs ->
-                                prefs[UserPreferences.LANGUAGE] = code
-                            }
-                        }
-                    },
+                    currentLanguage = mainUiState.currentLanguage,
+                    onLanguageSelected = mainViewModel::setLanguage,
                     onBack = { navController.popBackStack() }
                 )
             }
@@ -286,26 +200,13 @@ fun TZNavHost(
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type") ?: return@composable
-                val layout = if (type == "games") gamesLayoutState else toolsLayoutState
+                val layout = if (type == "games") mainUiState.gamesLayout else mainUiState.toolsLayout
                 DisplaySettingsScreen(
                     type = type,
                     currentLayout = layout,
                     onLayoutSelected = { mode ->
-                        if (type == "games") {
-                            gamesLayoutState = mode
-                            scope.launch {
-                                dataStore.edit { prefs ->
-                                    prefs[UserPreferences.LAYOUT_GAMES] = mode.name
-                                }
-                            }
-                        } else {
-                            toolsLayoutState = mode
-                            scope.launch {
-                                dataStore.edit { prefs ->
-                                    prefs[UserPreferences.LAYOUT_TOOLS] = mode.name
-                                }
-                            }
-                        }
+                        if (type == "games") mainViewModel.setGamesLayout(mode)
+                        else mainViewModel.setToolsLayout(mode)
                     },
                     onBack = { navController.popBackStack() }
                 )
@@ -316,9 +217,7 @@ fun TZNavHost(
                 enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
-                SearchSettingsScreen(
-                    onBack = { navController.popBackStack() }
-                )
+                SearchSettingsScreen(onBack = { navController.popBackStack() })
             }
 
             composable(
@@ -328,9 +227,7 @@ fun TZNavHost(
             ) {
                 AboutSettingsScreen(
                     onBack = { navController.popBackStack() },
-                    onLicensesClick = {
-                        navController.navigate(Screen.LicensesSettings.route)
-                    }
+                    onLicensesClick = { navController.navigate(Screen.LicensesSettings.route) }
                 )
             }
 
@@ -339,9 +236,7 @@ fun TZNavHost(
                 enterTransition = { fadeIn(initialAlpha = 0f, animationSpec = tween(150)) },
                 exitTransition = { fadeOut(targetAlpha = 0f, animationSpec = tween(150)) },
             ) {
-                LicensesScreen(
-                    onBack = { navController.popBackStack() }
-                )
+                LicensesScreen(onBack = { navController.popBackStack() })
             }
 
             composable(
@@ -354,26 +249,15 @@ fun TZNavHost(
                 ToolsScreen(
                     toolRegistry = toolRegistry,
                     gameId = gameId,
-                    currentLayout = toolsLayoutState,
-                    onLayoutSelected = { mode ->
-                        toolsLayoutState = mode
-                        scope.launch {
-                            dataStore.edit { prefs ->
-                                prefs[UserPreferences.LAYOUT_TOOLS] = mode.name
-                            }
-                        }
-                    },
+                    currentLayout = mainUiState.toolsLayout,
+                    onLayoutSelected = mainViewModel::setToolsLayout,
                     onToolClick = { toolId ->
                         navController.navigate(Screen.ToolDetail.createRoute(gameId, toolId))
                     },
                     onBack = { navController.popBackStack() },
-                    highlightedToolId = selectedToolId,
-                    onToolLongClick = { compositeKey ->
-                        selectedToolId = compositeKey
-                    },
-                    onTapOutside = {
-                        selectedToolId = null
-                    }
+                    highlightedToolId = mainUiState.highlightedToolKey,
+                    onToolLongClick = { mainViewModel.setHighlightedToolKey(it) },
+                    onTapOutside = { mainViewModel.clearHighlightedToolKey() }
                 )
             }
 
@@ -393,8 +277,8 @@ fun TZNavHost(
 
                 CompositionLocalProvider(
                     LocalToolSheetActions provides ToolSheetActions(
-                        onOpenTools = { toolShowSwitcher = true },
-                        onOpenOptions = { toolShowOptions = true }
+                        onOpenTools = { mainViewModel.showToolSwitcher(true) },
+                        onOpenOptions = { mainViewModel.showToolOptions(true) }
                     )
                 ) {
                     Column {
@@ -403,9 +287,9 @@ fun TZNavHost(
                             showBackButton = true,
                             onBackClick = { navController.popBackStack() },
                             actions = tool.TopBarActions(),
-                            modifier = if (currentTool?.showBottomBar == false) 
-                                Modifier.padding(horizontal = 0.dp) 
-                            else 
+                            modifier = if (currentTool?.showBottomBar == false)
+                                Modifier.padding(horizontal = 0.dp)
+                            else
                                 Modifier
                         )
                         Box(
@@ -413,9 +297,9 @@ fun TZNavHost(
                                 .weight(1f)
                                 .fillMaxWidth()
                                 .then(
-                                    if (currentTool?.showBottomBar == false) 
-                                        Modifier.padding(horizontal = 0.dp) 
-                                    else 
+                                    if (currentTool?.showBottomBar == false)
+                                        Modifier.padding(horizontal = 0.dp)
+                                    else
                                         Modifier
                                 )
                         ) {
@@ -424,13 +308,13 @@ fun TZNavHost(
                     }
                 }
 
-                if (toolShowSwitcher) {
+                if (mainUiState.showToolSwitcher) {
                     ToolSwitcherSheet(
                         tools = allTools,
                         currentToolId = toolId,
                         isLandscape = currentTool?.showBottomBar == false,
                         onToolSelected = { selected ->
-                            toolShowSwitcher = false
+                            mainViewModel.showToolSwitcher(false)
                             navController.navigate(
                                 Screen.ToolDetail.createRoute(gameId, selected.id)
                             ) {
@@ -438,12 +322,12 @@ fun TZNavHost(
                                 launchSingleTop = true
                             }
                         },
-                        onDismiss = { toolShowSwitcher = false }
+                        onDismiss = { mainViewModel.showToolSwitcher(false) }
                     )
                 }
 
-                if (toolShowOptions) {
-                    tool.OptionsSheet(onDismiss = { toolShowOptions = false })
+                if (mainUiState.showToolOptions) {
+                    tool.OptionsSheet(onDismiss = { mainViewModel.showToolOptions(false) })
                 }
             }
         }
