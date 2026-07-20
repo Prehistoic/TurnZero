@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 fun tcgGame(
     id: String,
     name: String,
-    description: String = "Standard trading card game rules and companion tools.",
+    description: String = "Trading Card Game",
     @DrawableRes logoRes: Int,
     vararg extraToolIds: String = emptyArray(),
 ): Game = object : Game {
