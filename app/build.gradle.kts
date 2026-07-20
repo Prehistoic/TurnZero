@@ -19,6 +19,10 @@ android {
         versionCode = 35
         versionName = "0.19.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
     }
 
     buildTypes {
@@ -35,10 +39,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    androidResources {
-        noCompress.add("db")
     }
 
     buildFeatures {
@@ -80,7 +80,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.aboutlibraries.compose)
     implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
     implementation(libs.errorprone.annotations)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

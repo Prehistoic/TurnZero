@@ -1,7 +1,6 @@
-# Hilt
--keep class dagger.hilt.** { *; }
--keep class javax.inject.** { *; }
--keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
-
-# DataStore
--keep class androidx.datastore.** { *; }
+# Hilt — keep generated entry points only
+-keep,allowobfuscation class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+-keepclassmembers class * {
+    @dagger.hilt.* <methods>;
+    @javax.inject.Inject <init>(...);
+}
