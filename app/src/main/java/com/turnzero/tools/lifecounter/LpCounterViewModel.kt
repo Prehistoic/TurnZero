@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -195,7 +194,7 @@ class LpCounterViewModel @Inject constructor(
         playerCount: Int? = null,
         globalStartingLp: Int? = null,
     ) {
-        runBlocking {
+        viewModelScope.launch {
             val current = repo.getConfig()
             val updated = current.copy(
                 playerCount = playerCount ?: current.playerCount,

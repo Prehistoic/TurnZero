@@ -3,6 +3,7 @@ package com.turnzero.tools.lifecounter
 import androidx.lifecycle.SavedStateHandle
 import com.turnzero.TZViewModelTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -214,7 +215,9 @@ class LpCounterViewModelTest : TZViewModelTest() {
     fun `setPlayerCount persists config`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
+        advanceUntilIdle()
         vm.setPlayerCount(4)
+        advanceUntilIdle()
         assertEquals(4, repo.savedConfig?.playerCount)
     }
 
@@ -222,7 +225,9 @@ class LpCounterViewModelTest : TZViewModelTest() {
     fun `setGlobalStartingLp persists config`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
+        advanceUntilIdle()
         vm.setGlobalStartingLp(30)
+        advanceUntilIdle()
         assertEquals(30, repo.savedConfig?.globalStartingLp)
     }
 
@@ -230,7 +235,9 @@ class LpCounterViewModelTest : TZViewModelTest() {
     fun `setPlayerStartingLp persists per-player override`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
+        advanceUntilIdle()
         vm.setPlayerStartingLp(3, 30)
+        advanceUntilIdle()
         assertEquals(mapOf(3 to 30), repo.savedConfig?.perPlayerStartingLp)
     }
 }
