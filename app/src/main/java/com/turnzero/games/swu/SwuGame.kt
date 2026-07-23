@@ -8,4 +8,5 @@ val SwuGame: Game = tcgGame(
     id = "swu",
     name = "Star Wars Unlimited",
     logoRes = R.drawable.ic_game_swu,
+    extraToolIds = arrayOf("lp-counter"),
 )

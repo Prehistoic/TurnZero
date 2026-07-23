@@ -27,6 +27,7 @@ import com.turnzero.ui.settings.AboutSettingsScreen
 import com.turnzero.ui.settings.AppearanceSettingsScreen
 import com.turnzero.ui.settings.DisplaySettingsScreen
 import com.turnzero.ui.settings.LanguageSelectionScreen
+import com.turnzero.tools.lifecounter.LocalGameId
 import com.turnzero.ui.settings.LicensesScreen
 import com.turnzero.ui.settings.SearchSettingsScreen
 import com.turnzero.ui.settings.SettingsScreen
@@ -276,6 +277,7 @@ fun TZNavHost(
                 val tool = allTools.firstOrNull { it.id == toolId } ?: return@composable
 
                 CompositionLocalProvider(
+                    LocalGameId provides gameId,
                     LocalToolSheetActions provides ToolSheetActions(
                         onOpenTools = { mainViewModel.showToolSwitcher(true) },
                         onOpenOptions = { mainViewModel.showToolOptions(true) }

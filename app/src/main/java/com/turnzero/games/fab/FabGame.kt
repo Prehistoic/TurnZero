@@ -8,4 +8,5 @@ val FabGame: Game = tcgGame(
     id = "fab",
     name = "Flesh and Blood",
     logoRes = R.drawable.ic_game_fab,
+    extraToolIds = arrayOf("lp-counter"),
 )
