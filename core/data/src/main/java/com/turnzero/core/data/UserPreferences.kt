@@ -22,6 +22,7 @@ object UserPreferences {
     fun dicePoolKey(gameId: String) = stringPreferencesKey("dice_pool_$gameId")
 
     val COIN_HISTORY = stringPreferencesKey("coin_history")
+    val LP_COUNTER_CONFIG = stringPreferencesKey("lp_counter_config")
     val LIFE_COUNTER_HISTORY = stringPreferencesKey("life_counter_history")
     val LIFE_COUNTER_TIMER_MODE = stringPreferencesKey("life_counter_timer_mode")
     val LIFE_COUNTER_TIMER_START = stringPreferencesKey("life_counter_timer_start")
