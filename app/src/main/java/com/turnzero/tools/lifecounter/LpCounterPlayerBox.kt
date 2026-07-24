@@ -250,37 +250,11 @@ private fun VerticalContent(
     onRightPress: (Boolean) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
+        // Center: LP + indicator + heart — exactly like horizontal mode
         Column(
-            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.align(Alignment.Center),
         ) {
-            // Minus touch zone (top)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .pointerInput(Unit) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                when (awaitPointerEvent().type) {
-                                    PointerEventType.Press -> onLeftPress(true)
-                                    PointerEventType.Release -> onLeftPress(false)
-                                    else -> {}
-                                }
-                            }
-                        }
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    Icons.Default.Remove,
-                    contentDescription = "Decrease LP",
-                    tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(28.dp).rotate(90f),
-                )
-            }
-
             // LP number rotated 90°
             Text(
                 text = "${player.currentLp}",
@@ -288,12 +262,14 @@ private fun VerticalContent(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 color = playerColor,
-                modifier = Modifier.weight(1f).rotate(90f),
+                modifier = Modifier.rotate(90f),
             )
 
-            // Indicator area (fixed height so content doesn't shift)
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // Indicator area (fixed size so content doesn't shift)
             Box(
-                modifier = Modifier.height(24.dp),
+                modifier = Modifier.height(20.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 androidx.compose.animation.AnimatedVisibility(
@@ -311,6 +287,8 @@ private fun VerticalContent(
                 }
             }
 
+            Spacer(modifier = Modifier.height(4.dp))
+
             // Heart
             IconButton(
                 onClick = onReset,
@@ -323,32 +301,60 @@ private fun VerticalContent(
                     modifier = Modifier.size(16.dp).rotate(90f),
                 )
             }
+        }
 
-            // Plus touch zone (bottom)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .pointerInput(Unit) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                when (awaitPointerEvent().type) {
-                                    PointerEventType.Press -> onRightPress(true)
-                                    PointerEventType.Release -> onRightPress(false)
-                                    else -> {}
-                                }
+        // Top touch zone: decrement (matches left side in horizontal)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.35f)
+                .align(Alignment.TopCenter)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            when (awaitPointerEvent().type) {
+                                PointerEventType.Press -> onLeftPress(true)
+                                PointerEventType.Release -> onLeftPress(false)
+                                else -> {}
                             }
                         }
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = "Increase LP",
-                    tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(28.dp).rotate(90f),
-                )
-            }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Default.Remove,
+                contentDescription = "Decrease LP",
+                tint = playerColor.copy(alpha = 0.6f),
+                modifier = Modifier.size(28.dp).rotate(90f),
+            )
+        }
+
+        // Bottom touch zone: increment (matches right side in horizontal)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.35f)
+                .align(Alignment.BottomCenter)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            when (awaitPointerEvent().type) {
+                                PointerEventType.Press -> onRightPress(true)
+                                PointerEventType.Release -> onRightPress(false)
+                                else -> {}
+                            }
+                        }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = "Increase LP",
+                tint = playerColor.copy(alpha = 0.6f),
+                modifier = Modifier.size(28.dp).rotate(90f),
+            )
         }
     }
 }
