@@ -61,28 +61,21 @@ class LpCounterViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `incrementPlayer adds 1 to currentLp and records history`() = runTest {
+    fun `incrementPlayer adds 1 to currentLp`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
         vm.incrementPlayer(1)
-        val state = vm.uiState.value
-        assertEquals(21, state.players[0].currentLp)
-        assertEquals(1, state.changeHistory.size)
-        assertEquals(20, state.changeHistory[0].previousLp)
-        assertEquals(1, state.changeHistory[0].delta)
-        assertEquals(21, state.changeHistory[0].newTotal)
-        assertEquals(1, state.changeHistory[0].playerNumber)
+        assertEquals(21, vm.uiState.value.players[0].currentLp)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
     }
 
     @Test
-    fun `decrementPlayer subtracts 1 from currentLp and records history`() = runTest {
+    fun `decrementPlayer subtracts 1 from currentLp`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
         vm.decrementPlayer(1)
-        val state = vm.uiState.value
-        assertEquals(19, state.players[0].currentLp)
-        assertEquals(-1, state.changeHistory[0].delta)
-        assertEquals(19, state.changeHistory[0].newTotal)
+        assertEquals(19, vm.uiState.value.players[0].currentLp)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
     }
 
     @Test
@@ -96,13 +89,30 @@ class LpCounterViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `resetChangeIndicator resets lastChange to zero`() = runTest {
+    fun `resetChangeIndicator resets lastChange and records net delta in history`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1) // 20 -> 21, lastChange=1
+        vm.incrementPlayer(1) // 21 -> 22, lastChange=2
+        vm.decrementPlayer(1) // 22 -> 21, lastChange=1
+        vm.resetChangeIndicator(1)
+        val state = vm.uiState.value
+        assertEquals(0, state.players[0].lastChange)
+        assertEquals(1, state.changeHistory.size)
+        assertEquals(20, state.changeHistory[0].previousLp)
+        assertEquals(1, state.changeHistory[0].delta)
+        assertEquals(21, state.changeHistory[0].newTotal)
+    }
+
+    @Test
+    fun `resetChangeIndicator does not record history when net delta is zero`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
         vm.incrementPlayer(1)
-        vm.incrementPlayer(1)
+        vm.decrementPlayer(1)
         vm.resetChangeIndicator(1)
         assertEquals(0, vm.uiState.value.players[0].lastChange)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
     }
 
     @Test
@@ -113,13 +123,18 @@ class LpCounterViewModelTest : TZViewModelTest() {
         vm.decrementPlayer(1) // 19 -> 18
         vm.decrementPlayer(1) // 18 -> 17
         vm.resetChangeIndicator(1)
+        val afterFirst = vm.uiState.value
+        assertEquals(1, afterFirst.changeHistory.size) // net -3 recorded
+        vm.decrementPlayer(1) // 17 -> 16
+        vm.decrementPlayer(1) // 16 -> 15
+        vm.resetChangeIndicator(1)
         vm.resetPlayer(1)
         val state = vm.uiState.value
         assertEquals(20, state.players[0].currentLp)
         assertEquals(0, state.players[0].lastChange)
         val resetEntry = state.changeHistory.last()
-        assertEquals(17, resetEntry.previousLp)
-        assertEquals(3, resetEntry.delta)
+        assertEquals(15, resetEntry.previousLp)
+        assertEquals(5, resetEntry.delta)
         assertEquals(20, resetEntry.newTotal)
     }
 
@@ -184,7 +199,9 @@ class LpCounterViewModelTest : TZViewModelTest() {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
         vm.incrementPlayer(1)
+        vm.resetChangeIndicator(1)
         vm.incrementPlayer(2)
+        vm.resetChangeIndicator(2)
         assertEquals(2, vm.uiState.value.changeHistory.size)
         vm.clearHistory()
         assertEquals(0, vm.uiState.value.changeHistory.size)
@@ -194,7 +211,10 @@ class LpCounterViewModelTest : TZViewModelTest() {
     fun `history is capped at 200 entries`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
-        repeat(250) { vm.incrementPlayer(1) }
+        repeat(250) {
+            vm.incrementPlayer(1)
+            vm.resetChangeIndicator(1)
+        }
         val history = vm.uiState.value.changeHistory
         assertTrue(history.size <= 200)
         assertEquals(250 + 20, vm.uiState.value.players[0].currentLp)
@@ -219,5 +239,4 @@ class LpCounterViewModelTest : TZViewModelTest() {
         advanceUntilIdle()
         assertEquals(30, repo.savedConfig?.globalStartingLp)
     }
-
 }

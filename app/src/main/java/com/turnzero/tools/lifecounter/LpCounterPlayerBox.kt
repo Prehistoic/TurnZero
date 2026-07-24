@@ -58,6 +58,8 @@ fun PlayerBox(
             lastChangeIsVisible.value = false
             delay(FADE_DURATION.toLong() + 50)
             onResetChangeIndicator()
+        } else {
+            lastChangeIsVisible.value = false
         }
     }
 
@@ -248,62 +250,12 @@ private fun VerticalContent(
     onRightPress: (Boolean) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        // Heart on the left side, rotated 90°
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterStart),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            IconButton(
-                onClick = onReset,
-                modifier = Modifier.size(28.dp),
-            ) {
-                Icon(
-                    Icons.Default.Favorite,
-                    contentDescription = "Reset LP",
-                    tint = playerColor,
-                    modifier = Modifier.size(16.dp).rotate(90f),
-                )
-            }
-        }
-
-        // Change indicator on the right side, rotated 90°
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Box(
-                modifier = Modifier.width(24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = lastChangeIsVisible,
-                    exit = fadeOut(animationSpec = tween()),
-                ) {
-                    val sign = if (changeDisplayValue > 0) "+" else ""
-                    Text(
-                        text = "$sign$changeDisplayValue",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.error,
-                        modifier = Modifier.rotate(90f),
-                    )
-                }
-            }
-        }
-
-        // Center: stacked minus, LP (rotated 90°), plus
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.SpaceAround,
         ) {
-            // Minus button (full width touch zone)
+            // Minus touch zone (top)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -339,7 +291,40 @@ private fun VerticalContent(
                 modifier = Modifier.weight(1f).rotate(90f),
             )
 
-            // Plus button (full width touch zone)
+            // Indicator area (fixed height so content doesn't shift)
+            Box(
+                modifier = Modifier.height(24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = lastChangeIsVisible,
+                    exit = fadeOut(animationSpec = tween()),
+                ) {
+                    val sign = if (changeDisplayValue > 0) "+" else ""
+                    Text(
+                        text = "$sign$changeDisplayValue",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.error,
+                        modifier = Modifier.rotate(90f),
+                    )
+                }
+            }
+
+            // Heart
+            IconButton(
+                onClick = onReset,
+                modifier = Modifier.size(28.dp),
+            ) {
+                Icon(
+                    Icons.Default.Favorite,
+                    contentDescription = "Reset LP",
+                    tint = playerColor,
+                    modifier = Modifier.size(16.dp).rotate(90f),
+                )
+            }
+
+            // Plus touch zone (bottom)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

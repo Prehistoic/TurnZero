@@ -60,20 +60,11 @@ class LpCounterViewModel @Inject constructor(
             val index = players.indexOfFirst { it.number == playerNumber }
             if (index < 0) return@update state
             val player = players[index]
-            val oldLp = player.currentLp
             players[index] = player.copy(
-                currentLp = oldLp + delta,
+                currentLp = player.currentLp + delta,
                 lastChange = player.lastChange + delta,
             )
-            val change = LpChange(
-                playerNumber = playerNumber,
-                previousLp = oldLp,
-                delta = delta,
-                newTotal = oldLp + delta,
-                timestamp = System.currentTimeMillis(),
-            )
-            val history = (state.changeHistory + change).takeLast(HISTORY_CAP)
-            state.copy(players = players, changeHistory = history)
+            state.copy(players = players)
         }
     }
 
@@ -142,8 +133,23 @@ class LpCounterViewModel @Inject constructor(
             val players = state.players.toMutableList()
             val index = players.indexOfFirst { it.number == playerNumber }
             if (index < 0) return@update state
-            players[index] = players[index].copy(lastChange = 0)
-            state.copy(players = players)
+            val player = players[index]
+            val netDelta = player.lastChange
+            if (netDelta != 0) {
+                val previousLp = player.currentLp - netDelta
+                val change = LpChange(
+                    playerNumber = playerNumber,
+                    previousLp = previousLp,
+                    delta = netDelta,
+                    newTotal = player.currentLp,
+                    timestamp = System.currentTimeMillis(),
+                )
+                val history = (state.changeHistory + change).takeLast(HISTORY_CAP)
+                players[index] = player.copy(lastChange = 0)
+                state.copy(players = players, changeHistory = history)
+            } else {
+                state
+            }
         }
     }
 
