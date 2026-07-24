@@ -12,14 +12,14 @@ fun LpCounterScreen(
     uiState: LpCounterUiState,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
-    onRelease: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
     onResetPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (uiState.playerCount) {
-        2 -> TwoPlayerLayout(uiState, onIncrement, onDecrement, onRelease, onResetPlayer, modifier)
-        3 -> ThreePlayerLayout(uiState, onIncrement, onDecrement, onRelease, onResetPlayer, modifier)
-        4 -> FourPlayerLayout(uiState, onIncrement, onDecrement, onRelease, onResetPlayer, modifier)
+        2 -> TwoPlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
+        3 -> ThreePlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
+        4 -> FourPlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
     }
 }
 
@@ -32,7 +32,7 @@ private fun PlayerBoxEntry(
     verticalMode: Boolean,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
-    onRelease: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
     onResetPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,7 +42,7 @@ private fun PlayerBoxEntry(
         playerColor = playerColor(player.number - 1),
         onIncrement = { onIncrement(player.number) },
         onDecrement = { onDecrement(player.number) },
-        onRelease = { onRelease(player.number) },
+        onResetChangeIndicator = { onResetChangeIndicator(player.number) },
         onReset = { onResetPlayer(player.number) },
         modifier = modifier,
         verticalMode = verticalMode,
@@ -54,7 +54,7 @@ private fun TwoPlayerLayout(
     uiState: LpCounterUiState,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
-    onRelease: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
     onResetPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -71,7 +71,7 @@ private fun TwoPlayerLayout(
             verticalMode = false,
             onIncrement = onIncrement,
             onDecrement = onDecrement,
-            onRelease = onRelease,
+            onResetChangeIndicator = onResetChangeIndicator,
             onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
@@ -81,7 +81,7 @@ private fun TwoPlayerLayout(
             verticalMode = false,
             onIncrement = onIncrement,
             onDecrement = onDecrement,
-            onRelease = onRelease,
+            onResetChangeIndicator = onResetChangeIndicator,
             onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
@@ -93,7 +93,7 @@ private fun ThreePlayerLayout(
     uiState: LpCounterUiState,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
-    onRelease: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
     onResetPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -114,7 +114,7 @@ private fun ThreePlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
@@ -124,7 +124,7 @@ private fun ThreePlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
@@ -135,7 +135,7 @@ private fun ThreePlayerLayout(
             verticalMode = false,
             onIncrement = onIncrement,
             onDecrement = onDecrement,
-            onRelease = onRelease,
+            onResetChangeIndicator = onResetChangeIndicator,
             onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
@@ -147,7 +147,7 @@ private fun FourPlayerLayout(
     uiState: LpCounterUiState,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
-    onRelease: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
     onResetPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -168,7 +168,7 @@ private fun FourPlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
@@ -178,7 +178,7 @@ private fun FourPlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
@@ -193,7 +193,7 @@ private fun FourPlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
@@ -203,7 +203,7 @@ private fun FourPlayerLayout(
                 verticalMode = true,
                 onIncrement = onIncrement,
                 onDecrement = onDecrement,
-                onRelease = onRelease,
+                onResetChangeIndicator = onResetChangeIndicator,
                 onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )

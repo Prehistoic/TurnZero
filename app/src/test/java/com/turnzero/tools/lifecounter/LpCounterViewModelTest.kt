@@ -96,12 +96,12 @@ class LpCounterViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `releasePlayer resets lastChange to zero`() = runTest {
+    fun `resetChangeIndicator resets lastChange to zero`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
         vm.incrementPlayer(1)
         vm.incrementPlayer(1)
-        vm.releasePlayer(1)
+        vm.resetChangeIndicator(1)
         assertEquals(0, vm.uiState.value.players[0].lastChange)
     }
 
@@ -112,7 +112,7 @@ class LpCounterViewModelTest : TZViewModelTest() {
         vm.decrementPlayer(1) // 20 -> 19
         vm.decrementPlayer(1) // 19 -> 18
         vm.decrementPlayer(1) // 18 -> 17
-        vm.releasePlayer(1)
+        vm.resetChangeIndicator(1)
         vm.resetPlayer(1)
         val state = vm.uiState.value
         assertEquals(20, state.players[0].currentLp)
@@ -129,8 +129,8 @@ class LpCounterViewModelTest : TZViewModelTest() {
         vm.initialize("mtg")
         vm.decrementPlayer(1) // 20 -> 19
         vm.decrementPlayer(2) // 20 -> 19
-        vm.releasePlayer(1)
-        vm.releasePlayer(2)
+        vm.resetChangeIndicator(1)
+        vm.resetChangeIndicator(2)
         vm.resetAll()
         assertEquals(20, vm.uiState.value.players[0].currentLp)
         assertEquals(20, vm.uiState.value.players[1].currentLp)

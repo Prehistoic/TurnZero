@@ -77,16 +77,6 @@ class LpCounterViewModel @Inject constructor(
         }
     }
 
-    fun releasePlayer(playerNumber: Int) {
-        _uiState.update { state ->
-            val players = state.players.toMutableList()
-            val index = players.indexOfFirst { it.number == playerNumber }
-            if (index < 0) return@update state
-            players[index] = players[index].copy(lastChange = 0)
-            state.copy(players = players)
-        }
-    }
-
     fun resetPlayer(playerNumber: Int) {
         _uiState.update { state ->
             val players = state.players.toMutableList()
@@ -145,6 +135,16 @@ class LpCounterViewModel @Inject constructor(
             )
         }
         persistConfig(globalStartingLp = lp)
+    }
+
+    fun resetChangeIndicator(playerNumber: Int) {
+        _uiState.update { state ->
+            val players = state.players.toMutableList()
+            val index = players.indexOfFirst { it.number == playerNumber }
+            if (index < 0) return@update state
+            players[index] = players[index].copy(lastChange = 0)
+            state.copy(players = players)
+        }
     }
 
     fun showOptions(show: Boolean) {

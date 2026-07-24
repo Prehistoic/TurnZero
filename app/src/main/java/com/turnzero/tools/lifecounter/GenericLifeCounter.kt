@@ -40,7 +40,7 @@ class GenericLifeCounter : Tool {
             uiState = uiState,
             onIncrement = viewModel::incrementPlayer,
             onDecrement = viewModel::decrementPlayer,
-            onRelease = viewModel::releasePlayer,
+            onResetChangeIndicator = viewModel::resetChangeIndicator,
             onResetPlayer = viewModel::resetPlayer,
             modifier = Modifier.padding(8.dp),
         )

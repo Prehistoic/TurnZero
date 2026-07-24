@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -24,12 +25,13 @@ import kotlinx.coroutines.delay
 private val REPEAT_INITIAL_DELAY = 500L
 private val REPEAT_INTERVAL = 100L
 private val INDICATOR_HOLD_DELAY = 2500
+private val FADE_DURATION = 300
 
 val PlayerColors = listOf(
-    Color(0xFF1B5E20), // P1 - Green
-    Color(0xFFB71C1C), // P2 - Red
-    Color(0xFF0D47A1), // P3 - Blue
-    Color(0xFFE65100), // P4 - Orange
+    Color(0xFF4CAF50), // P1 - Green
+    Color(0xFFF44336), // P2 - Red
+    Color(0xFF2196F3), // P3 - Blue
+    Color(0xFFFF9800), // P4 - Orange
 )
 
 @Composable
@@ -39,8 +41,8 @@ fun PlayerBox(
     playerColor: Color,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
-    onRelease: () -> Unit,
     onReset: () -> Unit,
+    onResetChangeIndicator: () -> Unit,
     modifier: Modifier = Modifier,
     verticalMode: Boolean = false,
 ) {
@@ -49,13 +51,15 @@ fun PlayerBox(
     var isLeftPressed by remember { mutableStateOf(false) }
     var isRightPressed by remember { mutableStateOf(false) }
 
+    // Show indicator when lastChange is non-zero, accumulate, and hide after delay
     LaunchedEffect(player.lastChange) {
         if (player.lastChange != 0) {
             changeDisplayValue.intValue = player.lastChange
             lastChangeIsVisible.value = true
-        } else {
             delay(INDICATOR_HOLD_DELAY.toLong())
             lastChangeIsVisible.value = false
+            delay(FADE_DURATION.toLong() + 50)
+            onResetChangeIndicator()
         }
     }
 
@@ -67,8 +71,6 @@ fun PlayerBox(
                 onDecrement()
                 delay(REPEAT_INTERVAL)
             }
-        } else {
-            onRelease()
         }
     }
 
@@ -80,8 +82,6 @@ fun PlayerBox(
                 onIncrement()
                 delay(REPEAT_INTERVAL)
             }
-        } else {
-            onRelease()
         }
     }
 
@@ -91,7 +91,8 @@ fun PlayerBox(
         Modifier
 
     Surface(
-        modifier = modifier then scaleModifier,
+        modifier = modifier then scaleModifier then
+            if (verticalMode) Modifier.rotate(90f) else Modifier,
         color = playerColor.copy(alpha = 0.15f),
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 2.dp,
@@ -126,13 +127,13 @@ fun PlayerBox(
 
                 IconButton(
                     onClick = onReset,
-                    modifier = Modifier.size(if (verticalMode) 28.dp else 36.dp),
+                    modifier = Modifier.size(36.dp),
                 ) {
                     Icon(
                         Icons.Default.Favorite,
                         contentDescription = "Reset LP",
                         tint = playerColor,
-                        modifier = Modifier.size(if (verticalMode) 16.dp else 20.dp),
+                        modifier = Modifier.size(20.dp),
                     )
                 }
             }
@@ -161,7 +162,7 @@ fun PlayerBox(
                     Icons.Default.Remove,
                     contentDescription = "Decrease LP",
                     tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(if (verticalMode) 24.dp else 32.dp),
+                    modifier = Modifier.size(32.dp),
                 )
             }
 
@@ -189,7 +190,7 @@ fun PlayerBox(
                     Icons.Default.Add,
                     contentDescription = "Increase LP",
                     tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(if (verticalMode) 24.dp else 32.dp),
+                    modifier = Modifier.size(32.dp),
                 )
             }
         }
