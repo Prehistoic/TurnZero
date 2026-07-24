@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -96,31 +95,16 @@ fun PlayerBox(
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 2.dp,
     ) {
-        if (verticalMode) {
-            VerticalContent(
-                player = player,
-                playerColor = playerColor,
-                lastChangeIsVisible = lastChangeIsVisible.value,
-                changeDisplayValue = changeDisplayValue.intValue,
-                isLeftPressed = isLeftPressed,
-                isRightPressed = isRightPressed,
-                onReset = onReset,
-                onLeftPress = { isLeftPressed = it },
-                onRightPress = { isRightPressed = it },
-            )
-        } else {
-            HorizontalContent(
-                player = player,
-                playerColor = playerColor,
-                lastChangeIsVisible = lastChangeIsVisible.value,
-                changeDisplayValue = changeDisplayValue.intValue,
-                isLeftPressed = isLeftPressed,
-                isRightPressed = isRightPressed,
-                onReset = onReset,
-                onLeftPress = { isLeftPressed = it },
-                onRightPress = { isRightPressed = it },
-            )
-        }
+        HorizontalContent(
+            player = player,
+            playerColor = playerColor,
+            lastChangeIsVisible = lastChangeIsVisible.value,
+            changeDisplayValue = changeDisplayValue.intValue,
+            onReset = onReset,
+            onLeftPress = { isLeftPressed = it },
+            onRightPress = { isRightPressed = it },
+            compact = verticalMode,
+        )
     }
 }
 
@@ -130,20 +114,24 @@ private fun HorizontalContent(
     playerColor: Color,
     lastChangeIsVisible: Boolean,
     changeDisplayValue: Int,
-    isLeftPressed: Boolean,
-    isRightPressed: Boolean,
     onReset: () -> Unit,
     onLeftPress: (Boolean) -> Unit,
     onRightPress: (Boolean) -> Unit,
+    compact: Boolean = false,
 ) {
+    val indicatorStyle = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge
+    val lpStyle = if (compact) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.displayLarge
+    val iconSize = if (compact) 24.dp else 32.dp
+    val heartSize = if (compact) 28.dp else 36.dp
+    val indicatorHeight = if (compact) 24.dp else 28.dp
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.align(Alignment.Center),
         ) {
-            // Fixed-height indicator area so content doesn't shift
             Box(
-                modifier = Modifier.height(28.dp),
+                modifier = Modifier.height(indicatorHeight),
                 contentAlignment = Alignment.Center,
             ) {
                 androidx.compose.animation.AnimatedVisibility(
@@ -153,7 +141,7 @@ private fun HorizontalContent(
                     val sign = if (changeDisplayValue > 0) "+" else ""
                     Text(
                         text = "$sign$changeDisplayValue",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = indicatorStyle,
                         color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.error,
                     )
@@ -162,7 +150,7 @@ private fun HorizontalContent(
 
             Text(
                 text = "${player.currentLp}",
-                style = MaterialTheme.typography.displayLarge,
+                style = lpStyle,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 color = playerColor,
@@ -170,13 +158,13 @@ private fun HorizontalContent(
 
             IconButton(
                 onClick = onReset,
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(heartSize),
             ) {
                 Icon(
                     Icons.Default.Favorite,
                     contentDescription = "Reset LP",
                     tint = playerColor,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(if (compact) 16.dp else 20.dp),
                 )
             }
         }
@@ -204,7 +192,7 @@ private fun HorizontalContent(
                 Icons.Default.Remove,
                 contentDescription = "Decrease LP",
                 tint = playerColor.copy(alpha = 0.6f),
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(iconSize),
             )
         }
 
@@ -231,129 +219,7 @@ private fun HorizontalContent(
                 Icons.Default.Add,
                 contentDescription = "Increase LP",
                 tint = playerColor.copy(alpha = 0.6f),
-                modifier = Modifier.size(32.dp),
-            )
-        }
-    }
-}
-
-@Composable
-private fun VerticalContent(
-    player: LpPlayer,
-    playerColor: Color,
-    lastChangeIsVisible: Boolean,
-    changeDisplayValue: Int,
-    isLeftPressed: Boolean,
-    isRightPressed: Boolean,
-    onReset: () -> Unit,
-    onLeftPress: (Boolean) -> Unit,
-    onRightPress: (Boolean) -> Unit,
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Center: LP + indicator + heart — exactly like horizontal mode
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.align(Alignment.Center),
-        ) {
-            // LP number rotated 90°
-            Text(
-                text = "${player.currentLp}",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color = playerColor,
-                modifier = Modifier.rotate(90f),
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Indicator area (fixed size so content doesn't shift)
-            Box(
-                modifier = Modifier.height(20.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = lastChangeIsVisible,
-                    exit = fadeOut(animationSpec = tween()),
-                ) {
-                    val sign = if (changeDisplayValue > 0) "+" else ""
-                    Text(
-                        text = "$sign$changeDisplayValue",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.error,
-                        modifier = Modifier.rotate(90f),
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Heart
-            IconButton(
-                onClick = onReset,
-                modifier = Modifier.size(28.dp),
-            ) {
-                Icon(
-                    Icons.Default.Favorite,
-                    contentDescription = "Reset LP",
-                    tint = playerColor,
-                    modifier = Modifier.size(16.dp).rotate(90f),
-                )
-            }
-        }
-
-        // Top touch zone: decrement (matches left side in horizontal)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.35f)
-                .align(Alignment.TopCenter)
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            when (awaitPointerEvent().type) {
-                                PointerEventType.Press -> onLeftPress(true)
-                                PointerEventType.Release -> onLeftPress(false)
-                                else -> {}
-                            }
-                        }
-                    }
-                },
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Default.Remove,
-                contentDescription = "Decrease LP",
-                tint = playerColor.copy(alpha = 0.6f),
-                modifier = Modifier.size(28.dp).rotate(90f),
-            )
-        }
-
-        // Bottom touch zone: increment (matches right side in horizontal)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.35f)
-                .align(Alignment.BottomCenter)
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            when (awaitPointerEvent().type) {
-                                PointerEventType.Press -> onRightPress(true)
-                                PointerEventType.Release -> onRightPress(false)
-                                else -> {}
-                            }
-                        }
-                    }
-                },
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Default.Add,
-                contentDescription = "Increase LP",
-                tint = playerColor.copy(alpha = 0.6f),
-                modifier = Modifier.size(28.dp).rotate(90f),
+                modifier = Modifier.size(iconSize),
             )
         }
     }
