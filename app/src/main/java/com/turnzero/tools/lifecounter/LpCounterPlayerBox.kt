@@ -12,8 +12,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
@@ -23,176 +23,48 @@ import kotlinx.coroutines.delay
 
 private val REPEAT_INITIAL_DELAY = 500L
 private val REPEAT_INTERVAL = 100L
-private val INDICATOR_FADE_DELAY = 2500
+private val INDICATOR_HOLD_DELAY = 2500
+
+val PlayerColors = listOf(
+    Color(0xFF1B5E20), // P1 - Green
+    Color(0xFFB71C1C), // P2 - Red
+    Color(0xFF0D47A1), // P3 - Blue
+    Color(0xFFE65100), // P4 - Orange
+)
 
 @Composable
-fun HorizontalPlayerBox(
+fun PlayerBox(
     player: LpPlayer,
     isUpsideDown: Boolean,
+    playerColor: Color,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
     onRelease: () -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
+    verticalMode: Boolean = false,
 ) {
     val lastChangeIsVisible = remember { mutableStateOf(false) }
-    val changeValue = remember { mutableIntStateOf(0) }
+    val changeDisplayValue = remember { mutableIntStateOf(0) }
+    var isLeftPressed by remember { mutableStateOf(false) }
+    var isRightPressed by remember { mutableStateOf(false) }
 
     LaunchedEffect(player.lastChange) {
         if (player.lastChange != 0) {
-            changeValue.intValue = player.lastChange
+            changeDisplayValue.intValue = player.lastChange
             lastChangeIsVisible.value = true
+        } else {
+            delay(INDICATOR_HOLD_DELAY.toLong())
+            lastChangeIsVisible.value = false
         }
     }
 
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .scale(if (isUpsideDown) -1f else 1f, if (isUpsideDown) -1f else 1f),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 2.dp,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(12.dp),
-        ) {
-            AnimatedVisibility(
-                visible = lastChangeIsVisible.value,
-                exit = fadeOut(animationSpec = tween(delayMillis = INDICATOR_FADE_DELAY)),
-            ) {
-                val sign = if (changeValue.intValue > 0) "+" else ""
-                Text(
-                    text = "$sign${changeValue.intValue}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = if (changeValue.intValue >= 0) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.error,
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                RepeatButton(
-                    onPress = onDecrement,
-                    onRelease = onRelease,
-                ) {
-                    Icon(Icons.Default.Remove, contentDescription = "Decrease LP")
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Text(
-                    text = "${player.currentLp}",
-                    style = MaterialTheme.typography.displayLarge,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                RepeatButton(
-                    onPress = onIncrement,
-                    onRelease = onRelease,
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Increase LP")
-                }
-            }
-
-            IconButton(onClick = onReset) {
-                Icon(
-                    Icons.Default.Favorite,
-                    contentDescription = "Reset LP",
-                    tint = MaterialTheme.colorScheme.error,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun VerticalPlayerBox(
-    player: LpPlayer,
-    isUpsideDown: Boolean,
-    onIncrement: () -> Unit,
-    onDecrement: () -> Unit,
-    onRelease: () -> Unit,
-    onReset: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-            .scale(if (isUpsideDown) -1f else 1f, if (isUpsideDown) -1f else 1f),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 2.dp,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-        ) {
-            RepeatButton(
-                onPress = onIncrement,
-                onRelease = onRelease,
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Increase LP")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "${player.currentLp}",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.rotate(90f),
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            RepeatButton(
-                onPress = onDecrement,
-                onRelease = onRelease,
-            ) {
-                Icon(Icons.Default.Remove, contentDescription = "Decrease LP")
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            IconButton(
-                onClick = onReset,
-                modifier = Modifier.size(32.dp),
-            ) {
-                Icon(
-                    Icons.Default.Favorite,
-                    contentDescription = "Reset LP",
-                    tint = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.size(20.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun RepeatButton(
-    onPress: () -> Unit,
-    onRelease: () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    var isPressed by remember { mutableStateOf(false) }
-
-    LaunchedEffect(isPressed) {
-        if (isPressed) {
-            onPress()
+    LaunchedEffect(isLeftPressed) {
+        if (isLeftPressed) {
+            onDecrement()
             delay(REPEAT_INITIAL_DELAY)
-            while (isPressed) {
-                onPress()
+            while (isLeftPressed) {
+                onDecrement()
                 delay(REPEAT_INTERVAL)
             }
         } else {
@@ -200,26 +72,126 @@ private fun RepeatButton(
         }
     }
 
-    IconButton(
-        onClick = { },
-        modifier = Modifier
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        when (event.type) {
-                            PointerEventType.Press -> {
-                                isPressed = true
-                            }
-                            PointerEventType.Release -> {
-                                isPressed = false
-                            }
-                            else -> {}
-                        }
-                    }
-                }
-            },
+    LaunchedEffect(isRightPressed) {
+        if (isRightPressed) {
+            onIncrement()
+            delay(REPEAT_INITIAL_DELAY)
+            while (isRightPressed) {
+                onIncrement()
+                delay(REPEAT_INTERVAL)
+            }
+        } else {
+            onRelease()
+        }
+    }
+
+    val scaleModifier = if (isUpsideDown)
+        Modifier.scale(scaleX = -1f, scaleY = -1f)
+    else
+        Modifier
+
+    Surface(
+        modifier = modifier then scaleModifier,
+        color = playerColor.copy(alpha = 0.15f),
+        shape = MaterialTheme.shapes.medium,
+        tonalElevation = 2.dp,
     ) {
-        content()
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.align(Alignment.Center),
+            ) {
+                AnimatedVisibility(
+                    visible = lastChangeIsVisible.value,
+                    exit = fadeOut(animationSpec = tween()),
+                ) {
+                    val sign = if (changeDisplayValue.intValue > 0) "+" else ""
+                    Text(
+                        text = "$sign${changeDisplayValue.intValue}",
+                        style = if (verticalMode) MaterialTheme.typography.titleMedium
+                                else MaterialTheme.typography.titleLarge,
+                        color = if (changeDisplayValue.intValue >= 0) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.error,
+                    )
+                }
+
+                Text(
+                    text = "${player.currentLp}",
+                    style = if (verticalMode) MaterialTheme.typography.headlineLarge
+                            else MaterialTheme.typography.displayLarge,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = playerColor,
+                )
+
+                IconButton(
+                    onClick = onReset,
+                    modifier = Modifier.size(if (verticalMode) 28.dp else 36.dp),
+                ) {
+                    Icon(
+                        Icons.Default.Favorite,
+                        contentDescription = "Reset LP",
+                        tint = playerColor,
+                        modifier = Modifier.size(if (verticalMode) 16.dp else 20.dp),
+                    )
+                }
+            }
+
+            // Left touch zone: decrement
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.35f)
+                    .align(Alignment.CenterStart)
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                when (event.type) {
+                                    PointerEventType.Press -> isLeftPressed = true
+                                    PointerEventType.Release -> isLeftPressed = false
+                                    else -> {}
+                                }
+                            }
+                        }
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    Icons.Default.Remove,
+                    contentDescription = "Decrease LP",
+                    tint = playerColor.copy(alpha = 0.6f),
+                    modifier = Modifier.size(if (verticalMode) 24.dp else 32.dp),
+                )
+            }
+
+            // Right touch zone: increment
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.35f)
+                    .align(Alignment.CenterEnd)
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                when (event.type) {
+                                    PointerEventType.Press -> isRightPressed = true
+                                    PointerEventType.Release -> isRightPressed = false
+                                    else -> {}
+                                }
+                            }
+                        }
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = "Increase LP",
+                    tint = playerColor.copy(alpha = 0.6f),
+                    modifier = Modifier.size(if (verticalMode) 24.dp else 32.dp),
+                )
+            }
+        }
     }
 }

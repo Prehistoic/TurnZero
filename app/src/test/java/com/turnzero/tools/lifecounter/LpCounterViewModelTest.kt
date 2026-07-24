@@ -170,17 +170,6 @@ class LpCounterViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `setPlayerStartingLp overrides individual player`() = runTest {
-        val vm = LpCounterViewModel(repo, savedStateHandle)
-        vm.initialize("mtg")
-        vm.setPlayerStartingLp(2, 30)
-        val state = vm.uiState.value
-        assertEquals(20, state.players[0].startingLp)
-        assertEquals(30, state.players[1].startingLp)
-        assertEquals(30, state.players[1].currentLp)
-    }
-
-    @Test
     fun `showHistory toggles visibility`() = runTest {
         val vm = LpCounterViewModel(repo, savedStateHandle)
         vm.initialize("mtg")
@@ -231,13 +220,4 @@ class LpCounterViewModelTest : TZViewModelTest() {
         assertEquals(30, repo.savedConfig?.globalStartingLp)
     }
 
-    @Test
-    fun `setPlayerStartingLp persists per-player override`() = runTest {
-        val vm = LpCounterViewModel(repo, savedStateHandle)
-        vm.initialize("mtg")
-        advanceUntilIdle()
-        vm.setPlayerStartingLp(3, 30)
-        advanceUntilIdle()
-        assertEquals(mapOf(3 to 30), repo.savedConfig?.perPlayerStartingLp)
-    }
 }

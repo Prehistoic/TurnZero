@@ -58,7 +58,6 @@ class GenericLifeCounter : Tool {
                 uiState = uiState,
                 onPlayerCountChange = viewModel::setPlayerCount,
                 onGlobalStartingLpChange = viewModel::setGlobalStartingLp,
-                onPlayerStartingLpChange = viewModel::setPlayerStartingLp,
                 onResetAll = viewModel::resetAll,
                 onDismiss = viewModel::dismissOptions,
             )
@@ -73,7 +72,6 @@ class GenericLifeCounter : Tool {
             uiState = uiState,
             onPlayerCountChange = viewModel::setPlayerCount,
             onGlobalStartingLpChange = viewModel::setGlobalStartingLp,
-            onPlayerStartingLpChange = viewModel::setPlayerStartingLp,
             onResetAll = viewModel::resetAll,
             onDismiss = onDismiss,
         )

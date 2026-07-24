@@ -1,9 +1,11 @@
 package com.turnzero.tools.lifecounter
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+private val BOX_SPACING = 8.dp
 
 @Composable
 fun LpCounterScreen(
@@ -21,6 +23,32 @@ fun LpCounterScreen(
     }
 }
 
+private fun playerColor(index: Int) = PlayerColors[index % PlayerColors.size]
+
+@Composable
+private fun PlayerBoxEntry(
+    player: LpPlayer,
+    isUpsideDown: Boolean,
+    verticalMode: Boolean,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onRelease: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PlayerBox(
+        player = player,
+        isUpsideDown = isUpsideDown,
+        playerColor = playerColor(player.number - 1),
+        onIncrement = { onIncrement(player.number) },
+        onDecrement = { onDecrement(player.number) },
+        onRelease = { onRelease(player.number) },
+        onReset = { onResetPlayer(player.number) },
+        modifier = modifier,
+        verticalMode = verticalMode,
+    )
+}
+
 @Composable
 private fun TwoPlayerLayout(
     uiState: LpCounterUiState,
@@ -31,24 +59,30 @@ private fun TwoPlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(modifier = modifier.fillMaxSize()) {
-        HorizontalPlayerBox(
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = BOX_SPACING),
+        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
+    ) {
+        PlayerBoxEntry(
             player = players.getOrNull(1) ?: players[0],
             isUpsideDown = true,
-            onIncrement = { onIncrement(players.getOrNull(1)?.number ?: 2) },
-            onDecrement = { onDecrement(players.getOrNull(1)?.number ?: 2) },
-            onRelease = { onRelease(players.getOrNull(1)?.number ?: 2) },
-            onReset = { onResetPlayer(players.getOrNull(1)?.number ?: 2) },
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onRelease = onRelease,
+            onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
-        HorizontalDivider()
-        HorizontalPlayerBox(
+        PlayerBoxEntry(
             player = players[0],
             isUpsideDown = false,
-            onIncrement = { onIncrement(1) },
-            onDecrement = { onDecrement(1) },
-            onRelease = { onRelease(1) },
-            onReset = { onResetPlayer(1) },
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onRelease = onRelease,
+            onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
     }
@@ -64,35 +98,45 @@ private fun ThreePlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(modifier = modifier.fillMaxSize()) {
-        Row(modifier = Modifier.fillMaxHeight(0.5f)) {
-            VerticalPlayerBox(
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = BOX_SPACING),
+        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxHeight(0.5f),
+            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
+        ) {
+            PlayerBoxEntry(
                 player = players[1],
                 isUpsideDown = false,
-                onIncrement = { onIncrement(2) },
-                onDecrement = { onDecrement(2) },
-                onRelease = { onRelease(2) },
-                onReset = { onResetPlayer(2) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
-            VerticalPlayerBox(
+            PlayerBoxEntry(
                 player = players[2],
                 isUpsideDown = true,
-                onIncrement = { onIncrement(3) },
-                onDecrement = { onDecrement(3) },
-                onRelease = { onRelease(3) },
-                onReset = { onResetPlayer(3) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
         }
-        HorizontalDivider()
-        HorizontalPlayerBox(
+        PlayerBoxEntry(
             player = players[0],
             isUpsideDown = false,
-            onIncrement = { onIncrement(1) },
-            onDecrement = { onDecrement(1) },
-            onRelease = { onRelease(1) },
-            onReset = { onResetPlayer(1) },
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onRelease = onRelease,
+            onResetPlayer = onResetPlayer,
             modifier = Modifier.weight(1f),
         )
     }
@@ -108,45 +152,59 @@ private fun FourPlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(modifier = modifier.fillMaxSize()) {
-        Row(modifier = Modifier.weight(1f)) {
-            VerticalPlayerBox(
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = BOX_SPACING),
+        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
+    ) {
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
+        ) {
+            PlayerBoxEntry(
                 player = players[0],
                 isUpsideDown = false,
-                onIncrement = { onIncrement(1) },
-                onDecrement = { onDecrement(1) },
-                onRelease = { onRelease(1) },
-                onReset = { onResetPlayer(1) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
-            VerticalPlayerBox(
+            PlayerBoxEntry(
                 player = players[1],
                 isUpsideDown = true,
-                onIncrement = { onIncrement(2) },
-                onDecrement = { onDecrement(2) },
-                onRelease = { onRelease(2) },
-                onReset = { onResetPlayer(2) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
         }
-        HorizontalDivider()
-        Row(modifier = Modifier.weight(1f)) {
-            VerticalPlayerBox(
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
+        ) {
+            PlayerBoxEntry(
                 player = players[2],
                 isUpsideDown = false,
-                onIncrement = { onIncrement(3) },
-                onDecrement = { onDecrement(3) },
-                onRelease = { onRelease(3) },
-                onReset = { onResetPlayer(3) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
-            VerticalPlayerBox(
+            PlayerBoxEntry(
                 player = players[3],
                 isUpsideDown = true,
-                onIncrement = { onIncrement(4) },
-                onDecrement = { onDecrement(4) },
-                onRelease = { onRelease(4) },
-                onReset = { onResetPlayer(4) },
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onRelease = onRelease,
+                onResetPlayer = onResetPlayer,
                 modifier = Modifier.weight(1f),
             )
         }

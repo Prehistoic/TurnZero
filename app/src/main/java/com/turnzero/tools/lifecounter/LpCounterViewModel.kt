@@ -22,8 +22,6 @@ class LpCounterViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LpCounterUiState())
     val uiState: StateFlow<LpCounterUiState> = _uiState.asStateFlow()
 
-    private val playerOverrides = mutableMapOf<Int, Int>()
-
     fun initialize(gameId: String) {
         val defaultLp = defaultLpByGame[gameId] ?: 20
         val initialPlayers = (1..2).map { LpPlayer(number = it, startingLp = defaultLp, currentLp = defaultLp) }
@@ -36,12 +34,8 @@ class LpCounterViewModel @Inject constructor(
 
     private fun applyConfig(config: LpCounterConfig) {
         val globalLp = config.globalStartingLp
-        val perPlayer = config.perPlayerStartingLp
-        playerOverrides.clear()
-        playerOverrides.putAll(perPlayer)
         val players = (1..config.playerCount).map { num ->
-            val lp = perPlayer[num] ?: globalLp
-            LpPlayer(number = num, startingLp = lp, currentLp = lp)
+            LpPlayer(number = num, startingLp = globalLp, currentLp = globalLp)
         }
         _uiState.update {
             it.copy(
@@ -135,10 +129,8 @@ class LpCounterViewModel @Inject constructor(
     fun setPlayerCount(count: Int) {
         require(count in 2..4) { "Player count must be 2-4" }
         val globalLp = _uiState.value.globalStartingLp
-        playerOverrides.keys.removeAll { it > count }
         val players = (1..count).map { num ->
-            val lp = playerOverrides[num] ?: globalLp
-            LpPlayer(number = num, startingLp = lp, currentLp = lp)
+            LpPlayer(number = num, startingLp = globalLp, currentLp = globalLp)
         }
         _uiState.update { it.copy(players = players, playerCount = count) }
         persistConfig(playerCount = count)
@@ -146,7 +138,6 @@ class LpCounterViewModel @Inject constructor(
 
     fun setGlobalStartingLp(lp: Int) {
         require(lp > 0) { "LP must be positive" }
-        playerOverrides.clear()
         _uiState.update { state ->
             state.copy(
                 globalStartingLp = lp,
@@ -154,20 +145,6 @@ class LpCounterViewModel @Inject constructor(
             )
         }
         persistConfig(globalStartingLp = lp)
-    }
-
-    fun setPlayerStartingLp(playerNumber: Int, lp: Int) {
-        require(lp > 0) { "LP must be positive" }
-        playerOverrides[playerNumber] = lp
-        _uiState.update { state ->
-            val players = state.players.toMutableList()
-            val index = players.indexOfFirst { it.number == playerNumber }
-            if (index >= 0) {
-                players[index] = players[index].copy(startingLp = lp, currentLp = lp)
-            }
-            state.copy(players = players)
-        }
-        persistConfig()
     }
 
     fun showOptions(show: Boolean) {
@@ -199,14 +176,8 @@ class LpCounterViewModel @Inject constructor(
             val updated = current.copy(
                 playerCount = playerCount ?: current.playerCount,
                 globalStartingLp = globalStartingLp ?: current.globalStartingLp,
-                perPlayerStartingLp = buildOverrides(),
             )
             repo.saveConfig(updated)
         }
-    }
-
-    private fun buildOverrides(): Map<Int, Int> {
-        val global = _uiState.value.globalStartingLp
-        return playerOverrides.filter { it.value != global }
     }
 }

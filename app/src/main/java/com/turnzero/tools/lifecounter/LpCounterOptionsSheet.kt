@@ -6,7 +6,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -17,12 +16,10 @@ fun LpCounterOptionsSheet(
     uiState: LpCounterUiState,
     onPlayerCountChange: (Int) -> Unit,
     onGlobalStartingLpChange: (Int) -> Unit,
-    onPlayerStartingLpChange: (Int, Int) -> Unit,
     onResetAll: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showPerPlayer by remember { mutableStateOf(false) }
     var showCustomInput by remember { mutableStateOf(false) }
     var customLpText by remember { mutableStateOf("") }
 
@@ -100,50 +97,6 @@ fun LpCounterOptionsSheet(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                }
-            }
-
-            HorizontalDivider()
-
-            Column {
-                TextButton(
-                    onClick = { showPerPlayer = !showPerPlayer },
-                ) {
-                    Text(
-                        text = if (showPerPlayer) "Per-Player Overrides \u25BE"
-                               else "Per-Player Overrides \u25B8",
-                    )
-                }
-                if (showPerPlayer) {
-                    uiState.players.forEach { player ->
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Text(
-                                text = "P${player.number}:",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.width(32.dp),
-                            )
-                            var playerLpText by remember(player.number, player.startingLp) {
-                                mutableStateOf("${player.startingLp}")
-                            }
-                            OutlinedTextField(
-                                value = playerLpText,
-                                onValueChange = { newValue ->
-                                    playerLpText = newValue.filter { it.isDigit() }
-                                    val lp = playerLpText.toIntOrNull()
-                                    if (lp != null && lp > 0) {
-                                        onPlayerStartingLpChange(player.number, lp)
-                                    }
-                                },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                singleLine = true,
-                                modifier = Modifier.width(100.dp),
-                            )
-                        }
-                    }
                 }
             }
 

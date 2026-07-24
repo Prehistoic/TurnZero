@@ -40,7 +40,6 @@ data class LpChange(
 data class LpCounterConfig(
     val playerCount: Int = 2,
     val globalStartingLp: Int = 20,
-    val perPlayerStartingLp: Map<Int, Int> = emptyMap(),
 )
 
 object Defaults {
