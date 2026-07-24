@@ -8,4 +8,5 @@ val MtgGame: Game = tcgGame(
     id = "mtg",
     name = "Magic: The Gathering",
     logoRes = R.drawable.ic_game_mtg,
+    extraToolIds = arrayOf("lp-counter"),
 )

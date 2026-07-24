@@ -1,0 +1,242 @@
+package com.turnzero.tools.lifecounter
+
+import androidx.lifecycle.SavedStateHandle
+import com.turnzero.TZViewModelTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+
+class FakeLpCounterRepo : LpCounterRepo {
+    private var _config = LpCounterConfig()
+
+    var savedConfig: LpCounterConfig? = null
+
+    override suspend fun getConfig(): LpCounterConfig = _config
+    override suspend fun saveConfig(config: LpCounterConfig) { savedConfig = config; _config = config }
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class LpCounterViewModelTest : TZViewModelTest() {
+
+    private lateinit var repo: FakeLpCounterRepo
+    private lateinit var savedStateHandle: SavedStateHandle
+
+    @Before
+    fun setup() {
+        repo = FakeLpCounterRepo()
+        savedStateHandle = SavedStateHandle()
+    }
+
+    @Test
+    fun `initial state has 2 players with game-specific defaults when initialized`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        val state = vm.uiState.value
+        assertEquals(2, state.players.size)
+        assertEquals(20, state.players[0].currentLp)
+        assertEquals(20, state.players[1].currentLp)
+        assertEquals(20, state.globalStartingLp)
+    }
+
+    @Test
+    fun `initialize uses swu default of 30`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("swu")
+        val state = vm.uiState.value
+        assertEquals(30, state.globalStartingLp)
+        assertEquals(30, state.players[0].currentLp)
+    }
+
+    @Test
+    fun `initialize falls back to 20 for unknown game`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("unknown")
+        val state = vm.uiState.value
+        assertEquals(20, state.globalStartingLp)
+    }
+
+    @Test
+    fun `incrementPlayer adds 1 to currentLp`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1)
+        assertEquals(21, vm.uiState.value.players[0].currentLp)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
+    }
+
+    @Test
+    fun `decrementPlayer subtracts 1 from currentLp`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1)
+        assertEquals(19, vm.uiState.value.players[0].currentLp)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
+    }
+
+    @Test
+    fun `lastChange accumulates while holding button`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1)
+        vm.incrementPlayer(1)
+        vm.incrementPlayer(1)
+        assertEquals(3, vm.uiState.value.players[0].lastChange)
+    }
+
+    @Test
+    fun `resetChangeIndicator resets lastChange and records net delta in history`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1) // 20 -> 21, lastChange=1
+        vm.incrementPlayer(1) // 21 -> 22, lastChange=2
+        vm.decrementPlayer(1) // 22 -> 21, lastChange=1
+        vm.resetChangeIndicator(1)
+        val state = vm.uiState.value
+        assertEquals(0, state.players[0].lastChange)
+        assertEquals(1, state.changeHistory.size)
+        assertEquals(20, state.changeHistory[0].previousLp)
+        assertEquals(1, state.changeHistory[0].delta)
+        assertEquals(21, state.changeHistory[0].newTotal)
+    }
+
+    @Test
+    fun `resetChangeIndicator does not record history when net delta is zero`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1)
+        vm.decrementPlayer(1)
+        vm.resetChangeIndicator(1)
+        assertEquals(0, vm.uiState.value.players[0].lastChange)
+        assertEquals(0, vm.uiState.value.changeHistory.size)
+    }
+
+    @Test
+    fun `resetPlayer restores starting LP and records full delta`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.decrementPlayer(1) // 19 -> 18
+        vm.decrementPlayer(1) // 18 -> 17
+        vm.resetChangeIndicator(1)
+        val afterFirst = vm.uiState.value
+        assertEquals(1, afterFirst.changeHistory.size) // net -3 recorded
+        vm.decrementPlayer(1) // 17 -> 16
+        vm.decrementPlayer(1) // 16 -> 15
+        vm.resetChangeIndicator(1)
+        vm.resetPlayer(1)
+        val state = vm.uiState.value
+        assertEquals(20, state.players[0].currentLp)
+        assertEquals(0, state.players[0].lastChange)
+        val resetEntry = state.changeHistory.last()
+        assertEquals(15, resetEntry.previousLp)
+        assertEquals(5, resetEntry.delta)
+        assertEquals(20, resetEntry.newTotal)
+    }
+
+    @Test
+    fun `resetAll resets all players to starting LP`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.decrementPlayer(2) // 20 -> 19
+        vm.resetChangeIndicator(1)
+        vm.resetChangeIndicator(2)
+        vm.resetAll()
+        assertEquals(20, vm.uiState.value.players[0].currentLp)
+        assertEquals(20, vm.uiState.value.players[1].currentLp)
+    }
+
+    @Test
+    fun `setPlayerCount to 3 recreates players with global starting LP`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.setPlayerCount(3)
+        val state = vm.uiState.value
+        assertEquals(3, state.players.size)
+        assertEquals(20, state.players[0].currentLp)
+        assertEquals(20, state.players[1].currentLp)
+        assertEquals(20, state.players[2].currentLp)
+    }
+
+    @Test
+    fun `setPlayerCount to 4 recreates 4 players`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.setPlayerCount(4)
+        assertEquals(4, vm.uiState.value.players.size)
+    }
+
+    @Test
+    fun `setGlobalStartingLp updates all players starting and current LP`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.setGlobalStartingLp(40)
+        val state = vm.uiState.value
+        assertEquals(40, state.globalStartingLp)
+        assertEquals(40, state.players[0].startingLp)
+        assertEquals(40, state.players[0].currentLp)
+        assertEquals(40, state.players[1].startingLp)
+        assertEquals(40, state.players[1].currentLp)
+    }
+
+    @Test
+    fun `showHistory toggles visibility`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.showHistory(true)
+        assertTrue(vm.uiState.value.showHistory)
+        vm.showHistory(false)
+        assertFalse(vm.uiState.value.showHistory)
+    }
+
+    @Test
+    fun `clearHistory empties history`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.incrementPlayer(1)
+        vm.resetChangeIndicator(1)
+        vm.incrementPlayer(2)
+        vm.resetChangeIndicator(2)
+        assertEquals(2, vm.uiState.value.changeHistory.size)
+        vm.clearHistory()
+        assertEquals(0, vm.uiState.value.changeHistory.size)
+    }
+
+    @Test
+    fun `history is capped at 200 entries`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        repeat(250) {
+            vm.incrementPlayer(1)
+            vm.resetChangeIndicator(1)
+        }
+        val history = vm.uiState.value.changeHistory
+        assertTrue(history.size <= 200)
+        assertEquals(250 + 20, vm.uiState.value.players[0].currentLp)
+    }
+
+    @Test
+    fun `setPlayerCount persists config`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        advanceUntilIdle()
+        vm.setPlayerCount(4)
+        advanceUntilIdle()
+        assertEquals(4, repo.savedConfig?.playerCount)
+    }
+
+    @Test
+    fun `setGlobalStartingLp persists config`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        advanceUntilIdle()
+        vm.setGlobalStartingLp(30)
+        advanceUntilIdle()
+        assertEquals(30, repo.savedConfig?.globalStartingLp)
+    }
+}

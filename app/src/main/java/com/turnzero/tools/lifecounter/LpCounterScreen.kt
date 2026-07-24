@@ -1,0 +1,185 @@
+package com.turnzero.tools.lifecounter
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+@Composable
+fun LpCounterScreen(
+    uiState: LpCounterUiState,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (uiState.playerCount) {
+        2 -> TwoPlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
+        3 -> ThreePlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
+        4 -> FourPlayerLayout(uiState, onIncrement, onDecrement, onResetChangeIndicator, onResetPlayer, modifier)
+    }
+}
+
+private fun playerColor(index: Int) = PlayerColors[index % PlayerColors.size]
+
+@Composable
+private fun PlayerBoxEntry(
+    player: LpPlayer,
+    isUpsideDown: Boolean,
+    verticalMode: Boolean,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PlayerBox(
+        player = player,
+        isUpsideDown = isUpsideDown,
+        playerColor = playerColor(player.number - 1),
+        onIncrement = { onIncrement(player.number) },
+        onDecrement = { onDecrement(player.number) },
+        onResetChangeIndicator = { onResetChangeIndicator(player.number) },
+        onReset = { onResetPlayer(player.number) },
+        modifier = modifier,
+        verticalMode = verticalMode,
+    )
+}
+
+@Composable
+private fun TwoPlayerLayout(
+    uiState: LpCounterUiState,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val players = uiState.players
+    Column(modifier = modifier.fillMaxSize()) {
+        PlayerBoxEntry(
+            player = players.getOrNull(1) ?: players[0],
+            isUpsideDown = true,
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onResetChangeIndicator = onResetChangeIndicator,
+            onResetPlayer = onResetPlayer,
+            modifier = Modifier.weight(1f),
+        )
+        PlayerBoxEntry(
+            player = players[0],
+            isUpsideDown = false,
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onResetChangeIndicator = onResetChangeIndicator,
+            onResetPlayer = onResetPlayer,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun ThreePlayerLayout(
+    uiState: LpCounterUiState,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val players = uiState.players
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxHeight(0.5f)) {
+            PlayerBoxEntry(
+                player = players[1],
+                isUpsideDown = false,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+            PlayerBoxEntry(
+                player = players[2],
+                isUpsideDown = true,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        PlayerBoxEntry(
+            player = players[0],
+            isUpsideDown = false,
+            verticalMode = false,
+            onIncrement = onIncrement,
+            onDecrement = onDecrement,
+            onResetChangeIndicator = onResetChangeIndicator,
+            onResetPlayer = onResetPlayer,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun FourPlayerLayout(
+    uiState: LpCounterUiState,
+    onIncrement: (Int) -> Unit,
+    onDecrement: (Int) -> Unit,
+    onResetChangeIndicator: (Int) -> Unit,
+    onResetPlayer: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val players = uiState.players
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.weight(1f)) {
+            PlayerBoxEntry(
+                player = players[0],
+                isUpsideDown = false,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+            PlayerBoxEntry(
+                player = players[1],
+                isUpsideDown = true,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        Row(modifier = Modifier.weight(1f)) {
+            PlayerBoxEntry(
+                player = players[2],
+                isUpsideDown = false,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+            PlayerBoxEntry(
+                player = players[3],
+                isUpsideDown = true,
+                verticalMode = true,
+                onIncrement = onIncrement,
+                onDecrement = onDecrement,
+                onResetChangeIndicator = onResetChangeIndicator,
+                onResetPlayer = onResetPlayer,
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
+}

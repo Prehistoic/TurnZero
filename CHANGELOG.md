@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-07-24
+
+### Added
+- Generic LP Counter tool for 2-4 players (available for MtG, Star Wars Unlimited, and Flesh and Blood)
+  - Tabletop-facing layouts with per-player colors and hold-to-repeat +/- buttons
+  - Configurable starting life points per game (20/30/40) with custom input
+  - Temporary change indicator above LP count with cumulative delta tracking
+  - Read-only history sheet showing net changes with previous LP, delta, and new total
+
 ## [0.19.2] - 2026-07-20
 
 ### Added
