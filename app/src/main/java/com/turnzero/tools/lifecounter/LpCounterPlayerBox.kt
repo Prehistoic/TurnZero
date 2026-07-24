@@ -1,6 +1,5 @@
 package com.turnzero.tools.lifecounter
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -51,7 +50,6 @@ fun PlayerBox(
     var isLeftPressed by remember { mutableStateOf(false) }
     var isRightPressed by remember { mutableStateOf(false) }
 
-    // Show indicator when lastChange is non-zero, accumulate, and hide after delay
     LaunchedEffect(player.lastChange) {
         if (player.lastChange != 0) {
             changeDisplayValue.intValue = player.lastChange
@@ -91,66 +89,231 @@ fun PlayerBox(
         Modifier
 
     Surface(
-        modifier = modifier then scaleModifier then
-            if (verticalMode) Modifier.rotate(90f) else Modifier,
+        modifier = modifier then scaleModifier,
         color = playerColor.copy(alpha = 0.15f),
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 2.dp,
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.align(Alignment.Center),
+        if (verticalMode) {
+            VerticalContent(
+                player = player,
+                playerColor = playerColor,
+                lastChangeIsVisible = lastChangeIsVisible.value,
+                changeDisplayValue = changeDisplayValue.intValue,
+                isLeftPressed = isLeftPressed,
+                isRightPressed = isRightPressed,
+                onReset = onReset,
+                onLeftPress = { isLeftPressed = it },
+                onRightPress = { isRightPressed = it },
+            )
+        } else {
+            HorizontalContent(
+                player = player,
+                playerColor = playerColor,
+                lastChangeIsVisible = lastChangeIsVisible.value,
+                changeDisplayValue = changeDisplayValue.intValue,
+                isLeftPressed = isLeftPressed,
+                isRightPressed = isRightPressed,
+                onReset = onReset,
+                onLeftPress = { isLeftPressed = it },
+                onRightPress = { isRightPressed = it },
+            )
+        }
+    }
+}
+
+@Composable
+private fun HorizontalContent(
+    player: LpPlayer,
+    playerColor: Color,
+    lastChangeIsVisible: Boolean,
+    changeDisplayValue: Int,
+    isLeftPressed: Boolean,
+    isRightPressed: Boolean,
+    onReset: () -> Unit,
+    onLeftPress: (Boolean) -> Unit,
+    onRightPress: (Boolean) -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            // Fixed-height indicator area so content doesn't shift
+            Box(
+                modifier = Modifier.height(28.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                AnimatedVisibility(
-                    visible = lastChangeIsVisible.value,
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = lastChangeIsVisible,
                     exit = fadeOut(animationSpec = tween()),
                 ) {
-                    val sign = if (changeDisplayValue.intValue > 0) "+" else ""
+                    val sign = if (changeDisplayValue > 0) "+" else ""
                     Text(
-                        text = "$sign${changeDisplayValue.intValue}",
-                        style = if (verticalMode) MaterialTheme.typography.titleMedium
-                                else MaterialTheme.typography.titleLarge,
-                        color = if (changeDisplayValue.intValue >= 0) MaterialTheme.colorScheme.primary
+                        text = "$sign$changeDisplayValue",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.error,
-                    )
-                }
-
-                Text(
-                    text = "${player.currentLp}",
-                    style = if (verticalMode) MaterialTheme.typography.headlineLarge
-                            else MaterialTheme.typography.displayLarge,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    color = playerColor,
-                )
-
-                IconButton(
-                    onClick = onReset,
-                    modifier = Modifier.size(36.dp),
-                ) {
-                    Icon(
-                        Icons.Default.Favorite,
-                        contentDescription = "Reset LP",
-                        tint = playerColor,
-                        modifier = Modifier.size(20.dp),
                     )
                 }
             }
 
-            // Left touch zone: decrement
+            Text(
+                text = "${player.currentLp}",
+                style = MaterialTheme.typography.displayLarge,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = playerColor,
+            )
+
+            IconButton(
+                onClick = onReset,
+                modifier = Modifier.size(36.dp),
+            ) {
+                Icon(
+                    Icons.Default.Favorite,
+                    contentDescription = "Reset LP",
+                    tint = playerColor,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
+
+        // Left touch zone
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.35f)
+                .align(Alignment.CenterStart)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            when (awaitPointerEvent().type) {
+                                PointerEventType.Press -> onLeftPress(true)
+                                PointerEventType.Release -> onLeftPress(false)
+                                else -> {}
+                            }
+                        }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Default.Remove,
+                contentDescription = "Decrease LP",
+                tint = playerColor.copy(alpha = 0.6f),
+                modifier = Modifier.size(32.dp),
+            )
+        }
+
+        // Right touch zone
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.35f)
+                .align(Alignment.CenterEnd)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            when (awaitPointerEvent().type) {
+                                PointerEventType.Press -> onRightPress(true)
+                                PointerEventType.Release -> onRightPress(false)
+                                else -> {}
+                            }
+                        }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = "Increase LP",
+                tint = playerColor.copy(alpha = 0.6f),
+                modifier = Modifier.size(32.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun VerticalContent(
+    player: LpPlayer,
+    playerColor: Color,
+    lastChangeIsVisible: Boolean,
+    changeDisplayValue: Int,
+    isLeftPressed: Boolean,
+    isRightPressed: Boolean,
+    onReset: () -> Unit,
+    onLeftPress: (Boolean) -> Unit,
+    onRightPress: (Boolean) -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Heart on the left side, rotated 90°
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.CenterStart),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            IconButton(
+                onClick = onReset,
+                modifier = Modifier.size(28.dp),
+            ) {
+                Icon(
+                    Icons.Default.Favorite,
+                    contentDescription = "Reset LP",
+                    tint = playerColor,
+                    modifier = Modifier.size(16.dp).rotate(90f),
+                )
+            }
+        }
+
+        // Change indicator on the right side, rotated 90°
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.CenterEnd),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Box(
+                modifier = Modifier.width(24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = lastChangeIsVisible,
+                    exit = fadeOut(animationSpec = tween()),
+                ) {
+                    val sign = if (changeDisplayValue > 0) "+" else ""
+                    Text(
+                        text = "$sign$changeDisplayValue",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (changeDisplayValue >= 0) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.error,
+                        modifier = Modifier.rotate(90f),
+                    )
+                }
+            }
+        }
+
+        // Center: stacked minus, LP (rotated 90°), plus
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            // Minus button (full width touch zone)
             Box(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.35f)
-                    .align(Alignment.CenterStart)
+                    .fillMaxWidth()
+                    .weight(1f)
                     .pointerInput(Unit) {
                         awaitPointerEventScope {
                             while (true) {
-                                val event = awaitPointerEvent()
-                                when (event.type) {
-                                    PointerEventType.Press -> isLeftPressed = true
-                                    PointerEventType.Release -> isLeftPressed = false
+                                when (awaitPointerEvent().type) {
+                                    PointerEventType.Press -> onLeftPress(true)
+                                    PointerEventType.Release -> onLeftPress(false)
                                     else -> {}
                                 }
                             }
@@ -162,23 +325,31 @@ fun PlayerBox(
                     Icons.Default.Remove,
                     contentDescription = "Decrease LP",
                     tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(28.dp).rotate(90f),
                 )
             }
 
-            // Right touch zone: increment
+            // LP number rotated 90°
+            Text(
+                text = "${player.currentLp}",
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = playerColor,
+                modifier = Modifier.weight(1f).rotate(90f),
+            )
+
+            // Plus button (full width touch zone)
             Box(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.35f)
-                    .align(Alignment.CenterEnd)
+                    .fillMaxWidth()
+                    .weight(1f)
                     .pointerInput(Unit) {
                         awaitPointerEventScope {
                             while (true) {
-                                val event = awaitPointerEvent()
-                                when (event.type) {
-                                    PointerEventType.Press -> isRightPressed = true
-                                    PointerEventType.Release -> isRightPressed = false
+                                when (awaitPointerEvent().type) {
+                                    PointerEventType.Press -> onRightPress(true)
+                                    PointerEventType.Release -> onRightPress(false)
                                     else -> {}
                                 }
                             }
@@ -190,7 +361,7 @@ fun PlayerBox(
                     Icons.Default.Add,
                     contentDescription = "Increase LP",
                     tint = playerColor.copy(alpha = 0.6f),
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(28.dp).rotate(90f),
                 )
             }
         }

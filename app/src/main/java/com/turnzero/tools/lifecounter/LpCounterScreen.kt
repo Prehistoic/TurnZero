@@ -3,9 +3,6 @@ package com.turnzero.tools.lifecounter
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-
-private val BOX_SPACING = 8.dp
 
 @Composable
 fun LpCounterScreen(
@@ -59,12 +56,7 @@ private fun TwoPlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = BOX_SPACING),
-        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
-    ) {
+    Column(modifier = modifier.fillMaxSize()) {
         PlayerBoxEntry(
             player = players.getOrNull(1) ?: players[0],
             isUpsideDown = true,
@@ -98,16 +90,8 @@ private fun ThreePlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = BOX_SPACING),
-        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(0.5f),
-            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
-        ) {
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxHeight(0.5f)) {
             PlayerBoxEntry(
                 player = players[1],
                 isUpsideDown = false,
@@ -152,16 +136,8 @@ private fun FourPlayerLayout(
     modifier: Modifier = Modifier,
 ) {
     val players = uiState.players
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = BOX_SPACING),
-        verticalArrangement = Arrangement.spacedBy(BOX_SPACING),
-    ) {
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
-        ) {
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.weight(1f)) {
             PlayerBoxEntry(
                 player = players[0],
                 isUpsideDown = false,
@@ -183,10 +159,7 @@ private fun FourPlayerLayout(
                 modifier = Modifier.weight(1f),
             )
         }
-        Row(
-            modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(BOX_SPACING),
-        ) {
+        Row(modifier = Modifier.weight(1f)) {
             PlayerBoxEntry(
                 player = players[2],
                 isUpsideDown = false,
