@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.3] - 2026-08-22
+
+### Added
+- Per-game dice presets: MTG (1d20, 1d6, 2d6), Pokemon (1d20, 1d6), and a generic RPG-style fallback (1d6, 2d6, 1d20) (#74)
+
+### Changed
+- Dice presets are now all white across every game (#74)
+
 ## [0.20.2] - 2026-08-22
 
 ### Fixed
