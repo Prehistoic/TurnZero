@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.4] - 2026-08-22
+
+### Fixed
+- LP Counter now keeps the device screen on while the tool is open (#75)
+
 ## [0.20.3] - 2026-08-22
 
 ### Added
