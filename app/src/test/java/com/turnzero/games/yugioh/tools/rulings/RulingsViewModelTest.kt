@@ -3,11 +3,14 @@ package com.turnzero.games.yugioh.tools.rulings
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.preferencesOf
+import com.turnzero.core.data.UserPreferences
 import com.turnzero.games.yugioh.tools.rulings.data.CardRulingsDetail
 import com.turnzero.games.yugioh.tools.rulings.data.CardSearchResult
 import com.turnzero.games.yugioh.tools.rulings.data.RulingsRepository
 import com.turnzero.TZViewModelTest
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -33,15 +36,58 @@ class RulingsViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `init loads formats and defaults to Goat`() = runTest {
+    fun `init loads formats and enables all formats by default`() = runTest {
         coEvery { repository.getAllFormats() } returns listOf("Goat", "Edison", "Stein")
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
 
         val state = vm.uiState.first()
         assertEquals("Goat", state.selectedFormat)
-        assertEquals(listOf("Goat", "Edison"), state.enabledFormats)
+        assertEquals(listOf("Goat", "Stein", "Edison"), state.enabledFormats)
         assertFalse(state.isLoading)
+    }
+
+    @Test
+    fun `default format is first enabled format in canonical order when nothing stored`() = runTest {
+        coEvery { repository.getAllFormats() } returns listOf("Edison", "Goat")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals("Goat", state.defaultFormat)
+        assertEquals("Goat", state.selectedFormat)
+    }
+
+    @Test
+    fun `default format falls back to first enabled format when stored default is disabled`() = runTest {
+        every { dataStore.data } returns flowOf(
+            preferencesOf(
+                UserPreferences.RULINGS_ENABLED_FORMATS to setOf("Stein"),
+                UserPreferences.RULINGS_DEFAULT_FORMAT to "Goat",
+            )
+        )
+        coEvery { repository.getAllFormats() } returns listOf("Goat", "Stein")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals("Stein", state.defaultFormat)
+        assertEquals("Stein", state.selectedFormat)
+        assertEquals(listOf("Stein"), state.enabledFormats)
+    }
+
+    @Test
+    fun `init falls back to all formats enabled when stored enabled set is empty`() = runTest {
+        every { dataStore.data } returns flowOf(
+            preferencesOf(UserPreferences.RULINGS_ENABLED_FORMATS to emptySet<String>())
+        )
+        coEvery { repository.getAllFormats() } returns listOf("Goat", "Edison")
+        val vm = RulingsViewModel(repository, dataStore)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals(listOf("Goat", "Edison"), state.enabledFormats)
+        assertEquals("Goat", state.defaultFormat)
     }
 
     @Test
@@ -70,14 +116,17 @@ class RulingsViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `toggleFormatEnabled enables disabled format`() = runTest {
+    fun `toggleFormatEnabled round-trips format between disabled and enabled`() = runTest {
         coEvery { repository.getAllFormats() } returns listOf("Goat", "Stein")
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
 
         vm.toggleFormatEnabled("Stein")
         testDispatcher.scheduler.advanceUntilIdle()
+        assertFalse(vm.uiState.first().enabledFormats.contains("Stein"))
 
+        vm.toggleFormatEnabled("Stein")
+        testDispatcher.scheduler.advanceUntilIdle()
         assertTrue(vm.uiState.first().enabledFormats.contains("Stein"))
     }
 
@@ -171,16 +220,19 @@ class RulingsViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `toggleFormatEnabled disables last enabled format but does not break`() = runTest {
+    fun `toggleFormatEnabled cannot disable the last enabled format`() = runTest {
         coEvery { repository.getAllFormats() } returns listOf("Goat", "HAT")
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
+
         vm.toggleFormatEnabled("Goat")
         testDispatcher.scheduler.advanceUntilIdle()
         vm.toggleFormatEnabled("HAT")
         testDispatcher.scheduler.advanceUntilIdle()
 
         val state = vm.uiState.first()
-        assertEquals(0, state.enabledFormats.size)
+        assertEquals(listOf("HAT"), state.enabledFormats)
+        assertEquals("HAT", state.selectedFormat)
+        assertEquals("HAT", state.defaultFormat)
     }
 }

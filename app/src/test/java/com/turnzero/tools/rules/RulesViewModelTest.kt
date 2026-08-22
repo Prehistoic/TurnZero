@@ -12,6 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -279,6 +280,30 @@ class RulesViewModelTest : TZViewModelTest() {
         advanceUntilIdle()
         val cats = vm.uiState.value.allKeywordCategories
         assertEquals(0, cats.size)
+    }
+
+    @Test
+    fun `init enables all rulesets by default`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals(setOf("v5-dm", "v6-gx"), state.enabledRulesets)
+    }
+
+    @Test
+    fun `toggleRulesetEnabled cannot disable the last enabled ruleset`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.toggleRulesetEnabled("v5-dm", false)
+        advanceUntilIdle()
+        vm.toggleRulesetEnabled("v6-gx", false)
+        advanceUntilIdle()
+
+        val state = vm.uiState.first()
+        assertEquals(setOf("v6-gx"), state.enabledRulesets)
+        assertEquals("v6-gx", state.selectedRulesetId)
     }
 }
 

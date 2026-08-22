@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-08-22
+
+### Added
+- All Yu-Gi-Oh! rulings formats are now enabled by default (#72)
+
+### Changed
+- Rulings default format now falls back to the first enabled format in chronological order (#72)
+- The last enabled rulings format can no longer be disabled (#72)
+
 ## [0.20.0] - 2026-07-24
 
 ### Added
