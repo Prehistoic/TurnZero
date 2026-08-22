@@ -32,8 +32,8 @@ data class RulingsUiState(
     val formats: List<String> = emptyList(),
     val enabledFormats: List<String> = emptyList(),
     val disabledFormats: List<String> = emptyList(),
-    val selectedFormat: String = "Goat",
-    val defaultFormat: String = "Goat",
+    val selectedFormat: String = FormatRulesData.allFormats.first().key,
+    val defaultFormat: String = FormatRulesData.allFormats.first().key,
     val generalRules: List<FormatRule> = emptyList(),
     val searchQuery: String = "",
     val searchResults: List<CardSearchResult> = emptyList(),
@@ -64,11 +64,12 @@ class RulingsViewModel @Inject constructor(
             val allFormats = repository.getAllFormats()
             val rawEnabled = dataStore.data.first()[UserPreferences.RULINGS_ENABLED_FORMATS]
                 ?: FormatRulesData.defaultEnabledKeys
-            val storedEnabled = if ("Modern" in rawEnabled) {
+            val migratedEnabled = if ("Modern" in rawEnabled) {
                 (rawEnabled - "Modern") + "Base"
             } else {
                 rawEnabled
             }
+            val storedEnabled = if (migratedEnabled.isEmpty()) FormatRulesData.defaultEnabledKeys else migratedEnabled
             val enabled = FormatRulesData.sortByChronological(allFormats.filter { it in storedEnabled })
             val disabled = FormatRulesData.sortByChronological(allFormats.filter { it !in storedEnabled })
 
@@ -76,7 +77,7 @@ class RulingsViewModel @Inject constructor(
             val defaultFormat = if (storedDefault != null && storedDefault in enabled) {
                 storedDefault
             } else {
-                if ("Goat" in enabled) "Goat" else enabled.firstOrNull() ?: "Goat"
+                enabled.firstOrNull() ?: FormatRulesData.allFormats.first().key
             }
 
             val rules = FormatRulesData.getMeta(defaultFormat)?.rules ?: emptyList()
