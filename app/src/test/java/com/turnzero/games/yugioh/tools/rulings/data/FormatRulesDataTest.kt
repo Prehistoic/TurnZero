@@ -207,14 +207,11 @@ class FormatRulesDataTest {
     }
 
     @Test
-    fun `defaultEnabledKeys has five formats`() {
+    fun `all formats are enabled by default`() {
         val defaultKeys = FormatRulesData.defaultEnabledKeys
-        assertEquals(5, defaultKeys.size)
-        assertTrue(defaultKeys.contains("Goat"))
-        assertTrue(defaultKeys.contains("Edison"))
-        assertTrue(defaultKeys.contains("Tengu"))
-        assertTrue(defaultKeys.contains("HAT"))
-        assertTrue(defaultKeys.contains("Base"))
+        val allKeys = FormatRulesData.allFormats.map { it.key }.toSet()
+        assertEquals(allKeys, defaultKeys)
+        assertTrue(FormatRulesData.allFormats.all { it.enabledByDefault })
     }
 
     @Test

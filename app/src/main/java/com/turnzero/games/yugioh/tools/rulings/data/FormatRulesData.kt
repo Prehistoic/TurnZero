@@ -4,7 +4,7 @@ data class FormatMeta(
     val key: String,
     val displayName: String,
     val dateLabel: String,
-    val enabledByDefault: Boolean = false,
+    val enabledByDefault: Boolean = true,
     val rules: List<FormatRule> = emptyList(),
 ) {
     val labelWithDate: String get() = "$displayName - $dateLabel"
@@ -429,7 +429,7 @@ object FormatRulesData {
     )
 
     val allFormats: List<FormatMeta> = listOf(
-        FormatMeta("Goat", "Goat", "Apr. 2005", enabledByDefault = true, rules = goatRules),
+        FormatMeta("Goat", "Goat", "Apr. 2005", rules = goatRules),
         FormatMeta("Stein", "Stein", "Sep. 2006"),
         FormatMeta("Trooper", "Trooper", "Jun. 2007"),
         FormatMeta("Circle", "Circle", "Sep. 2007"),
@@ -437,13 +437,13 @@ object FormatRulesData {
         FormatMeta("Gladiator", "Gladiator", "May 2008"),
         FormatMeta("TeleDAD", "TeleDAD", "Sep. 2008"),
         FormatMeta("Cat", "Cat", "Mar. 2009"),
-        FormatMeta("Edison", "Edison", "Mar. 2010", enabledByDefault = true, rules = edisonRules),
-        FormatMeta("Tengu", "Tengu", "Sep. 2011", enabledByDefault = true, rules = tenguRules),
+        FormatMeta("Edison", "Edison", "Mar. 2010", rules = edisonRules),
+        FormatMeta("Tengu", "Tengu", "Sep. 2011", rules = tenguRules),
         FormatMeta("Meadowlands", "Meadowlands", "Mar. 2013"),
         FormatMeta("FireWater", "Fire/Water", "Jan. 2014"),
         FormatMeta("Vegas", "Vegas", "Apr. 2014"),
-        FormatMeta("HAT", "HAT", "Apr. 2014", enabledByDefault = true, rules = hatRules),
-        FormatMeta("Base", "Modern", "Current", enabledByDefault = true),
+        FormatMeta("HAT", "HAT", "Apr. 2014", rules = hatRules),
+        FormatMeta("Base", "Modern", "Current"),
     )
 
     val defaultEnabledKeys: Set<String> = allFormats
