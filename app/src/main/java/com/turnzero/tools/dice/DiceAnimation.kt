@@ -121,7 +121,6 @@ fun DieCard(
     val borderWidth = remember { (dieSize.value / 32f).dp }
     val innerPadding = remember { (dieSize.value / 16f).dp }
     val labelFontSize = remember { (dieSize.value * 0.14f).sp }
-    val numberFontSize = remember { (dieSize.value * 0.38f).sp }
     val gap = remember { (dieSize.value / 32f).dp }
 
     Column(
@@ -144,7 +143,7 @@ fun DieCard(
             text = if (displayNumber != null) displayNumber.toString() else faceLabel,
             fontWeight = FontWeight.Bold,
             color = borderColor,
-            fontSize = numberFontSize,
+            fontSize = 28.sp,
             textAlign = TextAlign.Center
         )
     }
