@@ -285,7 +285,7 @@ class RulesViewModelTest : TZViewModelTest() {
     @Test
     fun `init enables all rulesets by default`() = runTest {
         val vm = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
+        advanceUntilIdle()
 
         val state = vm.uiState.first()
         assertEquals(setOf("v5-dm", "v6-gx"), state.enabledRulesets)
@@ -294,12 +294,12 @@ class RulesViewModelTest : TZViewModelTest() {
     @Test
     fun `toggleRulesetEnabled cannot disable the last enabled ruleset`() = runTest {
         val vm = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
+        advanceUntilIdle()
 
         vm.toggleRulesetEnabled("v5-dm", false)
-        testDispatcher.scheduler.advanceUntilIdle()
+        advanceUntilIdle()
         vm.toggleRulesetEnabled("v6-gx", false)
-        testDispatcher.scheduler.advanceUntilIdle()
+        advanceUntilIdle()
 
         val state = vm.uiState.first()
         assertEquals(setOf("v6-gx"), state.enabledRulesets)

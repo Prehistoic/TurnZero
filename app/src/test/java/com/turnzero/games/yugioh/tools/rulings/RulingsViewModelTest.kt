@@ -116,7 +116,7 @@ class RulingsViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `toggleFormatEnabled enables disabled format`() = runTest {
+    fun `toggleFormatEnabled round-trips format between disabled and enabled`() = runTest {
         coEvery { repository.getAllFormats() } returns listOf("Goat", "Stein")
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
