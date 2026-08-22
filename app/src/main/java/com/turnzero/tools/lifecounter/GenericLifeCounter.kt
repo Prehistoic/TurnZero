@@ -1,5 +1,7 @@
 package com.turnzero.tools.lifecounter
 
+import android.app.Activity
+import android.view.WindowManager
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -7,10 +9,15 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.turnzero.core.tools.api.Tool
 
@@ -32,6 +39,31 @@ class GenericLifeCounter : Tool {
 
         LaunchedEffect(gameId) {
             viewModel.initialize(gameId)
+        }
+
+        val context = LocalContext.current
+        val activity = context as? Activity
+
+        DisposableEffect(Unit) {
+            val window = activity?.window
+            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+            val activityObserver = LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_RESUME ->
+                        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    Lifecycle.Event.ON_PAUSE ->
+                        window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    else -> {}
+                }
+            }
+
+            (activity as? LifecycleOwner)?.lifecycle?.addObserver(activityObserver)
+
+            onDispose {
+                (activity as? LifecycleOwner)?.lifecycle?.removeObserver(activityObserver)
+                window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
         }
 
         LpCounterScreen(
