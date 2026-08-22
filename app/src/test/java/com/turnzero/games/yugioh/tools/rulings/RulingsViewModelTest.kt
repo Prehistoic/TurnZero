@@ -123,7 +123,10 @@ class RulingsViewModelTest : TZViewModelTest() {
 
         vm.toggleFormatEnabled("Stein")
         testDispatcher.scheduler.advanceUntilIdle()
+        assertFalse(vm.uiState.first().enabledFormats.contains("Stein"))
 
+        vm.toggleFormatEnabled("Stein")
+        testDispatcher.scheduler.advanceUntilIdle()
         assertTrue(vm.uiState.first().enabledFormats.contains("Stein"))
     }
 
@@ -217,16 +220,19 @@ class RulingsViewModelTest : TZViewModelTest() {
     }
 
     @Test
-    fun `toggleFormatEnabled disables last enabled format but does not break`() = runTest {
+    fun `toggleFormatEnabled cannot disable the last enabled format`() = runTest {
         coEvery { repository.getAllFormats() } returns listOf("Goat", "HAT")
         val vm = RulingsViewModel(repository, dataStore)
         testDispatcher.scheduler.advanceUntilIdle()
+
         vm.toggleFormatEnabled("Goat")
         testDispatcher.scheduler.advanceUntilIdle()
         vm.toggleFormatEnabled("HAT")
         testDispatcher.scheduler.advanceUntilIdle()
 
         val state = vm.uiState.first()
-        assertEquals(0, state.enabledFormats.size)
+        assertEquals(listOf("HAT"), state.enabledFormats)
+        assertEquals("HAT", state.selectedFormat)
+        assertEquals("HAT", state.defaultFormat)
     }
 }

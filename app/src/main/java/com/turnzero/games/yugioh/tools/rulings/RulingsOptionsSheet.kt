@@ -87,6 +87,7 @@ fun RulingsOptionsSheet(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
             ) {
                 items(allFormatsWithStatus, key = { it.first }) { (formatKey, isEnabled) ->
+                    val isLastEnabled = isEnabled && enabledFormats.size == 1
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -95,6 +96,7 @@ fun RulingsOptionsSheet(
                     ) {
                         Checkbox(
                             checked = isEnabled,
+                            enabled = !isLastEnabled,
                             onCheckedChange = { onToggleFormat(formatKey) },
                         )
                         Spacer(modifier = Modifier.width(8.dp))

@@ -173,8 +173,12 @@ class RulingsViewModel @Inject constructor(
 
     fun toggleFormatEnabled(formatKey: String) {
         val currentEnabled = _uiState.value.enabledFormats.toMutableSet()
-        if (formatKey in currentEnabled) currentEnabled.remove(formatKey)
-        else currentEnabled.add(formatKey)
+        if (formatKey in currentEnabled) {
+            if (currentEnabled.size == 1) return
+            currentEnabled.remove(formatKey)
+        } else {
+            currentEnabled.add(formatKey)
+        }
         val sorted = FormatRulesData.sortByChronological(currentEnabled.toList())
         val allFormats = _uiState.value.formats
         val disabled = FormatRulesData.sortByChronological(allFormats.filter { it !in currentEnabled })
