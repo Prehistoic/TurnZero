@@ -454,4 +454,57 @@ class LifeCounterViewModelTest {
         vm.applyCalcChange()
         assertFalse(vm.uiState.value.snapLpAnimation)
     }
+
+    @Test
+    fun `lpState is restored from SavedStateHandle when viewmodel is recreated`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        assertEquals(7500, vm.uiState.value.player1Lp)
+
+        val recreated = LifeCounterViewModel(savedStateHandle)
+        assertEquals(7500, recreated.uiState.value.player1Lp)
+        assertEquals(8000, recreated.uiState.value.player2Lp)
+        assertEquals(8000, recreated.uiState.value.startingLp)
+    }
+
+    @Test
+    fun `startingLp is restored from SavedStateHandle when viewmodel is recreated`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.setStartingLp(4000)
+        val recreated = LifeCounterViewModel(savedStateHandle)
+        assertEquals(4000, recreated.uiState.value.player1Lp)
+        assertEquals(4000, recreated.uiState.value.player2Lp)
+        assertEquals(4000, recreated.uiState.value.startingLp)
+    }
+
+    @Test
+    fun `resetAll persists reset LPs to SavedStateHandle`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.setStartingLp(4000)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(1)
+        vm.applyCalcChange()
+        assertEquals(3900, vm.uiState.value.player1Lp)
+        vm.resetAll()
+        val recreated = LifeCounterViewModel(savedStateHandle)
+        assertEquals(4000, recreated.uiState.value.player1Lp)
+        assertEquals(4000, recreated.uiState.value.player2Lp)
+        assertEquals(4000, recreated.uiState.value.startingLp)
+    }
+
+    @Test
+    fun `undoLastChange persists restored LP to SavedStateHandle`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange() // 8000 -> 7500
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(3)
+        vm.applyCalcChange() // 7500 -> 7200
+        vm.undoLastChange() // 7200 -> 7500
+        val recreated = LifeCounterViewModel(savedStateHandle)
+        assertEquals(7500, recreated.uiState.value.player1Lp)
+    }
 }

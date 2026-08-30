@@ -20,12 +20,24 @@ class LifeCounterViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        LifeCounterUiState(remainingSeconds = 45 * 60L)
+        LifeCounterUiState(remainingSeconds = 45 * 60L).copy(
+            player1Lp = savedStateHandle.get<Int>(KEY_PLAYER1_LP) ?: 8000,
+            player2Lp = savedStateHandle.get<Int>(KEY_PLAYER2_LP) ?: 8000,
+            startingLp = savedStateHandle.get<Int>(KEY_STARTING_LP) ?: 8000,
+        )
     )
     val uiState: StateFlow<LifeCounterUiState> = _uiState.asStateFlow()
 
+    private inline fun updateState(transform: (LifeCounterUiState) -> LifeCounterUiState) {
+        val updated = transform(_uiState.value)
+        _uiState.value = updated
+        savedStateHandle[KEY_PLAYER1_LP] = updated.player1Lp
+        savedStateHandle[KEY_PLAYER2_LP] = updated.player2Lp
+        savedStateHandle[KEY_STARTING_LP] = updated.startingLp
+    }
+
     internal fun tick() {
-        _uiState.update { current ->
+        updateState { current ->
             when (current.timerMode) {
                 TimerMode.COUNT_UP -> {
                     current.copy(elapsedSeconds = current.elapsedSeconds + 1)
@@ -53,11 +65,11 @@ class LifeCounterViewModel @Inject constructor(
     fun startPauseTimer() {
         val state = _uiState.value
         if (state.isRunning) {
-            _uiState.update { it.copy(isRunning = false, flashZero = false) }
+            updateState { it.copy(isRunning = false, flashZero = false) }
             timerJob?.cancel()
             timerJob = null
         } else {
-            _uiState.update { it.copy(isRunning = true, hasEverStarted = true) }
+            updateState { it.copy(isRunning = true, hasEverStarted = true) }
             timerJob = viewModelScope.launch {
                 var nextTick = System.nanoTime() + 1_000_000_000L
                 while (isActive) {
@@ -73,7 +85,7 @@ class LifeCounterViewModel @Inject constructor(
 
     fun pauseTimer() {
         if (_uiState.value.isRunning) {
-            _uiState.update { it.copy(isRunning = false) }
+            updateState { it.copy(isRunning = false) }
             timerJob?.cancel()
             timerJob = null
         }
@@ -83,7 +95,7 @@ class LifeCounterViewModel @Inject constructor(
         timerJob?.cancel()
         timerJob = null
         val minutes = _uiState.value.timerStartValueMinutes
-        _uiState.update {
+        updateState {
             it.copy(
                 isRunning = false,
                 elapsedSeconds = 0,
@@ -95,7 +107,7 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun openCalc(player: Player) {
-        _uiState.update {
+        updateState {
             it.copy(
                 showCalcSheet = true,
                 activePlayer = player,
@@ -105,18 +117,18 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun closeCalc() {
-        _uiState.update { it.copy(showCalcSheet = false) }
+        updateState { it.copy(showCalcSheet = false) }
     }
 
     fun setOperation(op: Operation) {
-        _uiState.update {
+        updateState {
             it.copy(calcState = it.calcState.copy(operation = op, digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
         }
     }
 
     fun inputDigit(d: Int) {
-        _uiState.update { state ->
-            if (d == 0 && state.calcState.digits.isEmpty()) return@update state
+        updateState { state ->
+            if (d == 0 && state.calcState.digits.isEmpty()) return@updateState state
             val newDigits = state.calcState.digits + d.toString()
             val isZero = d == 0
             val result = if (state.calcState.lockedIn || isZero) {
@@ -136,8 +148,8 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun addZeros(count: Int) {
-        _uiState.update { state ->
-            if (state.calcState.digits.isEmpty()) return@update state
+        updateState { state ->
+            if (state.calcState.digits.isEmpty()) return@updateState state
             val newDigits = state.calcState.digits + "0".repeat(count)
             val result = (newDigits.toIntOrNull() ?: 0) to 0
             state.copy(
@@ -152,7 +164,7 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun clearInput() {
-        _uiState.update {
+        updateState {
             it.copy(calcState = it.calcState.copy(digits = "", previewValue = 0, trailingZeroCount = 0, lockedIn = false))
         }
     }
@@ -170,7 +182,7 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun divideBy2() {
-        _uiState.update {
+        updateState {
             it.copy(calcState = CalcInputState(operation = Operation.DIVIDE, lockedIn = true))
         }
     }
@@ -180,7 +192,7 @@ class LifeCounterViewModel @Inject constructor(
         timerJob = null
         val lp = _uiState.value.startingLp
         val minutes = _uiState.value.timerStartValueMinutes
-        _uiState.update {
+        updateState {
             it.copy(
                 isRunning = false,
                 player1Lp = lp,
@@ -199,7 +211,7 @@ class LifeCounterViewModel @Inject constructor(
     val history = _uiState.value.history
     if (history.isEmpty()) return
     val last = history.first()
-    _uiState.update {
+    updateState {
         val updated = if (last.player == Player.PLAYER_1)
             it.copy(player1Lp = last.previousLp)
         else
@@ -213,7 +225,7 @@ class LifeCounterViewModel @Inject constructor(
         timerJob = null
         val lp = _uiState.value.startingLp
         val minutes = _uiState.value.timerStartValueMinutes
-        _uiState.update {
+        updateState {
             it.copy(
                 timerMode = mode,
                 isRunning = false,
@@ -233,7 +245,7 @@ class LifeCounterViewModel @Inject constructor(
         timerJob?.cancel()
         timerJob = null
         val lp = _uiState.value.startingLp
-        _uiState.update {
+        updateState {
             it.copy(
                 timerStartValueMinutes = minutes,
                 isRunning = false,
@@ -253,7 +265,7 @@ class LifeCounterViewModel @Inject constructor(
         timerJob?.cancel()
         timerJob = null
         val minutes = _uiState.value.timerStartValueMinutes
-        _uiState.update {
+        updateState {
             it.copy(
                 startingLp = lp,
                 player1Lp = lp,
@@ -270,19 +282,19 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     fun toggleHistory() {
-        _uiState.update { it.copy(showHistory = !it.showHistory) }
+        updateState { it.copy(showHistory = !it.showHistory) }
     }
 
     fun clearHistory() {
-        _uiState.update { it.copy(history = emptyList()) }
+        updateState { it.copy(history = emptyList()) }
     }
 
     fun consumedFlashZero() {
-        _uiState.update { it.copy(flashZero = false) }
+        updateState { it.copy(flashZero = false) }
     }
 
     fun consumedSnapLpAnimation() {
-        _uiState.update { it.copy(snapLpAnimation = false) }
+        updateState { it.copy(snapLpAnimation = false) }
     }
 
     private fun activePlayerLp(state: LifeCounterUiState): Int {
@@ -301,7 +313,7 @@ class LifeCounterViewModel @Inject constructor(
             operation = op,
             timestamp = System.currentTimeMillis()
         )
-        _uiState.update {
+        updateState {
             val base = it.copy(
                 history = listOf(change) + it.history,
                 showCalcSheet = false,
@@ -312,6 +324,10 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     companion object {
+        private const val KEY_PLAYER1_LP = "player1_lp"
+        private const val KEY_PLAYER2_LP = "player2_lp"
+        private const val KEY_STARTING_LP = "starting_lp"
+
         fun computePreview(digits: String): Pair<Int, Int> {
             if (digits.isEmpty()) return 0 to 0
             return when {

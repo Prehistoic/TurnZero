@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Yu-Gi-Oh! LP Counter now returns to the base LP color after a reset instead of showing red/green based on the reset direction
+- LP state no longer resets when navigating back, switching tools, or switching apps: LP values survive back navigation and are restored after the system kills the app in the background, for both the Yu-Gi-Oh! and the generic LP Counter
+
 ## [0.20.4] - 2026-08-22
 
 ### Fixed

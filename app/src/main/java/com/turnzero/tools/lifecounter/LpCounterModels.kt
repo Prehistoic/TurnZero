@@ -16,6 +16,7 @@ data class LpCounterUiState(
     val showHistory: Boolean = false,
 )
 
+@Serializable
 data class LpPlayer(
     val number: Int,
     val startingLp: Int,
@@ -26,6 +27,13 @@ data class LpPlayer(
         require(number in 1..4) { "Player number must be 1-4, got $number" }
     }
 }
+
+@Serializable
+data class LpCounterSnapshot(
+    val players: List<LpPlayer> = emptyList(),
+    val playerCount: Int = 2,
+    val globalStartingLp: Int = 20,
+)
 
 @Serializable
 data class LpChange(

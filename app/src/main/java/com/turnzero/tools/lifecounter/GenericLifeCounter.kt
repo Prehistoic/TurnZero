@@ -1,7 +1,8 @@
 package com.turnzero.tools.lifecounter
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,6 +23,7 @@ import com.turnzero.core.tools.api.Tool
 
 val LocalGameId = staticCompositionLocalOf<String> { "mtg" }
 
+@SuppressLint("ContextCastToActivity")
 class GenericLifeCounter : Tool {
 
     override val id = "lp-counter"
@@ -33,35 +35,33 @@ class GenericLifeCounter : Tool {
     @Composable
     override fun Screen(onBack: () -> Unit) {
         val gameId = LocalGameId.current
-        val viewModel: LpCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LpCounterViewModel = hiltViewModel(activity)
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
         LaunchedEffect(gameId) {
             viewModel.initialize(gameId)
         }
 
-        val context = LocalContext.current
-        val activity = context as? Activity
-
         DisposableEffect(Unit) {
-            val window = activity?.window
-            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            val window = activity.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
             val activityObserver = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME ->
-                        window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     Lifecycle.Event.ON_PAUSE ->
-                        window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     else -> {}
                 }
             }
 
-            (activity as? LifecycleOwner)?.lifecycle?.addObserver(activityObserver)
+            activity.lifecycle.addObserver(activityObserver)
 
             onDispose {
-                (activity as? LifecycleOwner)?.lifecycle?.removeObserver(activityObserver)
-                window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                activity.lifecycle.removeObserver(activityObserver)
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
         }
 
@@ -95,7 +95,8 @@ class GenericLifeCounter : Tool {
 
     @Composable
     override fun OptionsSheet(onDismiss: () -> Unit) {
-        val viewModel: LpCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LpCounterViewModel = hiltViewModel(activity)
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         LpCounterOptionsSheet(
             uiState = uiState,
@@ -108,7 +109,8 @@ class GenericLifeCounter : Tool {
 
     @Composable
     override fun TopBarActions(): @Composable RowScope.() -> Unit = {
-        val viewModel: LpCounterViewModel = hiltViewModel()
+        val activity = LocalContext.current as ComponentActivity
+        val viewModel: LpCounterViewModel = hiltViewModel(activity)
 
         IconButton(onClick = { viewModel.showHistory(true) }) {
             Icon(Icons.Default.History, contentDescription = "History")

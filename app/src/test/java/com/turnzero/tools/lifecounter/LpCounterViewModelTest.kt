@@ -239,4 +239,61 @@ class LpCounterViewModelTest : TZViewModelTest() {
         advanceUntilIdle()
         assertEquals(30, repo.savedConfig?.globalStartingLp)
     }
+
+    @Test
+    fun `initialize does not reset LP state when re-entering same game`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.decrementPlayer(2) // 20 -> 19
+        vm.initialize("mtg")
+        val state = vm.uiState.value
+        assertEquals(19, state.players[0].currentLp)
+        assertEquals(19, state.players[1].currentLp)
+    }
+
+    @Test
+    fun `each game keeps independent LP state`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.initialize("swu")
+        assertEquals(30, vm.uiState.value.players[0].currentLp)
+        vm.decrementPlayer(1) // 30 -> 29
+        vm.initialize("mtg")
+        assertEquals(19, vm.uiState.value.players[0].currentLp)
+        vm.initialize("swu")
+        assertEquals(29, vm.uiState.value.players[0].currentLp)
+    }
+
+    @Test
+    fun `LP state is restored from SavedStateHandle after viewmodel recreation`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.incrementPlayer(2) // 20 -> 21
+
+        val recreated = LpCounterViewModel(repo, savedStateHandle)
+        recreated.initialize("mtg")
+        val state = recreated.uiState.value
+        assertEquals(19, state.players[0].currentLp)
+        assertEquals(21, state.players[1].currentLp)
+        assertEquals(20, state.players[0].startingLp)
+        assertEquals(2, state.playerCount)
+    }
+
+    @Test
+    fun `per-game state is restored independently from SavedStateHandle`() = runTest {
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.initialize("swu")
+        vm.decrementPlayer(1) // 30 -> 29
+
+        val recreated = LpCounterViewModel(repo, savedStateHandle)
+        recreated.initialize("mtg")
+        assertEquals(19, recreated.uiState.value.players[0].currentLp)
+        recreated.initialize("swu")
+        assertEquals(29, recreated.uiState.value.players[0].currentLp)
+    }
 }
