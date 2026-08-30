@@ -2,6 +2,9 @@ package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.compose.runtime.Stable
 
+internal fun computeLpChangeDirection(previousLp: Int, newLp: Int, snapped: Boolean): Int =
+    if (snapped) 0 else newLp.compareTo(previousLp)
+
 enum class TimerMode { COUNT_UP, COUNT_DOWN }
 
 enum class Player { PLAYER_1, PLAYER_2 }

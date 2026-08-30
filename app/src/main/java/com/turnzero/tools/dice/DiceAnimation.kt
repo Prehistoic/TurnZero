@@ -140,7 +140,7 @@ fun DieCard(
         )
         Spacer(modifier = Modifier.height(gap))
         Text(
-            text = if (displayNumber != null) displayNumber.toString() else faceLabel,
+            text = dieCardNumberText(displayNumber),
             fontWeight = FontWeight.Bold,
             color = borderColor,
             fontSize = 28.sp,
@@ -148,6 +148,9 @@ fun DieCard(
         )
     }
 }
+
+internal fun dieCardNumberText(displayNumber: Int?): String =
+    if (displayNumber != null) displayNumber.toString() else "1"
 
 private fun randomNoRepeat(faceCount: Int, previous: Int): Int {
     if (faceCount <= 1) return 1

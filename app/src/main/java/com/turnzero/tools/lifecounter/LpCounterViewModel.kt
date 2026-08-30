@@ -9,8 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,29 +23,85 @@ class LpCounterViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LpCounterUiState())
     val uiState: StateFlow<LpCounterUiState> = _uiState.asStateFlow()
 
+    private var currentGameId: String? = null
+    private val gameStates = mutableMapOf<String, LpCounterUiState>()
+
     fun initialize(gameId: String) {
+        currentGameId = gameId
+        val existing = gameStates[gameId] ?: restoreState(gameId)
+        if (existing != null) {
+            _uiState.value = existing
+            return
+        }
         val defaultLp = defaultLpByGame[gameId] ?: 20
-        val initialPlayers = (1..2).map { LpPlayer(number = it, startingLp = defaultLp, currentLp = defaultLp) }
-        _uiState.update { it.copy(players = initialPlayers, globalStartingLp = defaultLp) }
+        val initial = LpCounterUiState(
+            players = (1..2).map { LpPlayer(number = it, startingLp = defaultLp, currentLp = defaultLp) },
+            globalStartingLp = defaultLp,
+        )
+        gameStates[gameId] = initial
+        _uiState.value = initial
         viewModelScope.launch {
             val config = repo.getConfig()
-            applyConfig(config)
+            applyConfig(config, gameId)
         }
     }
 
-    private fun applyConfig(config: LpCounterConfig) {
-        val globalLp = config.globalStartingLp
+    private fun applyConfig(config: LpCounterConfig, gameId: String) {
+        val base = gameStates[gameId] ?: return
         val players = (1..config.playerCount).map { num ->
-            LpPlayer(number = num, startingLp = globalLp, currentLp = globalLp)
+            LpPlayer(number = num, startingLp = config.globalStartingLp, currentLp = config.globalStartingLp)
         }
-        _uiState.update {
-            it.copy(
-                players = players,
-                playerCount = config.playerCount,
-                globalStartingLp = globalLp,
-            )
+        val updated = base.copy(
+            players = players,
+            playerCount = config.playerCount,
+            globalStartingLp = config.globalStartingLp,
+        )
+        gameStates[gameId] = updated
+        persistState(gameId, updated)
+        if (currentGameId == gameId) {
+            _uiState.value = updated
         }
     }
+
+    private inline fun updateState(transform: (LpCounterUiState) -> LpCounterUiState) {
+        val updated = transform(_uiState.value)
+        _uiState.value = updated
+        val gameId = currentGameId
+        if (gameId != null) {
+            gameStates[gameId] = updated
+            persistState(gameId, updated)
+        }
+    }
+
+    private fun persistState(gameId: String, state: LpCounterUiState) {
+        savedStateHandle[stateKey(gameId)] = json.encodeToString(
+            LpCounterSnapshot(
+                players = state.players,
+                playerCount = state.playerCount,
+                globalStartingLp = state.globalStartingLp,
+            )
+        )
+    }
+
+    private fun restoreState(gameId: String): LpCounterUiState? {
+        val raw = try {
+            savedStateHandle.get<String>(stateKey(gameId))
+        } catch (_: Exception) {
+            null
+        } ?: return null
+        return try {
+            val snapshot = json.decodeFromString<LpCounterSnapshot>(raw)
+            LpCounterUiState(
+                players = snapshot.players,
+                playerCount = snapshot.playerCount,
+                globalStartingLp = snapshot.globalStartingLp,
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun stateKey(gameId: String) = "lp_counter_state_$gameId"
 
     fun incrementPlayer(playerNumber: Int) {
         applyDelta(playerNumber, 1)
@@ -55,10 +112,10 @@ class LpCounterViewModel @Inject constructor(
     }
 
     private fun applyDelta(playerNumber: Int, delta: Int) {
-        _uiState.update { state ->
+        updateState { state ->
             val players = state.players.toMutableList()
             val index = players.indexOfFirst { it.number == playerNumber }
-            if (index < 0) return@update state
+            if (index < 0) return@updateState state
             val player = players[index]
             players[index] = player.copy(
                 currentLp = player.currentLp + delta,
@@ -69,10 +126,10 @@ class LpCounterViewModel @Inject constructor(
     }
 
     fun resetPlayer(playerNumber: Int) {
-        _uiState.update { state ->
+        updateState { state ->
             val players = state.players.toMutableList()
             val index = players.indexOfFirst { it.number == playerNumber }
-            if (index < 0) return@update state
+            if (index < 0) return@updateState state
             val player = players[index]
             val delta = player.startingLp - player.currentLp
             players[index] = player.copy(currentLp = player.startingLp, lastChange = 0)
@@ -89,7 +146,7 @@ class LpCounterViewModel @Inject constructor(
     }
 
     fun resetAll() {
-        _uiState.update { state ->
+        updateState { state ->
             val changes = state.players.map { player ->
                 LpChange(
                     playerNumber = player.number,
@@ -113,13 +170,13 @@ class LpCounterViewModel @Inject constructor(
         val players = (1..count).map { num ->
             LpPlayer(number = num, startingLp = globalLp, currentLp = globalLp)
         }
-        _uiState.update { it.copy(players = players, playerCount = count) }
+        updateState { it.copy(players = players, playerCount = count) }
         persistConfig(playerCount = count)
     }
 
     fun setGlobalStartingLp(lp: Int) {
         require(lp > 0) { "LP must be positive" }
-        _uiState.update { state ->
+        updateState { state ->
             state.copy(
                 globalStartingLp = lp,
                 players = state.players.map { it.copy(startingLp = lp, currentLp = lp) },
@@ -129,10 +186,10 @@ class LpCounterViewModel @Inject constructor(
     }
 
     fun resetChangeIndicator(playerNumber: Int) {
-        _uiState.update { state ->
+        updateState { state ->
             val players = state.players.toMutableList()
             val index = players.indexOfFirst { it.number == playerNumber }
-            if (index < 0) return@update state
+            if (index < 0) return@updateState state
             val player = players[index]
             val netDelta = player.lastChange
             if (netDelta != 0) {
@@ -154,15 +211,15 @@ class LpCounterViewModel @Inject constructor(
     }
 
     fun showOptions(show: Boolean) {
-        _uiState.update { it.copy(showOptions = show) }
+        updateState { it.copy(showOptions = show) }
     }
 
     fun showHistory(show: Boolean) {
-        _uiState.update { it.copy(showHistory = show) }
+        updateState { it.copy(showHistory = show) }
     }
 
     fun clearHistory() {
-        _uiState.update { it.copy(changeHistory = emptyList()) }
+        updateState { it.copy(changeHistory = emptyList()) }
     }
 
     fun dismissOptions() {
@@ -185,5 +242,9 @@ class LpCounterViewModel @Inject constructor(
             )
             repo.saveConfig(updated)
         }
+    }
+
+    companion object {
+        private val json = Json { ignoreUnknownKeys = true }
     }
 }
