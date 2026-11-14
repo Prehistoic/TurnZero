@@ -28,6 +28,11 @@ jobs:
     name: Build Release
     runs-on: ubuntu-24.04
     needs: get_tag
+    env:
+      RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+      RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+      RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -52,12 +57,26 @@ jobs:
           fi
           echo "Version validation passed: $VERSION_NAME"
 
+      - name: Decode signing keystore
+        run: |
+          if [ -z "$RELEASE_KEYSTORE_BASE64" ] || [ -z "$RELEASE_KEYSTORE_PASSWORD" ] || [ -z "$RELEASE_KEY_ALIAS" ] || [ -z "$RELEASE_KEY_PASSWORD" ]; then
+            echo "ERROR: signing secrets are not configured (RELEASE_KEYSTORE_BASE64, RELEASE_KEYSTORE_PASSWORD, RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD)"
+            exit 1
+          fi
+          echo "$RELEASE_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/turnzero-release.jks"
+          echo "RELEASE_KEYSTORE_FILE=$RUNNER_TEMP/turnzero-release.jks" >> "$GITHUB_ENV"
+
       - name: Build release APK
         run: ./gradlew assembleRelease
 
       - name: Rename APK
         run: |
-          mv app/build/outputs/apk/release/app-release-unsigned.apk TurnZero-${{ needs.get_tag.outputs.tag }}.apk
+          APK=$(find app/build/outputs/apk/release -name "*.apk" ! -name "*unsigned*" | head -1)
+          if [ -z "$APK" ]; then
+            echo "ERROR: no signed release APK found"
+            exit 1
+          fi
+          mv "$APK" TurnZero-${{ needs.get_tag.outputs.tag }}.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
