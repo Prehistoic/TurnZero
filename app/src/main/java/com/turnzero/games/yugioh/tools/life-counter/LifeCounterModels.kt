@@ -2,14 +2,23 @@ package com.turnzero.games.yugioh.tools.lifecounter
 
 import androidx.compose.runtime.Stable
 
-internal fun computeLpChangeDirection(previousLp: Int, newLp: Int, snapped: Boolean): Int =
-    if (snapped) 0 else newLp.compareTo(previousLp)
-
 enum class TimerMode { COUNT_UP, COUNT_DOWN }
 
 enum class Player { PLAYER_1, PLAYER_2 }
 
 enum class Operation { ADD, SUBTRACT, DIVIDE }
+
+/**
+ * The cause of the last LP change that may color the LP text. Only calculator
+ * edits create one: reset, undo and option changes never color the LP.
+ */
+@Stable
+data class LpColorChange(
+    val player: Player,
+    val previousLp: Int,
+    val newLp: Int,
+    val id: Long,
+)
 
 data class LpChange(
     val player: Player,
@@ -45,5 +54,5 @@ data class LifeCounterUiState(
     val calcState: CalcInputState = CalcInputState(),
     val flashZero: Boolean = false,
     val hasEverStarted: Boolean = false,
-    val snapLpAnimation: Boolean = false
+    val lpColorChange: LpColorChange? = null
 )

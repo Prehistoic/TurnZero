@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- Vibration alert when the Yu-Gi-Oh! LP Counter timer reaches 00:00:00 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".TZApplication"

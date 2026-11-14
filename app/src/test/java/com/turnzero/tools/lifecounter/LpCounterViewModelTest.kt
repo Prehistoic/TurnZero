@@ -12,12 +12,12 @@ import org.junit.Before
 import org.junit.Test
 
 class FakeLpCounterRepo : LpCounterRepo {
-    private var _config = LpCounterConfig()
+    var config = LpCounterConfig()
 
     var savedConfig: LpCounterConfig? = null
 
-    override suspend fun getConfig(): LpCounterConfig = _config
-    override suspend fun saveConfig(config: LpCounterConfig) { savedConfig = config; _config = config }
+    override suspend fun getConfig(): LpCounterConfig = config
+    override suspend fun saveConfig(config: LpCounterConfig) { savedConfig = config; this.config = config }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -264,6 +264,41 @@ class LpCounterViewModelTest : TZViewModelTest() {
         assertEquals(19, vm.uiState.value.players[0].currentLp)
         vm.initialize("swu")
         assertEquals(29, vm.uiState.value.players[0].currentLp)
+    }
+
+    @Test
+    fun `pending config load does not overwrite LP changes made before it completes`() = runTest {
+        repo.config = LpCounterConfig(playerCount = 4, globalStartingLp = 40)
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19 before the config load lands
+        advanceUntilIdle() // config load completes now
+        assertEquals(19, vm.uiState.value.players[0].currentLp)
+        assertEquals(2, vm.uiState.value.playerCount)
+    }
+
+    @Test
+    fun `pending config load does not overwrite a reset made before it completes`() = runTest {
+        repo.config = LpCounterConfig(playerCount = 4, globalStartingLp = 40)
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        vm.decrementPlayer(1) // 20 -> 19
+        vm.resetAll() // back to the 20 default the user is seeing
+        advanceUntilIdle() // stale config load lands
+        assertEquals(20, vm.uiState.value.players[0].currentLp)
+        assertEquals(20, vm.uiState.value.globalStartingLp)
+    }
+
+    @Test
+    fun `config is applied when the user has not interacted yet`() = runTest {
+        repo.config = LpCounterConfig(playerCount = 4, globalStartingLp = 40)
+        val vm = LpCounterViewModel(repo, savedStateHandle)
+        vm.initialize("mtg")
+        advanceUntilIdle()
+        val state = vm.uiState.value
+        assertEquals(4, state.playerCount)
+        assertEquals(40, state.globalStartingLp)
+        assertEquals(40, state.players[0].currentLp)
     }
 
     @Test

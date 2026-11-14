@@ -6,15 +6,21 @@ import org.junit.Test
 class LifeCounterModelsTest {
 
     @Test
-    fun `computeLpChangeDirection returns zero when snapped regardless of lp delta`() {
-        assertEquals(0, computeLpChangeDirection(previousLp = 5000, newLp = 8000, snapped = true))
-        assertEquals(0, computeLpChangeDirection(previousLp = 8000, newLp = 5000, snapped = true))
+    fun `LpColorChange carries the edited player and lp values`() {
+        val change = LpColorChange(
+            player = Player.PLAYER_2,
+            previousLp = 8000,
+            newLp = 8300,
+            id = 42L
+        )
+        assertEquals(Player.PLAYER_2, change.player)
+        assertEquals(8000, change.previousLp)
+        assertEquals(8300, change.newLp)
+        assertEquals(42L, change.id)
     }
 
     @Test
-    fun `computeLpChangeDirection returns positive on increase and negative on decrease when not snapped`() {
-        assertEquals(1, computeLpChangeDirection(previousLp = 8000, newLp = 8500, snapped = false))
-        assertEquals(-1, computeLpChangeDirection(previousLp = 8000, newLp = 7500, snapped = false))
-        assertEquals(0, computeLpChangeDirection(previousLp = 8000, newLp = 8000, snapped = false))
+    fun `LifeCounterUiState has no lpColorChange by default`() {
+        assertEquals(null, LifeCounterUiState().lpColorChange)
     }
 }
