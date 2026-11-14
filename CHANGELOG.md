@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.5] - 2026-11-14
+
 ### Fixed
-- Yu-Gi-Oh! LP Counter now returns to the base LP color after a reset instead of showing red/green based on the reset direction
+- Yu-Gi-Oh! LP Counter now only colors the LP text for calculator edits: reset, undo, and option changes (starting LP, timer) snap to the new value without flashing red/green
+- Generic LP Counter startup config loading can no longer wipe LP changes made while the tool was opening
+- Dice tool now shows 1 as the initial face value instead of the die name (d6, d20, ...)
 - LP state no longer resets when navigating back, switching tools, or switching apps: LP values survive back navigation and are restored after the system kills the app in the background, for both the Yu-Gi-Oh! and the generic LP Counter
+- Declared the missing VIBRATE permission so the LP Counter timer vibration alert works reliably on all devices
 
 ## [0.20.4] - 2026-08-22
 

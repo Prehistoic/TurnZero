@@ -5,6 +5,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -325,7 +327,7 @@ class LifeCounterViewModelTest {
         vm.undoLastChange()
         assertEquals(8000, vm.uiState.value.player1Lp)
         assertTrue(vm.uiState.value.history.isEmpty())
-        assertTrue(vm.uiState.value.snapLpAnimation)
+        assertNull(vm.uiState.value.lpColorChange)
     }
 
     @Test
@@ -368,7 +370,7 @@ class LifeCounterViewModelTest {
         assertFalse(vm.uiState.value.isRunning)
         assertEquals(0, vm.uiState.value.elapsedSeconds)
         assertEquals(30 * 60, vm.uiState.value.remainingSeconds)
-        assertTrue(vm.uiState.value.snapLpAnimation)
+        assertNull(vm.uiState.value.lpColorChange)
     }
 
     @Test
@@ -423,36 +425,71 @@ class LifeCounterViewModelTest {
     }
 
     @Test
-    fun `snapLpAnimation is true after setTimerMode and consumed sets it false`() = runTest {
+    fun `applyCalcChange sets lpColorChange for the edited player`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5) // 500
+        vm.applyCalcChange()
+        val change = vm.uiState.value.lpColorChange
+        assertNotNull(change)
+        assertEquals(Player.PLAYER_1, change!!.player)
+        assertEquals(8000, change.previousLp)
+        assertEquals(7500, change.newLp)
+    }
+
+    @Test
+    fun `lpColorChange is null by default and not set by other actions`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        assertNull(vm.uiState.value.lpColorChange)
         vm.setTimerMode(TimerMode.COUNT_UP)
-        assertTrue(vm.uiState.value.snapLpAnimation)
-        vm.consumedSnapLpAnimation()
-        assertFalse(vm.uiState.value.snapLpAnimation)
-    }
-
-    @Test
-    fun `snapLpAnimation is true after setTimerStartValue`() = runTest {
-        val vm = LifeCounterViewModel(savedStateHandle)
+        assertNull(vm.uiState.value.lpColorChange)
         vm.setTimerStartValue(30)
-        assertTrue(vm.uiState.value.snapLpAnimation)
-    }
-
-    @Test
-    fun `snapLpAnimation is true after setStartingLp`() = runTest {
-        val vm = LifeCounterViewModel(savedStateHandle)
+        assertNull(vm.uiState.value.lpColorChange)
         vm.setStartingLp(4000)
-        assertTrue(vm.uiState.value.snapLpAnimation)
+        assertNull(vm.uiState.value.lpColorChange)
     }
 
     @Test
-    fun `snapLpAnimation is false by default and not set by regular LP change`() = runTest {
+    fun `resetAll clears lpColorChange`() = runTest {
         val vm = LifeCounterViewModel(savedStateHandle)
-        assertFalse(vm.uiState.value.snapLpAnimation)
         vm.openCalc(Player.PLAYER_1)
         vm.inputDigit(5)
         vm.applyCalcChange()
-        assertFalse(vm.uiState.value.snapLpAnimation)
+        assertNotNull(vm.uiState.value.lpColorChange)
+        vm.resetAll()
+        assertNull(vm.uiState.value.lpColorChange)
+    }
+
+    @Test
+    fun `undoLastChange clears lpColorChange`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        assertNotNull(vm.uiState.value.lpColorChange)
+        vm.undoLastChange()
+        assertNull(vm.uiState.value.lpColorChange)
+    }
+
+    @Test
+    fun `setStartingLp clears lpColorChange`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        assertNotNull(vm.uiState.value.lpColorChange)
+        vm.setStartingLp(4000)
+        assertNull(vm.uiState.value.lpColorChange)
+    }
+
+    @Test
+    fun `lpColorChange is not restored from SavedStateHandle`() = runTest {
+        val vm = LifeCounterViewModel(savedStateHandle)
+        vm.openCalc(Player.PLAYER_1)
+        vm.inputDigit(5)
+        vm.applyCalcChange()
+        val recreated = LifeCounterViewModel(savedStateHandle)
+        assertNull(recreated.uiState.value.lpColorChange)
     }
 
     @Test

@@ -26,6 +26,13 @@ class LpCounterViewModel @Inject constructor(
     private var currentGameId: String? = null
     private val gameStates = mutableMapOf<String, LpCounterUiState>()
 
+    /**
+     * Games whose LP values the user has modified since [initialize]. While a
+     * game is dirty, the async config load must not rebuild its players or it
+     * would wipe the user's changes.
+     */
+    private val dirtyGames = mutableSetOf<String>()
+
     fun initialize(gameId: String) {
         currentGameId = gameId
         val existing = gameStates[gameId] ?: restoreState(gameId)
@@ -47,6 +54,7 @@ class LpCounterViewModel @Inject constructor(
     }
 
     private fun applyConfig(config: LpCounterConfig, gameId: String) {
+        if (gameId in dirtyGames) return
         val base = gameStates[gameId] ?: return
         val players = (1..config.playerCount).map { num ->
             LpPlayer(number = num, startingLp = config.globalStartingLp, currentLp = config.globalStartingLp)
@@ -71,6 +79,10 @@ class LpCounterViewModel @Inject constructor(
             gameStates[gameId] = updated
             persistState(gameId, updated)
         }
+    }
+
+    private fun markDirty() {
+        currentGameId?.let { dirtyGames.add(it) }
     }
 
     private fun persistState(gameId: String, state: LpCounterUiState) {
@@ -123,6 +135,7 @@ class LpCounterViewModel @Inject constructor(
             )
             state.copy(players = players)
         }
+        markDirty()
     }
 
     fun resetPlayer(playerNumber: Int) {
@@ -143,6 +156,7 @@ class LpCounterViewModel @Inject constructor(
             val history = (state.changeHistory + change).takeLast(HISTORY_CAP)
             state.copy(players = players, changeHistory = history)
         }
+        markDirty()
     }
 
     fun resetAll() {
@@ -162,6 +176,7 @@ class LpCounterViewModel @Inject constructor(
                 changeHistory = history,
             )
         }
+        markDirty()
     }
 
     fun setPlayerCount(count: Int) {
@@ -172,6 +187,7 @@ class LpCounterViewModel @Inject constructor(
         }
         updateState { it.copy(players = players, playerCount = count) }
         persistConfig(playerCount = count)
+        markDirty()
     }
 
     fun setGlobalStartingLp(lp: Int) {
@@ -183,6 +199,7 @@ class LpCounterViewModel @Inject constructor(
             )
         }
         persistConfig(globalStartingLp = lp)
+        markDirty()
     }
 
     fun resetChangeIndicator(playerNumber: Int) {

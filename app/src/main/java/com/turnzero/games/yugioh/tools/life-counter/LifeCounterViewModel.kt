@@ -61,6 +61,7 @@ class LifeCounterViewModel @Inject constructor(
     }
 
     private var timerJob: Job? = null
+    private var colorChangeId = 0L
 
     fun startPauseTimer() {
         val state = _uiState.value
@@ -202,7 +203,7 @@ class LifeCounterViewModel @Inject constructor(
                 flashZero = false,
                 hasEverStarted = false,
                 history = emptyList(),
-                snapLpAnimation = true
+                lpColorChange = null
             )
         }
     }
@@ -216,7 +217,7 @@ class LifeCounterViewModel @Inject constructor(
             it.copy(player1Lp = last.previousLp)
         else
             it.copy(player2Lp = last.previousLp)
-        updated.copy(history = history.drop(1), snapLpAnimation = true)
+        updated.copy(history = history.drop(1), lpColorChange = null)
     }
 }
 
@@ -236,7 +237,7 @@ class LifeCounterViewModel @Inject constructor(
                 flashZero = false,
                 hasEverStarted = false,
                 history = emptyList(),
-                snapLpAnimation = true
+                lpColorChange = null
             )
         }
     }
@@ -256,7 +257,7 @@ class LifeCounterViewModel @Inject constructor(
                 flashZero = false,
                 hasEverStarted = false,
                 history = emptyList(),
-                snapLpAnimation = true
+                lpColorChange = null
             )
         }
     }
@@ -276,7 +277,7 @@ class LifeCounterViewModel @Inject constructor(
                 flashZero = false,
                 hasEverStarted = false,
                 history = emptyList(),
-                snapLpAnimation = true
+                lpColorChange = null
             )
         }
     }
@@ -291,10 +292,6 @@ class LifeCounterViewModel @Inject constructor(
 
     fun consumedFlashZero() {
         updateState { it.copy(flashZero = false) }
-    }
-
-    fun consumedSnapLpAnimation() {
-        updateState { it.copy(snapLpAnimation = false) }
     }
 
     private fun activePlayerLp(state: LifeCounterUiState): Int {
@@ -317,7 +314,13 @@ class LifeCounterViewModel @Inject constructor(
             val base = it.copy(
                 history = listOf(change) + it.history,
                 showCalcSheet = false,
-                calcState = CalcInputState()
+                calcState = CalcInputState(),
+                lpColorChange = LpColorChange(
+                    player = change.player,
+                    previousLp = change.previousLp,
+                    newLp = change.newLp,
+                    id = ++colorChangeId
+                )
             )
             if (isPlayer1) base.copy(player1Lp = newLp) else base.copy(player2Lp = newLp)
         }

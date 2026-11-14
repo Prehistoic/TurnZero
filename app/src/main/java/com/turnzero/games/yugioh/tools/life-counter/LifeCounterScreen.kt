@@ -23,12 +23,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.abs
+
+/** Test-observable rendering of the LP color direction (-1 red, 0 default, +1 green). */
+internal val LpColorDirectionKey = SemanticsPropertyKey<Int>("LpColorDirection")
+
+private fun Modifier.lpColorDirection(value: Int): Modifier =
+    semantics { this[LpColorDirectionKey] = value }
 
 @Composable
 fun LifeCounterScreen(
@@ -39,7 +48,6 @@ fun LifeCounterScreen(
     onUndoLastChange: () -> Unit,
     onOpenCalc: (Player) -> Unit,
     onConsumedFlashZero: () -> Unit,
-    onConsumedSnapLpAnimation: () -> Unit,
     onCloseCalc: () -> Unit,
     onCalcAction: LifeCounterCalcActions,
     modifier: Modifier = Modifier
@@ -97,12 +105,6 @@ fun LifeCounterScreen(
         }
     }
 
-    LaunchedEffect(uiState.snapLpAnimation) {
-        if (uiState.snapLpAnimation) {
-            onConsumedSnapLpAnimation()
-        }
-    }
-
     Box(modifier = modifier.fillMaxSize().displayCutoutPadding().navigationBarsPadding()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -115,7 +117,7 @@ fun LifeCounterScreen(
                 PlayerLpPanel(
                     player = Player.PLAYER_1,
                     lp = uiState.player1Lp,
-                    snapLpAnimation = uiState.snapLpAnimation,
+                    lpColorChange = uiState.lpColorChange,
                     onClick = { onOpenCalc(Player.PLAYER_1) },
                     modifier = Modifier.weight(1f)
                 )
@@ -135,7 +137,7 @@ fun LifeCounterScreen(
                 PlayerLpPanel(
                     player = Player.PLAYER_2,
                     lp = uiState.player2Lp,
-                    snapLpAnimation = uiState.snapLpAnimation,
+                    lpColorChange = uiState.lpColorChange,
                     onClick = { onOpenCalc(Player.PLAYER_2) },
                     modifier = Modifier.weight(1f)
                 )
@@ -179,7 +181,7 @@ fun LifeCounterScreen(
 private fun PlayerLpPanel(
     player: Player,
     lp: Int,
-    snapLpAnimation: Boolean,
+    lpColorChange: LpColorChange?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -189,11 +191,18 @@ private fun PlayerLpPanel(
     }
     val defaultColor = MaterialTheme.colorScheme.primary
 
-    var prevLp by remember { mutableStateOf(lp) }
+    val change = lpColorChange?.takeIf { it.player == player }
+    var handledChangeId by remember { mutableStateOf(change?.id) }
     var lpChangeDirection by remember { mutableIntStateOf(0) }
 
-    val duration = remember(lp, snapLpAnimation) {
-        if (snapLpAnimation) 0 else (abs(lp - prevLp) / 5).coerceIn(1000, 2000)
+    // A change is colored only when it arrived while this panel was alive and
+    // has not been animated yet. Reset, undo and option changes never carry a
+    // color change, so they snap to the new LP without coloring it.
+    val isNewChange = change != null && change.id != handledChangeId
+    val duration = if (isNewChange) {
+        (abs(change!!.newLp - change.previousLp) / 5).coerceIn(1000, 2000)
+    } else {
+        0
     }
     val displayLp by animateIntAsState(
         targetValue = lp,
@@ -201,11 +210,16 @@ private fun PlayerLpPanel(
         label = "lp"
     )
 
-    LaunchedEffect(lp, snapLpAnimation) {
-        lpChangeDirection = computeLpChangeDirection(prevLp, lp, snapLpAnimation)
-        prevLp = lp
-        if (!snapLpAnimation && duration > 0) {
-            delay(duration.toLong())
+    LaunchedEffect(change?.id) {
+        val currentChange = change
+        if (currentChange != null && currentChange.id != handledChangeId) {
+            lpChangeDirection = currentChange.newLp.compareTo(currentChange.previousLp)
+            if (duration > 0) {
+                delay(duration.toLong())
+                lpChangeDirection = 0
+            }
+            handledChangeId = currentChange.id
+        } else {
             lpChangeDirection = 0
         }
     }
@@ -236,7 +250,10 @@ private fun PlayerLpPanel(
                     fontWeight = FontWeight.Bold,
                     color = color
                 ),
-                fontSize = 72.sp
+                fontSize = 72.sp,
+                modifier = Modifier
+                    .testTag(if (player == Player.PLAYER_1) "player-1-lp" else "player-2-lp")
+                    .lpColorDirection(lpChangeDirection)
             )
             Text(
                 text = "LP",
