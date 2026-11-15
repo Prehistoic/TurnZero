@@ -1,0 +1,287 @@
+{
+  "phases": [
+    {
+      "name": "Draw Phase",
+      "steps": [
+        {
+          "title": "Draw Phase",
+          "text": [
+            "The turn player draws 1 card from their Deck.",
+            "This is the first phase of every turn. You must draw 1 card from the top of your Deck.",
+            "If you cannot draw because your Deck is empty, you lose the Duel.",
+            "**The player who goes first does draw during their first Draw Phase**, giving them a 6-card hand after drawing.",
+            "After drawing, Trap Cards or Quick-Play Spell Cards can be activated before proceeding to the Standby Phase."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx", "v7-5ds", "v8-zexal"] } }
+    },
+    {
+      "name": "Draw Phase",
+      "steps": [
+        {
+          "title": "Draw Phase",
+          "text": [
+            "The turn player draws 1 card from their Deck.",
+            "This is the first phase of every turn. You must draw 1 card from the top of your Deck.",
+            "If you cannot draw because your Deck is empty, you lose the Duel.",
+            "**The player who goes first does NOT draw during their first Draw Phase** — they start their first turn with only their initial 5-card hand.",
+            "After drawing, Trap Cards or Quick-Play Spell Cards can be activated before proceeding to the Standby Phase."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Standby Phase",
+      "steps": [
+        {
+          "title": "Standby Phase",
+          "text": [
+            "Resolve effects that activate during the Standby Phase.",
+            "If a card says to do something during the Standby Phase, resolve those effects now. This includes maintenance costs that must be paid.",
+            "Trap Cards and Quick-Play Spell Cards can be activated in this phase."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play cards and set up your field before battling."
+          ]
+        },
+        {
+          "title": "Once per turn:",
+          "bullets": [
+            "**Normal Summon** a monster in face-up Attack Position",
+            "**Set** a monster in face-down Defense Position",
+            "Levels 1–4 require no Tributes",
+            "Levels 5–6 require 1 Tribute",
+            "Levels 7+ require 2 Tributes"
+          ]
+        },
+        {
+          "title": "As many times as you want:",
+          "bullets": [
+            "**Special Summon** monsters (Fusion, Ritual, or by card effects)",
+            "**Flip Summon** a face-down monster to face-up Attack Position",
+            "**Change battle position** of monsters (once each, except: cannot change a monster played this turn)",
+            "**Activate** Spell Cards and Trap Cards, or card effects",
+            "**Set** Spell and Trap Cards face-down"
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx"] } }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play cards and set up your field before battling."
+          ]
+        },
+        {
+          "title": "Once per turn:",
+          "bullets": [
+            "**Normal Summon** a monster in face-up Attack Position",
+            "**Set** a monster in face-down Defense Position",
+            "Levels 1–4 require no Tributes",
+            "Levels 5–6 require 1 Tribute",
+            "Levels 7+ require 2 Tributes"
+          ]
+        },
+        {
+          "title": "As many times as you want:",
+          "bullets": [
+            "**Special Summon** monsters (Fusion, Ritual, Synchro, or by card effects)",
+            "**Flip Summon** a face-down monster to face-up Attack Position",
+            "**Change battle position** of monsters (once each, except: cannot change a monster played this turn)",
+            "**Activate** Spell Cards and Trap Cards, or card effects",
+            "**Set** Spell and Trap Cards face-down"
+          ]
+        }
+      ],
+      "when": { "format": "v7-5ds" }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play cards and set up your field before battling."
+          ]
+        },
+        {
+          "title": "Once per turn:",
+          "bullets": [
+            "**Normal Summon** a monster in face-up Attack Position",
+            "**Set** a monster in face-down Defense Position",
+            "Levels 1–4 require no Tributes",
+            "Levels 5–6 require 1 Tribute",
+            "Levels 7+ require 2 Tributes"
+          ]
+        },
+        {
+          "title": "As many times as you want:",
+          "bullets": [
+            "**Special Summon** monsters (Fusion, Ritual, Synchro, Xyz, or by card effects)",
+            "**Flip Summon** a face-down monster to face-up Attack Position",
+            "**Change battle position** of monsters (once each, except: cannot change a monster played this turn)",
+            "**Activate** Spell Cards and Trap Cards, or card effects",
+            "**Set** Spell and Trap Cards face-down"
+          ]
+        }
+      ],
+      "when": { "format": "v8-zexal" }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play cards and set up your field before battling."
+          ]
+        },
+        {
+          "title": "Once per turn:",
+          "bullets": [
+            "**Normal Summon** a monster in face-up Attack Position",
+            "**Set** a monster in face-down Defense Position",
+            "Levels 1–4 require no Tributes",
+            "Levels 5–6 require 1 Tribute",
+            "Levels 7+ require 2 Tributes",
+            "**Pendulum Summon** (once per turn)"
+          ]
+        },
+        {
+          "title": "As many times as you want:",
+          "bullets": [
+            "**Special Summon** monsters (Fusion, Ritual, Synchro, Xyz, or by card effects)",
+            "**Flip Summon** a face-down monster to face-up Attack Position",
+            "**Change battle position** of monsters (once each, except: cannot change a monster played this turn)",
+            "**Activate** Spell Cards and Trap Cards, or card effects",
+            "**Set** Spell and Trap Cards face-down"
+          ]
+        }
+      ],
+      "when": { "format": "v9-arcv" }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play cards and set up your field before battling."
+          ]
+        },
+        {
+          "title": "Once per turn:",
+          "bullets": [
+            "**Normal Summon** a monster in face-up Attack Position",
+            "**Set** a monster in face-down Defense Position",
+            "Levels 1–4 require no Tributes",
+            "Levels 5–6 require 1 Tribute",
+            "Levels 7+ require 2 Tributes",
+            "**Pendulum Summon** (once per turn)"
+          ]
+        },
+        {
+          "title": "As many times as you want:",
+          "text": [
+            "**Important:** Monsters Summoned from the Extra Deck must go to the Extra Monster Zone or a Main Monster Zone a Link Monster points to. Pendulum Summons from the Extra Deck follow this rule; from the hand, they go to any Main Monster Zone."
+          ],
+          "bullets": [
+            "**Special Summon** monsters (Fusion, Ritual, Synchro, Xyz, Link, or by card effects)",
+            "**Flip Summon** a face-down monster to face-up Attack Position",
+            "**Change battle position** of monsters (once each, except: cannot change a monster played this turn)",
+            "**Activate** Spell Cards and Trap Cards, or card effects",
+            "**Set** Spell and Trap Cards face-down"
+          ]
+        }
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Battle Phase",
+      "steps": [
+        {
+          "title": "Battle Phase",
+          "text": [
+            "Declare attacks with your monsters and deal battle damage.",
+            "The Battle Phase is divided into 4 steps. The player going first cannot conduct a Battle Phase on their first turn."
+          ]
+        },
+        {
+          "title": "Start Step:",
+          "text": [
+            "Announce you are entering the Battle Phase."
+          ]
+        },
+        {
+          "title": "Battle Step:",
+          "text": [
+            "Select 1 Attack Position monster to attack with and 1 target. Each Attack Position monster can declare 1 attack per turn. If your opponent controls no monsters, you may attack directly."
+          ]
+        },
+        {
+          "title": "Damage Step:",
+          "text": [
+            "Calculate battle damage. Only Counter Traps and ATK/DEF-modifying effects may be activated here, and only before damage calculation."
+          ],
+          "bullets": [
+            "**vs Attack Position** (ATK vs ATK): Higher ATK wins, difference is battle damage. Equal = both destroyed, no damage.",
+            "**vs Defense Position** (ATK vs DEF): ATK > DEF = destroy defender, no damage. ATK ≤ DEF = neither destroyed, difference dealt to attacker as damage.",
+            "**Direct Attack:** Full ATK as battle damage."
+          ]
+        },
+        {
+          "title": "Replay:",
+          "text": [
+            "If the attack target leaves the field before the Damage Step, you may re-select a target or cancel the attack."
+          ]
+        },
+        {
+          "title": "End Step:",
+          "text": [
+            "Announce the end of your Battle Phase."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Main Phase 2",
+      "steps": [
+        {
+          "title": "Main Phase 2",
+          "text": [
+            "A second chance to play cards after battling.",
+            "After the Battle Phase, you may enter Main Phase 2. You can perform all the same actions as Main Phase 1, but limited actions already used (Normal Summon/Set) cannot be repeated.",
+            "If you did not conduct a Battle Phase, Main Phase 2 is skipped."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "End Phase",
+      "steps": [
+        {
+          "title": "End Phase",
+          "text": [
+            "Conclude your turn and discard to 6 cards if needed.",
+            "Announce the end of your turn. Resolve any card effects that activate during the End Phase.",
+            "If you have more than 6 cards in your hand, discard to the Graveyard until you have exactly 6."
+          ]
+        }
+      ]
+    }
+  ]
+}

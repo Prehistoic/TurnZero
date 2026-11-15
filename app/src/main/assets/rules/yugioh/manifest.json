@@ -1,0 +1,49 @@
+{
+  "specificities": [
+    {
+      "id": "format",
+      "name": "Format",
+      "type": "single",
+      "options": [
+        { "id": "v5-dm", "name": "v5.0 - DM" },
+        { "id": "v6-gx", "name": "v6.0 - GX" },
+        { "id": "v7-5ds", "name": "v7.0 - 5D's" },
+        { "id": "v8-zexal", "name": "v8.0 - ZEXAL" },
+        { "id": "v9-arcv", "name": "v9.0 - ARC-V" },
+        { "id": "v10-vrains", "name": "v10 - VRAINS" }
+      ]
+    }
+  ],
+  "rulebooks": [
+    {
+      "id": "v6",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/yugioh-v6-rulebook.pdf",
+      "when": { "format": { "or": ["v5-dm", "v6-gx"] } }
+    },
+    {
+      "id": "v7",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/yugioh-v7-rulebook.pdf",
+      "when": { "format": "v7-5ds" }
+    },
+    {
+      "id": "v8",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/yugioh-v8-rulebook.pdf",
+      "when": { "format": "v8-zexal" }
+    },
+    {
+      "id": "v9",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/yugioh-v9-rulebook.pdf",
+      "when": { "format": "v9-arcv" }
+    },
+    {
+      "id": "v10",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/yugioh-v10-rulebook.pdf",
+      "when": { "format": "v10-vrains" }
+    }
+  ]
+}

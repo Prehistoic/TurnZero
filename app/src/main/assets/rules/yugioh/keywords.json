@@ -1,0 +1,463 @@
+{
+  "keywords": [
+    {
+      "name": "Normal Summon",
+      "category": "Summons",
+      "text": [
+        "Once per turn, play a monster from your hand in face-up Attack Position. Levels 1–4 require no Tributes, 5–6 require 1, and 7+ require 2. This does not start a Chain."
+      ]
+    },
+    {
+      "name": "Set",
+      "category": "Summons",
+      "text": [
+        "Play a monster from your hand in face-down Defense Position. Counts as your one Normal Summon/Set per turn. A Set monster is not considered Summoned until flipped face-up."
+      ]
+    },
+    {
+      "name": "Tribute Summon",
+      "category": "Summons",
+      "text": [
+        "A Normal Summon of a Level 5+ monster requiring Tributes. Send the required number of monsters you control to the Graveyard before Summoning."
+      ]
+    },
+    {
+      "name": "Flip Summon",
+      "category": "Summons",
+      "text": [
+        "Change a face-down Defense Position monster to face-up Attack Position. Cannot be done the same turn the monster was Set. No limit per turn."
+      ]
+    },
+    {
+      "name": "Special Summon",
+      "category": "Summons",
+      "text": [
+        "Any summon that is not a Normal Summon or Flip Summon. Includes Fusion, Ritual, and card effects. No limit per turn unless specified."
+      ]
+    },
+    {
+      "name": "Fusion Summon",
+      "category": "Summons",
+      "text": [
+        "Special Summon a Fusion Monster from your Fusion Deck using the Fusion Material Monsters listed on the card, combined with a card like 'Polymerization'. Send materials to the Graveyard."
+      ]
+    },
+    {
+      "name": "Ritual Summon",
+      "category": "Summons",
+      "text": [
+        "Special Summon a Ritual Monster from your hand by activating its matching Ritual Spell Card and Tributing monsters whose total Levels equal or exceed the Ritual Monster's Level."
+      ]
+    },
+    {
+      "name": "Attack Position",
+      "category": "Battle Positions",
+      "text": [
+        "A monster placed vertically on the field. It can declare attacks and its ATK is used for battle damage calculation."
+      ]
+    },
+    {
+      "name": "Defense Position",
+      "category": "Battle Positions",
+      "text": [
+        "A monster placed horizontally on the field. It cannot declare attacks and its DEF is used for battle damage calculation."
+      ]
+    },
+    {
+      "name": "Battle Damage",
+      "category": "Damage Calculation",
+      "text": [
+        "Damage inflicted to a player by an attacking monster or by a battle between two monsters. Different from effect damage."
+      ]
+    },
+    {
+      "name": "Piercing Battle Damage",
+      "category": "Damage Calculation",
+      "text": [
+        "When attacking a Defense Position monster, if ATK exceeds DEF, the difference is dealt to the opponent as battle damage."
+      ]
+    },
+    {
+      "name": "Direct Attack",
+      "category": "Damage Calculation",
+      "text": [
+        "If your opponent controls no monsters, you can attack them directly, dealing damage equal to your monster's ATK."
+      ]
+    },
+    {
+      "name": "Chain",
+      "category": "Core Mechanics",
+      "text": [
+        "When a card is activated, the opponent may respond with their own card, creating a Chain. Effects resolve backwards — the last card activated resolves first."
+      ]
+    },
+    {
+      "name": "Spell Speed",
+      "category": "Core Mechanics",
+      "text": [
+        "Determines which effects can chain to which."
+      ],
+      "bullets": [
+        "**Speed 1:** Normal/Equip/Continuous/Field/Ritual Spells, Ignition/Trigger/Flip effects",
+        "**Speed 2:** Quick-Play Spells, Normal/Continuous Traps, Multi-Trigger effects",
+        "**Speed 3:** Counter Traps (only another Speed 3 can respond)"
+      ]
+    },
+    {
+      "name": "Turn Player Priority",
+      "category": "Core Mechanics",
+      "text": [
+        "The turn player always has Priority to activate a card first in each phase or step. The opponent cannot activate cards until Priority is passed."
+      ]
+    },
+    {
+      "name": "Field Spell Card",
+      "category": "Spell Types",
+      "text": [
+        "Placed in the Field Card Zone. Only 1 can be active at a time. A new Field Spell automatically destroys the previous one. Does not count toward the 5-card Spell & Trap Zone limit."
+      ]
+    },
+    {
+      "name": "Equip Spell Card",
+      "category": "Spell Types",
+      "text": [
+        "Equips to 1 face-up monster on the field. Remains on the field. If the equipped monster is destroyed or flipped face-down, the Equip Card is destroyed."
+      ]
+    },
+    {
+      "name": "Quick-Play Spell Card",
+      "category": "Spell Types",
+      "text": [
+        "Can be activated during any Phase of your turn. Can also be activated during your opponent's turn if you Set it face-down first, but not in the same turn it was Set."
+      ]
+    },
+    {
+      "name": "Continuous Spell Card",
+      "category": "Spell Types",
+      "text": [
+        "Remains on the field after activation. Its effect continues as long as it remains face-up."
+      ]
+    },
+    {
+      "name": "Counter Trap Card",
+      "category": "Trap Types",
+      "text": [
+        "The fastest card type (Spell Speed 3). Normally activated in response to another card's activation. Only another Counter Trap can respond. Often negates effects."
+      ]
+    },
+    {
+      "name": "Continuous Trap Card",
+      "category": "Trap Types",
+      "text": [
+        "Remains on the field after activation. Its effect continues as long as it remains face-up. May have Ignition-like or Trigger-like effects."
+      ]
+    },
+    {
+      "name": "Graveyard",
+      "category": "Field Zones",
+      "text": [
+        "Destroyed monsters and used Spell/Trap Cards are sent here face-up. Both players' Graveyards are public knowledge. The order of cards must not be changed."
+      ]
+    },
+    {
+      "name": "Remove from Play",
+      "category": "Core Mechanics",
+      "text": [
+        "A card removed from play is separated from the field instead of going to the Graveyard. Normally cannot be used again during the current Duel."
+      ]
+    },
+    {
+      "name": "Destroy",
+      "category": "Core Mechanics",
+      "text": [
+        "A card is destroyed when sent to the Graveyard due to battle or by a card effect that specifically uses the word 'destroy'. Returning to hand/Deck or sending as cost/Tribute is NOT destroying."
+      ]
+    },
+    {
+      "name": "Tribute",
+      "category": "Core Mechanics",
+      "text": [
+        "Send a monster you control to the Graveyard. A cost for Summoning Level 5+ monsters or activating certain effects. A Tributed monster is NOT treated as destroyed."
+      ]
+    },
+    {
+      "name": "Discard",
+      "category": "Core Mechanics",
+      "text": [
+        "Send a card from your hand to the Graveyard, either by a card effect or by the End Phase hand size limit (maximum 6 cards)."
+      ]
+    },
+    {
+      "name": "Control",
+      "category": "Core Mechanics",
+      "text": [
+        "Cards on your side of the field are under your control. Your opponent can take control of your cards through card effects. If a controlled card is sent to the Graveyard, it goes to the owner's Graveyard."
+      ]
+    },
+    {
+      "name": "Target",
+      "category": "Core Mechanics",
+      "text": [
+        "For effects that target, you select the target when activating the card. Effects that affect all cards, or where you select at resolution, do not target."
+      ]
+    },
+    {
+      "name": "Monster Tokens",
+      "category": "Core Mechanics",
+      "text": [
+        "Monsters created by card effects. Not included in your Deck. Cannot be sent to the hand or Graveyard — when destroyed, they are simply removed from the field. Occupy a Monster Zone."
+      ]
+    },
+    {
+      "name": "Forbidden & Limited",
+      "category": "Core Mechanics",
+      "text": [
+        "Normally up to 3 copies of a card. Forbidden = 0, Limited = 1, Semi-Limited = 2. The list is updated regularly for official tournaments."
+      ]
+    },
+    {
+      "name": "Flip Effect",
+      "category": "Effect Types",
+      "text": [
+        "An effect that activates when a face-down card is flipped face-up (Flip Summoned, attacked, or flipped by a card effect). Marked by 'FLIP:' on the card."
+      ]
+    },
+    {
+      "name": "Continuous Effect",
+      "category": "Effect Types",
+      "text": [
+        "An effect that is active while the monster is face-up on the field. No activation trigger — starts when the monster appears, ends when it leaves."
+      ]
+    },
+    {
+      "name": "Ignition Effect",
+      "category": "Effect Types",
+      "text": [
+        "An effect you manually activate during your Main Phase by declaring it. May have costs like discarding or Tributing."
+      ]
+    },
+    {
+      "name": "Trigger Effect",
+      "category": "Effect Types",
+      "text": [
+        "An effect that activates automatically at specific times, such as 'during the Standby Phase' or 'when this monster is destroyed.'"
+      ]
+    },
+    {
+      "name": "Multi-Trigger Effect",
+      "category": "Effect Types",
+      "text": [
+        "A monster effect that can be activated during either player's turn (Spell Speed 2), as long as specific requirements are met."
+      ]
+    },
+    {
+      "name": "Match",
+      "category": "Core Mechanics",
+      "text": [
+        "A Match is a best 2-out-of-3 Duels. Between Duels, you may swap cards between your Side Deck and Main Deck."
+      ]
+    },
+    {
+      "name": "Original ATK/DEF",
+      "category": "Core Mechanics",
+      "text": [
+        "The ATK or DEF value printed on the Monster Card, not including modifiers from Equip Spells or other effects. If '?' is printed, the original value is treated as 0."
+      ]
+    },
+    {
+      "name": "Pay a Cost",
+      "category": "Core Mechanics",
+      "text": [
+        "An action required before activating a card or Summoning a monster (discarding, paying LP, Tributing). Costs are NOT refunded if the activation is negated."
+      ]
+    },
+    {
+      "name": "Synchro Summon",
+      "category": "Summons",
+      "text": [
+        "Send 1 face-up Tuner monster + 1 or more face-up non-Tuner monsters from your field to the Graveyard. Their combined Levels must exactly equal the Synchro Monster's Level. Special Summon the Synchro Monster from your Extra Deck."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Tuner Monster",
+      "category": "Summons",
+      "text": [
+        "A monster subtype marked 'Tuner' next to its Type. Required as material for a Synchro Summon."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Synchro Monster",
+      "category": "Card Types",
+      "text": [
+        "A white-framed monster placed in the Extra Deck. Summoned via Synchro Summon. Has a Level (not a Rank)."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Quick Effect",
+      "category": "Effect Types",
+      "text": [
+        "A monster effect with Spell Speed 2 that can be activated during either player's turn. Formerly called Multi-Trigger Effects."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Extra Deck",
+      "category": "Deck Construction",
+      "text": [
+        "Replaces the Fusion Deck. Contains Synchro and Fusion Monsters. 0 to 15 cards. You may look at your own Extra Deck during the game."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Xyz Summon",
+      "category": "Summons",
+      "text": [
+        "Stack 2 or more face-up monsters of the same Level as Xyz Materials. Place the Xyz Monster on top from your Extra Deck. Xyz Monsters have Ranks, not Levels."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Xyz Monster",
+      "category": "Card Types",
+      "text": [
+        "A black-framed monster in the Extra Deck. Has a Rank (stars on the left) instead of a Level. Uses Xyz Materials for effects via 'detaching'."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Xyz Material",
+      "category": "Summons",
+      "text": [
+        "Monsters stacked underneath an Xyz Monster. They are NOT treated as cards on the field. Detaching sends 1 material to the Graveyard, usually as a cost. Tokens cannot be used as Xyz Material."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Rank",
+      "category": "Card Types",
+      "text": [
+        "Xyz Monsters have Ranks instead of Levels. Stars appear on the left side of the card. Effects that refer to 'Level' do not apply to Xyz Monsters."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Banished",
+      "category": "Core Mechanics",
+      "text": [
+        "Cards separated from the field; not in the Graveyard. Previously called 'Remove from Play'. Returned to the owner after the Duel."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Pendulum Monster",
+      "category": "Card Types",
+      "text": [
+        "A hybrid card (half-green frame) that can be Normal Summoned/Set as a Monster OR activated as a Spell in a Pendulum Zone. Has ATK/DEF and a Pendulum Scale. When sent from the field to the GY, it goes face-up to the Extra Deck instead."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Pendulum Summon",
+      "category": "Summons",
+      "text": [
+        "Once per turn during your Main Phase, if you have a Pendulum Card in each Pendulum Zone, you can Special Summon any number of monsters from your hand and face-up Extra Deck whose Levels are between the two Pendulum Scales (exclusive). Example: Scales 1 & 8 summon Levels 2–7."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Pendulum Scale",
+      "category": "Summons",
+      "text": [
+        "A number on the Pendulum Monster Card that determines the range of Levels you can Pendulum Summon. The range is between the two Scales on your field, not including the Scale numbers themselves."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Pendulum Zone",
+      "category": "Card Types",
+      "text": [
+        "The leftmost and rightmost Spell & Trap Zones. Pendulum Cards activated as Spells go here. They do not count toward the 5-card S/T limit. If a card in this zone would be destroyed, it goes face-up to the Extra Deck."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Face-up Extra Deck",
+      "category": "Core Mechanics",
+      "text": [
+        "When a Pendulum Monster on the field is sent to the Graveyard, it is placed face-up on the Extra Deck instead. Face-up Pendulum Monsters in the Extra Deck can be Pendulum Summoned again."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "name": "Link Monster",
+      "category": "Card Types",
+      "text": [
+        "A blue-framed monster in the Extra Deck. Has a Link Rating instead of a Level/Rank, and no DEF. Cannot exist in Defense Position. Has red Link Arrows around the card art."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Link Summon",
+      "category": "Summons",
+      "text": [
+        "Send face-up monsters from your field to the GY whose total count matches the Link Rating. A Link Monster used as material counts as 1 material OR its own Link Rating. Tokens can be used as Link Material."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Link Rating",
+      "category": "Card Types",
+      "text": [
+        "The number in the bottom-right of a Link Monster card. Equals the number of Link Arrows and the minimum materials needed. Replaces the DEF value."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Link Arrow",
+      "category": "Core Mechanics",
+      "text": [
+        "Red arrows on a Link Monster's card art pointing to specific zones. Zones pointed to can be used for Extra Deck Summons. A monster pointed to is 'linked'. Two Link Monsters pointing at each other are 'co-linked'."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Extra Monster Zone",
+      "category": "Field Zones",
+      "text": [
+        "A zone shared by both players in the center of the field. Where all Extra Deck monsters must be summoned. Each player controls 1 (normally)."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "Simultaneous Effects (SEGOC)",
+      "category": "Core Mechanics",
+      "text": [
+        "When multiple Trigger effects activate at the same time, they are placed on a Chain in this order:",
+        "The Chain resolves backwards, starting with the opponent's optional effects."
+      ],
+      "bullets": [
+        "1. Turn player's mandatory effects",
+        "2. Opponent's mandatory effects",
+        "3. Turn player's optional effects",
+        "4. Opponent's optional effects"
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "name": "PSCT Structure",
+      "category": "Core Mechanics",
+      "text": [
+        "Problem Solving Card Text uses punctuation to indicate timing:"
+      ],
+      "bullets": [
+        "Before colon (:) = activation conditions",
+        "Before semi-colon (;) = actions at activation (costs, targeting)",
+        "After semi-colon = effect at resolution"
+      ],
+      "when": { "format": "v10-vrains" }
+    }
+  ]
+}
