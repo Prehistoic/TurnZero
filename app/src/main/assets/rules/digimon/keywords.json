@@ -1,0 +1,512 @@
+{
+  "keywords": [
+    {
+      "name": "<ACE>",
+      "category": "Misc",
+      "text": [
+        "ACE cards are a special card type with <Overflow>. When an ACE card leaves the field or from under a card to another area, the memory marker moves toward your opponent's side by the <Overflow> value.",
+        "ACE cards have \"ACE\" in their name and provide powerful counterplay options at the risk of giving your opponent memory when removed."
+      ]
+    },
+    {
+      "name": "<All Turns>",
+      "category": "Timing",
+      "text": [
+        "This effect is active during both your turn and your opponent's turn."
+      ]
+    },
+    {
+      "name": "<Alliance>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon attacks, you may suspend one of your other Digimon to add its DP to the attacker and give it <Security A. +1> for the attack. The DP added is the value at time of suspension and is not modified later."
+      ]
+    },
+    {
+      "name": "<App Fusion>",
+      "category": "Evolution",
+      "text": [
+        "A digivolution mechanic where two linked Digimon in the battle area digivolve together into a single Digimon card from your hand by paying the App Fusion cost."
+      ]
+    },
+    {
+      "name": "<Armor Purge>",
+      "category": "Protection",
+      "text": [
+        "When this Digimon would be deleted, you may trash the top card of its stack to prevent the deletion. This is an immediate-type effect with an optional processing condition."
+      ]
+    },
+    {
+      "name": "<Ascension>",
+      "category": "Evolution",
+      "text": [
+        "When this card is deleted, you may place it face-down at the top of your security stack."
+      ]
+    },
+    {
+      "name": "<Assembly>",
+      "category": "Evolution",
+      "text": [
+        "A play mechanic where you place the specified number of cards from your trash under the Digimon being played. The play cost is reduced by the specified value.",
+        "Similar to <DigiXros>, but cards are taken from your trash instead of hand/battle area."
+      ]
+    },
+    {
+      "name": "<Barrier>",
+      "category": "Protection",
+      "text": [
+        "When this Digimon would be deleted in battle, you may trash the top card of your security stack to prevent the deletion."
+      ]
+    },
+    {
+      "name": "<Blast Digivolve>",
+      "category": "Evolution",
+      "text": [
+        "One of your Digimon in the battle area may digivolve into this card from your hand without paying the cost. The activation is optional."
+      ]
+    },
+    {
+      "name": "<Blast DNA Digivolve>",
+      "category": "Evolution",
+      "text": [
+        "One of your Digimon specified in the effect and a card from your hand may DNA digivolve into this card without paying the cost. The card's DNA digivolution requirements cannot be ignored."
+      ]
+    },
+    {
+      "name": "<Blitz>",
+      "category": "Movement",
+      "text": [
+        "This Digimon can attack if your opponent has 1 or more memory. Once declared, the attack proceeds even if memory moves back to 0 or more. Cannot be used if memory is already at 0 or more when activating."
+      ]
+    },
+    {
+      "name": "<Blocker>",
+      "category": "Combat",
+      "text": [
+        "During your opponent's attack, you may suspend this Digimon to redirect the attack to it. Only one Blocker can be activated per attack, and the attack target itself cannot block.",
+        "A block can only be performed if the attacking Digimon is in the battle area."
+      ]
+    },
+    {
+      "name": "<Burst Digivolve>",
+      "category": "Evolution",
+      "text": [
+        "A digivolution mechanic where you return one of your Tamers from the battle area to your hand to digivolve a specified Digimon into this card by paying the burst digivolve cost.",
+        "At the end of the turn it was burst digivolved, the top card of the stack is trashed unless there are no more cards under it."
+      ]
+    },
+    {
+      "name": "<Collision>",
+      "category": "Combat",
+      "text": [
+        "While this Digimon is attacking, all of your opponent's Digimon gain <Blocker> and your opponent is forced to block if possible during the block timing."
+      ]
+    },
+    {
+      "name": "<Counter>",
+      "category": "Timing",
+      "text": [
+        "An effect that can be activated during the Counter Timing after your opponent declares an attack. Only one <Counter> effect can be activated per attack. Cannot be activated by other card effects unless the effect specifically says \"activate <Counter>.\""
+      ]
+    },
+    {
+      "name": "<DNA Digivolution>",
+      "category": "Evolution",
+      "text": [
+        "A digivolution mechanic where two or more of your Digimon are stacked together to digivolve into a single Digimon card from your hand by paying the DNA digivolution cost.",
+        "The cards placed under the DNA-digivolved Digimon become new digivolution cards. The new Digimon is always placed unsuspended, regardless of the previous orientation.",
+        "DNA digivolution can only be performed by effects that specifically say DNA digivolution — not by regular digivolution effects."
+      ]
+    },
+    {
+      "name": "<De-Digivolve>",
+      "category": "Costs",
+      "text": [
+        "Trash the specified number of cards from the top of the chosen Digimon's stack, one card at a time. The player using the effect declares a number from 1 up to the number specified. Cannot trash cards from level 3 or lower Digimon (i.e. you cannot go below level 3)."
+      ]
+    },
+    {
+      "name": "<Decode>",
+      "category": "Evolution",
+      "text": [
+        "When this Digimon would leave the battle area other than by battle, you may play the specified Digimon from its digivolution cards without paying cost. E.g. <Decode (blue Lv.4)>."
+      ]
+    },
+    {
+      "name": "<Decoy>",
+      "category": "Protection",
+      "text": [
+        "When another of your Digimon matching the specified trait would be deleted by an opponent's effect, you may delete this Digimon instead to prevent it. E.g. <Decoy (Black)> protects Digimon with the Black trait."
+      ]
+    },
+    {
+      "name": "<Delay>",
+      "category": "Utility",
+      "text": [
+        "While this card is in the battle area, you may trash it to activate its <Delay> effect. Cannot be used the same turn the card is placed in the battle area. The activation is optional."
+      ]
+    },
+    {
+      "name": "<Digi-Burst>",
+      "category": "Costs",
+      "text": [
+        "Trash the specified number of digivolution cards from this Digimon to activate another effect. The trashing is optional — you may choose how many cards to trash up to the specified number."
+      ]
+    },
+    {
+      "name": "<DigiXros>",
+      "category": "Evolution",
+      "text": [
+        "A play mechanic where you place cards specified in the DigiXros requirements from your hand and/or battle area under the Digimon being played. The play cost is reduced by the specified amount for each card placed.",
+        "DigiXros is optional but you must place at least 1 card. Cards are stacked left-to-right as shown in the requirements."
+      ]
+    },
+    {
+      "name": "<Digisorption>",
+      "category": "Costs",
+      "text": [
+        "When digivolving into a card with this effect, you may suspend one of your Digimon to reduce the digivolution cost by the specified amount. You can use this even to suspend a Digimon that will become a digivolution card. Multiple instances can be triggered for a single digivolution."
+      ]
+    },
+    {
+      "name": "<Draw>",
+      "category": "Utility",
+      "text": [
+        "Draw the specified number of cards from your deck. The draw is mandatory."
+      ]
+    },
+    {
+      "name": "<DUAL Card>",
+      "category": "Misc",
+      "text": [
+        "A DUAL card can be treated as either a Digimon or an Option card. You declare which mode you're using when playing it.",
+        "On the field, a DUAL card is always treated as a Digimon — it cannot be referenced as an Option card while on the field. DUAL cards have both Digimon information (upper text) and Option information (lower text)."
+      ]
+    },
+    {
+      "name": "<End of All Turns>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the end of every turn, both yours and your opponent's."
+      ]
+    },
+    {
+      "name": "<End of Attack>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the point when the end of the attack arrives, after the attack has been fully resolved."
+      ]
+    },
+    {
+      "name": "<End of Opponent's Turn>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when your opponent's turn ends. The non-turn player chooses the activation order."
+      ]
+    },
+    {
+      "name": "<End of Your Turn>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when your turn ends. The turn player chooses the activation order if multiple effects trigger."
+      ]
+    },
+    {
+      "name": "<Engage>",
+      "category": "Utility",
+      "text": [
+        "At the end of your turn, this Digimon may attack."
+      ]
+    },
+    {
+      "name": "<Evade>",
+      "category": "Protection",
+      "text": [
+        "When this Digimon would be deleted, you may suspend it to prevent the deletion. This is an immediate-type effect with an optional processing condition."
+      ]
+    },
+    {
+      "name": "<Execute>",
+      "category": "Utility",
+      "text": [
+        "At the end of your turn, this Digimon may attack an opponent's Digimon (including unsuspended ones). It is deleted as pending processing after the attack ends."
+      ]
+    },
+    {
+      "name": "<Fortitude>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon with digivolution cards is deleted, you may play it again without paying its cost. This is a mandatory trigger-type effect."
+      ]
+    },
+    {
+      "name": "<Fragment>",
+      "category": "Protection",
+      "text": [
+        "When this Digimon would be deleted, you may trash the specified number of its digivolution cards to prevent the deletion. E.g. <Fragment (3)> requires trashing 3 digivolution cards."
+      ]
+    },
+    {
+      "name": "<Guard>",
+      "category": "Protection",
+      "text": [
+        "When any of your other Digimon would leave the battle area by an opponent's effect, you may delete this Digimon to prevent it from leaving."
+      ]
+    },
+    {
+      "name": "<Iceclad>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon battles (except against Security Digimon), compare the number of digivolution cards instead of DP. The card with more digivolution cards wins; if tied, both lose."
+      ]
+    },
+    {
+      "name": "<Jamming>",
+      "category": "Combat",
+      "text": [
+        "This Digimon is not deleted as a result of battle against an opponent's Security Digimon (the card flipped during a security check)."
+      ]
+    },
+    {
+      "name": "<Link +>",
+      "category": "Evolution",
+      "text": [
+        "Increases the maximum number of link cards this Digimon can have by the specified number. Multiple instances add together numerically (e.g. two instances of <Link +1> increases the link limit by 2)."
+      ]
+    },
+    {
+      "name": "<Main>",
+      "category": "Timing",
+      "text": [
+        "An activation-type effect that can be used during your Main Phase when there is no unresolved processing. Found on Digimon, Tamers, and Option cards."
+      ]
+    },
+    {
+      "name": "<Material Save>",
+      "category": "Utility",
+      "text": [
+        "When this Digimon is deleted, you may place the specified number of cards from its <DigiXros> requirements (from among its digivolution cards) under one of your Tamers. If the Tamer already has cards under it, new ones go to the bottom."
+      ]
+    },
+    {
+      "name": "<Mind Link>",
+      "category": "Utility",
+      "text": [
+        "Place this Tamer under one of your Digimon as a digivolution card. Only works on Digimon that don't already have a Tamer card in their digivolution cards. This is a mandatory effect when its <Main> timing is used."
+      ]
+    },
+    {
+      "name": "<On Deletion>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when this card is deleted. It triggers in the area where the card was before moving to the trash, and becomes pending activation once the card arrives in trash."
+      ]
+    },
+    {
+      "name": "<On Play>",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically triggers when this card is played onto the field."
+      ]
+    },
+    {
+      "name": "<Opponent's Turn>",
+      "category": "Timing",
+      "text": [
+        "This effect is only active during your opponent's turn. It is inactive during your own turn."
+      ]
+    },
+    {
+      "name": "<Overclock>",
+      "category": "Utility",
+      "text": [
+        "At the end of your turn, by deleting one of your Tokens or a specified Digimon (e.g. a Digimon with a specific trait), this Digimon attacks a player without suspending. E.g. <Overclock ([Puppet] Trait)>."
+      ]
+    },
+    {
+      "name": "<Overflow>",
+      "category": "Costs",
+      "text": [
+        "A rule on Digimon ACE cards. When a card with <Overflow> moves from the field (or from under a card) to another area, the memory marker moves toward your opponent's side by the specified value. This is processed immediately, even during other actions.",
+        "<Overflow> is not processed when a card is moved INTO the field or placed under another card. When multiple <Overflow> instances trigger simultaneously, the turn player resolves all theirs first, then the non-turn player."
+      ]
+    },
+    {
+      "name": "<Partition>",
+      "category": "Evolution",
+      "text": [
+        "When this Digimon would leave the battle area (not by your effect or battle), you may play 1 of each of the specified cards from its digivolution cards without paying cost. E.g. <Partition (blue Lv.4 & green Lv.4)>."
+      ]
+    },
+    {
+      "name": "<Piercing>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon deletes your opponent's Digimon in battle, it performs a security check immediately before the attack ends. The security check is mandatory and only one check can be performed per attack (even if <Piercing> would activate multiple times)."
+      ]
+    },
+    {
+      "name": "<Progress>",
+      "category": "Protection",
+      "text": [
+        "This Digimon is unaffected by your opponent's effects while attacking."
+      ]
+    },
+    {
+      "name": "<Raid>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon attacks, you may switch the target to your opponent's unsuspended Digimon with the highest DP. If multiple Digimon share the highest DP, you choose which one becomes the target."
+      ]
+    },
+    {
+      "name": "<Reboot>",
+      "category": "Movement",
+      "text": [
+        "This Digimon is unsuspended during your opponent's unsuspend phase, at the same time as the turn player's unsuspending. Multiple instances don't stack — it only activates once per phase."
+      ]
+    },
+    {
+      "name": "<Recovery>",
+      "category": "Recovery",
+      "text": [
+        "Place the specified number of cards from the top of your deck face-down on top of your security stack."
+      ]
+    },
+    {
+      "name": "<Retaliation>",
+      "category": "Combat",
+      "text": [
+        "When this Digimon is deleted in battle, the Digimon it battled is also deleted. This is a mandatory trigger-type effect."
+      ]
+    },
+    {
+      "name": "<Rush>",
+      "category": "Movement",
+      "text": [
+        "This Digimon can attack on the same turn it is played. Normally, Digimon must wait until your next turn."
+      ]
+    },
+    {
+      "name": "<Save>",
+      "category": "Utility",
+      "text": [
+        "You may place this card under one of your Tamers. Cards under a Tamer are not considered to be on the field. The activation is optional."
+      ]
+    },
+    {
+      "name": "<Scapegoat>",
+      "category": "Protection",
+      "text": [
+        "When this Digimon would be deleted by anything other than your own effects, you may delete one of your other Digimon to prevent its deletion."
+      ]
+    },
+    {
+      "name": "<Security A. +1>",
+      "category": "Combat",
+      "text": [
+        "Increases the number of security checks this Digimon performs when attacking the opponent directly. Multiple instances stack numerically (e.g. two instances of <Security A. +1> means 2 additional checks).",
+        "Even with negative modifiers, the actual number of security checks is always 0 or more."
+      ]
+    },
+    {
+      "name": "<Security>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when this card is revealed from your security stack during a security check. You may choose to activate it — if you do, the effect resolves before the card goes to trash (unless the effect says otherwise). <Security> effects take priority over all other effects when triggering simultaneously."
+      ]
+    },
+    {
+      "name": "<Security Digimon>",
+      "category": "Misc",
+      "text": [
+        "When a Digimon card is flipped over from your security stack during a security check, it becomes a Security Digimon. It battles the attacking Digimon by comparing DP.",
+        "A Security Digimon is not added to your hand — it goes to the trash after the battle (unless the attacking Digimon has <Jamming>, in which case the Security Digimon is also not deleted)."
+      ]
+    },
+    {
+      "name": "<Start of Opponent's Main Phase>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the moment your opponent's Main Phase begins."
+      ]
+    },
+    {
+      "name": "<Start of Opponent's Turn>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the start of your opponent's Unsuspend Phase, before any cards are unsuspended."
+      ]
+    },
+    {
+      "name": "<Start of Your Main Phase>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the moment your Main Phase begins."
+      ]
+    },
+    {
+      "name": "<Start of Your Turn>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers at the start of your Unsuspend Phase, before any cards are unsuspended."
+      ]
+    },
+    {
+      "name": "<Training>",
+      "category": "Utility",
+      "text": [
+        "During your Main Phase, you may suspend this Digimon to place the top card of your deck under it as a digivolution card. This effect can be activated in both the battle area and the breeding area."
+      ]
+    },
+    {
+      "name": "<Use Req.>",
+      "category": "Misc",
+      "text": [
+        "Allows you to ignore the color requirements of the specified cards. Found on cards like Digi-Eggs that give blanket color coverage for digivolution."
+      ]
+    },
+    {
+      "name": "<Vortex>",
+      "category": "Utility",
+      "text": [
+        "At the end of your turn, this Digimon may attack one of your opponent's Digimon. It also allows attacking the turn it was played."
+      ]
+    },
+    {
+      "name": "<When Attacking>",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically triggers when this Digimon declares an attack, after the attack declaration is made."
+      ]
+    },
+    {
+      "name": "<When Digivolving>",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically triggers when this Digimon digivolves."
+      ]
+    },
+    {
+      "name": "<When Linking>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when this card links with another card, at the moment the link is established."
+      ]
+    },
+    {
+      "name": "<When Moving>",
+      "category": "Timing",
+      "text": [
+        "An effect that triggers when the card with that effect is moved from one area to another."
+      ]
+    },
+    {
+      "name": "<Your Turn>",
+      "category": "Timing",
+      "text": [
+        "This effect is only active during your own turn. It is inactive during your opponent's turn."
+      ]
+    }
+  ]
+}

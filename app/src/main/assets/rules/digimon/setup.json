@@ -1,0 +1,95 @@
+{
+  "steps": [
+    {
+      "title": "Init Memory Gauge",
+      "text": [
+        "Set up the memory gauge between players.",
+        "Set the memory gauge between both players with the marker starting at 0 in the center. The left side is your memory, the right side is your opponent's. Memory can never exceed 10."
+      ]
+    },
+    {
+      "title": "Shuffle & Place Decks",
+      "text": [
+        "Shuffle your main deck and Digi-Egg deck, then place both face-down on the field.",
+        "Thoroughly randomize both your main deck and your Digi-Egg deck.",
+        "Give your opponent the opportunity to shuffle or cut your decks after you're done.",
+        "Place your main deck face-down in the deck area, and your Digi-Egg deck face-down in its designated area. Neither player may look at or change the order of cards in either deck."
+      ]
+    },
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Play Rock-Paper-Scissors; the winner chooses who goes first.",
+        "Both players play Rock-Paper-Scissors. The winner freely decides whether to go first or second — no outside intervention is allowed."
+      ]
+    },
+    {
+      "title": "Draw Opening Hand",
+      "text": [
+        "Each player draws 5 cards from their deck as their starting hand.",
+        "Both players draw the top 5 cards of their deck. This is your initial hand — keep it secret from your opponent.",
+        "You may freely look at and rearrange the cards in your own hand at any time."
+      ]
+    },
+    {
+      "title": "Mulligan (Optional)",
+      "text": [
+        "Each player may redraw their entire hand once, starting with the first player.",
+        "Starting with the first player, each player may declare a re-draw. If you do, return all cards from your hand to your deck, reshuffle, and draw a new hand of 5 cards.",
+        "You can only do this once — after taking your mulligan (or choosing not to), you must keep that hand.",
+        "Tip: If your opening hand has no low-level Digimon or no rookies to hatch, strongly consider taking the mulligan."
+      ]
+    },
+    {
+      "title": "Place Security Stack",
+      "text": [
+        "Take the top 5 cards off your deck and place them face-down, one at a time, as your security.",
+        "Take 5 cards from the top of your deck and place them face-down one at a time without looking at their faces. The card at the top of your deck ends up at the bottom of your security stack.",
+        "Spread the security cards out so the number of cards can be seen by both players. You cannot change the order of cards in your security stack.",
+        "When your opponent attacks you directly, the top card of your security stack is checked. If it has a [Security] effect, you may activate it."
+      ]
+    },
+    {
+      "title": "Deck — Main Deck",
+      "text": [
+        "Exactly 50 cards made up of Digimon, Tamer, and Option cards.",
+        "You can include up to 4 copies of the same card (by card number)."
+      ]
+    },
+    {
+      "title": "Deck — Digi-Egg Deck",
+      "text": [
+        "0 to 5 cards. As long as it has 5 or fewer cards, it can have as many cards as you like, or even be empty.",
+        "Can include up to 4 copies of a card with the same card number."
+      ]
+    },
+    {
+      "image": "rulebooks/images/digimon-field.png",
+      "text": [
+        "Your play area is arranged as shown above. Cards are either Unsuspended (vertical) or Suspended (horizontal). When paying costs or attacking, you suspend cards."
+      ]
+    },
+    {
+      "text": [
+        "**The Game Areas**"
+      ],
+      "bullets": [
+        "**① Deck** — Your 50-card draw pile, face-down. A private area — neither player can look at or change its order.",
+        "**② Digi-Egg Deck** — 0–5 card deck, face-down. A private area where your egg cards wait to be hatched.",
+        "**③ Breeding Area** — Where hatched Digimon go. Max 1 card. Cards here are protected from nearly all effects.",
+        "**④ Battle Area** — Your main play zone. Any number of cards can be here. Digimon, Tamers, and Option cards all go here when played.",
+        "**⑤ Trash** — Discard pile, face-up. A public area — both players can look through it at any time.",
+        "**⑥ Security Stack** — 5 face-down cards from the start of the game. When attacked directly, the top security card is checked.",
+        "**⑦ Hand** — Your cards held in secret. You may freely rearrange them."
+      ]
+    },
+    {
+      "text": [
+        "**The Memory Gauge**",
+        "Memory is the shared resource used to pay costs. 0 is the center. Numbers on your left are your memory; numbers on your right are your opponent's memory. Memory never exceeds 10.",
+        "When you pay a cost, move the marker right toward your opponent. When you \"gain memory,\" move it left toward you. Loss of memory moves it right.",
+        "Your turn ends when the memory reaches 1 or more on your opponent's side. The more you do on your turn, the more memory you give your opponent for their turn."
+      ]
+    }
+  ]
+}
