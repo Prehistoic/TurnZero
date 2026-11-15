@@ -38,19 +38,8 @@ fun AboutSettingsScreen(
     var updateStatus by remember { mutableStateOf<UpdateManager.UpdateStatus>(UpdateManager.UpdateStatus.Idle) }
     val updateManager = remember { UpdateManager(context) }
 
-    LaunchedEffect(updateStatus) {
-        if (updateStatus is UpdateManager.UpdateStatus.UpToDate) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "No update available", Toast.LENGTH_SHORT).show()
-            }
-            updateStatus = UpdateManager.UpdateStatus.Idle
-        }
-        if (updateStatus is UpdateManager.UpdateStatus.Error) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, (updateStatus as UpdateManager.UpdateStatus.Error).message, Toast.LENGTH_SHORT).show()
-            }
-            updateStatus = UpdateManager.UpdateStatus.Idle
-        }
+    fun toast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     Scaffold(
@@ -114,27 +103,69 @@ fun AboutSettingsScreen(
                 SettingsCategoryRow(
                     icon = Icons.Outlined.SystemUpdate,
                     title = "Check for updates",
-                    description = when (updateStatus) {
+                    description = when (val status = updateStatus) {
                         is UpdateManager.UpdateStatus.Checking -> "Checking..."
-                        is UpdateManager.UpdateStatus.Downloading -> "Downloading..."
+                        is UpdateManager.UpdateStatus.Downloading ->
+                            "Downloading update… ${status.progress}%"
                         is UpdateManager.UpdateStatus.ReadyToInstall -> "Ready to install"
                         else -> "Check for new versions"
                     },
+                    enabled = canCheckForUpdates(updateStatus),
                     widget = {
-                        if (updateStatus is UpdateManager.UpdateStatus.Checking ||
-                            updateStatus is UpdateManager.UpdateStatus.Downloading) {
-                            CircularProgressIndicator(
+                        when (val status = updateStatus) {
+                            is UpdateManager.UpdateStatus.Checking -> CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
                                 strokeWidth = 2.dp
                             )
+
+                            is UpdateManager.UpdateStatus.Downloading -> CircularProgressIndicator(
+                                progress = { status.progress / 100f },
+                                modifier = Modifier.size(24.dp),
+                                strokeWidth = 2.dp
+                            )
+
+                            else -> Unit
                         }
                     },
                     onClick = {
-                        if (updateStatus !is UpdateManager.UpdateStatus.Checking &&
-                            updateStatus !is UpdateManager.UpdateStatus.Downloading) {
+                        if (canCheckForUpdates(updateStatus)) {
                             scope.launch {
                                 updateStatus = UpdateManager.UpdateStatus.Checking
-                                updateStatus = updateManager.checkForUpdate()
+                                when (val result = updateManager.checkForUpdate()) {
+                                    is UpdateManager.UpdateStatus.UpToDate -> {
+                                        toast("No update available")
+                                        updateStatus = UpdateManager.UpdateStatus.Idle
+                                    }
+
+                                    is UpdateManager.UpdateStatus.Error -> {
+                                        toast(result.message)
+                                        updateStatus = UpdateManager.UpdateStatus.Idle
+                                    }
+
+                                    is UpdateManager.UpdateStatus.UpdateAvailable -> {
+                                        toast("Update ${result.version} found — downloading…")
+                                        updateStatus = UpdateManager.UpdateStatus.Downloading(0)
+                                        val downloaded = updateManager.downloadUpdate(result.downloadUrl) { percent ->
+                                            withContext(Dispatchers.Main.immediate) {
+                                                updateStatus = UpdateManager.UpdateStatus.Downloading(percent)
+                                            }
+                                        }
+                                        updateStatus = downloaded
+                                        when (downloaded) {
+                                            is UpdateManager.UpdateStatus.ReadyToInstall ->
+                                                updateManager.installApk(downloaded.apkFile)
+
+                                            is UpdateManager.UpdateStatus.Error -> {
+                                                toast(downloaded.message)
+                                                updateStatus = UpdateManager.UpdateStatus.Idle
+                                            }
+
+                                            else -> Unit
+                                        }
+                                    }
+
+                                    else -> updateStatus = result
+                                }
                             }
                         }
                     }
@@ -180,17 +211,6 @@ fun AboutSettingsScreen(
             }
         }
     }
-
-    LaunchedEffect(updateStatus) {
-        if (updateStatus is UpdateManager.UpdateStatus.UpdateAvailable) {
-            val available = updateStatus as UpdateManager.UpdateStatus.UpdateAvailable
-            updateStatus = updateManager.downloadUpdate(available.downloadUrl)
-        }
-        if (updateStatus is UpdateManager.UpdateStatus.ReadyToInstall) {
-            val ready = updateStatus as UpdateManager.UpdateStatus.ReadyToInstall
-            updateManager.installApk(ready.apkFile)
-        }
-    }
 }
 
 @Composable
@@ -208,3 +228,8 @@ private fun SocialLink(
         )
     }
 }
+
+/** A check can start only when no check or download is already in flight. */
+internal fun canCheckForUpdates(status: UpdateManager.UpdateStatus): Boolean =
+    status !is UpdateManager.UpdateStatus.Checking &&
+        status !is UpdateManager.UpdateStatus.Downloading

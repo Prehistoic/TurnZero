@@ -203,7 +203,7 @@ When creating a pull request, the agent MUST:
    versionCode = <previous + 1>
    versionName = "<updated semver>"
    ```
-2. **Verify CHANGELOG** — ensure `CHANGELOG.md` has a new version section matching the bumped version in `app/build.gradle.kts`, populated with all changes on the branch (including any changes already merged to `main` since the last release). The `## [Unreleased]` section should be empty.
+2. **Verify CHANGELOG** — ensure `CHANGELOG.md` has a new version section matching the bumped version in `app/build.gradle.kts`, populated with all changes on the branch (including any changes already merged to `main` since the last release). There is no `## [Unreleased]` section: entries go directly into the version section being prepared.
 3. **Check for missed entries** — review `git log main..HEAD` and ensure all user-facing changes appear in the CHANGELOG. If prior commits on `main` were never captured, include them in the new version section.
 4. **Bump dates** — the new version section header must include the current date: `## [X.Y.Z] - YYYY-MM-DD`
 
@@ -212,16 +212,16 @@ When creating a pull request, the agent MUST:
 The project maintains a `CHANGELOG.md` at the repository root following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
 **Rules:**
-- Every PR that changes functionality MUST update `CHANGELOG.md` under the `## [Unreleased]` section.
+- Every PR that changes functionality MUST add its entries to the version section it is preparing in `CHANGELOG.md`.
 - Use the categories: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
 - Each entry is a single bullet point describing the change from the user's perspective.
-- Before creating a release, move the `[Unreleased]` entries to a new version section with the date.
+- Do not add an `## [Unreleased]` section: every section is written for a specific version and date.
 - The version header must match the tag format exactly (e.g., `## [0.2.0] - 2026-06-28`).
 - The release workflow automatically extracts the changelog section for the tagged version as the GitHub Release body.
 
 **Example entry:**
 ```markdown
-## [Unreleased]
+## [0.22.0] - 2026-12-01
 
 ### Added
 - About section in Settings with version info and update checker
