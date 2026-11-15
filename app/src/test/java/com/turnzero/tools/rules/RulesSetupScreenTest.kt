@@ -6,6 +6,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +33,7 @@ class RulesSetupScreenTest {
     @Test
     fun `shows first step number and swipes to second`() {
         composeRule.setContent {
-            SetupCarousel(steps = steps)
+            SetupCarousel(steps = steps, resetKey = 0)
         }
 
         composeRule.onNodeWithText("1.").assertIsDisplayed()
@@ -43,9 +46,27 @@ class RulesSetupScreenTest {
     }
 
     @Test
+    fun `changing the reset key returns to the first step`() {
+        var resetKey by mutableStateOf(0)
+
+        composeRule.setContent {
+            SetupCarousel(steps = steps, resetKey = resetKey)
+        }
+
+        composeRule.onNodeWithTag("SetupCarouselPager").performTouchInput { swipeLeft() }
+        composeRule.onNodeWithText("2.").assertIsDisplayed()
+
+        resetKey = 1
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText("1.").assertIsDisplayed()
+        composeRule.onNodeWithText("2.").assertDoesNotExist()
+    }
+
+    @Test
     fun `empty steps shows empty state`() {
         composeRule.setContent {
-            SetupCarousel(steps = emptyList())
+            SetupCarousel(steps = emptyList(), resetKey = 0)
         }
 
         composeRule.onNodeWithText("No setup steps available").assertIsDisplayed()

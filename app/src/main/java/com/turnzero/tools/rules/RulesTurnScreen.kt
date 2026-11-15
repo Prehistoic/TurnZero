@@ -198,10 +198,16 @@ private fun StepDetail(
         ) {
             Text(
                 text = "Step ${stepIndex + 1} of ${phase.steps.size} · ${phase.name}",
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,
             )
-            RulesItemContent(step)
+            RulesItemContent(
+                item = step,
+                titleStyle = MaterialTheme.typography.titleLarge,
+                spacing = 12.dp,
+                paragraphSpacing = 8.dp,
+            )
         }
         HorizontalDivider()
         Row(

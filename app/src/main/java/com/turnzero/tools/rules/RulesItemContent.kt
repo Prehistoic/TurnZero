@@ -16,37 +16,49 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.ui.components.parseBoldText
 import java.io.IOException
 
 /** Renders one [RuleItem]: optional title, paragraphs, bullets, then an optional asset image. */
 @Composable
-fun RulesItemContent(item: RuleItem, modifier: Modifier = Modifier) {
+fun RulesItemContent(
+    item: RuleItem,
+    modifier: Modifier = Modifier,
+    titleStyle: TextStyle = MaterialTheme.typography.titleSmall,
+    spacing: Dp = 4.dp,
+    paragraphSpacing: Dp = 4.dp,
+) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
         item.title?.let { title ->
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
+                style = titleStyle,
                 fontWeight = FontWeight.SemiBold,
             )
         }
-        item.text.forEach { paragraph ->
-            Text(
-                text = remember(paragraph) { parseBoldText(paragraph) },
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
-        item.bullets.forEach { bullet ->
-            Text(
-                text = remember(bullet) { bulletText(bullet) },
-                style = MaterialTheme.typography.bodyMedium,
-            )
+        if (item.text.isNotEmpty() || item.bullets.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(paragraphSpacing)) {
+                item.text.forEach { paragraph ->
+                    Text(
+                        text = remember(paragraph) { parseBoldText(paragraph) },
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                item.bullets.forEach { bullet ->
+                    Text(
+                        text = remember(bullet) { bulletText(bullet) },
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
         }
         item.image?.let { assetPath ->
             RulesAssetImage(assetPath = assetPath)

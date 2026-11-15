@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,15 +31,25 @@ import androidx.compose.ui.unit.dp
 import com.turnzero.core.ui.components.TZEmptyState
 import com.turnzero.core.ui.components.parseBoldText
 
-/** Swipeable carousel of setup steps, one step per page, with page-indicator dots. */
+/**
+ * Swipeable carousel of setup steps, one step per page, with page-indicator dots. [resetKey]
+ * identifies the specificity selection: whenever it changes, the carousel jumps back to step one,
+ * because the step list it was paging through no longer applies.
+ */
 @Composable
-fun SetupCarousel(steps: List<RuleItem>, modifier: Modifier = Modifier) {
+fun SetupCarousel(
+    steps: List<RuleItem>,
+    resetKey: Any,
+    modifier: Modifier = Modifier,
+) {
     if (steps.isEmpty()) {
         TZEmptyState(message = "No setup steps available", modifier = modifier)
         return
     }
 
     val pagerState = rememberPagerState(pageCount = { steps.size })
+    // A specificity change rebuilds the step list, so start again from the first step.
+    LaunchedEffect(resetKey) { pagerState.scrollToPage(0) }
 
     Column(modifier = modifier.fillMaxSize()) {
         HorizontalPager(
@@ -75,15 +86,13 @@ fun SetupCarousel(steps: List<RuleItem>, modifier: Modifier = Modifier) {
 }
 
 /**
- * One setup step, laid out for the carousel: the title is centred above the content, and every
- * paragraph gets its own breathing room instead of the compact list spacing used elsewhere.
+ * One setup step, laid out for the carousel: the title is centred above the content with extra
+ * room below it, and every paragraph gets its own breathing room instead of the compact list
+ * spacing used elsewhere.
  */
 @Composable
 private fun SetupStepContent(item: RuleItem, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         item.title?.let { title ->
             Text(
                 text = title,
@@ -92,6 +101,7 @@ private fun SetupStepContent(item: RuleItem, modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
+            Spacer(Modifier.height(20.dp))
         }
         if (item.text.isNotEmpty() || item.bullets.isNotEmpty()) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -110,6 +120,7 @@ private fun SetupStepContent(item: RuleItem, modifier: Modifier = Modifier) {
             }
         }
         item.image?.let { assetPath ->
+            Spacer(Modifier.height(12.dp))
             RulesAssetImage(assetPath = assetPath)
         }
     }

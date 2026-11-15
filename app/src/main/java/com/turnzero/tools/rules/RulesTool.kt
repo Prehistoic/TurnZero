@@ -94,7 +94,10 @@ class RulesTool : Tool {
                         onSubToolClick = viewModel::openSubTool,
                     )
 
-                    RuleSubTool.SETUP -> SetupCarousel(steps = state.setupSteps)
+                    RuleSubTool.SETUP -> SetupCarousel(
+                        steps = state.setupSteps,
+                        resetKey = state.selection,
+                    )
 
                     RuleSubTool.TURN -> TurnStructureScreen(
                         phases = state.turnPhases,
