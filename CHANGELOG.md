@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-11-15
+
+### Fixed
+- Update checker now shows download progress and tells you when an update was found, instead of appearing to do nothing while the APK downloads
+
 ## [0.21.0] - 2026-11-15
 
 ### Added

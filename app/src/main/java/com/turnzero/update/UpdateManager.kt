@@ -82,7 +82,10 @@ class UpdateManager(private val context: Context) {
         }
     }
 
-    suspend fun downloadUpdate(downloadUrl: String): UpdateStatus = withContext(Dispatchers.IO) {
+    suspend fun downloadUpdate(
+        downloadUrl: String,
+        onProgress: suspend (Int) -> Unit = {},
+    ): UpdateStatus = withContext(Dispatchers.IO) {
         try {
             val url = URL(downloadUrl)
             val connection = url.openConnection() as HttpURLConnection
@@ -100,12 +103,17 @@ class UpdateManager(private val context: Context) {
                     val buffer = ByteArray(8192)
                     var bytesRead: Int
                     var totalBytesRead: Long = 0
+                    var lastPercent = -1
 
                     while (inputStream.read(buffer).also { bytesRead = it } != -1) {
                         outputStream.write(buffer, 0, bytesRead)
                         totalBytesRead += bytesRead
                         if (fileSize > 0) {
-                            val progress = ((totalBytesRead * 100) / fileSize).toInt()
+                            val percent = downloadPercent(totalBytesRead, fileSize.toLong())
+                            if (percent != lastPercent) {
+                                lastPercent = percent
+                                onProgress(percent)
+                            }
                         }
                     }
                 }
@@ -143,4 +151,10 @@ class UpdateManager(private val context: Context) {
         }
         return 0
     }
+}
+
+/** Percentage of a download that is complete, or `0` while the total size is unknown. */
+internal fun downloadPercent(bytesRead: Long, totalBytes: Long): Int {
+    if (totalBytes <= 0) return 0
+    return ((bytesRead * 100) / totalBytes).toInt().coerceIn(0, 100)
 }
