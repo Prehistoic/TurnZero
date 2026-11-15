@@ -39,6 +39,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug builds are signed with the local debug key while releases are signed with the
+            // CI keystore, so they cannot share an app id. The suffix lets both stay installed:
+            // a release APK can be tested next to the Android Studio build.
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
