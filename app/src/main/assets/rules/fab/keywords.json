@@ -1,0 +1,361 @@
+{
+  "keywords": [
+    {
+      "name": "Attack",
+      "category": "Combat",
+      "text": [
+        "The attack ability on a card or weapon lets you declare an attack. The card moves onto the combat chain, the chain opens if closed, and you must declare a legal target (enemy hero or ally)."
+      ]
+    },
+    {
+      "name": "Go again",
+      "category": "Combat",
+      "text": [
+        "After this resolves, gain 1 action point. This lets you take another action in the same turn. Multiple instances don't stack — you can only have go again once."
+      ]
+    },
+    {
+      "name": "Dominate",
+      "category": "Combat",
+      "text": [
+        "This attack can't be defended by more than one card from hand. Equipment can still defend alongside that one card."
+      ]
+    },
+    {
+      "name": "Overpower",
+      "category": "Combat",
+      "text": [
+        "This attack can't be defended by more than one action card. Unlike Dominate, you can still block with multiple non-action cards."
+      ]
+    },
+    {
+      "name": "Crush",
+      "category": "Combat",
+      "text": [
+        "A triggered ability that fires when this attack deals 4 or more damage. Common on Guardian cards."
+      ]
+    },
+    {
+      "name": "Piercing N",
+      "category": "Combat",
+      "text": [
+        "If this is defended, the defending hero loses N life. Bypasses the defense value entirely."
+      ]
+    },
+    {
+      "name": "Reprise",
+      "category": "Combat",
+      "text": [
+        "Triggers if the defending hero defended with a card from hand this chain link. Rewards you for drawing out your opponent's hand."
+      ]
+    },
+    {
+      "name": "Battleworn",
+      "category": "Equipment",
+      "text": [
+        "When the combat chain closes, if this equipment defended, put a -1 defense counter on it. Equipment wears down over time."
+      ]
+    },
+    {
+      "name": "Blade Break",
+      "category": "Equipment",
+      "text": [
+        "When the combat chain closes, if this defended, destroy it. One-time use, then it's gone."
+      ]
+    },
+    {
+      "name": "Temper",
+      "category": "Equipment",
+      "text": [
+        "When the combat chain closes, if this defended, put it on the bottom of your deck. It returns for later use rather than being destroyed."
+      ]
+    },
+    {
+      "name": "Ward N",
+      "category": "Defense",
+      "text": [
+        "If you would be dealt N or less damage, destroy this and prevent that damage. Absorbs small hits entirely."
+      ]
+    },
+    {
+      "name": "Spellvoid N",
+      "category": "Defense",
+      "text": [
+        "If you would be dealt N or less arcane damage, you may destroy this and prevent it. Similar to Ward but specifically for arcane damage and optional."
+      ]
+    },
+    {
+      "name": "Spectra",
+      "category": "Aura",
+      "text": [
+        "This can be attacked (normally only heroes/allies can). When it becomes the target of an attack, destroy it. Illusionist auras use this."
+      ]
+    },
+    {
+      "name": "Phantasm",
+      "category": "Aura",
+      "text": [
+        "When defended by a non-Illusionist attack action card with 6 or more power, destroy this. Powerful illusion that shatters against big physical attacks."
+      ]
+    },
+    {
+      "name": "Mirage N",
+      "category": "Aura",
+      "text": [
+        "When defending a non-Illusionist attack, this gets +N defense. Illusionist aura shields."
+      ]
+    },
+    {
+      "name": "Fusion",
+      "category": "Play",
+      "text": [
+        "Optional additional cost when playing: reveal a card with the specified supertype(s) from your hand. Doing so unlocks a bonus effect. Combines elements together."
+      ]
+    },
+    {
+      "name": "Heave N",
+      "category": "Play",
+      "text": [
+        "While this is in your hand, you may pay N resource points plus put it face-up into your arsenal from hand. Lets you stash a card for later at a discount."
+      ]
+    },
+    {
+      "name": "Scrap",
+      "category": "Play",
+      "text": [
+        "Optional additional cost: banish an item or equipment you control. Reduces the resource cost. Mechanologist theme."
+      ]
+    },
+    {
+      "name": "Beat Chest",
+      "category": "Play",
+      "text": [
+        "Optional additional cost: discard a card with 6 or more power. Brute-themed cost reduction."
+      ]
+    },
+    {
+      "name": "Material",
+      "category": "Play",
+      "text": [
+        "While this card is under a permanent (attached/equipped), that permanent gains its listed effects."
+      ]
+    },
+    {
+      "name": "Contract",
+      "category": "Play",
+      "text": [
+        "You are contracted to complete a specific objective. If you do, you get the listed reward. Failing may have consequences."
+      ]
+    },
+    {
+      "name": "Surge",
+      "category": "Combat",
+      "text": [
+        "If this deals N or more damage, get a bonus effect. Rewards big hits."
+      ]
+    },
+    {
+      "name": "Combo",
+      "category": "Combat",
+      "text": [
+        "If the named card was the last attack in the combat chain, this gets a bonus. Builds on your previous attack."
+      ]
+    },
+    {
+      "name": "Rune Gate",
+      "category": "Class",
+      "text": [
+        "If you control enough Runechants (Runeblade tokens), you may play this from your banished zone. Runeblade recursion mechanic."
+      ]
+    },
+    {
+      "name": "Quell N",
+      "category": "Defense",
+      "text": [
+        "If you would be dealt N or less damage, prevent that damage. Similar to Ward but doesn't destroy the source — can be used repeatedly."
+      ]
+    },
+    {
+      "name": "Legendary",
+      "category": "Deckbuilding",
+      "text": [
+        "You may only have 1 copy of this card in your card-pool, even if the format allows more copies."
+      ]
+    },
+    {
+      "name": "Ephemeral",
+      "category": "Deckbuilding",
+      "text": [
+        "You can't include this in your card-pool. It can only be created during the game by effects (usually tokens)."
+      ]
+    },
+    {
+      "name": "Modular",
+      "category": "Equipment",
+      "text": [
+        "This may be equipped to any equipment zone (Arms, Chest, Head, or Legs). Flexible placement."
+      ]
+    },
+    {
+      "name": "Cloaked",
+      "category": "Equipment",
+      "text": [
+        "Equip this face-down. Your opponent doesn't know what it is until you use it. Assassin/Ninja theme."
+      ]
+    },
+    {
+      "name": "Perched",
+      "category": "Equipment",
+      "text": [
+        "Can be equipped in addition to a two-handed weapon. Occupies the same weapon zone as the 2H without taking an extra slot."
+      ]
+    },
+    {
+      "name": "Arcane Shelter N",
+      "category": "Defense",
+      "text": [
+        "If you would be dealt N or less damage, prevent that damage. Ward variant that doesn't require destroying the source."
+      ]
+    },
+    {
+      "name": "Guardwell",
+      "category": "Equipment",
+      "text": [
+        "When the combat chain closes, if this defended, it stays equipped instead of being destroyed or removed."
+      ]
+    },
+    {
+      "name": "Ambush",
+      "category": "Class",
+      "text": [
+        "While this is in your arsenal, you may defend with it as though it were in your hand. Surprise blocks from the arsenal."
+      ]
+    },
+    {
+      "name": "Crank",
+      "category": "Class",
+      "text": [
+        "As this enters the arena, you may remove a steam counter from a Mechanologist item to get a bonus."
+      ]
+    },
+    {
+      "name": "Blood Debt",
+      "category": "Class",
+      "text": [
+        "While in your banished zone at the start of your turn, you lose 1 life. Shadow cards have a cost for sitting in banish."
+      ]
+    },
+    {
+      "name": "Galvanize",
+      "category": "Class",
+      "text": [
+        "When this defends, you may banish a card from your graveyard for a bonus. Mechanologist recursion."
+      ]
+    },
+    {
+      "name": "Bond",
+      "category": "Class",
+      "text": [
+        "If an Elemental card was pitched to pay for an Elemental card this turn, get a bonus. Rewards staying in-element."
+      ]
+    },
+    {
+      "name": "Flow",
+      "category": "Class",
+      "text": [
+        "If you played a card with the matching element this turn, get a bonus. Rewards elemental sequencing."
+      ]
+    },
+    {
+      "name": "Unity",
+      "category": "Class",
+      "text": [
+        "When this defends together with a card from hand, this gets +1 defense. Skilled at cooperative defense."
+      ]
+    },
+    {
+      "name": "Heavy",
+      "category": "Class",
+      "text": [
+        "If this is the only card equipped to your weapon zones (no off-hand), get a bonus. Guardian two-hander theme."
+      ]
+    },
+    {
+      "name": "Tower",
+      "category": "Class",
+      "text": [
+        "If this has 13 or more power, unlock a powerful effect. Guardian build-up mechanic."
+      ]
+    },
+    {
+      "name": "High Tide",
+      "category": "Class",
+      "text": [
+        "If there are 2 or more Wizard non-attack action cards in your graveyard, get a bonus. Wizard spellcasting."
+      ]
+    },
+    {
+      "name": "Solflare",
+      "category": "Class",
+      "text": [
+        "When this is charged to your hero's soul, trigger an effect. Light Warrior soul-charging."
+      ]
+    },
+    {
+      "name": "Go Fish",
+      "category": "Class",
+      "text": [
+        "When this hits a hero, they reveal their hand and you may banish a card from it. Mind games."
+      ]
+    },
+    {
+      "name": "Quickstrike",
+      "category": "Class",
+      "text": [
+        "If this has go again at the start of the chain link, get a bonus. Rewards building speed."
+      ]
+    },
+    {
+      "name": "Starfall",
+      "category": "Class",
+      "text": [
+        "If an instant has been put into your graveyard this turn, get a bonus. Rewards quick reflexes."
+      ]
+    },
+    {
+      "name": "Essence",
+      "category": "Deckbuilding",
+      "text": [
+        "Allows your hero to include cards with certain talents even if they don't have that talent. Expands your card-pool options."
+      ]
+    },
+    {
+      "name": "Meld",
+      "category": "Play",
+      "text": [
+        "Pay double cost to play both halves of a split card at once. The melded card has properties of both sides."
+      ]
+    },
+    {
+      "name": "Stealth",
+      "category": "Class",
+      "text": [
+        "This card does nothing special on its own — Stealth has no inherent mechanical effect. Assassin cards use Stealth as a label for other abilities to reference."
+      ]
+    },
+    {
+      "name": "Pairs with [OBJECT]",
+      "category": "Equipment",
+      "text": [
+        "Equip this only if you already have the named object equipped. Paired items that work together."
+      ]
+    },
+    {
+      "name": "Protect",
+      "category": "Combat",
+      "text": [
+        "You may defend any hero attacked by an opponent with this card. Act as a bodyguard for your team in multiplayer."
+      ]
+    }
+  ]
+}

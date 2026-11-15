@@ -1,0 +1,63 @@
+{
+  "phases": [
+    {
+      "name": "Start Phase",
+      "steps": [
+        {
+          "title": "Start Phase",
+          "text": [
+            "Beginning-of-turn effects trigger and resolve.",
+            "Players do not get priority during this phase. Any 'start of turn' effects trigger and resolve automatically."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Action Phase",
+      "steps": [
+        {
+          "title": "Action Phase",
+          "text": [
+            "The main phase — you have 1 action point and can play cards, attack, and activate abilities.",
+            "You start the action phase with 1 action point. Most actions (attacking, playing action cards) cost your action point.",
+            "You can also pitch cards to gain resources — discard a card from hand to gain resource points equal to the card's pitch value (the number of pips in the top-left corner).",
+            "The action phase ends when the stack is empty, the combat chain is closed, and both players pass priority in succession."
+          ]
+        },
+        {
+          "title": "What you can do during the action phase:",
+          "bullets": [
+            "**Play an action card** — Costs 1 action point + its resource cost. Resolves on the stack, then goes to graveyard.",
+            "**Attack with a weapon** — Some weapons have an activated ability to attack. Costs 1 action point + any resource cost.",
+            "**Play an instant** — Does not cost an action point. Can be played any time you have priority, even during your opponent's turn.",
+            "**Activate an ability** — Pay the cost (action point + resources) and resolve.",
+            "**Pitch a card** — Discard any card from hand to gain resource points. You can pitch multiple times to build up resources for a big play."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "End Phase",
+      "steps": [
+        {
+          "title": "End Phase",
+          "text": [
+            "Clean up, arsenal a card, pitch away, ready everything, and draw back to your intellect.",
+            "The turn ends, and the next player in clockwise order begins their turn. For the first turn of the game, all other players also draw to their intellect after the turn player's end phase."
+          ]
+        },
+        {
+          "title": "In order:",
+          "bullets": [
+            "**Reset allies' life totals** (if any).",
+            "**Arsenal** — You may put one card from your hand face-down into your empty arsenal zone.",
+            "**Pitch** — All cards in your pitch zone go to the bottom of your deck in any order.",
+            "**Ready** — Untap all of your permanents (weapons, equipment, allies).",
+            "**Lose action/resource points** — Any remaining points are lost.",
+            "**Draw** — Draw cards until your hand size equals your hero's intellect."
+          ]
+        }
+      ]
+    }
+  ]
+}

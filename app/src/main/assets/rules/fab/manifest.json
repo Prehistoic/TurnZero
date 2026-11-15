@@ -1,0 +1,21 @@
+{
+  "specificities": [
+    {
+      "id": "format",
+      "name": "Format",
+      "type": "single",
+      "options": [
+        { "id": "classic-constructed", "name": "Classic Constructed" },
+        { "id": "silver-age", "name": "Silver Age" }
+      ]
+    }
+  ],
+  "rulebooks": [
+    {
+      "id": "comp",
+      "name": "Comprehensive Rules",
+      "asset": "rulebooks/fab-comprehensive-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}
