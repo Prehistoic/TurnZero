@@ -1,0 +1,28 @@
+{
+  "specificities": [
+    {
+      "id": "format",
+      "name": "Format",
+      "type": "single",
+      "options": [
+        { "id": "standard", "name": "Standard" },
+        { "id": "modern", "name": "Modern" },
+        { "id": "pioneer", "name": "Pioneer" },
+        { "id": "legacy", "name": "Legacy" },
+        { "id": "vintage", "name": "Vintage" },
+        { "id": "premodern", "name": "Premodern" },
+        { "id": "pauper", "name": "Pauper" },
+        { "id": "commander", "name": "Commander" },
+        { "id": "duel-commander", "name": "Duel Commander" }
+      ]
+    }
+  ],
+  "rulebooks": [
+    {
+      "id": "comp",
+      "name": "Comprehensive Rules",
+      "asset": "rulebooks/mtg-comprehensive-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}
