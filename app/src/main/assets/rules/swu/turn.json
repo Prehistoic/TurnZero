@@ -1,0 +1,62 @@
+{
+  "phases": [
+    {
+      "name": "Action Phase",
+      "steps": [
+        {
+          "title": "Action Phase",
+          "text": [
+            "Players take turns doing one action at a time until both pass in a row.",
+            "The player with the initiative goes first, then the opponent, then back and forth. On your turn, you may do one of these:",
+            "The phase ends when both players pass consecutively (or one takes the initiative right after the other passes)."
+          ],
+          "bullets": [
+            "**Play a Card** — Pay a card's cost by exhausting that many resources. Units and upgrades enter play exhausted. Events go straight to your discard pile after resolving.",
+            "**Attack With a Unit** — Exhaust a ready unit and choose an enemy unit in the same arena (ground or space), or attack the enemy base directly. Units deal damage equal to their power.",
+            "**Use an Action Ability** — Pay any cost in brackets after the word \"Action\" or \"Epic Action\" and resolve the effect.",
+            "**Take the Initiative** — Take the initiative counter and flip it. Only one player can do this per round. After this, you pass for the rest of the phase but will go first next round.",
+            "**Pass** — Do nothing this turn. You can still take actions later if your opponent acts after you."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Draw Cards",
+      "steps": [
+        {
+          "title": "Draw Cards",
+          "text": [
+            "Each player draws 2 cards from their deck.",
+            "If your deck is empty, instead deal 3 damage to your base for each card you would have drawn."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Resource a Card",
+      "steps": [
+        {
+          "title": "Resource a Card",
+          "text": [
+            "You may put 1 card from your hand into play facedown and exhausted as a resource.",
+            "The player with the initiative decides first, then their opponent. You may choose not to resource anything.",
+            "Tip: Resource a card each round until you have enough to deploy your leader, then consider whether you need more."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ready All Cards",
+      "steps": [
+        {
+          "title": "Ready All Cards",
+          "text": [
+            "Ready all your exhausted cards — units, resources, and your leader.",
+            "All of your cards stand back up, ready for the next action phase.",
+            "After readying, a new round begins."
+          ]
+        }
+      ]
+    }
+  ]
+}

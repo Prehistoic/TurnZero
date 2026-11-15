@@ -1,0 +1,24 @@
+{
+  "winConditions": [
+    {
+      "title": "Reduce the Enemy Base to 0 HP",
+      "text": [
+        "Each base starts with 30 HP. Deal enough damage to the enemy base to reduce it to 0 HP and you win the game.",
+        "If both bases reach 0 HP at the same time, the game is a draw."
+      ]
+    },
+    {
+      "title": "Empty Deck",
+      "text": [
+        "If you run out of cards in your deck, you keep playing. Each time you would draw a card from an empty deck, you instead deal 3 damage to your base per card.",
+        "For example, drawing 2 cards during the regroup phase with an empty deck deals 6 damage to your base."
+      ]
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "You may concede at any time. Simply announce that you concede and you lose immediately."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "keywords": [
+    {
+      "name": "Ambush",
+      "category": "Combat",
+      "text": [
+        "When you play this unit, it may ready and attack an enemy unit immediately. It enters play exhausted like normal, so it must use Ambush to ready and attack in the same turn. If there are no enemy units to attack, Ambush does nothing."
+      ]
+    },
+    {
+      "name": "Grit",
+      "category": "Combat",
+      "text": [
+        "This unit gets +1 power for each point of damage on it. The more injured it is, the harder it hits back."
+      ]
+    },
+    {
+      "name": "Overwhelm",
+      "category": "Combat",
+      "text": [
+        "When this unit attacks and deals more damage than needed to defeat the defender, the extra damage hits the enemy base. Example: A 5-power unit with Overwhelm attacks a unit with 3 HP remaining — it deals 2 excess damage to the enemy base."
+      ]
+    },
+    {
+      "name": "Raid X",
+      "category": "Combat",
+      "text": [
+        "While attacking, this unit gets +X power. Example: A unit with Raid 2 gets +2 power while it's the attacker."
+      ]
+    },
+    {
+      "name": "Restore X",
+      "category": "Combat",
+      "text": [
+        "When this unit attacks, heal X damage from your base before damage is dealt. Example: A unit with Restore 2 heals 2 damage from your base each time it attacks."
+      ]
+    },
+    {
+      "name": "Saboteur",
+      "category": "Combat",
+      "text": [
+        "When this unit attacks, you can ignore enemy Sentinel units and choose any target. Also, remove all Shield tokens from the defender before dealing damage."
+      ]
+    },
+    {
+      "name": "Sentinel",
+      "category": "Combat",
+      "text": [
+        "Enemy units in the same arena can't attack your non-Sentinel units or your base — they must attack your Sentinel unit first. If you control multiple Sentinels, the attacker chooses which one to attack."
+      ]
+    },
+    {
+      "name": "Shielded",
+      "category": "On Play",
+      "text": [
+        "When you play this unit, give it a Shield token. The shield absorbs all damage from the next hit, then is removed. Multiple shields don't stack — each Shielded gives one shield."
+      ]
+    },
+    {
+      "name": "Bounty",
+      "category": "Triggered",
+      "text": [
+        "When this unit is defeated, the opponent who defeated it may trigger the listed Bounty effect. Each Bounty is an optional reward for taking down the unit. If you defeat your own unit with Bounty, your opponent still collects."
+      ]
+    },
+    {
+      "name": "Smuggle [Y]",
+      "category": "Resources",
+      "text": [
+        "You may play this card from your resource zone (instead of from your hand) by paying cost Y. The card in your resource zone is replaced by the top card of your deck. Useful for accessing extra cards you stashed as resources early on."
+      ]
+    },
+    {
+      "name": "Coordinate",
+      "category": "Misc",
+      "text": [
+        "The ability listed after Coordinate is only active while you control 3 or more units (including this one). If you drop below 3 units, the ability turns off until you build your board back up."
+      ]
+    },
+    {
+      "name": "Exploit X",
+      "category": "Misc",
+      "text": [
+        "While playing this card, you may defeat up to X of your own units. For each unit you sacrifice this way, the card costs 2 less. Sacrificing cheap units lets you play expensive cards much earlier."
+      ]
+    },
+    {
+      "name": "Piloting [Y]",
+      "category": "Misc",
+      "text": [
+        "You may play this unit as an upgrade on a friendly VEHICLE unit instead of as a unit, paying cost Y instead of its printed cost. The attached unit gains the pilot's power, HP, and abilities. Useful for upgrading vehicles with fighter pilots."
+      ]
+    },
+    {
+      "name": "Hidden",
+      "category": "Defense",
+      "text": [
+        "This unit can't be attacked during the same phase it was played. It's safe for one round before becoming a valid target. Note: Sentinel overrides Hidden — a unit with both can still be attacked."
+      ]
+    },
+    {
+      "name": "Plot",
+      "category": "Resources",
+      "text": [
+        "When you deploy your leader, you may play this card from your resource zone at its normal cost. The card is replaced by the top card of your deck. You can play multiple Plot cards when deploying — show your opponent all of them, then resolve in any order."
+      ]
+    },
+    {
+      "name": "Support",
+      "category": "On Play",
+      "text": [
+        "When you play this unit, you may immediately attack with another unit. That unit gains all of this unit's other abilities for that attack. Great for setting up combo attacks with a buffed ally."
+      ]
+    }
+  ]
+}

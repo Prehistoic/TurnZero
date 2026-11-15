@@ -1,0 +1,17 @@
+{
+  "specificities": [],
+  "rulebooks": [
+    {
+      "id": "quickstart",
+      "name": "Quickstart Rules",
+      "asset": "rulebooks/swu-quickstart-rulebook.pdf",
+      "when": {}
+    },
+    {
+      "id": "comp",
+      "name": "Comprehensive Rules 8.0",
+      "asset": "rulebooks/swu-comprehensive-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}
