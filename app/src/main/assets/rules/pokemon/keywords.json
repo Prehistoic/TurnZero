@@ -1,0 +1,271 @@
+{
+  "keywords": [
+    {
+      "name": "<Active Pokemon>",
+      "category": "Game Terms",
+      "text": [
+        "The Pokemon in your Active Spot. Only the Active Pokemon can attack. You must always have exactly 1 Active Pokemon."
+      ]
+    },
+    {
+      "name": "<Asleep>",
+      "category": "Special Conditions",
+      "text": [
+        "Special Condition. Turn the Pokemon counterclockwise. It cannot attack or retreat. During Pokemon Checkup, flip a coin — heads recovers, tails stays Asleep."
+      ]
+    },
+    {
+      "name": "<Bench>",
+      "category": "Game Terms",
+      "text": [
+        "Row for Benched Pokemon (up to 5). They can use Abilities but cannot attack. Damage to Benched Pokemon ignores Weakness and Resistance."
+      ]
+    },
+    {
+      "name": "<Burned>",
+      "category": "Special Conditions",
+      "text": [
+        "Special Condition. Place a Burn marker. During Pokemon Checkup, place 2 damage counters, then flip a coin — heads recovers. Only one Burn marker at a time."
+      ]
+    },
+    {
+      "name": "<Confused>",
+      "category": "Special Conditions",
+      "text": [
+        "Special Condition. Turn the card top toward you. Before attacking, flip a coin — heads means normal attack; tails means attack fails and you place 3 damage counters on your Pokemon."
+      ]
+    },
+    {
+      "name": "<Damage Counters>",
+      "category": "Game Terms",
+      "text": [
+        "Each counter equals 10 damage. A Pokemon is KO'd when total counters equal or exceed HP/10."
+      ]
+    },
+    {
+      "name": "<Energy>",
+      "category": "Game Terms",
+      "text": [
+        "Cards that power attacks. 11 types: Grass, Fire, Water, Lightning, Psychic, Fighting, Darkness, Metal, Fairy, Dragon, Colorless. Attach 1 per turn from hand to a Pokemon."
+      ]
+    },
+    {
+      "name": "<Evolution>",
+      "category": "Game Terms",
+      "text": [
+        "Playing a Stage 1 or 2 card on top of a qualifying Pokemon. Keeps attached cards and damage counters, loses Special Conditions and effects. Cannot evolve on first turn or the turn a Pokemon was played."
+      ]
+    },
+    {
+      "name": "<Knocked Out>",
+      "category": "Game Terms",
+      "text": [
+        "When total damage equals or exceeds HP. The Pokemon and attached cards go to discard. Opponent takes Prize card(s): 1 normally, 2 for ex/V/GX, 3 for VMAX/TAG TEAM/Mega ex."
+      ]
+    },
+    {
+      "name": "<Mulligan>",
+      "category": "Game Terms",
+      "text": [
+        "If no Basic Pokemon in opening hand: reveal, shuffle back, draw 7 new cards. Repeat until you have one. Opponent may draw 1 extra card per mulligan you take beyond shared ones."
+      ]
+    },
+    {
+      "name": "<Paralyzed>",
+      "category": "Special Conditions",
+      "text": [
+        "Special Condition. Turn the Pokemon clockwise. It cannot attack or retreat. Recovers automatically during Pokemon Checkup after its owner's next turn."
+      ]
+    },
+    {
+      "name": "<Poisoned>",
+      "category": "Special Conditions",
+      "text": [
+        "Special Condition. Place a Poison marker. During Pokemon Checkup, place 1 damage counter. Only one Poison marker at a time."
+      ]
+    },
+    {
+      "name": "<Prize Cards>",
+      "category": "Game Terms",
+      "text": [
+        "6 face-down cards set aside during setup. Take 1 when you KO an opponent's Pokemon. Taking your last Prize card wins the game."
+      ]
+    },
+    {
+      "name": "<Resistance>",
+      "category": "Game Terms",
+      "text": [
+        "Reduced damage from certain types (e.g. -20). Printed lower-left. Apply after Weakness. Only affects defending Active Pokemon."
+      ]
+    },
+    {
+      "name": "<Retreat>",
+      "category": "Game Terms",
+      "text": [
+        "Switch Active Pokemon with a Benched one. Discard Energy equal to Retreat Cost. Once per turn. Clears Special Conditions. Asleep/Paralyzed Pokemon cannot retreat."
+      ]
+    },
+    {
+      "name": "<Weakness>",
+      "category": "Game Terms",
+      "text": [
+        "Extra damage from certain types (e.g. x2). Printed lower-left. Apply before Resistance. Only affects defending Active Pokemon."
+      ]
+    },
+    {
+      "name": "<Pokemon ex>",
+      "category": "Pokemon Types",
+      "text": [
+        "Powerful Pokemon with strong attacks and higher HP. When Knocked Out, opponent takes 2 Prize cards. 'ex' is part of the Pokemon's name."
+      ]
+    },
+    {
+      "name": "<Pokemon V>",
+      "category": "Pokemon Types",
+      "text": [
+        "Powerful Basic Pokemon with high HP and strong attacks. When Knocked Out, opponent takes 2 Prize cards. Pokemon VSTAR and VMAX evolve from Pokemon V."
+      ]
+    },
+    {
+      "name": "<Pokemon VSTAR>",
+      "category": "Pokemon Types",
+      "text": [
+        "Evolves from Pokemon V. Has a VSTAR Power (attack or Ability) that can only be used once per game. When Knocked Out, opponent takes 2 Prize cards. Considered a Pokemon V."
+      ]
+    },
+    {
+      "name": "<Pokemon VMAX>",
+      "category": "Pokemon Types",
+      "text": [
+        "Evolves from Pokemon V. Massive HP (300+) and strong attacks. When Knocked Out, opponent takes 3 Prize cards. Considered a Pokemon V."
+      ]
+    },
+    {
+      "name": "<Pokemon V-UNION>",
+      "category": "Pokemon Types",
+      "text": [
+        "Made of 4 separate cards with the same name. All 4 pieces must be played from discard pile to Bench at the same time. Takes 1 Bench spot. When KO'd, opponent takes 3 Prize cards."
+      ]
+    },
+    {
+      "name": "<Pokemon-GX>",
+      "category": "Pokemon Types",
+      "text": [
+        "Powerful Pokemon with a special GX attack usable once per game. When Knocked Out, opponent takes 2 Prize cards. 'GX' is part of the Pokemon's name."
+      ]
+    },
+    {
+      "name": "<Pokemon-EX>",
+      "category": "Pokemon Types",
+      "text": [
+        "Older powerful Pokemon type. When Knocked Out, opponent takes 2 Prize cards. 'EX' is part of the Pokemon's name. Different from Pokemon ex."
+      ]
+    },
+    {
+      "name": "<Mega Evolution Pokemon ex>",
+      "category": "Pokemon Types",
+      "text": [
+        "Supremely powerful Pokemon ex. When Knocked Out, opponent takes 3 Prize cards. Can appear as Basic, Stage 1, or Stage 2 Pokemon."
+      ]
+    },
+    {
+      "name": "<Mega Evolution Pokemon-EX>",
+      "category": "Pokemon Types",
+      "text": [
+        "Evolves from Pokemon-EX. When you play one, your turn ends immediately. When Knocked Out, opponent takes 2 Prize cards."
+      ]
+    },
+    {
+      "name": "<TAG TEAM>",
+      "category": "Pokemon Types",
+      "text": [
+        "Special Basic Pokemon-GX featuring multiple Pokemon. Very high HP with bonus GX attacks. When Knocked Out, opponent takes 3 Prize cards."
+      ]
+    },
+    {
+      "name": "<Radiant Pokemon>",
+      "category": "Pokemon Types",
+      "text": [
+        "Shiny Basic Pokemon. Only 1 Radiant Pokemon allowed per deck. Always Basic, never evolves."
+      ]
+    },
+    {
+      "name": "<Tera Pokemon ex>",
+      "category": "Pokemon Types",
+      "text": [
+        "Pokemon ex with a crystalline effect that prevents all attack damage while on your Bench. When KO'd, opponent takes 2 Prize cards."
+      ]
+    },
+    {
+      "name": "<Dual-Type Pokemon>",
+      "category": "Pokemon Types",
+      "text": [
+        "A Pokemon with two types simultaneously. Affected by effects targeting either type. Weakness and Resistance apply for both types."
+      ]
+    },
+    {
+      "name": "<BREAK Evolution>",
+      "category": "Evolution",
+      "text": [
+        "Special evolution that keeps the previous Pokemon's attacks and Abilities, then adds more. Changes HP and possibly type. 'BREAK' is part of the name."
+      ]
+    },
+    {
+      "name": "<Restored Pokemon>",
+      "category": "Evolution",
+      "text": [
+        "Fossil Pokemon that can only be played via an Item card effect. Not a Basic Pokemon. Cannot be played from hand normally."
+      ]
+    },
+    {
+      "name": "<Ancient Trait>",
+      "category": "Misc",
+      "text": [
+        "Special powers on certain Pokemon cards, printed under the name. Not attacks or Abilities — cards that block those won't affect Ancient Traits."
+      ]
+    },
+    {
+      "name": "<ACE SPEC>",
+      "category": "Misc",
+      "text": [
+        "Extremely powerful Trainer cards. Only 1 total ACE SPEC card allowed per deck (not 1 of each — 1 total)."
+      ]
+    },
+    {
+      "name": "<Prism Star>",
+      "category": "Misc",
+      "text": [
+        "Powerful cards limited to 1 copy per name per deck. Sent to Lost Zone instead of discard pile."
+      ]
+    },
+    {
+      "name": "<Lost Zone>",
+      "category": "Misc",
+      "text": [
+        "Cards sent here are permanently removed from the game — they cannot be recovered like the discard pile."
+      ]
+    },
+    {
+      "name": "<Special Conditions>",
+      "category": "Special Conditions",
+      "text": [
+        "Asleep, Burned, Confused, Paralyzed, and Poisoned. Only affect Active Pokemon. Cleared when a Pokemon evolves or moves to the Bench.",
+        "Asleep, Confused, and Paralyzed rotate the card; Burned and Poisoned use markers. A Pokemon can have multiple Special Conditions at once (e.g. Burned + Paralyzed + Poisoned)."
+      ]
+    },
+    {
+      "name": "<Trainer Cards>",
+      "category": "Game Terms",
+      "text": [
+        "Special cards with four subtypes: Item (unlimited per turn), Supporter (1 per turn), Stadium (1 per turn, stays in play), and Pokemon Tool (attach to a Pokemon, 1 per Pokemon)."
+      ]
+    },
+    {
+      "name": "<Abilities>",
+      "category": "Game Terms",
+      "text": [
+        "Special effects on Pokemon that are not attacks. Some are always active, others you choose to use. Usable from both Active and Benched Pokemon. Does not end your turn."
+      ]
+    }
+  ]
+}

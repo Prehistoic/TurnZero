@@ -1,0 +1,113 @@
+{
+  "phases": [
+    {
+      "name": "Draw a Card",
+      "steps": [
+        {
+          "title": "Draw a Card",
+          "text": [
+            "Start your turn by drawing 1 card from the top of your deck. If your deck is empty, you lose the game.",
+            "Draw 1 card from the top of your deck and add it to your hand.",
+            "If you cannot draw because your deck is empty at the beginning of your turn, you lose the game. The player going first still draws a card on their first turn."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Action Phase",
+      "steps": [
+        {
+          "title": "Action Phase",
+          "text": [
+            "Perform any of the following actions in any order, as many times as each allows."
+          ]
+        },
+        {
+          "title": "A) Put Basic Pokemon on Your Bench",
+          "text": [
+            "Choose any number of Basic Pokemon from your hand and place them face up on your Bench. Your Bench can hold up to 5 Pokemon at a time."
+          ]
+        },
+        {
+          "title": "B) Evolve Pokemon",
+          "text": [
+            "If you have a Pokemon in your hand that says \"Evolves from [Name]\" and [Name] is a Pokemon you have had in play since the start of your turn, you may play that card on top of it.",
+            "You can evolve Basic to Stage 1, or Stage 1 to Stage 2. A Pokemon cannot evolve on its first turn in play. Neither player can evolve on their very first turn of the game.",
+            "When a Pokemon evolves, it keeps all attached cards and damage counters, but loses all Special Conditions and other effects."
+          ]
+        },
+        {
+          "title": "C) Attach an Energy Card",
+          "text": [
+            "Take 1 Energy card from your hand and attach it to one of your Pokemon (Active or Benched). You can only do this once per turn."
+          ]
+        },
+        {
+          "title": "D) Play Trainer Cards",
+          "bullets": [
+            "**Item cards** — Play as many as you want per turn. Do what the card says, then discard it.",
+            "**Supporter cards** — Play only 1 per turn. The player going first cannot play a Supporter on their first turn.",
+            "**Stadium cards** — Play only 1 per turn. Stays in play with ongoing effects. Only 1 Stadium can be in play at a time — playing a new one discards the old one.",
+            "**Pokemon Tool cards** — Attach to 1 of your Pokemon (max 1 Tool per Pokemon). Stays attached until removed."
+          ]
+        },
+        {
+          "title": "E) Retreat Your Active Pokemon",
+          "text": [
+            "Discard Energy from your Active Pokemon equal to its Retreat Cost (printed bottom-right). Then switch it with a Benched Pokemon. You can only retreat once per turn.",
+            "Asleep and Paralyzed Pokemon cannot retreat. When your Active Pokemon moves to the Bench, it recovers from all Special Conditions and attack effects."
+          ]
+        },
+        {
+          "title": "F) Use Abilities",
+          "text": [
+            "Many Pokemon have Abilities you can use during your turn. Abilities are not attacks — using one does not end your turn. You can use Abilities from both Active and Benched Pokemon."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Attack",
+      "steps": [
+        {
+          "title": "Attack",
+          "text": [
+            "Choose an attack on your Active Pokemon, verify you have the required Energy, and declare your attack. Your turn ends afterward.",
+            "The player going first cannot attack on their first turn."
+          ]
+        },
+        {
+          "title": "Attack Steps",
+          "text": [
+            "After attacking, check if any Pokemon were Knocked Out. For each KO, the opponent takes Prize card(s) and promotes a new Active Pokemon from their Bench."
+          ],
+          "bullets": [
+            "**1. Check Energy** — Ensure your Active Pokemon has the required Energy attached. Colorless symbols mean any type works. Attacks with cost 0 need no Energy.",
+            "**2. Check Weakness & Resistance** — If the defending Pokemon has Weakness to your type (e.g. x2), double the damage. If it has Resistance (e.g. -20), subtract that. Don't apply to Benched Pokemon.",
+            "**3. Place Damage Counters** — Place 1 damage counter (10 HP) for each 10 damage dealt, after modifiers. If a Pokemon's total damage equals or exceeds its HP, it's Knocked Out."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pokemon Checkup",
+      "steps": [
+        {
+          "title": "Pokemon Checkup",
+          "text": [
+            "Between turns, resolve Special Conditions and any between-turn effects.",
+            "After your turn ends, resolve Pokemon Checkup in this order:",
+            "Apply any effects from Abilities or Trainer cards that specify they happen during Pokemon Checkup.",
+            "After both players complete checks, any Pokemon reduced to 0 HP is Knocked Out and the opponent takes a Prize card. Then the next turn begins."
+          ],
+          "bullets": [
+            "**1. Poisoned** — Place 1 damage counter on the Poisoned Pokemon.",
+            "**2. Burned** — Place 2 damage counters, then flip a coin. Heads recovers the Pokemon.",
+            "**3. Asleep** — Flip a coin. Heads recovers; tails stays Asleep.",
+            "**4. Paralyzed** — Recovers automatically if Paralyzed since the end of its owner's last turn."
+          ]
+        }
+      ]
+    }
+  ]
+}

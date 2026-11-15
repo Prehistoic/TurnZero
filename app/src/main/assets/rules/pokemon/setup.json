@@ -1,0 +1,84 @@
+{
+  "steps": [
+    {
+      "title": "Shuffle & Determine First Player",
+      "text": [
+        "Shuffle your deck. Flip a coin — the winner decides who goes first.",
+        "Flip a coin. The winner chooses to go first or second."
+      ]
+    },
+    {
+      "title": "Draw Opening Hand",
+      "text": [
+        "Each player draws 7 cards from the top of their deck as their starting hand.",
+        "Both players draw the top 7 cards of their deck simultaneously. Keep your hand hidden from your opponent."
+      ]
+    },
+    {
+      "title": "Place Basic Pokemon",
+      "text": [
+        "Place 1 Basic Pokemon face-down as your Active Pokemon, then place up to 5 more face-down on your Bench.",
+        "If you have no Basic Pokemon in your hand, you must take a mulligan: reveal your hand, shuffle it back into your deck, and draw 7 new cards. Your opponent may draw 1 extra card for each mulligan you take.",
+        "After drawing a hand with at least 1 Basic Pokemon, place one face-down in the Active Spot. You may optionally place up to 5 more Basic Pokemon face-down on your Bench.",
+        "Tip: Placing multiple Basic Pokemon on your Bench gives you backup options if your Active Pokemon is Knocked Out."
+      ]
+    },
+    {
+      "title": "Set Prize Cards",
+      "text": [
+        "Take the top 6 cards of your deck and place them face-down to the side as your Prize cards.",
+        "Place exactly 6 cards from the top of your deck face-down in your Prize card area. Neither player may look at Prize cards during the game.",
+        "Each time you Knock Out an opponent's Pokemon, you take 1 of your Prize cards and add it to your hand."
+      ]
+    },
+    {
+      "title": "Flip & Begin",
+      "text": [
+        "Both players flip all their face-down Pokemon face up and the game begins.",
+        "Reveal your Active and Benched Pokemon by flipping them face up. The first player's turn then begins."
+      ]
+    },
+    {
+      "title": "Deck — Main Deck",
+      "text": [
+        "Exactly 60 cards — no more, no less.",
+        "You may have at most 4 copies of any card with the same name. Basic Energy cards are unlimited.",
+        "Your deck must contain at least 1 Basic Pokemon."
+      ]
+    },
+    {
+      "title": "Deck — Special Card Limits",
+      "text": [
+        "You may have only 1 total ACE SPEC card per deck.",
+        "You may have only 1 Radiant Pokemon per deck.",
+        "You may have only 1 copy of each Prism Star card per deck."
+      ]
+    },
+    {
+      "image": "rulebooks/images/pokemon-field.png",
+      "text": [
+        "Your play area is arranged as shown above. Each player has their own zones within a shared in-play area."
+      ]
+    },
+    {
+      "text": [
+        "**The Zones**"
+      ],
+      "bullets": [
+        "**1. Active Spot** — The front row. Only the Active Pokemon can attack. You must always have exactly 1 Active Pokemon.",
+        "**2. Bench** — Back row for Benched Pokemon (up to 5). They can use Abilities but cannot attack. Damage to Benched Pokemon ignores Weakness and Resistance.",
+        "**3. Deck** — 60-card draw pile, face-down. Neither player may look at or rearrange either deck.",
+        "**4. Discard Pile** — Used and Knocked Out cards go here face-up. Anyone can look through it at any time.",
+        "**5. Prize Cards** — 6 face-down cards set aside during setup. Take 1 when you KO an opponent's Pokemon. First to take all 6 wins.",
+        "**6. Lost Zone** — A special out-of-play zone. Cards sent here cannot be recovered for the rest of the game.",
+        "**7. Stadium (shared)** — Between both Active Spots. Only 1 Stadium can be in play at a time."
+      ]
+    },
+    {
+      "text": [
+        "**Damage Counters**",
+        "Each damage counter represents 10 damage. A Pokemon is Knocked Out when its total damage equals or exceeds its HP."
+      ]
+    }
+  ]
+}
