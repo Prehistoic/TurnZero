@@ -41,19 +41,22 @@ class RulesTool : Tool {
         val rules = state.rules
         val draft = state.draftSelection
 
-        val actionIcon: ImageVector? = when (subTool) {
-            null -> Icons.Filled.GridView
-            RuleSubTool.RULEBOOK -> null
+        val actionIcon: ImageVector? = when {
+            rules == null -> null
+            subTool == null -> Icons.Filled.GridView
+            subTool == RuleSubTool.RULEBOOK -> null
             else -> Icons.AutoMirrored.Filled.MenuBook
         }
-        val actionContentDescription: String? = when (subTool) {
-            null -> "Change layout"
-            RuleSubTool.RULEBOOK -> null
+        val actionContentDescription: String? = when {
+            rules == null -> null
+            subTool == null -> "Change layout"
+            subTool == RuleSubTool.RULEBOOK -> null
             else -> "Open rulebook pages"
         }
-        val onActionClick: (() -> Unit)? = when (subTool) {
-            null -> viewModel::showLayoutSheet
-            RuleSubTool.RULEBOOK -> null
+        val onActionClick: (() -> Unit)? = when {
+            rules == null -> null
+            subTool == null -> viewModel::showLayoutSheet
+            subTool == RuleSubTool.RULEBOOK -> null
             else -> viewModel::jumpToPages
         }
 
@@ -127,7 +130,7 @@ class RulesTool : Tool {
             )
         }
 
-        if (state.showLayoutSheet) {
+        if (rules != null && state.showLayoutSheet) {
             LayoutBottomSheet(
                 currentLayout = state.layout,
                 onLayoutSelected = viewModel::setLayout,
