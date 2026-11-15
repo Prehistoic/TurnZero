@@ -110,6 +110,7 @@ fun AboutSettingsScreen(
                         is UpdateManager.UpdateStatus.ReadyToInstall -> "Ready to install"
                         else -> "Check for new versions"
                     },
+                    enabled = canCheckForUpdates(updateStatus),
                     widget = {
                         when (val status = updateStatus) {
                             is UpdateManager.UpdateStatus.Checking -> CircularProgressIndicator(
@@ -127,8 +128,7 @@ fun AboutSettingsScreen(
                         }
                     },
                     onClick = {
-                        if (updateStatus !is UpdateManager.UpdateStatus.Checking &&
-                            updateStatus !is UpdateManager.UpdateStatus.Downloading) {
+                        if (canCheckForUpdates(updateStatus)) {
                             scope.launch {
                                 updateStatus = UpdateManager.UpdateStatus.Checking
                                 when (val result = updateManager.checkForUpdate()) {
@@ -228,3 +228,8 @@ private fun SocialLink(
         )
     }
 }
+
+/** A check can start only when no check or download is already in flight. */
+internal fun canCheckForUpdates(status: UpdateManager.UpdateStatus): Boolean =
+    status !is UpdateManager.UpdateStatus.Checking &&
+        status !is UpdateManager.UpdateStatus.Downloading

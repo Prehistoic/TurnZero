@@ -66,12 +66,15 @@ fun SettingsCategoryRow(
     title: String,
     description: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     widget: @Composable (() -> Unit)? = null
 ) {
+    val contentAlpha = if (enabled) 1f else 0.38f
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -79,20 +82,21 @@ fun SettingsCategoryRow(
             imageVector = icon,
             contentDescription = null,
             modifier = Modifier.size(28.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = contentAlpha)
         )
         Spacer(Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = contentAlpha),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = contentAlpha),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
