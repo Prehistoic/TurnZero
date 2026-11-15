@@ -53,7 +53,7 @@ class RulesToolViewModelTest : TZViewModelTest() {
 
         val state = vm.uiState.value
         assertNull(state.rules)
-        assertTrue(state.isLoading)
+        assertFalse(state.isLoading)
         assertNull(state.subTool)
         assertFalse(state.showSpecificityDialog)
         assertNull(state.specificitySummary)
@@ -213,6 +213,32 @@ class RulesToolViewModelTest : TZViewModelTest() {
             "rulebook",
             storedPreferences.value[UserPreferences.rulesSubToolKey(GAME_ID)]
         )
+    }
+
+    @Test
+    fun `dismissPdfSelector returns to the main panel and clears the persisted sub-tool`() = runTest {
+        val rules = sampleRules.copy(
+            manifest = sampleRules.manifest.copy(
+                rulebooks = listOf(
+                    RulebookDef(id = "official", name = "Official Rulebook", asset = "rulebooks/official.pdf"),
+                    RulebookDef(id = "quick", name = "Quick Start", asset = "rulebooks/quick.pdf"),
+                )
+            )
+        )
+        val vm = createViewModel(rules)
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.RULEBOOK)
+        assertTrue(vm.uiState.value.showPdfSelector)
+
+        vm.dismissPdfSelector()
+        advanceUntilIdle()
+
+        val state = vm.uiState.value
+        assertFalse(state.showPdfSelector)
+        assertNull(state.subTool)
+        assertEquals(0, state.pdfInitialPage)
+        assertNull(storedPreferences.value[UserPreferences.rulesSubToolKey(GAME_ID)])
     }
 
     @Test

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.abs
@@ -40,8 +41,8 @@ import kotlin.math.abs
 @Composable
 fun RulebookPdfViewer(
     assetPath: String,
-    initialPage: Int = 0,
     modifier: Modifier = Modifier,
+    initialPage: Int = 0,
 ) {
     val context = LocalContext.current
     val cachedPath by remember(assetPath) { mutableStateOf(copyRulebookAssetToCache(context, assetPath)) }
@@ -76,7 +77,7 @@ fun RulebookPdfViewer(
             val sf = 2.0
             val w = (pdfPage.width * sf).toInt()
             val h = (pdfPage.height * sf).toInt()
-            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val bmp = createBitmap(w, h, Bitmap.Config.ARGB_8888)
             Canvas(bmp).drawColor(Color.WHITE)
             pdfPage.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             pdfPage.close()

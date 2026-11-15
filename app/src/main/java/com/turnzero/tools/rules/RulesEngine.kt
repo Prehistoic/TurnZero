@@ -67,6 +67,8 @@ fun deselectOption(
     if (spec.type != SpecificityType.MULTI) return selection
 
     val selected = selection.multi[specId].orEmpty()
+    // Safe to short-circuit: any selected dependent would imply optionId is selected (selectOption
+    // closes over requires), so an unselected option can never have selected dependents.
     if (optionId !in selected) return selection
 
     val removed = dependentClosure(spec, optionId)

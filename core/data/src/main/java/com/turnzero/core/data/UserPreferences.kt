@@ -31,7 +31,6 @@ object UserPreferences {
     val LIFE_COUNTER_STARTING_LP = stringPreferencesKey("life_counter_starting_lp")
     val RULINGS_ENABLED_FORMATS = stringSetPreferencesKey("rulings_enabled_formats")
     val RULINGS_DEFAULT_FORMAT = stringPreferencesKey("rulings_default_format")
-
     val RULES_LAYOUT = stringPreferencesKey("rules_layout")
 
     fun rulesSpecStringKey(gameId: String, specId: String) =

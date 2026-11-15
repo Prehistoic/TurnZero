@@ -28,6 +28,9 @@ fun RulebookScreen(
     // A single matching rulebook needs no choice, so it is used when nothing is selected yet.
     val resolved = rulebooks.firstOrNull { it.id == selectedRulebookId } ?: rulebooks.singleOrNull()
 
+    // Also re-ask when the previously chosen rulebook no longer matches the selection (stale id).
+    // Cancelling the dialog goes through the view model, which closes the sub-tool, so it cannot
+    // loop back into this condition.
     if (showSelector || (resolved == null && rulebooks.isNotEmpty())) {
         AlertDialog(
             onDismissRequest = onDismissSelector,

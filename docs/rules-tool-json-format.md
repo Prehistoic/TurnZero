@@ -292,6 +292,8 @@ first `text` entry is the heading in bold, followed by its bullets — as in Pok
 }
 ```
 
+(Trimmed — the original lists all seven zones.)
+
 ### 3.3 Keywords
 
 `keywords.json` holds `keywords`, an array of:
@@ -316,7 +318,8 @@ first `text` entry is the heading in bold, followed by its bullets — as in Pok
 }
 ```
 
-(From `app/src/main/assets/rules/yugioh/keywords.json`.)
+(From `app/src/main/assets/rules/yugioh/keywords.json`, trimmed — the original has a third
+Speed 3 bullet.)
 
 Keywords are sorted alphabetically by `name` for display, so author them in any order. Category
 chips come from the distinct `category` values, also sorted. Search is case-insensitive and only
@@ -458,7 +461,7 @@ No extension selected (illustrative) — `[]`:
 { "extensions": [] }
 ```
 
-Every extension except Inns & Cathedrals (illustrative) — a value-level `not`:
+Without Inns & Cathedrals (illustrative) — a value-level `not`:
 
 ```json
 { "extensions": { "not": "inns" } }
@@ -574,8 +577,8 @@ Structure, Win Condition and Keywords. It does not render anything else.
 ```json
 {
   "pages": [
-    { "rulebook": "official", "pages": [7, 8], "when": { "format": "standard" } },
-    { "rulebook": "v6", "pages": [12], "when": {} }
+    { "rulebook": "v9", "pages": [12], "when": { "format": "v9-arcv" } },
+    { "rulebook": "v6", "pages": [7, 8], "when": {} }
   ]
 }
 ```
@@ -607,7 +610,8 @@ Details that bite:
   (the viewer clamps), and `0`/negative opens page 1. Verify numbers against the actual PDF.
 - **Keep the ref's `when` consistent with the referenced rulebook's `when`.** The Rulebook screen
   only resolves rulebooks that match the current selection; a ref pointing at a rulebook your
-  selection hides falls back to the picker/empty state.
+  selection hides falls back to the Rulebook screen's own resolution — one matching rulebook opens
+  at the ref's page, several open the picker, none shows the empty state.
 - One ref list per file, so each sub-tool jumps independently; it is fine for `win.json` to have
   no `pages` at all.
 - No shipped game uses `pages` yet — every existing game relies on the fallback. The shape above
@@ -762,13 +766,15 @@ Two tests walk every game folder:
 A further group of tests pins the checkers themselves against a known-good fixture and known-bad
 mutations, so the gate cannot silently stop catching things.
 
-Every failure message starts with `game '<gameId>':` and, where possible, names the offending
-item by JSON path.
+Most failure messages start with `game '<gameId>':` and, where possible, name the offending
+item by JSON path; the two `assertTrue` failures (`must parse` and `unsatisfiable when`) name the
+game inline instead.
 
 | Message | Meaning | Fix |
 |---|---|---|
 | `game 'x' must parse` | the folder did not load: a file is missing, or one of the five has a JSON or grammar error | read the logcat warning (`TZ/Rules`), or decode the files with `python3 -m json.tool` |
 | `duplicate specificity ids [...]` | two specificities share an `id` | rename one |
+| `duplicate rulebook ids [...]` | two rulebooks share an `id` | rename one |
 | `specificity 'x' has duplicate option ids [...]` | duplicate option ids in one specificity | rename one |
 | `specificity 'x' option 'y' requires unknown options [...]` | `requires` points at a nonexistent option | fix the id (same specificity only) |
 | `specificity 'x' has a requires cycle: a -> b -> a` | circular prerequisites | break the cycle |
@@ -776,7 +782,7 @@ item by JSON path.
 | `number specificity 'x' has min 5 > max 4` | inverted range | fix the bounds |
 | `multi specificity 'x' has 31 options; at most 30 are supported (the engine enumerates 2^n subsets in an Int bitmask)` | too many checkboxes | split the specificity or the game |
 | `<where> references unknown specificity 'ghost'` | `when` names a spec that does not exist | fix the key |
-| `<where>: specificity 'x' has no options ['nope']` | `when` names an option that does not exist | fix the value |
+| `<where>: specificity 'x' has no options [nope]` | `when` names an option that does not exist | fix the value |
 | `<where>: specificity 'x' expects an int, got 'three'` | a number spec was compared to a non-numeric string | use a quoted integer |
 | `<where>: specificity 'x' value 5 is outside 2..4` | number outside `min..max` | fix the value or the bounds |
 | `<where> references unknown rulebook 'nope'` | `PageRef.rulebook` is not in the manifest | fix the id |
@@ -815,7 +821,7 @@ whether content reads well. Those stay human review.
    wrong (or clamped) page. Check against the actual file, and keep `pages: []` out of the JSON.
 7. **Duplicate ids.** Specificity ids must be unique in the manifest, option ids inside their
    specificity, and rulebook ids in the manifest. Duplicated ids make `when` resolution and page
-   refs ambiguous.
+   refs ambiguous — the gate flags all three.
 8. **`and` / `or` / `not` as ids.** These are grammar keywords. A spec with one of these ids
    cannot be referenced at all.
 9. **Typos inside a negation.** `{ "format": { "not": "commanderr" } }` is always true — it does

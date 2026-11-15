@@ -51,7 +51,7 @@ class RulesToolViewModel @Inject constructor(
                     showSpecificityDialog = needsDialog,
                     subTool = rules?.let { restoreSubTool(prefs) },
                     layout = restoreLayout(prefs),
-                    isLoading = rules == null,
+                    isLoading = false,
                 )
             }
         }
@@ -207,15 +207,12 @@ class RulesToolViewModel @Inject constructor(
             when {
                 stepIndex > 0 -> state.copy(turnStepIndex = stepIndex - 1)
                 phaseIndex > 0 -> {
-                    val previous = phases.getOrNull(phaseIndex - 1)
-                    if (previous == null || previous.steps.isEmpty()) {
-                        state
-                    } else {
-                        state.copy(
-                            turnPhaseIndex = phaseIndex - 1,
-                            turnStepIndex = previous.steps.lastIndex,
-                        )
-                    }
+                    // turnPhases drops empty phases, so a previous phase always has steps.
+                    val previous = phases[phaseIndex - 1]
+                    state.copy(
+                        turnPhaseIndex = phaseIndex - 1,
+                        turnStepIndex = previous.steps.lastIndex,
+                    )
                 }
                 else -> state
             }
@@ -246,8 +243,14 @@ class RulesToolViewModel @Inject constructor(
         }
     }
 
+    /** Cancelling the picker returns to the rules main panel instead of re-asking forever. */
     fun dismissPdfSelector() {
-        _uiState.update { it.copy(showPdfSelector = false) }
+        _uiState.update {
+            it.copy(showPdfSelector = false, subTool = null, pdfInitialPage = 0)
+        }
+        viewModelScope.launch {
+            dataStore.edit { prefs -> prefs.remove(UserPreferences.rulesSubToolKey(gameId)) }
+        }
     }
 
     fun jumpToPages() {
@@ -322,6 +325,6 @@ class RulesToolViewModel @Inject constructor(
     }
 
     private companion object {
-        const val TAG = "TZ/RulesTool"
+        const val TAG = "TZ/Rules"
     }
 }

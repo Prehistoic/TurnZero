@@ -177,6 +177,14 @@ class RulesContentValidationTest {
         }
     }
 
+    @Test
+    fun `validation reports duplicate rulebook ids`() {
+        val official = validRules().manifest.rulebooks.single()
+        val manifest = validRules().manifest.copy(rulebooks = listOf(official, official))
+
+        assertValidationFailure("duplicate rulebook ids") { checkManifestWellFormed("test-game", manifest) }
+    }
+
     private fun manifestWith(vararg extra: SpecificityDef): RulesManifest {
         val valid = validRules().manifest
         val replaced = extra.map { it.id }.toSet()
@@ -266,12 +274,17 @@ class RulesContentValidationTest {
         return rules!!
     }
 
-    /** Unique spec/option ids, `requires` targets existing options and stays acyclic, sane numbers. */
+    /** Unique spec/option/rulebook ids, `requires` targets existing options and stays acyclic, sane numbers. */
     private fun checkManifestWellFormed(gameId: String, manifest: RulesManifest) {
         val duplicateSpecs = manifest.specificities.map { it.id }
             .groupingBy { it }.eachCount().filterValues { it > 1 }.keys
         if (duplicateSpecs.isNotEmpty()) {
             invalid(gameId, "duplicate specificity ids $duplicateSpecs")
+        }
+        val duplicateRulebooks = manifest.rulebooks.map { it.id }
+            .groupingBy { it }.eachCount().filterValues { it > 1 }.keys
+        if (duplicateRulebooks.isNotEmpty()) {
+            invalid(gameId, "duplicate rulebook ids $duplicateRulebooks")
         }
         manifest.specificities.forEach { checkSpecificity(gameId, it) }
     }
