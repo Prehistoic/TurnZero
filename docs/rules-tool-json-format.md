@@ -510,8 +510,8 @@ This is a complete, made-up game used to show `number` and `multi` together. Not
 ```json
 {
   "pages": [
-    { "rulebook": "official", "pages": [3, 4], "when": {} },
-    { "rulebook": "river-rules", "pages": [2], "when": { "extensions": "river" } }
+    { "rulebook": "river-rules", "pages": [2], "when": { "extensions": "river" } },
+    { "rulebook": "official", "pages": [3, 4], "when": {} }
   ],
   "steps": [
     { "title": "Lay out the board", "text": ["Place the starting tile face up in the middle of the table."] },
