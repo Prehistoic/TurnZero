@@ -48,11 +48,6 @@ class RulesTurnScreenTest {
                 stepIndex = null
             },
             onOpenStep = { index -> stepIndex = index },
-            onBackToOverview = {
-                phaseIndex = null
-                stepIndex = null
-            },
-            onBackToSteps = { stepIndex = null },
             onNextStep = {
                 val phase = phaseIndex ?: return@TurnStructureScreen
                 val step = stepIndex ?: return@TurnStructureScreen
@@ -94,14 +89,22 @@ class RulesTurnScreenTest {
     }
 
     @Test
-    fun `next advances steps and shows next phase label at boundary`() {
+    fun `phase list shows singular step count`() {
+        composeRule.setContent { TestScreen() }
+
+        composeRule.onNodeWithText("2 steps").assertIsDisplayed()
+        composeRule.onNodeWithText("1 step").assertIsDisplayed()
+    }
+
+    @Test
+    fun `next advances steps and labels the boundary button without the phase name`() {
         composeRule.setContent { TestScreen() }
 
         composeRule.onNodeWithText("A").performClick()
         composeRule.onNodeWithText("a2").performClick()
 
-        composeRule.onNodeWithText("Next: B →").assertIsDisplayed()
-        composeRule.onNodeWithText("Next: B →").performClick()
+        composeRule.onNodeWithText("Next →").assertIsDisplayed()
+        composeRule.onNodeWithText("Next →").performClick()
 
         composeRule.onNodeWithText("Step 1 of 1 · B").assertIsDisplayed()
     }
@@ -130,7 +133,7 @@ class RulesTurnScreenTest {
 
         composeRule.onNodeWithText("A").performClick()
         composeRule.onNodeWithText("a2").performClick()
-        composeRule.onNodeWithText("Next: B →").performClick()
+        composeRule.onNodeWithText("Next →").performClick()
 
         composeRule.onNodeWithText("Step 1 of 1 · B").assertIsDisplayed()
         composeRule.onNodeWithText("Next →").assertIsNotEnabled()
@@ -145,8 +148,6 @@ class RulesTurnScreenTest {
                 stepIndex = null,
                 onOpenPhase = {},
                 onOpenStep = {},
-                onBackToOverview = {},
-                onBackToSteps = {},
                 onNextStep = {},
                 onPreviousStep = {},
             )

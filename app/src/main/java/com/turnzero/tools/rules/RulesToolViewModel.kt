@@ -106,7 +106,11 @@ class RulesToolViewModel @Inject constructor(
         val draft = current.draftSelection ?: return
         val manifest = current.rules?.manifest
         _uiState.update {
-            it.copy(selection = draft, draftSelection = null, showSpecificityDialog = false)
+            it.copy(
+                selection = draft,
+                draftSelection = null,
+                showSpecificityDialog = false,
+            ).resetForSelection()
         }
         viewModelScope.launch {
             dataStore.edit { prefs ->
@@ -168,7 +172,12 @@ class RulesToolViewModel @Inject constructor(
     }
 
     fun openPhase(index: Int) {
-        _uiState.update { it.copy(turnPhaseIndex = index, turnStepIndex = null) }
+        _uiState.update { state ->
+            val steps = state.turnPhases.getOrNull(index)?.steps ?: return@update state
+            // A phase with a single step has no meaningful step list, so open its detail directly.
+            val stepIndex = if (steps.size == 1) 0 else null
+            state.copy(turnPhaseIndex = index, turnStepIndex = stepIndex)
+        }
     }
 
     fun closePhase() {
@@ -181,6 +190,26 @@ class RulesToolViewModel @Inject constructor(
 
     fun closeStep() {
         _uiState.update { it.copy(turnStepIndex = null) }
+    }
+
+    /**
+     * Pops one drill-down level, mirroring the on-screen hierarchy: step detail → step list (for
+     * multi-step phases) → phase list → main panel.
+     */
+    fun back() {
+        val state = _uiState.value
+        if (state.subTool == RuleSubTool.TURN) {
+            val phase = state.turnPhaseIndex?.let { state.turnPhases.getOrNull(it) }
+            if (state.turnStepIndex != null && phase != null && phase.steps.size > 1) {
+                closeStep()
+                return
+            }
+            if (state.turnPhaseIndex != null) {
+                closePhase()
+                return
+            }
+        }
+        closeSubTool()
     }
 
     fun nextStep() {
@@ -286,6 +315,25 @@ class RulesToolViewModel @Inject constructor(
         viewModelScope.launch {
             dataStore.edit { prefs -> prefs[UserPreferences.rulesSubToolKey(gameId)] = id }
         }
+    }
+
+    /**
+     * Drops every drill-down and filter that the new selection may have invalidated, and resolves
+     * the rulebook again, so the open sub-tool looks exactly as it would on a fresh open.
+     */
+    private fun RulesToolUiState.resetForSelection(): RulesToolUiState {
+        val rulebooks = matchingRulebooks
+        val keptRulebook = selectedRulebookId?.takeIf { id -> rulebooks.any { it.id == id } }
+        return copy(
+            turnPhaseIndex = null,
+            turnStepIndex = null,
+            keywordQuery = "",
+            keywordCategory = null,
+            expandedKeywordIndex = null,
+            selectedRulebookId = keptRulebook ?: rulebooks.singleOrNull()?.id,
+            showPdfSelector = keptRulebook == null && rulebooks.size > 1,
+            pdfInitialPage = 0,
+        )
     }
 
     private fun restoreLayout(prefs: Preferences): LayoutMode = try {

@@ -25,7 +25,7 @@
           ]
         },
         {
-          "title": "What you can do during the action phase:",
+          "title": "What you can do during the action phase",
           "bullets": [
             "**Play an action card** — Costs 1 action point + its resource cost. Resolves on the stack, then goes to graveyard.",
             "**Attack with a weapon** — Some weapons have an activated ability to attack. Costs 1 action point + any resource cost.",
@@ -47,7 +47,7 @@
           ]
         },
         {
-          "title": "In order:",
+          "title": "In order",
           "bullets": [
             "**Reset allies' life totals** (if any).",
             "**Arsenal** — You may put one card from your hand face-down into your empty arsenal zone.",

@@ -1,5 +1,6 @@
 package com.turnzero.tools.rules
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.GridView
@@ -16,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,6 +48,8 @@ class RulesTool : Tool {
         val rules = state.rules
         val draft = state.draftSelection
 
+        BackHandler(enabled = subTool != null) { viewModel.back() }
+
         val actionIcon: ImageVector? = when {
             rules == null -> null
             subTool == null -> Icons.Filled.GridView
@@ -66,7 +72,7 @@ class RulesTool : Tool {
         Column(modifier = Modifier.fillMaxSize()) {
             RulesToolTopBar(
                 title = subTool?.title ?: "Rules",
-                onBack = { if (subTool != null) viewModel.closeSubTool() else onBack() },
+                onBack = { if (subTool != null) viewModel.back() else onBack() },
                 pillText = state.specificitySummary,
                 onPillClick = viewModel::openSpecificityDialog,
                 actionIcon = actionIcon,
@@ -96,8 +102,6 @@ class RulesTool : Tool {
                         stepIndex = state.turnStepIndex,
                         onOpenPhase = viewModel::openPhase,
                         onOpenStep = viewModel::openStep,
-                        onBackToOverview = viewModel::closePhase,
-                        onBackToSteps = viewModel::closeStep,
                         onNextStep = viewModel::nextStep,
                         onPreviousStep = viewModel::previousStep,
                     )
@@ -155,9 +159,11 @@ class RulesTool : Tool {
 
         LaunchedEffect(Unit) { viewModel.openSpecificityEditor() }
 
-        ModalBottomSheet(onDismissRequest = onDismiss) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
             Column(
                 modifier = Modifier
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 24.dp, vertical = 16.dp)
                     .padding(bottom = 32.dp),
             ) {

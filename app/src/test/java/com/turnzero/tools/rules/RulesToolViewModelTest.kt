@@ -268,6 +268,114 @@ class RulesToolViewModelTest : TZViewModelTest() {
     }
 
     @Test
+    fun `openPhase opens a single-step phase detail directly`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.TURN)
+        vm.openPhase(1)
+
+        val state = vm.uiState.value
+        assertEquals(1, state.turnPhaseIndex)
+        assertEquals(0, state.turnStepIndex)
+    }
+
+    @Test
+    fun `back from a multi-step detail returns to the step list`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.TURN)
+        vm.openPhase(0)
+        vm.openStep(1)
+
+        vm.back()
+
+        val state = vm.uiState.value
+        assertEquals(RuleSubTool.TURN, state.subTool)
+        assertEquals(0, state.turnPhaseIndex)
+        assertNull(state.turnStepIndex)
+    }
+
+    @Test
+    fun `back from a single-step detail returns to the phase list`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.TURN)
+        vm.openPhase(1)
+
+        vm.back()
+
+        val state = vm.uiState.value
+        assertEquals(RuleSubTool.TURN, state.subTool)
+        assertNull(state.turnPhaseIndex)
+        assertNull(state.turnStepIndex)
+    }
+
+    @Test
+    fun `back from the phase list returns to the main panel`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.TURN)
+        vm.openPhase(0)
+        vm.back()
+        assertNull(vm.uiState.value.turnStepIndex)
+
+        vm.back()
+
+        val state = vm.uiState.value
+        assertNull(state.subTool)
+        assertNull(storedPreferences.value[UserPreferences.rulesSubToolKey(GAME_ID)])
+    }
+
+    @Test
+    fun `confirmSpecificities resets the current subtool to its fresh-open state`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSubTool(RuleSubTool.TURN)
+        vm.openPhase(0)
+        vm.openStep(1)
+        vm.setKeywordQuery("fly")
+        vm.filterKeywordCategory("Combat")
+
+        vm.openSpecificityEditor()
+        vm.selectSpecificityOption("fmt", "commander")
+        vm.confirmSpecificities()
+
+        val state = vm.uiState.value
+        assertNull(state.turnPhaseIndex)
+        assertNull(state.turnStepIndex)
+        assertEquals("", state.keywordQuery)
+        assertNull(state.keywordCategory)
+        assertNull(state.expandedKeywordIndex)
+    }
+
+    @Test
+    fun `confirmSpecificities re-resolves a rulebook hidden by the new selection`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.openSpecificityEditor()
+        vm.selectSpecificityOption("fmt", "commander")
+        vm.confirmSpecificities()
+        vm.openSubTool(RuleSubTool.RULEBOOK)
+        assertTrue(vm.uiState.value.showPdfSelector)
+
+        vm.selectRulebook("commander")
+        vm.openSpecificityEditor()
+        vm.selectSpecificityOption("fmt", "standard")
+        vm.confirmSpecificities()
+
+        val state = vm.uiState.value
+        assertEquals("official", state.selectedRulebookId)
+        assertFalse(state.showPdfSelector)
+        assertEquals(0, state.pdfInitialPage)
+    }
+
+    @Test
     fun `nextStep advances within phase then across phase boundary`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()

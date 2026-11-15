@@ -81,7 +81,7 @@ fun RulesAssetImage(
     }
 }
 
-private fun bulletText(bullet: String): AnnotatedString = buildAnnotatedString {
+internal fun bulletText(bullet: String): AnnotatedString = buildAnnotatedString {
     append("\u2022 ")
     append(parseBoldText(bullet))
 }

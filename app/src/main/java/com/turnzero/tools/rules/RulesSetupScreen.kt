@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -17,12 +19,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.turnzero.core.ui.components.TZEmptyState
+import com.turnzero.core.ui.components.parseBoldText
 
 /** Swipeable carousel of setup steps, one step per page, with page-indicator dots. */
 @Composable
@@ -47,14 +53,17 @@ fun SetupCarousel(steps: List<RuleItem>, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = "${page + 1}.",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.displayLarge,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                RulesItemContent(steps[page])
+                Spacer(Modifier.height(24.dp))
+                SetupStepContent(item = steps[page])
             }
         }
         StepDots(
@@ -62,6 +71,47 @@ fun SetupCarousel(steps: List<RuleItem>, modifier: Modifier = Modifier) {
             current = pagerState.currentPage,
             modifier = Modifier.padding(vertical = 12.dp),
         )
+    }
+}
+
+/**
+ * One setup step, laid out for the carousel: the title is centred above the content, and every
+ * paragraph gets its own breathing room instead of the compact list spacing used elsewhere.
+ */
+@Composable
+private fun SetupStepContent(item: RuleItem, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item.title?.let { title ->
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        if (item.text.isNotEmpty() || item.bullets.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                item.text.forEach { paragraph ->
+                    Text(
+                        text = remember(paragraph) { parseBoldText(paragraph) },
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+                item.bullets.forEach { bullet ->
+                    Text(
+                        text = remember(bullet) { bulletText(bullet) },
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+        }
+        item.image?.let { assetPath ->
+            RulesAssetImage(assetPath = assetPath)
+        }
     }
 }
 

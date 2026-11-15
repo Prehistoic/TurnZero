@@ -55,7 +55,7 @@
           ]
         },
         {
-          "title": "Once per turn:",
+          "title": "Once per turn",
           "bullets": [
             "**Normal Summon** a monster in face-up Attack Position",
             "**Set** a monster in face-down Defense Position",
@@ -65,7 +65,7 @@
           ]
         },
         {
-          "title": "As many times as you want:",
+          "title": "As many times as you want",
           "bullets": [
             "**Special Summon** monsters (Fusion, Ritual, or by card effects)",
             "**Flip Summon** a face-down monster to face-up Attack Position",
@@ -87,7 +87,7 @@
           ]
         },
         {
-          "title": "Once per turn:",
+          "title": "Once per turn",
           "bullets": [
             "**Normal Summon** a monster in face-up Attack Position",
             "**Set** a monster in face-down Defense Position",
@@ -97,7 +97,7 @@
           ]
         },
         {
-          "title": "As many times as you want:",
+          "title": "As many times as you want",
           "bullets": [
             "**Special Summon** monsters (Fusion, Ritual, Synchro, or by card effects)",
             "**Flip Summon** a face-down monster to face-up Attack Position",
@@ -119,7 +119,7 @@
           ]
         },
         {
-          "title": "Once per turn:",
+          "title": "Once per turn",
           "bullets": [
             "**Normal Summon** a monster in face-up Attack Position",
             "**Set** a monster in face-down Defense Position",
@@ -129,7 +129,7 @@
           ]
         },
         {
-          "title": "As many times as you want:",
+          "title": "As many times as you want",
           "bullets": [
             "**Special Summon** monsters (Fusion, Ritual, Synchro, Xyz, or by card effects)",
             "**Flip Summon** a face-down monster to face-up Attack Position",
@@ -151,7 +151,7 @@
           ]
         },
         {
-          "title": "Once per turn:",
+          "title": "Once per turn",
           "bullets": [
             "**Normal Summon** a monster in face-up Attack Position",
             "**Set** a monster in face-down Defense Position",
@@ -162,7 +162,7 @@
           ]
         },
         {
-          "title": "As many times as you want:",
+          "title": "As many times as you want",
           "bullets": [
             "**Special Summon** monsters (Fusion, Ritual, Synchro, Xyz, or by card effects)",
             "**Flip Summon** a face-down monster to face-up Attack Position",
@@ -184,7 +184,7 @@
           ]
         },
         {
-          "title": "Once per turn:",
+          "title": "Once per turn",
           "bullets": [
             "**Normal Summon** a monster in face-up Attack Position",
             "**Set** a monster in face-down Defense Position",
@@ -195,7 +195,7 @@
           ]
         },
         {
-          "title": "As many times as you want:",
+          "title": "As many times as you want",
           "text": [
             "**Important:** Monsters Summoned from the Extra Deck must go to the Extra Monster Zone or a Main Monster Zone a Link Monster points to. Pendulum Summons from the Extra Deck follow this rule; from the hand, they go to any Main Monster Zone."
           ],
@@ -221,19 +221,19 @@
           ]
         },
         {
-          "title": "Start Step:",
+          "title": "Start Step",
           "text": [
             "Announce you are entering the Battle Phase."
           ]
         },
         {
-          "title": "Battle Step:",
+          "title": "Battle Step",
           "text": [
             "Select 1 Attack Position monster to attack with and 1 target. Each Attack Position monster can declare 1 attack per turn. If your opponent controls no monsters, you may attack directly."
           ]
         },
         {
-          "title": "Damage Step:",
+          "title": "Damage Step",
           "text": [
             "Calculate battle damage. Only Counter Traps and ATK/DEF-modifying effects may be activated here, and only before damage calculation."
           ],
@@ -244,13 +244,13 @@
           ]
         },
         {
-          "title": "Replay:",
+          "title": "Replay",
           "text": [
             "If the attack target leaves the field before the Damage Step, you may re-select a target or cancel the attack."
           ]
         },
         {
-          "title": "End Step:",
+          "title": "End Step",
           "text": [
             "Announce the end of your Battle Phase."
           ]

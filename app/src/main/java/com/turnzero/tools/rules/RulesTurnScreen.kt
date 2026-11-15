@@ -31,10 +31,7 @@ import com.turnzero.core.ui.components.TZEmptyState
 /**
  * Turn structure drill-down: phase list, then the selected phase's step list, then one step's
  * content with previous/next navigation. Purely stateless — the drill-down position is passed in
- * and every navigation intent is reported up.
- *
- * [onBackToOverview] and [onBackToSteps] are not rendered here: the tool's top bar owns the back
- * affordance, but both are part of the screen's contract.
+ * and every navigation intent is reported up. The back affordance lives in the tool's top bar.
  */
 @Composable
 fun TurnStructureScreen(
@@ -43,8 +40,6 @@ fun TurnStructureScreen(
     stepIndex: Int?,
     onOpenPhase: (Int) -> Unit,
     onOpenStep: (Int) -> Unit,
-    onBackToOverview: () -> Unit,
-    onBackToSteps: () -> Unit,
     onNextStep: () -> Unit,
     onPreviousStep: () -> Unit,
     modifier: Modifier = Modifier,
@@ -124,7 +119,7 @@ private fun PhaseList(
                             fontWeight = FontWeight.SemiBold,
                         )
                         Text(
-                            text = "${phase.steps.size} steps",
+                            text = stepCountLabel(phase.steps.size),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -192,11 +187,6 @@ private fun StepDetail(
     val isFirstStep = phaseIndex == 0 && stepIndex == 0
     val isLastStepOfLastPhase =
         phaseIndex == phases.lastIndex && stepIndex == phase.steps.lastIndex
-    val nextLabel = if (stepIndex == phase.steps.lastIndex && phaseIndex < phases.lastIndex) {
-        "Next: ${phases[phaseIndex + 1].name} →"
-    } else {
-        "Next →"
-    }
 
     Column(modifier = modifier.fillMaxSize()) {
         Column(
@@ -232,8 +222,10 @@ private fun StepDetail(
                 enabled = !isLastStepOfLastPhase,
                 modifier = Modifier.weight(1f),
             ) {
-                Text(nextLabel)
+                Text("Next →")
             }
         }
     }
 }
+
+private fun stepCountLabel(count: Int): String = if (count == 1) "1 step" else "$count steps"

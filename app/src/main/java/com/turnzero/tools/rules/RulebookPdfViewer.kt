@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
+import com.turnzero.core.ui.components.TZEmptyState
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.abs
@@ -49,6 +50,7 @@ fun RulebookPdfViewer(
     val pdfState = remember { mutableStateOf<RulebookPdfState?>(null) }
     var pageCount by remember { mutableIntStateOf(0) }
     var currentPage by remember(assetPath) { mutableIntStateOf(initialPage.coerceAtLeast(0)) }
+    var renderFailed by remember(assetPath) { mutableStateOf(false) }
 
     DisposableEffect(cachedPath) {
         val path = cachedPath ?: return@DisposableEffect onDispose {}
@@ -57,7 +59,9 @@ fun RulebookPdfViewer(
             val renderer = PdfRenderer(fd)
             pdfState.value = RulebookPdfState(renderer, fd)
             pageCount = renderer.pageCount
-        } catch (_: Exception) { }
+        } catch (_: Exception) {
+            renderFailed = true
+        }
         onDispose {
             pdfState.value?.renderer?.close()
             pdfState.value?.fd?.close()
@@ -93,6 +97,18 @@ fun RulebookPdfViewer(
     var showPageDialog by remember { mutableStateOf(false) }
     var pageInput by remember { mutableStateOf("") }
     var pageInputError by remember { mutableStateOf(false) }
+
+    val loadState = rulebookLoadState(cachedPath, pageCount, renderFailed)
+    if (loadState != RulebookLoadState.READY) {
+        if (loadState == RulebookLoadState.FAILED) {
+            TZEmptyState(message = "Couldn't open the rulebook", modifier = modifier)
+        } else {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        return
+    }
 
     val goToPage = {
         val num = pageInput.toIntOrNull()
@@ -235,6 +251,19 @@ private data class RulebookPdfState(
     val renderer: PdfRenderer,
     val fd: ParcelFileDescriptor,
 )
+
+/** What the viewer can render right now; [READY] needs an opened renderer with at least one page. */
+internal enum class RulebookLoadState { LOADING, READY, FAILED }
+
+internal fun rulebookLoadState(
+    cachedPath: String?,
+    pageCount: Int,
+    renderFailed: Boolean,
+): RulebookLoadState = when {
+    renderFailed || cachedPath == null -> RulebookLoadState.FAILED
+    pageCount > 0 -> RulebookLoadState.READY
+    else -> RulebookLoadState.LOADING
+}
 
 private fun copyRulebookAssetToCache(context: Context, assetPath: String): String? {
     return try {
