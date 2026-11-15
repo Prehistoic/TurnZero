@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-11-15
+
+### Added
+- Rules tool revamp: sub-tool panel (Setup, Turn Structure, Win Condition, Keywords, Rulebook) with grid/list layouts
+- Per-game specificities: Format for card games, Player Count and ordered Extensions for board games, selectable on first open and from Options, always visible in the top bar
+- JSON-driven rules content with parameter-aware `when` conditions and per-tool rulebook page jump buttons
+- Rules tool remembers the last opened sub-tool for each game, including across app restarts
+
+### Changed
+- Rules content migrated from hardcoded Kotlin to per-game JSON assets
+- Deck and Field sections folded into Setup
+
+### Removed
+- Legacy Rules tabs (Setup/Turn/Victory/Deck/Field/Keywords) and format visibility controls
+
 ## [0.20.5] - 2026-11-14
 
 ### Fixed
