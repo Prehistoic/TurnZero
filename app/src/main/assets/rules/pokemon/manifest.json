@@ -1,0 +1,11 @@
+{
+  "specificities": [],
+  "rulebooks": [
+    {
+      "id": "official",
+      "name": "Official Rulebook",
+      "asset": "rulebooks/pokemon-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}

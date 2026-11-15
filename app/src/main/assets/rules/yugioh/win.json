@@ -1,0 +1,22 @@
+{
+  "winConditions": [
+    {
+      "title": "Reduce LP to 0",
+      "text": [
+        "Each player starts with 8000 Life Points. Reduce your opponent's LP to 0 through battle damage and effect damage to win."
+      ]
+    },
+    {
+      "title": "Deck Out",
+      "text": [
+        "If a player is unable to draw a card from their Main Deck when required, they lose the Duel."
+      ]
+    },
+    {
+      "title": "Alternative Win Conditions",
+      "text": [
+        "Some cards have effects that declare an automatic win when their conditions are met (e.g., Exodia the Forbidden One, Final Countdown)."
+      ]
+    }
+  ]
+}

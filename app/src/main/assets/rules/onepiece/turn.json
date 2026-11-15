@@ -1,0 +1,146 @@
+{
+  "phases": [
+    {
+      "name": "Refresh Phase",
+      "steps": [
+        {
+          "title": "Refresh Phase",
+          "text": [
+            "Set all your rested cards to active (upright). Return all DON!! cards attached to your Leader and Characters back to your cost area, rested.",
+            "Set all your rested cards in your Leader area, Character area, Stage area, and cost area to the active (upright) position.",
+            "All DON!! cards that were given to (attached to) your Leader and Character cards are returned to your cost area and become rested.",
+            "Effects that last \"until the start of your next turn\" expire now."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Draw Phase",
+      "steps": [
+        {
+          "title": "Draw Phase",
+          "text": [
+            "Draw 1 card from the top of your deck. The first player skips this draw on their very first turn.",
+            "Draw 1 card from the top of your deck and add it to your hand.",
+            "The player going first does not draw a card on their first turn of the game. A card must be drawn in all subsequent draw phases for both players."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DON!! Phase",
+      "steps": [
+        {
+          "title": "DON!! Phase",
+          "text": [
+            "Place DON!! cards face-up from your DON!! deck into your cost area: 2 normally, or only 1 on your first turn.",
+            "Normally, take 2 DON!! cards from your DON!! deck and place them face-up in your cost area, set to active.",
+            "On your very first turn, only place 1 DON!! card instead.",
+            "If your DON!! deck has fewer cards than required, place as many as you can. If your DON!! deck is empty, place nothing.",
+            "DON!! cards in your cost area are your primary resource — you rest them to pay for cards and you can attach them to Characters for +1000 power each during your turn."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Main Phase",
+      "steps": [
+        {
+          "title": "Main Phase",
+          "text": [
+            "Play cards, activate effects, give DON!! to Characters, and battle — any number of times, in any order you choose."
+          ]
+        },
+        {
+          "title": "Play Cards",
+          "text": [
+            "Pay a card's cost by resting that many active DON!! cards in your cost area:"
+          ],
+          "bullets": [
+            "**Play a Character card** — Pay its cost, then place it active in your Character area. You can have a maximum of 5 Characters; if your area is full, you must trash one existing Character first. Characters cannot attack the turn they are played (unless they have [Rush]).",
+            "**Play a Stage card** — Pay its cost, then place it active in your Stage area. You can only have 1 Stage card at a time; if you already have one, trash it before playing the new one. Stages provide ongoing effects while on the field.",
+            "**Play an Event card [Main]** — Reveal the card, pay its cost, resolve its effect, then trash it. Event cards are one-time effects that go to the trash after use."
+          ]
+        },
+        {
+          "title": "Activate Card Effects",
+          "text": [
+            "Use effects marked [Activate: Main] on your Leader, Characters, or Stages. Pay any listed activation costs. You can do this before, after, or between battles."
+          ]
+        },
+        {
+          "title": "Give DON!! Cards",
+          "text": [
+            "Take 1 active DON!! card from your cost area and place it under your Leader or one of your Character cards. Each DON!! card attached this way gives that card +1000 power during your turn.",
+            "You can do this as many times as you have active DON!! cards available. Attached DON!! cards return to your cost area (rested) at the start of your next Refresh Phase."
+          ]
+        },
+        {
+          "title": "Battle",
+          "text": [
+            "Neither player can attack on their first turn. A battle follows these 5 steps in strict order:"
+          ]
+        },
+        {
+          "title": "1. Attack Declaration",
+          "bullets": [
+            "Rest (turn sideways) one of your active Leaders or Characters and declare your attack.",
+            "Choose your target: the opponent's Leader, or one of their rested Characters.",
+            "[When Attacking] and [On Your Opponent's Attack] effects trigger and activate now."
+          ]
+        },
+        {
+          "title": "2. Block Step",
+          "bullets": [
+            "The defending player may rest one of their Characters with [Blocker] to redirect the attack to that Blocker instead of the original target.",
+            "Only one Blocker can be activated per battle. [On Block] effects trigger if a Blocker is used."
+          ]
+        },
+        {
+          "title": "3. Counter Step",
+          "bullets": [
+            "The defending player may play Event cards with [Counter] from their hand by paying their cost.",
+            "They may also trash Character cards with a Counter value from their hand to boost their Leader's or a Character's power by that value for this battle only.",
+            "These actions can be performed in any order, as many times as the defending player wishes."
+          ]
+        },
+        {
+          "title": "4. Damage Step",
+          "bullets": [
+            "Compare the attacking card's power to the defending card's power.",
+            "If the attacker's power is greater than or equal to the defender's — the battle is won:",
+            "  - Against a Leader: Deal 1 damage. If the opponent has 0 Life cards after the damage, you win the game immediately.",
+            "  - Against a Character: That Character is K.O.'d and sent to the trash.",
+            "If the attacker's power is lower than the defender's — the battle is lost and nothing happens. No counter-damage is dealt."
+          ]
+        },
+        {
+          "title": "5. End of Battle",
+          "text": [
+            "Declare the end of your Main Phase to proceed to the End Phase."
+          ],
+          "bullets": [
+            "End-of-battle effects trigger and resolve.",
+            "All effects that last \"during this battle\" expire.",
+            "Return to the Main Phase — you may continue attacking with other Characters or performing other actions."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "End Phase",
+      "steps": [
+        {
+          "title": "End Phase",
+          "text": [
+            "Resolve all end-of-turn effects in order: first [End of Your Turn], then [End of Your Opponent's Turn]. All \"during this turn\" effects expire.",
+            "[End of Your Turn] effects activate and resolve — the turn player chooses the order if multiple effects trigger.",
+            "[End of Your Opponent's Turn] effects then activate and resolve — the non-turn player chooses the order.",
+            "Effects that last \"during this turn\" or \"until the end of the turn\" expire now.",
+            "Your turn ends and your opponent's turn begins with their Refresh Phase."
+          ]
+        }
+      ]
+    }
+  ]
+}

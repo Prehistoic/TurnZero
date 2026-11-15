@@ -1,0 +1,124 @@
+{
+  "steps": [
+    {
+      "title": "Shuffle & Cut",
+      "text": [
+        "Both players shuffle their decks, then the opponent may cut.",
+        "Each player shuffles their own deck thoroughly. After shuffling, present your deck to your opponent.",
+        "Your opponent may then shuffle or cut your deck (be careful when touching your opponent's cards)."
+      ]
+    },
+    {
+      "title": "Determine First Turn",
+      "text": [
+        "Decide who goes first using rock-paper-scissors or a coin flip.",
+        "The winner chooses to go first or second. For subsequent Duels, the loser of the previous Duel decides who goes first.",
+        "If the previous Duel ended in a tie, determine with another random method.",
+        "**The player who goes first does draw during their first Draw Phase** (starting with 6 cards after drawing).",
+        "The player who goes first cannot conduct a Battle Phase during their very first turn."
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx", "v7-5ds", "v8-zexal"] } }
+    },
+    {
+      "title": "Determine First Turn",
+      "text": [
+        "Decide who goes first using rock-paper-scissors or a coin flip.",
+        "The winner chooses to go first or second. For subsequent Duels, the loser of the previous Duel decides who goes first.",
+        "If the previous Duel ended in a tie, determine with another random method.",
+        "**The player who goes first does not draw during their first Draw Phase**.",
+        "The player who goes first cannot conduct a Battle Phase during their very first turn."
+      ],
+      "when": { "format": { "or": ["v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "title": "Draw Starting Hand",
+      "text": [
+        "Each player draws 5 cards from the top of their Deck.",
+        "Both players draw 5 cards from the top of their Main Deck. This is your starting hand before the first Draw Phase."
+      ]
+    },
+    {
+      "title": "Deck — Main Deck",
+      "text": [
+        "Minimum 40 cards (no upper limit).",
+        "Max 3 copies of any card (Main Deck + Side Deck combined)."
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx"] } }
+    },
+    {
+      "title": "Deck — Fusion Deck",
+      "text": [
+        "Contains only Fusion Monsters.",
+        "No size limit — you may include as many Fusion Monsters as you want.",
+        "Cards in the Fusion Deck are not counted toward the 40-card minimum.",
+        "Max 3 copies of the same card."
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx"] } }
+    },
+    {
+      "title": "Deck — Side Deck",
+      "text": [
+        "Exactly 15 cards.",
+        "Swap cards between Side Deck and Main Deck between Duels in a Match.",
+        "Must remain exactly 15 cards after swapping."
+      ],
+      "when": { "format": { "or": ["v5-dm", "v6-gx"] } }
+    },
+    {
+      "title": "Deck — Main Deck",
+      "text": [
+        "40 to 60 cards.",
+        "Max 3 copies of any card (Main Deck + Extra Deck + Side Deck combined)."
+      ],
+      "when": { "format": { "or": ["v7-5ds", "v8-zexal", "v9-arcv", "v10-vrains"] } }
+    },
+    {
+      "title": "Deck — Extra Deck",
+      "text": [
+        "0 to 15 cards.",
+        "Contains Synchro Monsters and Fusion Monsters.",
+        "Not counted toward the 40-card minimum."
+      ],
+      "when": { "format": "v7-5ds" }
+    },
+    {
+      "title": "Deck — Extra Deck",
+      "text": [
+        "0 to 15 cards.",
+        "Contains Xyz Monsters, Synchro Monsters, and Fusion Monsters."
+      ],
+      "when": { "format": "v8-zexal" }
+    },
+    {
+      "title": "Deck — Extra Deck",
+      "text": [
+        "0 to 15 cards.",
+        "Contains Pendulum Monsters (face-up), Xyz, Synchro, and Fusion Monsters."
+      ],
+      "when": { "format": "v9-arcv" }
+    },
+    {
+      "title": "Deck — Extra Deck",
+      "text": [
+        "0 to 15 cards.",
+        "Contains Link Monsters, Pendulum Monsters (face-up), Xyz, Synchro, and Fusion Monsters."
+      ],
+      "when": { "format": "v10-vrains" }
+    },
+    {
+      "title": "Deck — Side Deck",
+      "text": [
+        "0 to 15 cards.",
+        "Swap cards between Side Deck, Main Deck, and Extra Deck between Duels."
+      ],
+      "when": { "format": "v7-5ds" }
+    },
+    {
+      "title": "Deck — Side Deck",
+      "text": [
+        "0 to 15 cards."
+      ],
+      "when": { "format": { "or": ["v8-zexal", "v9-arcv", "v10-vrains"] } }
+    }
+  ]
+}

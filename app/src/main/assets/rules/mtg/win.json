@@ -1,0 +1,75 @@
+{
+  "winConditions": [
+    {
+      "title": "Reduce Life to 0",
+      "text": [
+        "Each player starts with 20 life (40 for Commander). Reduce your opponent's life to 0 through combat damage, spell effects, or abilities to win."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Reduce Life to 0",
+      "text": [
+        "Each player starts with 40 life. Reduce each opponent's life to 0 through combat damage, spell effects, or abilities to win."
+      ],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    },
+    {
+      "title": "Empty Library",
+      "text": [
+        "If a player is required to draw a card but has no cards remaining in their library, they lose the game."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Empty Library",
+      "text": [
+        "If a player is required to draw a card but has no cards remaining, they lose."
+      ],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    },
+    {
+      "title": "Poison Counters",
+      "text": ["A player who receives 10 or more poison counters loses the game."],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Poison Counters",
+      "text": ["A player who receives 10 or more poison counters loses the game."],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    },
+    {
+      "title": "Commander Damage",
+      "text": [
+        "If a player is dealt 21 or more combat damage by a single commander over the course of the game, that player loses. Damage is tracked per commander."
+      ],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    },
+    {
+      "title": "Alternative Conditions",
+      "text": [
+        "Some cards have effects that declare an automatic win (e.g., Approach of the Second Sun, Thassa's Oracle, Laboratory Maniac)."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Alternative Conditions",
+      "text": ["Some cards have effects that declare an automatic win."],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "Either player may concede at any time. Announce your concession and you lose immediately."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "Either player may concede at any time. Announce your concession and you lose immediately."
+      ],
+      "when": { "format": { "or": ["commander", "duel-commander"] } }
+    }
+  ]
+}

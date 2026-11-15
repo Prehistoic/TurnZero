@@ -283,29 +283,33 @@ fun TZNavHost(
                         onOpenOptions = { mainViewModel.showToolOptions(true) }
                     )
                 ) {
-                    Column {
-                        TZTopBar(
-                            title = tool.name,
-                            showBackButton = true,
-                            onBackClick = { navController.popBackStack() },
-                            actions = tool.TopBarActions(),
-                            modifier = if (currentTool?.showBottomBar == false)
-                                Modifier.padding(horizontal = 0.dp)
-                            else
-                                Modifier
-                        )
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth()
-                                .then(
-                                    if (currentTool?.showBottomBar == false)
-                                        Modifier.padding(horizontal = 0.dp)
-                                    else
-                                        Modifier
-                                )
-                        ) {
-                            tool.Screen(onBack = { navController.popBackStack() })
+                    if (tool.providesOwnTopBar) {
+                        tool.Screen(onBack = { navController.popBackStack() })
+                    } else {
+                        Column {
+                            TZTopBar(
+                                title = tool.name,
+                                showBackButton = true,
+                                onBackClick = { navController.popBackStack() },
+                                actions = tool.TopBarActions(),
+                                modifier = if (currentTool?.showBottomBar == false)
+                                    Modifier.padding(horizontal = 0.dp)
+                                else
+                                    Modifier
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth()
+                                    .then(
+                                        if (currentTool?.showBottomBar == false)
+                                            Modifier.padding(horizontal = 0.dp)
+                                        else
+                                            Modifier
+                                    )
+                            ) {
+                                tool.Screen(onBack = { navController.popBackStack() })
+                            }
                         }
                     }
                 }

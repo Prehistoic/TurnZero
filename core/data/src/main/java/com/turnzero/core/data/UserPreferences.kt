@@ -3,6 +3,8 @@ package com.turnzero.core.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -29,8 +31,20 @@ object UserPreferences {
     val LIFE_COUNTER_STARTING_LP = stringPreferencesKey("life_counter_starting_lp")
     val RULINGS_ENABLED_FORMATS = stringSetPreferencesKey("rulings_enabled_formats")
     val RULINGS_DEFAULT_FORMAT = stringPreferencesKey("rulings_default_format")
-    val RULES_DEFAULT_RULESET = stringPreferencesKey("rules_default_ruleset")
-    val RULES_ENABLED_RULESETS = stringSetPreferencesKey("rules_enabled_rulesets")
+    val RULES_LAYOUT = stringPreferencesKey("rules_layout")
+
+    fun rulesSpecStringKey(gameId: String, specId: String) =
+        stringPreferencesKey("rules_spec_string_${gameId}_$specId")
+
+    fun rulesSpecIntKey(gameId: String, specId: String) =
+        intPreferencesKey("rules_spec_int_${gameId}_$specId")
+
+    fun rulesSpecSetKey(gameId: String, specId: String) =
+        stringSetPreferencesKey("rules_spec_set_${gameId}_$specId")
+
+    fun rulesConfiguredKey(gameId: String) = booleanPreferencesKey("rules_configured_$gameId")
+
+    fun rulesSubToolKey(gameId: String) = stringPreferencesKey("rules_subtool_$gameId")
 
     fun coinCountKey(gameId: String) = stringPreferencesKey("coin_count_$gameId")
 }

@@ -1,0 +1,245 @@
+{
+  "steps": [
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Randomly determine who goes first. The winner chooses to play or draw.",
+        "Use any mutually agreeable random method (dice roll, coin flip). The winner decides whether to play first or draw first."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Shuffle & Draw",
+      "text": [
+        "Each player shuffles their library and draws 7 cards as their opening hand.",
+        "Thoroughly randomize your deck. Your opponent may shuffle or cut it after you finish.",
+        "Both players draw 7 cards from the top of their library."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Mulligan (London Mulligan)",
+      "text": [
+        "Draw 7 each time. After keeping, put 1 card on the bottom of your library for each mulligan taken.",
+        "Starting with the first player, each player may declare a mulligan: shuffle your hand back into your library and draw 7 new cards.",
+        "After you keep a hand, put 1 card from it on the bottom of your library for each mulligan you took. You may mulligan as many times as you want."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Choose Your Commander",
+      "text": [
+        "Each player reveals their legendary creature commander and places it in the command zone.",
+        "Your commander must be a legendary creature (or a planeswalker allowed by the rules). It starts in the command zone, not in your library.",
+        "Your deck's color identity is determined by all mana symbols in your commander's mana cost and rules text. Every card in your 99-card library must fall within this color identity."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Determine Turn Order",
+      "text": [
+        "Randomly determine seating. The first player chooses the direction of play.",
+        "Commander is typically played with 4 players. Determine seating randomly, then the player going first chooses whether play proceeds clockwise or counterclockwise.",
+        "Each player starts with 40 life. Commander damage is tracked separately for each commander (21+ combat damage from a single commander = loss)."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Shuffle & Draw",
+      "text": [
+        "Shuffle your 99-card library. Draw 7 cards, then take mulligans as desired.",
+        "Thoroughly shuffle your deck. Opponents may cut. Draw 7 cards. London Mulligan applies: shuffle back, draw 7 again, bottom 1 card per mulligan taken."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Choose Your Commander",
+      "text": [
+        "Each player reveals their legendary creature (or planeswalker) commander and places it in the command zone.",
+        "Duel Commander uses the same color identity rules as regular Commander. Your commander starts in the command zone. Both players start with 20 life."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Randomly determine who goes first. The winner chooses to play or draw.",
+        "Use any mutually agreeable random method. The winner decides whether to play first or draw first."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "title": "Shuffle & Draw",
+      "text": [
+        "Shuffle your 99-card library. Draw 7 cards. London Mulligan: shuffle back, draw 7, bottom 1 per mulligan.",
+        "Thoroughly shuffle your deck. Draw 7. Mulligan as many times as you want, bottoming 1 card per mulligan."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "The most recent 3 years of premiere Standard-legal Magic sets. Older sets rotate out annually."
+      ],
+      "when": { "format": "standard" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "All sets from Eighth Edition (July 2003) forward, plus Modern Horizons sets. Does not rotate."
+      ],
+      "when": { "format": "modern" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "All sets from Return to Ravnica (October 2012) forward. Non-rotating format between Standard and Modern."
+      ],
+      "when": { "format": "pioneer" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "All Magic sets ever printed. Has its own banned list separate from other formats. No restricted list."
+      ],
+      "when": { "format": "legacy" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "All Magic sets ever printed. Uses a Restricted List — restricted cards are limited to 1 copy instead of 4. Only format with restricted cards."
+      ],
+      "when": { "format": "vintage" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "Sets from Fourth Edition and Ice Age (1995) through Scourge (2003). Community-run format focused on the pre-Modern era."
+      ],
+      "when": { "format": "premodern" }
+    },
+    {
+      "title": "Deck — Card Pool",
+      "text": [
+        "Only cards printed at common rarity in any Magic set or product. If a card was ever common, all versions are legal."
+      ],
+      "when": { "format": "pauper" }
+    },
+    {
+      "title": "Deck — Deck Size",
+      "text": [
+        "Minimum 60 cards, no maximum."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Deck — Card Limit",
+      "text": [
+        "Max 4 copies of any card with the same English name. Basic lands (Plains, Island, Swamp, Mountain, Forest) are unlimited. Cards that override this (like Relentless Rats) take precedence."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Deck — Sideboard",
+      "text": [
+        "Up to 15 cards. After game 1, swap cards on a 1-for-1 basis. Deck must stay at least 60 cards after sideboarding."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "title": "Deck — Deck Size",
+      "text": [
+        "Exactly 100 cards including your commander. 99 cards in the library + 1 commander in the command zone."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Deck — Singleton",
+      "text": [
+        "Only 1 copy of any card except basic lands or cards that specifically say otherwise."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Deck — Commander",
+      "text": [
+        "1 legendary creature as your commander. Starts in the command zone. Color identity = all mana symbols on your commander — every card must match.",
+        "Cast from command zone any time you could cast a sorcery. Commander tax: +2 generic mana per previous cast from command zone."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Deck — Starting Life",
+      "text": [
+        "40 life. 21+ combat damage from a single commander = loss, tracked per commander."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "title": "Deck — Deck Size",
+      "text": [
+        "Exactly 100 cards including commander. Singleton: 1 copy per card except basic lands."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "title": "Deck — Commander",
+      "text": [
+        "1 legendary creature or planeswalker (per banlist). Color identity rules same as Commander. Commander tax: +2 per recast."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "title": "Deck — Starting Life",
+      "text": [
+        "20 life. 21 commander damage rule applies. 1v1 format with a separate banlist from multiplayer Commander."
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "image": "rulebooks/images/mtg-field.png",
+      "text": [
+        "**Battlefield (Standard)**"
+      ],
+      "bullets": [
+        "**Library** — Your draw pile, face-down.",
+        "**Hand** — Cards you hold. Hidden. Max 7 at end of turn.",
+        "**Battlefield** — Permanents (creatures, lands, artifacts, enchantments, planeswalkers). Each player has their own side.",
+        "**Graveyard** — Discard pile, face-up. Public information.",
+        "**Exile** — Removed-from-game zone.",
+        "**Stack** — Spells and abilities wait to resolve here. Last-in, first-out."
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "text": [
+        "**Battlefield (Commander, 4 Players)**"
+      ],
+      "bullets": [
+        "**Library** — 99-card draw pile.",
+        "**Hand** — Hidden. Max 7 at cleanup.",
+        "**Battlefield** — All 4 players share the battlefield with their own sides.",
+        "**Graveyard** — Discard pile, face-up.",
+        "**Exile** — Removed-from-game zone.",
+        "**Stack** — Spells/abilities resolve LIFO.",
+        "**Command Zone** — Commander starts here. Cast from here with commander tax (+2 per recast)."
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "text": [
+        "**Battlefield (Duel Commander, 1v1)**"
+      ],
+      "bullets": [
+        "**Library** — 99-card draw pile.",
+        "**Hand** — Hidden. Max 7 at cleanup.",
+        "**Battlefield** — 1v1, each player has their own side.",
+        "**Graveyard** — Discard pile, face-up.",
+        "**Exile** — Removed-from-game zone.",
+        "**Stack** — Spells/abilities resolve LIFO.",
+        "**Command Zone** — Commander starts here. Commander tax applies. 20 starting life."
+      ],
+      "when": { "format": "duel-commander" }
+    }
+  ]
+}

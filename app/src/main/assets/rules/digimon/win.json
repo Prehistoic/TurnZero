@@ -1,0 +1,31 @@
+{
+  "winConditions": [
+    {
+      "title": "Attack With Zero Security",
+      "text": [
+        "When your Digimon attacks your opponent directly and their security stack has 0 cards, your attack is successful and you win the game.",
+        "This is the primary win condition — reduce the opponent's security to zero, then land one more attack."
+      ]
+    },
+    {
+      "title": "Empty Deck",
+      "text": [
+        "If a player has 0 cards in their deck and cannot draw during their draw phase, they lose the game.",
+        "This is checked continuously — once a player's deck runs out, they meet a defeat condition."
+      ]
+    },
+    {
+      "title": "Card Effect",
+      "text": [
+        "Some card effects can cause a player to win or lose the game. When such an effect resolves, the game ends accordingly."
+      ]
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "Either player may declare a forfeit at any time. The conceding player immediately loses.",
+        "A forfeit is never forced and effects don't trigger for a loss by forfeit."
+      ]
+    }
+  ]
+}

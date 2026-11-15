@@ -16,8 +16,8 @@ android {
         applicationId = "com.turnzero"
         minSdk = 28
         targetSdk = 37
-        versionCode = 42
-        versionName = "0.20.5"
+        versionCode = 43
+        versionName = "0.21.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -39,6 +39,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug builds are signed with the local debug key while releases are signed with the
+            // CI keystore, so they cannot share an app id. The suffix lets both stay installed:
+            // a release APK can be tested next to the Android Studio build.
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true

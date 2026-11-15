@@ -1,0 +1,17 @@
+{
+  "winConditions": [
+    {
+      "title": "Reduce Opponent's Life to 0",
+      "text": [
+        "Each hero starts with a life total shown on their card. Deal enough damage to reduce the opponent's life to 0 and you win.",
+        "If both players' life totals are reduced to 0 simultaneously, the game is a draw."
+      ]
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "You may concede at any time. Announce your concession and you lose immediately."
+      ]
+    }
+  ]
+}

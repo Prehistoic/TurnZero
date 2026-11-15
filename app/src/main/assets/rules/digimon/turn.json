@@ -1,0 +1,154 @@
+{
+  "phases": [
+    {
+      "name": "Unsuspend Phase",
+      "steps": [
+        {
+          "title": "Unsuspend Phase",
+          "text": [
+            "Set all your suspended cards back to unsuspended (vertical). [Start of Turn] effects trigger first.",
+            "Set all your suspended cards in the battle area and breeding area to the unsuspended (vertical) position. Cards don't need to be unsuspended in any particular order.",
+            "[Start of Your Turn] effects trigger and resolve before any cards are unsuspended. If the turn end conditions are met after these effects resolve, the turn ends before unsuspending occurs.",
+            "A Digimon with <Reboot> also unsuspends during your opponent's unsuspend phase."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Draw Phase",
+      "steps": [
+        {
+          "title": "Draw Phase",
+          "text": [
+            "Draw 1 card from your deck. The first player skips this on their very first turn.",
+            "Draw 1 card from the top of your deck and add it to your hand.",
+            "The player going first does not draw a card on their first turn of the game. A card must be drawn in all subsequent draw phases for both players."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Breeding Phase",
+      "steps": [
+        {
+          "title": "Breeding Phase",
+          "text": [
+            "Choose one: hatch a Digi-Egg from your Digi-Egg deck, move a Digimon from breeding area to battle area, or do nothing.",
+            "During the breeding phase, you perform exactly one of these three actions:"
+          ]
+        },
+        {
+          "title": "Hatch a Digi-Egg",
+          "text": [
+            "Take the top card of your Digi-Egg deck and place it face-up in the breeding area. You can't hatch if you have no cards left in your Digi-Egg deck or if you already have a Digimon in the breeding area."
+          ]
+        },
+        {
+          "title": "Move to Battle Area",
+          "text": [
+            "Move your Digimon from the breeding area to the battle area. It keeps its current orientation (suspended or unsuspended) and any effects applied to it. Note: its effect status (e.g. pending activations) is NOT carried over during the move."
+          ]
+        },
+        {
+          "title": "Do Nothing",
+          "text": [
+            "Proceed directly to the Main Phase without performing either action above.",
+            "Important: Only 1 card can be in the breeding area at a time. Cards in the breeding area are highly protected — they can't be targeted by effects, their effects don't trigger or activate, and their information can't be referenced (unless an effect explicitly specifies the breeding area)."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Main Phase",
+      "steps": [
+        {
+          "title": "Main Phase",
+          "text": [
+            "Play cards, digivolve, use Options, link, attack, and activate effects — in any order, any number of times."
+          ]
+        },
+        {
+          "title": "Play a Digimon or Tamer",
+          "text": [
+            "Pay a card's play cost by moving the memory marker toward your opponent's side by that amount. The card is placed unsuspended in the battle area. A Digimon cannot attack on the turn it is played (unless it has <Rush>).",
+            "Special play mechanics:"
+          ],
+          "bullets": [
+            "**DigiXros** — For cards with DigiXros requirements (e.g. \"DigiXros -2: [Shoutmon]×[Ballistamon]\"), you may place the specified cards from your hand and/or battle area under the played card. The play cost is reduced by the specified amount for each card placed. You must place at least 1 card.",
+            "**[Assembly]** — Similar to DigiXros. Place specified cards from your hand under the played Digimon to reduce its play cost by the amount shown."
+          ]
+        },
+        {
+          "title": "Digivolve",
+          "text": [
+            "Stack a Digimon card from your hand onto one of your Digimon on the field by paying its digivolution cost (move the memory marker right by that amount). The previous top card becomes a digivolution card under the new one, and the new Digimon gains all inherited effects from cards below it."
+          ],
+          "bullets": [
+            "**DNA Digivolution** — Combine two or more of your Digimon in the battle area into a single Digimon card from your hand that has DNA Digivolution requirements.",
+            "**Burst Digivolve** — A special digivolution method with its own requirements.",
+            "**App Fusion** — A unique digivolution mechanic for Appmon cards.",
+            "**<Blast Digivolve>** — Digivolve one of your Digimon into this card from your hand without paying cost. Can be used on your opponent's turn.",
+            "**<Digisorption>** — When digivolving into this card, you may suspend one of your Digimon to reduce the digivolution cost by the specified amount."
+          ]
+        },
+        {
+          "title": "Use an Option Card",
+          "text": [
+            "Pay the cost of an Option card from your hand, resolve its effect, then trash it. You must have a Digimon or Tamer on your field that shares a color with the Option card to meet its color requirements."
+          ]
+        },
+        {
+          "title": "Link a Card",
+          "text": [
+            "Plug 1 card from your hand or battle area sideways under one of your Digimon in the battle area as a link card. A Digimon can have a maximum of 1 link card (unless it has <Link +>). The linked Digimon gains the link card's DP bonus and link effects. Link cards are not considered to be stacked cards or on the field."
+          ]
+        },
+        {
+          "title": "Attack",
+          "text": [
+            "Suspend (rest) one of your Digimon in the battle area and declare an attack. Your target can be either the opponent directly (performing a security check if they have security) or one of their Digimon (which results in a battle comparing DP).",
+            "Attack procedure: ① Declare attack & choose target → ② [Counter] timing (opponent may activate one [Counter] effect) → ③ Block timing (opponent may redirect to a <Blocker>) → ④ Confirm success (resolve security check or battle) → ⑤ End of attack."
+          ]
+        },
+        {
+          "title": "Activate Effects",
+          "text": [
+            "Use [Main] effects on your cards during this phase, when there is no unresolved processing."
+          ]
+        },
+        {
+          "title": "Pass",
+          "text": [
+            "Declare a pass to immediately move the memory marker to 3 on your opponent's side. This can be a strategic way to end your turn quickly and deny your opponent too much memory."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "End of Turn",
+      "steps": [
+        {
+          "title": "End of Turn",
+          "text": [
+            "When memory reaches 1 or more on your opponent's side and all processing is resolved, your turn ends and your opponent's turn begins.",
+            "The turn end conditions are met when the memory marker is at 1 or more on your opponent's side and all current processing is complete. The turn ends with the current phase (it does not proceed to the next phase)."
+          ]
+        },
+        {
+          "title": "End of Turn Sequence",
+          "text": [
+            "If the memory moves to 0 or more on your side during end-of-turn processing, the turn end is postponed and the current phase continues.",
+            "Once all end-of-turn processing is resolved, the turn passes to your opponent."
+          ],
+          "bullets": [
+            "**1.** [End of Your Turn] effects trigger and activate — the turn player chooses the order if multiple trigger.",
+            "**2.** [End of Opponent's Turn] effects trigger and activate — the non-turn player chooses their order.",
+            "**3.** [End of All Turns] effects trigger and activate.",
+            "**4.** <Overflow> effects are resolved — first the turn player resolves all of theirs one at a time, then the non-turn player resolves all of theirs.",
+            "**5.** All \"during this turn\" and \"until end of turn\" effects expire."
+          ]
+        }
+      ]
+    }
+  ]
+}

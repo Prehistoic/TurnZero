@@ -1,0 +1,31 @@
+{
+  "winConditions": [
+    {
+      "title": "Take All Prize Cards",
+      "text": [
+        "Each player starts with 6 face-down Prize cards. Every time you Knock Out an opponent's Pokemon, you take 1 Prize card into your hand (2 for Pokemon ex/V/GX, 3 for VMAX/TAG TEAM/Mega ex).",
+        "The first player to take all 6 of their Prize cards wins the game. This is the primary win condition."
+      ]
+    },
+    {
+      "title": "No Pokemon in Play",
+      "text": [
+        "If your opponent has no Pokemon left in play (no Active Pokemon and no Benched Pokemon), you immediately win the game.",
+        "This typically happens when their last Pokemon is Knocked Out and they have no Bench replacements."
+      ]
+    },
+    {
+      "title": "Empty Deck at Start of Turn",
+      "text": [
+        "If your opponent has no cards left in their deck at the beginning of their turn and cannot draw a card, you win the game.",
+        "Note: losing the ability to draw due to a card effect during your turn does not cause a loss."
+      ]
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "Either player may concede at any time. Announce your concession and you lose immediately."
+      ]
+    }
+  ]
+}

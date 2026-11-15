@@ -1,0 +1,370 @@
+{
+  "phases": [
+    {
+      "name": "Beginning Phase",
+      "steps": [
+        {
+          "title": "Beginning Phase",
+          "text": [
+            "Untap all your permanents, resolve upkeep triggers, then draw a card."
+          ]
+        },
+        {
+          "title": "Untap Step",
+          "text": [
+            "Untap all your tapped permanents. No player receives priority during this step."
+          ]
+        },
+        {
+          "title": "Upkeep Step",
+          "text": [
+            "Abilities that trigger at the beginning of upkeep go on the stack. Players may cast instants and activate abilities."
+          ]
+        },
+        {
+          "title": "Draw Step",
+          "text": [
+            "The active player draws 1 card. The player going first skips this draw on their very first turn."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "name": "Beginning Phase",
+      "steps": [
+        {
+          "title": "Beginning Phase",
+          "text": [
+            "Untap all your permanents, resolve upkeep triggers, then draw a card."
+          ]
+        },
+        {
+          "title": "Untap Step",
+          "text": [
+            "Untap all your tapped permanents. No player receives priority."
+          ]
+        },
+        {
+          "title": "Upkeep Step",
+          "text": [
+            "Abilities that trigger at the beginning of upkeep go on the stack. Players may cast instants and activate abilities."
+          ]
+        },
+        {
+          "title": "Draw Step",
+          "text": [
+            "Draw 1 card from your library. The player going first skips this draw on their very first turn."
+          ]
+        }
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "name": "Beginning Phase",
+      "steps": [
+        {
+          "title": "Beginning Phase",
+          "text": [
+            "Untap all your permanents, resolve upkeep triggers, then draw a card."
+          ]
+        },
+        {
+          "title": "Untap Step",
+          "text": [
+            "Untap all your tapped permanents."
+          ]
+        },
+        {
+          "title": "Upkeep Step",
+          "text": [
+            "Upkeep triggers go on the stack. Players may respond."
+          ]
+        },
+        {
+          "title": "Draw Step",
+          "text": [
+            "Draw 1 card. First player skips this on their first turn."
+          ]
+        }
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play 1 land (once per turn). Cast creature, sorcery, enchantment, artifact, and planeswalker spells.",
+            "You may play up to 1 land from your hand per turn. You may cast any number of spells as long as you can pay their costs. Instants and cards with flash can be cast at any time."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play 1 land. Cast spells, including your commander from the command zone.",
+            "You may play up to 1 land per turn. Cast creature, sorcery, enchantment, artifact, and planeswalker spells. You may cast your commander from the command zone at any time you could cast a sorcery. Each time after the first, it costs an additional 2 generic mana (commander tax)."
+          ]
+        }
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "name": "Main Phase 1",
+      "steps": [
+        {
+          "title": "Main Phase 1",
+          "text": [
+            "Play 1 land. Cast spells, including your commander from the command zone.",
+            "Play up to 1 land. Cast creature, sorcery, enchantment, artifact, and planeswalker spells. You may cast your commander from the command zone. Each recast costs an additional 2 generic mana (commander tax)."
+          ]
+        }
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "name": "Combat Phase",
+      "steps": [
+        {
+          "title": "Combat Phase",
+          "text": [
+            "Attack with your creatures and deal combat damage to the opponent or their planeswalkers."
+          ]
+        },
+        {
+          "title": "Beginning of Combat",
+          "text": [
+            "Announce you are entering combat. The active player receives priority first."
+          ]
+        },
+        {
+          "title": "Declare Attackers",
+          "text": [
+            "Choose which untapped creatures will attack and what they attack (opponent or their planeswalkers). Tapping the creature is part of declaring it as an attacker (unless it has vigilance). Creatures with summoning sickness cannot attack unless they have haste."
+          ]
+        },
+        {
+          "title": "Declare Blockers",
+          "text": [
+            "The defending player chooses which creatures will block and how. Each blocking creature can block only one attacker. Multiple creatures can block the same attacker. A creature with flying can only be blocked by creatures with flying or reach. A creature with menace must be blocked by 2+ creatures."
+          ]
+        },
+        {
+          "title": "Combat Damage",
+          "text": [
+            "Attackers and blockers deal damage equal to their power simultaneously. First strike and double strike create an extra damage step before the normal one. Trample: excess damage to blockers spills over to the defending player. Deathtouch: any amount of damage destroys the blocker. Lifelink: you gain life equal to the damage dealt."
+          ]
+        },
+        {
+          "title": "End of Combat",
+          "text": [
+            "Effects that last until end of combat expire. Creatures stop being attacking or blocking."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "name": "Combat Phase",
+      "steps": [
+        {
+          "title": "Combat Phase",
+          "text": [
+            "Attack opponents or their planeswalkers with your creatures."
+          ]
+        },
+        {
+          "title": "Beginning of Combat",
+          "text": [
+            "Announce combat entry. The active player gets priority first."
+          ]
+        },
+        {
+          "title": "Declare Attackers",
+          "text": [
+            "Choose which untapped creatures attack and which opponent (or their planeswalker) each attacks. You may attack different opponents with different creatures. Tapping the creature is part of declaring it as an attacker (unless it has vigilance). Creatures with summoning sickness cannot attack without haste."
+          ]
+        },
+        {
+          "title": "Declare Blockers",
+          "text": [
+            "Only the defending player (the one being attacked) may declare blockers. Flying, menace, and other combat abilities apply normally."
+          ]
+        },
+        {
+          "title": "Combat Damage",
+          "text": [
+            "First strike/double strike create an extra damage step. Trample, deathtouch, lifelink all function as normal. Commander damage is tracked separately per commander."
+          ]
+        },
+        {
+          "title": "End of Combat",
+          "text": [
+            "End-of-combat effects expire. Creatures stop being attacking/blocking."
+          ]
+        }
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "name": "Combat Phase",
+      "steps": [
+        {
+          "title": "Combat Phase",
+          "text": [
+            "Attack your opponent or their planeswalkers with your creatures."
+          ]
+        },
+        {
+          "title": "Beginning of Combat",
+          "text": [
+            "Announce combat. Active player gets priority first."
+          ]
+        },
+        {
+          "title": "Declare Attackers",
+          "text": [
+            "Choose untapped creatures to attack. Tap (unless vigilance). Summoning sickness prevents attacking without haste. Attack opponent or their planeswalkers."
+          ]
+        },
+        {
+          "title": "Declare Blockers",
+          "text": [
+            "Defending player assigns blockers. Flying blocks flying/reach. Menace requires 2+ blockers."
+          ]
+        },
+        {
+          "title": "Combat Damage",
+          "text": [
+            "First strike/double strike extra step. Trample, deathtouch, lifelink apply. Commander damage tracked per commander (21+ = loss)."
+          ]
+        },
+        {
+          "title": "End of Combat",
+          "text": [
+            "End-of-combat effects expire."
+          ]
+        }
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "name": "Main Phase 2",
+      "steps": [
+        {
+          "title": "Main Phase 2",
+          "text": [
+            "A second chance to cast spells and play a land after combat.",
+            "Identical to Main Phase 1. You may play a land here if you did not play one during Main Phase 1. Cast any remaining spells before ending your turn."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "name": "Main Phase 2",
+      "steps": [
+        {
+          "title": "Main Phase 2",
+          "text": [
+            "Second main phase — play a land if you haven't yet, cast remaining spells, including your commander.",
+            "Identical to Main Phase 1. Play a land if you didn't in Main Phase 1. You may cast your commander from the command zone here if you haven't yet this turn."
+          ]
+        }
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "name": "Main Phase 2",
+      "steps": [
+        {
+          "title": "Main Phase 2",
+          "text": [
+            "Second main phase — play a land if you haven't, cast remaining spells.",
+            "Play a land if you didn't in Main Phase 1. Cast remaining spells, including your commander."
+          ]
+        }
+      ],
+      "when": { "format": "duel-commander" }
+    },
+    {
+      "name": "Ending Phase",
+      "steps": [
+        {
+          "title": "Ending Phase",
+          "text": [
+            "End-of-turn effects trigger, then discard down to maximum hand size."
+          ]
+        },
+        {
+          "title": "End Step",
+          "text": [
+            "Abilities that trigger at the beginning of the end step go on the stack. Players may cast instants and activate abilities."
+          ]
+        },
+        {
+          "title": "Cleanup Step",
+          "text": [
+            "Discard down to your maximum hand size of 7 cards. All damage is removed from creatures. All 'until end of turn' effects expire."
+          ]
+        }
+      ],
+      "when": { "format": { "or": ["standard", "modern", "pioneer", "legacy", "vintage", "premodern", "pauper"] } }
+    },
+    {
+      "name": "Ending Phase",
+      "steps": [
+        {
+          "title": "Ending Phase",
+          "text": [
+            "End-of-turn triggers, discard to 7 cards max, damage removed from creatures."
+          ]
+        },
+        {
+          "title": "End Step",
+          "text": [
+            "End-of-turn abilities trigger. Players may cast instants."
+          ]
+        },
+        {
+          "title": "Cleanup Step",
+          "text": [
+            "Discard to 7 cards max. All damage removed from creatures. 'Until end of turn' effects expire."
+          ]
+        }
+      ],
+      "when": { "format": "commander" }
+    },
+    {
+      "name": "Ending Phase",
+      "steps": [
+        {
+          "title": "Ending Phase",
+          "text": [
+            "End step triggers, discard to 7, damage removed."
+          ]
+        },
+        {
+          "title": "End Step",
+          "text": [
+            "End-of-turn triggers."
+          ]
+        },
+        {
+          "title": "Cleanup Step",
+          "text": [
+            "Discard to 7 cards max. Damage removed. Effects expire."
+          ]
+        }
+      ],
+      "when": { "format": "duel-commander" }
+    }
+  ]
+}

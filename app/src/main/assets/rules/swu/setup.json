@@ -1,0 +1,105 @@
+{
+  "steps": [
+    {
+      "title": "Place Your Base",
+      "text": [
+        "Put your base at the top of your play area, facing your opponent's base.",
+        "Each base has its own HP value shown on the card. It provides 1 aspect icon for playing cards."
+      ]
+    },
+    {
+      "title": "Place Your Leader",
+      "text": [
+        "Put your leader below your base, horizontal (non-unit) side faceup.",
+        "Your leader provides 2 aspect icons. Its Epic Action ability will let you deploy it as a powerful unit later in the game."
+      ]
+    },
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Randomly choose who gets the initiative counter.",
+        "Randomly pick a player. That player decides who starts with the initiative counter — they can keep it or give it to their opponent.",
+        "The player with the initiative takes the first action of the game."
+      ]
+    },
+    {
+      "title": "Shuffle & Draw",
+      "text": [
+        "Shuffle your deck, then draw 6 cards.",
+        "Both players shuffle their decks and draw 6 cards as their opening hand."
+      ]
+    },
+    {
+      "title": "Mulligan (Optional)",
+      "text": [
+        "You may shuffle your hand back and draw a new hand of 6 cards.",
+        "The player with the initiative decides first, then their opponent.",
+        "You can only take one mulligan, and you must keep the new hand.",
+        "Tip: Take a mulligan if your hand has no units that cost 1 or 2."
+      ]
+    },
+    {
+      "title": "Resource Two Cards",
+      "text": [
+        "Choose 2 cards from your hand and put them into play facedown and ready as resources.",
+        "Resources are used to pay for cards you play. Each player must resource exactly 2 cards.",
+        "A card used as a resource is placed facedown — its text and abilities are inactive while it's a resource.",
+        "The game begins with the first action phase."
+      ]
+    },
+    {
+      "title": "Deck — Card Limits",
+      "text": [
+        "Minimum 50 cards (no maximum limit) in Premier/Eternal format.",
+        "Exactly 1 Leader and 1 Base — these exist alongside your deck and don't count toward the minimum.",
+        "Up to 3 copies of any unit, event, or upgrade card."
+      ]
+    },
+    {
+      "title": "Deck — Aspect Rules",
+      "text": [
+        "You may include cards of ANY aspect in your deck, regardless of your Leader and Base aspects.",
+        "When playing a card with aspect icons beyond those provided by your Leader and Base, you must pay 2 extra resources per unmatched icon — this is the \"aspect penalty.\"",
+        "Neutral cards (gray border, no aspect icons) never incur the aspect penalty."
+      ]
+    },
+    {
+      "title": "Deck — Sideboard",
+      "text": [
+        "Up to 10 cards to swap between games in a match."
+      ]
+    },
+    {
+      "image": "rulebooks/images/swu-field.png",
+      "text": [
+        "**Play Area Layout**",
+        "Your play area is arranged as follows:"
+      ],
+      "bullets": [
+        "**Base zone** — Your base card sits top center. This is what your opponent is trying to destroy.",
+        "**Leader zone** — Your leader sits below your base, starting on its horizontal (non-unit) side faceup.",
+        "**Ground arena** — Ground units are played in a row on one side of your base. Ground units can only attack other ground units, or the enemy base directly.",
+        "**Space arena** — Space units are played in a row on the other side of your base. Space units can only attack other space units, or the enemy base directly.",
+        "**Resource zone** — Cards placed facedown here become resources, used to pay costs.",
+        "**Deck** — Your draw pile. Cards enter your hand from here.",
+        "**Discard pile** — Defeated units and used events go here faceup."
+      ]
+    },
+    {
+      "text": [
+        "**Ground & Space Arenas**",
+        "Combat is divided into two separate arenas: ground and space. Each unit card shows its arena type at the top.",
+        "A ground unit can't attack a space unit, and a space unit can't attack a ground unit — they fight in separate lanes.",
+        "However, any unit can attack the enemy base directly, regardless of arena."
+      ]
+    },
+    {
+      "text": [
+        "**Ready & Exhausted**",
+        "Cards are either ready (upright) or exhausted (turned sideways).",
+        "Units and resources enter play exhausted, then become ready at the end of the regroup phase.",
+        "You must exhaust resources to pay for cards. You must exhaust a unit to attack with it. An exhausted card can't be exhausted again until it's readied."
+      ]
+    }
+  ]
+}

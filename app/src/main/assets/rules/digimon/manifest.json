@@ -1,0 +1,17 @@
+{
+  "specificities": [],
+  "rulebooks": [
+    {
+      "id": "manual",
+      "name": "Official Rule Manual",
+      "asset": "rulebooks/digimon-rule-manual-rulebook.pdf",
+      "when": {}
+    },
+    {
+      "id": "comp",
+      "name": "Comprehensive Rules",
+      "asset": "rulebooks/digimon-comprehensive-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}

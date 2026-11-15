@@ -1,0 +1,25 @@
+{
+  "winConditions": [
+    {
+      "title": "Deliver the Finishing Blow",
+      "text": [
+        "If you attack your opponent's Leader and deal damage when they have 0 Life cards remaining, you win the game.",
+        "This is the primary win condition — reduce the opponent's Life to zero, then land one final hit."
+      ]
+    },
+    {
+      "title": "Empty Deck",
+      "text": [
+        "If a player has 0 cards in their deck, they lose the game at the next rule processing check.",
+        "This is checked continuously — as soon as a player's deck runs out, they meet a defeat condition."
+      ]
+    },
+    {
+      "title": "Concession",
+      "text": [
+        "Either player may concede at any time. Announce your concession and you lose immediately.",
+        "Concession is not affected by any card effect and cannot be forced by any card either."
+      ]
+    }
+  ]
+}

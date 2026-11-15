@@ -1,0 +1,133 @@
+{
+  "steps": [
+    {
+      "title": "Reveal Heroes",
+      "text": [
+        "Each player places their hero card face-up in their hero zone.",
+        "Your hero determines your class, talents, life total, and intellect (cards drawn at end of turn)."
+      ]
+    },
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Randomly pick a player, who then decides who goes first.",
+        "For the first game of a match, use any mutually agreeable random method. For subsequent games, the loser of the previous game decides."
+      ]
+    },
+    {
+      "title": "Choose Equipment & Weapons",
+      "text": [
+        "Secretly select your starting arena-cards from your card-pool.",
+        "Choose up to one card per equipment zone (Arms, Chest, Head, Legs) and weapon zone(s). Place them face-down in their zones or in a single face-down pile.",
+        "Your choice stays hidden until the game begins."
+      ]
+    },
+    {
+      "title": "Shuffle & Cut",
+      "text": [
+        "Shuffle your deck and present it to your opponent to shuffle or cut.",
+        "After your opponent cuts, place your deck in its zone. You may no longer change which cards you selected."
+      ]
+    },
+    {
+      "title": "Reveal & Draw",
+      "text": [
+        "Reveal your weapons and equipment. Draw cards up to your hero's intellect.",
+        "Starting with the first player, each player reveals their equipment and weapons face-up. Then each draws cards equal to their hero's intellect.",
+        "The first player begins their first turn."
+      ]
+    },
+    {
+      "title": "Match Format",
+      "text": [
+        "55-minute rounds, best of 1.",
+        "Classic Constructed tournaments use best-of-1 matches with 55-minute rounds. If time expires, the turn player finishes their turn plus one additional turn. If still no winner, the game is a draw."
+      ],
+      "when": { "format": "classic-constructed" }
+    },
+    {
+      "title": "Match Format",
+      "text": [
+        "35-minute rounds, best of 1.",
+        "Silver Age tournaments use best-of-1 matches with 35-minute rounds. If time expires, the turn player finishes their turn plus one additional turn. If still no winner, the game is a draw."
+      ],
+      "when": { "format": "silver-age" }
+    },
+    {
+      "title": "Deck — Card Pool & Deck",
+      "text": [
+        "Card pool: exactly 80 cards. Select at least 60 cards from your pool to form your deck."
+      ],
+      "when": { "format": "classic-constructed" }
+    },
+    {
+      "title": "Deck — Hero & Restrictions",
+      "text": [
+        "Must use a non-young (adult) hero.",
+        "Up to 3 copies of each unique card (same name AND color).",
+        "Cards must match your hero's class and talents — generic cards can go in any deck."
+      ],
+      "when": { "format": "classic-constructed" }
+    },
+    {
+      "title": "Deck — Card Pool & Deck",
+      "text": [
+        "Card pool: exactly 55 cards. Select exactly 40 cards from your pool to form your deck."
+      ],
+      "when": { "format": "silver-age" }
+    },
+    {
+      "title": "Deck — Hero & Restrictions",
+      "text": [
+        "Must use a young hero.",
+        "All cards must be common, rare, or basic rarity.",
+        "Up to 2 copies of each unique card (same name AND color).",
+        "Cards must match your hero's class and talents — generic cards can go in any deck."
+      ],
+      "when": { "format": "silver-age" }
+    },
+    {
+      "title": "Deck — Equipment",
+      "text": [
+        "Up to 1 card per equipment zone (Arms, Chest, Head, Legs) and weapon zone(s).",
+        "Unused pool cards become your inventory for sideboarding between games."
+      ]
+    },
+    {
+      "title": "Play Area Layout",
+      "image": "rulebooks/images/fab-playmat.png",
+      "text": [
+        "Flesh and Blood uses a distinct play area with several zones:"
+      ],
+      "bullets": [
+        "**Hero zone** — Your hero card sits here, face-up. It shows your life total, class, talents, and intellect.",
+        "**Weapon zones** — You may have 1 or 2 weapon zones. Weapons are equipped here face-up and can be used to attack.",
+        "**Equipment zones** — Arms, Chest, Head, and Legs. Equipment is equipped here face-up and provides passive effects or defense.",
+        "**Deck zone** — Your draw pile. Cards enter your hand from here.",
+        "**Graveyard** — Defeated equipment, used action cards, and discarded cards go here face-up.",
+        "**Banished zone** — Cards removed from the game go here face-up. Some effects let you play cards from banish.",
+        "**Pitch zone** — When you pitch a card, it goes here temporarily. At the end of the turn, all pitched cards go to the bottom of your deck.",
+        "**Arsenal** — One face-down card you can play as though it were in your hand. Only one card at a time.",
+        "**Combat chain** — When you attack, the attack card and any defending/reaction cards form a temporary chain link here."
+      ]
+    },
+    {
+      "title": "Pitching",
+      "text": [
+        "Instead of using lands or mana, FaB uses a pitching system. Each card has a pitch value (1, 2, or 3 colored pips in the top-left). To gain resources, discard a card from your hand — you gain resource points equal to its pitch value. You can pitch multiple cards in a turn to pay for expensive plays."
+      ]
+    },
+    {
+      "title": "The Combat Chain",
+      "text": [
+        "When you attack, the combat chain opens. Attacking cards form chain links. The defending player may defend with cards from hand or equipment. Both players can play attack/defense reactions. Each chain link resolves in order: Declare attack → Declare defense → Reactions → Damage."
+      ]
+    },
+    {
+      "title": "Defense Values",
+      "text": [
+        "Every card has a defense value (bottom-right number). When defending, you block damage equal to the card's defense value. Equipment has defense too, but may take durability loss."
+      ]
+    }
+  ]
+}

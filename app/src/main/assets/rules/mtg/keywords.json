@@ -1,0 +1,1243 @@
+{
+  "keywords": [
+    {
+      "name": "<Absorb>",
+      "category": "Keyword Ability",
+      "text": [
+        "If a source would deal damage to this creature, prevent X of that damage, where X is the absorb number."
+      ]
+    },
+    {
+      "name": "<Adapt>",
+      "category": "Keyword Action",
+      "text": [
+        "If this creature has no +1/+1 counters, put N +1/+1 counters on it."
+      ]
+    },
+    {
+      "name": "<Affinity>",
+      "category": "Keyword Ability",
+      "text": [
+        "This spell costs 1 less for each permanent of the specified type you control."
+      ]
+    },
+    {
+      "name": "<Adventurer Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Creature cards with an instant/sorcery Adventure you can cast first. After the Adventure resolves, the card is exiled and you may cast the creature later."
+      ]
+    },
+    {
+      "name": "<Afterlife>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature dies, create N 1/1 white and black Spirit creature tokens with flying."
+      ]
+    },
+    {
+      "name": "<Aftermath>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast the Aftermath half of this card from your graveyard, then exile it."
+      ]
+    },
+    {
+      "name": "<Annihilator>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks, defending player sacrifices N permanents."
+      ]
+    },
+    {
+      "name": "<Artifact>",
+      "category": "Core Concept",
+      "text": [
+        "A card type representing magical items, constructs, and equipment. Artifact cards are typically colorless and are cast like other spells."
+      ]
+    },
+    {
+      "name": "<Attraction Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Artifacts that open attractions from a side deck called the Attraction deck. Each has a visit ability that triggers when you roll to visit it."
+      ]
+    },
+    {
+      "name": "<Ascend>",
+      "category": "Keyword Ability",
+      "text": [
+        "If you control 10+ permanents, you gain the city's blessing for the rest of the game."
+      ]
+    },
+    {
+      "name": "<Backup>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature enters, put N +1/+1 counter(s) on target creature, which also gains this creature's non-Backup abilities."
+      ]
+    },
+    {
+      "name": "<Battle>",
+      "category": "Core Concept",
+      "text": [
+        "A permanent type introduced in March of the Machine. Battles enter under an opponent's control and can be attacked. When defeated, they transform under your control."
+      ]
+    },
+    {
+      "name": "<Bargain>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may sacrifice an artifact, enchantment, or token as you cast this spell for an additional effect."
+      ]
+    },
+    {
+      "name": "<Battle Cry>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn."
+      ]
+    },
+    {
+      "name": "<Bestow>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card as an Aura for its bestow cost. If the enchanted creature leaves, it becomes a creature again."
+      ]
+    },
+    {
+      "name": "<Blitz>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell for its blitz cost. If you do, it gains haste and 'When this creature dies, draw a card.' Sacrifice it at the next end step."
+      ]
+    },
+    {
+      "name": "<Bloodthirst>",
+      "category": "Keyword Ability",
+      "text": [
+        "If an opponent was dealt damage this turn, this creature enters with N +1/+1 counters."
+      ]
+    },
+    {
+      "name": "<Boast>",
+      "category": "Keyword Ability",
+      "text": [
+        "Activate this ability only if this creature attacked this turn and only once per turn."
+      ]
+    },
+    {
+      "name": "<Bolster>",
+      "category": "Keyword Action",
+      "text": [
+        "Choose the creature you control with the least toughness. Put N +1/+1 counters on it."
+      ]
+    },
+    {
+      "name": "<Bushido>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature blocks or becomes blocked, it gets +N/+N until end of turn."
+      ]
+    },
+    {
+      "name": "<Buyback>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may pay an additional cost as you cast this spell. If you do, put it into your hand instead of the graveyard as it resolves."
+      ]
+    },
+    {
+      "name": "<Cascade>",
+      "category": "Keyword Ability",
+      "text": [
+        "When you cast this spell, exile cards from the top of your library until you hit a nonland card with lesser mana value. You may cast it for free."
+      ]
+    },
+    {
+      "name": "<Casualty>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast this spell, you may sacrifice a creature with power N or greater for an additional effect."
+      ]
+    },
+    {
+      "name": "<Case Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Enchantments with a condition to 'solve' the case. Once solved, the card gains additional or upgraded effects."
+      ]
+    },
+    {
+      "name": "<Changeling>",
+      "category": "Keyword Ability",
+      "text": [
+        "This card is every creature type at all times."
+      ]
+    },
+    {
+      "name": "<Class Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Enchantments with class levels (1-3) that can be unlocked by paying mana. Each level grants progressively stronger abilities."
+      ]
+    },
+    {
+      "name": "<Cleave>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell for its cleave cost. If you do, remove the words in square brackets from its text."
+      ]
+    },
+    {
+      "name": "<Collect Evidence>",
+      "category": "Keyword Action",
+      "text": [
+        "Exile cards with total mana value N or greater from your graveyard as an additional cost."
+      ]
+    },
+    {
+      "name": "<Companion>",
+      "category": "Keyword Ability",
+      "text": [
+        "If your starting deck meets the companion's deckbuilding requirement, you may pay 3 to put it into your hand from outside the game once per game."
+      ]
+    },
+    {
+      "name": "<Connive>",
+      "category": "Keyword Action",
+      "text": [
+        "Draw a card, then discard a card. If a nonland card was discarded, put a +1/+1 counter on this creature."
+      ]
+    },
+    {
+      "name": "<Conspire>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast this spell, you may tap two untapped creatures that share a color with it to copy it."
+      ]
+    },
+    {
+      "name": "<Convoke>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may tap untapped creatures you control to help pay for this spell. Each creature tapped pays for 1 mana of its color."
+      ]
+    },
+    {
+      "name": "<Craft>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the craft cost, exile this permanent and the specified materials, then return it transformed under your control."
+      ]
+    },
+    {
+      "name": "<Creature>",
+      "category": "Core Concept",
+      "text": [
+        "The most common card type. Creatures have power and toughness, can attack and block during combat, and are subject to summoning sickness."
+      ]
+    },
+    {
+      "name": "<Crew>",
+      "category": "Keyword Ability",
+      "text": [
+        "Tap any number of creatures you control with total power N or greater to have this Vehicle become an artifact creature until end of turn."
+      ]
+    },
+    {
+      "name": "<Cycling>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the cycling cost, discard this card, then draw a card."
+      ]
+    },
+    {
+      "name": "<Day and Night>",
+      "category": "Core Concept",
+      "text": [
+        "A game state tracked globally. If a player casts no spells during their turn, it becomes night next turn. If they cast 2+ spells, it becomes day. Cards with daybound/nightbound transform accordingly."
+      ]
+    },
+    {
+      "name": "<Dash>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this creature for its dash cost. If you do, it gains haste and returns to your hand at end of turn."
+      ]
+    },
+    {
+      "name": "<Deathtouch>",
+      "category": "Keyword Ability",
+      "text": [
+        "Any amount of damage dealt by this creature to another creature is enough to destroy it."
+      ]
+    },
+    {
+      "name": "<Decayed>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can't block. When it attacks, sacrifice it at end of combat."
+      ]
+    },
+    {
+      "name": "<Defender>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature cannot attack."
+      ]
+    },
+    {
+      "name": "<Delve>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast this spell, you may exile cards from your graveyard. Each card exiled pays for 1 generic mana."
+      ]
+    },
+    {
+      "name": "<Demonstrate>",
+      "category": "Keyword Ability",
+      "text": [
+        "When you cast this spell, you may copy it. If you do, an opponent of your choice may also copy it."
+      ]
+    },
+    {
+      "name": "<Destroy>",
+      "category": "Keyword Action",
+      "text": [
+        "Move a permanent from the battlefield to its owner's graveyard."
+      ]
+    },
+    {
+      "name": "<Dethrone>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks the player with the most or tied for most life, put a +1/+1 counter on it."
+      ]
+    },
+    {
+      "name": "<Devour>",
+      "category": "Keyword Ability",
+      "text": [
+        "As this enters the battlefield, you may sacrifice any number of creatures. It enters with N +1/+1 counters for each creature sacrificed."
+      ]
+    },
+    {
+      "name": "<Discard>",
+      "category": "Keyword Action",
+      "text": [
+        "Take a card from your hand and put it into your graveyard."
+      ]
+    },
+    {
+      "name": "<Discover>",
+      "category": "Keyword Action",
+      "text": [
+        "Exile cards from the top of your library until you hit a nonland with mana value N or less. Cast it for free or put it into your hand."
+      ]
+    },
+    {
+      "name": "<Disguise>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card face-down as a 2/2 colorless creature for 3. Turn it face up for its disguise cost at any time."
+      ]
+    },
+    {
+      "name": "<Disturb>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card transformed from your graveyard."
+      ]
+    },
+    {
+      "name": "<Double Strike>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature deals combat damage twice — once in the first strike step and again in the normal damage step."
+      ]
+    },
+    {
+      "name": "<Dredge>",
+      "category": "Keyword Ability",
+      "text": [
+        "Instead of drawing a card, you may mill exactly N cards and return this card from your graveyard to your hand."
+      ]
+    },
+    {
+      "name": "<Echo>",
+      "category": "Keyword Ability",
+      "text": [
+        "At the beginning of your next upkeep after this permanent comes under your control, sacrifice it unless you pay its echo cost."
+      ]
+    },
+    {
+      "name": "<Emblem>",
+      "category": "Core Concept",
+      "text": [
+        "A marker in the command zone with one or more abilities. Created by planeswalker ultimates and other effects. Not a card or permanent — cannot be destroyed or removed."
+      ]
+    },
+    {
+      "name": "<Embalm>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the embalm cost and exile this card from your graveyard to create a token copy of it that's a white Zombie in addition."
+      ]
+    },
+    {
+      "name": "<Enchantment>",
+      "category": "Core Concept",
+      "text": [
+        "A card type representing ongoing magical effects. Enchantments are permanents that stay on the battlefield and provide continuous or triggered abilities."
+      ]
+    },
+    {
+      "name": "<Emerge>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value."
+      ]
+    },
+    {
+      "name": "<Enchant>",
+      "category": "Keyword Ability",
+      "text": [
+        "This Aura can be attached to the specified kind of permanent. If the enchanted permanent leaves, the Aura goes to the graveyard."
+      ]
+    },
+    {
+      "name": "<Encore>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the encore cost and exile this card from your graveyard to create a token copy for each opponent that must attack that opponent if able."
+      ]
+    },
+    {
+      "name": "<Enlist>",
+      "category": "Keyword Ability",
+      "text": [
+        "As this creature attacks, you may tap an untapped nonattacking creature you control to add its power to this creature's."
+      ]
+    },
+    {
+      "name": "<Entwine>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the entwine cost to choose both modes of this modal spell instead of just one."
+      ]
+    },
+    {
+      "name": "<Equip>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the equip cost at sorcery speed to attach this Equipment to a creature you control."
+      ]
+    },
+    {
+      "name": "<Escape>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card from your graveyard for its escape cost by exiling additional cards from your graveyard."
+      ]
+    },
+    {
+      "name": "<Evolve>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever a creature with greater power or toughness enters under your control, put a +1/+1 counter on this creature."
+      ]
+    },
+    {
+      "name": "<Exalted>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn for each Exalted permanent you control."
+      ]
+    },
+    {
+      "name": "<Exile (Zone)>",
+      "category": "Core Concept",
+      "text": [
+        "A holding area outside the game. Exiled cards are much harder to interact with than those in the graveyard. Some effects exile temporarily and return cards later."
+      ]
+    },
+    {
+      "name": "<Exile>",
+      "category": "Keyword Action",
+      "text": [
+        "Remove a card from the game entirely. Exiled cards are much harder to interact with than those in the graveyard."
+      ]
+    },
+    {
+      "name": "<Exploit>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature enters, you may sacrifice a creature for an additional effect."
+      ]
+    },
+    {
+      "name": "<Explore>",
+      "category": "Keyword Action",
+      "text": [
+        "Reveal the top card of your library. If it's a land, put it into your hand. Otherwise, put a +1/+1 counter on this creature and put the card back or into your graveyard."
+      ]
+    },
+    {
+      "name": "<Extort>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever you cast a spell, you may pay W/B. If you do, each opponent loses 1 life and you gain life equal to the total lost."
+      ]
+    },
+    {
+      "name": "<Fabricate>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature enters, choose one: put N +1/+1 counters on it, or create N 1/1 colorless Servo artifact creature tokens."
+      ]
+    },
+    {
+      "name": "<Fading>",
+      "category": "Keyword Ability",
+      "text": [
+        "This permanent enters with N fade counters. At your upkeep, remove one. If you can't, sacrifice it."
+      ]
+    },
+    {
+      "name": "<Fight>",
+      "category": "Keyword Action",
+      "text": [
+        "Two creatures deal damage equal to their power to each other."
+      ]
+    },
+    {
+      "name": "<First Strike>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature deals combat damage before creatures without first strike or double strike."
+      ]
+    },
+    {
+      "name": "<Flash>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell any time you could cast an instant."
+      ]
+    },
+    {
+      "name": "<Flashback>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell from your graveyard for its flashback cost. It is exiled afterward."
+      ]
+    },
+    {
+      "name": "<Flying>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can only be blocked by creatures with flying or reach."
+      ]
+    },
+    {
+      "name": "<Foretell>",
+      "category": "Keyword Ability",
+      "text": [
+        "During your turn, you may pay 2 and exile this card face-down. Cast it on a later turn for its foretell cost."
+      ]
+    },
+    {
+      "name": "<Frenzy>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks and isn't blocked, it gets +N/+0 until end of turn."
+      ]
+    },
+    {
+      "name": "<Fuse>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast both halves of this split card from your hand."
+      ]
+    },
+    {
+      "name": "<Goad>",
+      "category": "Keyword Action",
+      "text": [
+        "A goaded creature must attack a player other than you if able during its controller's next combat."
+      ]
+    },
+    {
+      "name": "<Graft>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature enters with N +1/+1 counters. Whenever another creature enters, you may move a +1/+1 counter from this creature onto it."
+      ]
+    },
+    {
+      "name": "<Graveyard>",
+      "category": "Core Concept",
+      "text": [
+        "Each player's discard pile. Cards go here when destroyed, discarded, sacrificed, countered, or milled. All cards are face-up and may be examined at any time."
+      ]
+    },
+    {
+      "name": "<Haste>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can attack and use tap abilities the turn it enters the battlefield — it ignores summoning sickness."
+      ]
+    },
+    {
+      "name": "<Haunt>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this card is put into a graveyard, exile it haunting target creature. The haunt ability works from exile."
+      ]
+    },
+    {
+      "name": "<Hexproof>",
+      "category": "Keyword Ability",
+      "text": [
+        "This permanent or player cannot be the target of spells or abilities controlled by opponents."
+      ]
+    },
+    {
+      "name": "<Hideaway>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this permanent enters, look at the top N cards of your library, exile one face down, then put the rest on bottom. You may play the exiled card if conditions are met."
+      ]
+    },
+    {
+      "name": "<Horsemanship>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can only be blocked by creatures with horsemanship."
+      ]
+    },
+    {
+      "name": "<Improvise>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may tap untapped artifacts you control to help pay for this spell. Each artifact tapped pays for 1 generic mana."
+      ]
+    },
+    {
+      "name": "<Indestructible>",
+      "category": "Keyword Ability",
+      "text": [
+        "This permanent cannot be destroyed by damage or effects that say 'destroy.' It can still be sacrificed, exiled, or have its toughness reduced to 0."
+      ]
+    },
+    {
+      "name": "<Infect>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters."
+      ]
+    },
+    {
+      "name": "<Instant>",
+      "category": "Core Concept",
+      "text": [
+        "A one-shot spell type that can be cast at any time you have priority — including during your opponent's turn. Goes to the graveyard after resolving."
+      ]
+    },
+    {
+      "name": "<Ingest>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature deals combat damage to a player, that player exiles the top card of their library."
+      ]
+    },
+    {
+      "name": "<Intimidate>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can only be blocked by artifact creatures and creatures that share a color with it."
+      ]
+    },
+    {
+      "name": "<Investigating>",
+      "category": "Keyword Action",
+      "text": [
+        "Create a colorless Clue artifact token with '2, Sacrifice this artifact: Draw a card.'"
+      ]
+    },
+    {
+      "name": "<Kicker>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may pay an additional cost as you cast this spell for an added effect."
+      ]
+    },
+    {
+      "name": "<Land>",
+      "category": "Core Concept",
+      "text": [
+        "A permanent type that produces mana when tapped. You may play 1 land per turn. Lands are colorless and are not spells — they cannot be countered."
+      ]
+    },
+    {
+      "name": "<Landwalk>",
+      "category": "Keyword Ability",
+      "text": [
+        "If the defending player controls a land of the specified type, this creature cannot be blocked."
+      ]
+    },
+    {
+      "name": "<Learn>",
+      "category": "Keyword Action",
+      "text": [
+        "You may discard a card to draw a card. If you do and you own a Lesson card outside the game, you may reveal it and put it into your hand."
+      ]
+    },
+    {
+      "name": "<Lifelink>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature deals damage, you gain that much life simultaneously."
+      ]
+    },
+    {
+      "name": "<Library>",
+      "category": "Core Concept",
+      "text": [
+        "Your draw pile, kept face-down. Cards are drawn from here. Neither player may look at or change the order of cards in a library unless an effect allows it."
+      ]
+    },
+    {
+      "name": "<Living Weapon>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this Equipment enters, create a 0/0 black Phyrexian Germ creature token and attach this Equipment to it."
+      ]
+    },
+    {
+      "name": "<Madness>",
+      "category": "Keyword Ability",
+      "text": [
+        "If you discard this card, you may exile it. If you do, cast it for its madness cost or put it into your graveyard."
+      ]
+    },
+    {
+      "name": "<Manifest>",
+      "category": "Keyword Action",
+      "text": [
+        "Put the top card of your library onto the battlefield face down as a 2/2 creature. Turn it face up at any time if it's a creature card by paying its mana cost."
+      ]
+    },
+    {
+      "name": "<Meld>",
+      "category": "Keyword Action",
+      "text": [
+        "When the two specified cards are on the battlefield, exile them and return them transformed as one combined permanent."
+      ]
+    },
+    {
+      "name": "<Menace>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can only be blocked by two or more creatures."
+      ]
+    },
+    {
+      "name": "<Mentor>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power."
+      ]
+    },
+    {
+      "name": "<Mill>",
+      "category": "Keyword Action",
+      "text": [
+        "Put the top N cards of a library into that player's graveyard."
+      ]
+    },
+    {
+      "name": "<Miracle>",
+      "category": "Keyword Ability",
+      "text": [
+        "If the first card you draw each turn has miracle, you may reveal it and cast it for its miracle cost immediately."
+      ]
+    },
+    {
+      "name": "<Modular>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature enters with N +1/+1 counters. When it dies, you may put its +1/+1 counters on target artifact creature."
+      ]
+    },
+    {
+      "name": "<Monstrosity>",
+      "category": "Keyword Action",
+      "text": [
+        "Pay the cost to put N +1/+1 counters on this creature. It becomes monstrous and may trigger an additional effect."
+      ]
+    },
+    {
+      "name": "<Morph>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card face-down as a 2/2 colorless creature for 3. Turn it face up at any time for its morph cost."
+      ]
+    },
+    {
+      "name": "<Mutate>",
+      "category": "Keyword Ability",
+      "text": [
+        "Cast this spell on top or underneath a non-Human creature you own. The mutated creature has all abilities of the top card plus those of cards below it."
+      ]
+    },
+    {
+      "name": "<Myriad>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature attacks, for each opponent other than the defending player, create a tapped and attacking token copy. Exile those tokens at end of combat."
+      ]
+    },
+    {
+      "name": "<Ninjutsu>",
+      "category": "Keyword Ability",
+      "text": [
+        "Return an unblocked attacker to hand, pay ninjutsu cost, then put this card from your hand onto the battlefield tapped and attacking."
+      ]
+    },
+    {
+      "name": "<Offering>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell at the time you could cast an instant by sacrificing a creature of the specified type, reducing the cost by that creature's mana value."
+      ]
+    },
+    {
+      "name": "<Omen Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Cards with an Omen cost — a cheaper alternative cost. When cast for its Omen cost, the card is shuffled back into its owner's library instead of going to the graveyard."
+      ]
+    },
+    {
+      "name": "<Outlast>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the outlast cost and tap this creature to put a +1/+1 counter on it. Activate only as a sorcery."
+      ]
+    },
+    {
+      "name": "<Overload>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the overload cost instead of the mana cost. If you do, replace 'target' with 'each' in the spell's text."
+      ]
+    },
+    {
+      "name": "<Partner>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may have two commanders. Their color identities combine for deck construction. Each has its own commander tax."
+      ]
+    },
+    {
+      "name": "<Persist>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature dies, if it had no -1/-1 counters, return it to the battlefield under its owner's control with a -1/-1 counter."
+      ]
+    },
+    {
+      "name": "<Permanent>",
+      "category": "Core Concept",
+      "text": [
+        "A card or token currently on the battlefield. Permanents include creatures, artifacts, enchantments, planeswalkers, battles, and lands."
+      ]
+    },
+    {
+      "name": "<Planeswalker>",
+      "category": "Core Concept",
+      "text": [
+        "A permanent type with loyalty counters. Activate one loyalty ability per turn per planeswalker at sorcery speed. Can be attacked directly by creatures and damaged by spells."
+      ]
+    },
+    {
+      "name": "<Plot>",
+      "category": "Keyword Ability",
+      "text": [
+        "Exile this card from your hand. You may cast it on a future turn without paying its mana cost. Plot only as a sorcery."
+      ]
+    },
+    {
+      "name": "<Poisonous>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature deals combat damage to a player, that player gets N poison counters."
+      ]
+    },
+    {
+      "name": "<Power/Toughness>",
+      "category": "Core Concept",
+      "text": [
+        "The two numbers (X/Y) on creature cards. Power is the amount of combat damage the creature deals. Toughness is the amount of damage needed to destroy it."
+      ]
+    },
+    {
+      "name": "<Populate>",
+      "category": "Keyword Action",
+      "text": [
+        "Create a token that's a copy of a creature token you control."
+      ]
+    },
+    {
+      "name": "<Preparation Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Cards you may exile face-down from your hand as a sorcery. On a future turn, you may cast them from exile without paying their mana cost."
+      ]
+    },
+    {
+      "name": "<Proliferate>",
+      "category": "Keyword Action",
+      "text": [
+        "Choose any number of permanents and/or players that have counters, then give each one more counter of each kind already there."
+      ]
+    },
+    {
+      "name": "<Protection>",
+      "category": "Keyword Ability",
+      "text": [
+        "Cannot be Damaged, Enchanted/Equipped, Blocked, or Targeted by sources of the stated quality (mnemonic: DEBT)."
+      ]
+    },
+    {
+      "name": "<Prowess>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn."
+      ]
+    },
+    {
+      "name": "<Rad Counters>",
+      "category": "Core Concept",
+      "text": [
+        "Counters that cause a player to mill cards and take damage at the beginning of their precombat main phase. The number of cards milled equals the number of rad counters."
+      ]
+    },
+    {
+      "name": "<Ravenous>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature enters with N +1/+1 counters. If N or more was paid as part of X, draw a card when it enters."
+      ]
+    },
+    {
+      "name": "<Reach>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can block creatures with flying."
+      ]
+    },
+    {
+      "name": "<Read Ahead>",
+      "category": "Keyword Ability",
+      "text": [
+        "As this Saga enters, choose a chapter and start there instead of chapter 1. You still get all previous chapter abilities."
+      ]
+    },
+    {
+      "name": "<Rebound>",
+      "category": "Keyword Ability",
+      "text": [
+        "If you cast this spell from your hand, exile it as it resolves. At the beginning of your next upkeep, you may cast it from exile without paying its mana cost."
+      ]
+    },
+    {
+      "name": "<Reconfigure>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the reconfigure cost to attach this Equipment creature to another creature or unattach it. While attached, it's not a creature."
+      ]
+    },
+    {
+      "name": "<Regenerate>",
+      "category": "Keyword Action",
+      "text": [
+        "The next time this permanent would be destroyed this turn, instead tap it, remove it from combat, and remove all damage from it."
+      ]
+    },
+    {
+      "name": "<Renown>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature deals combat damage to a player, if it isn't renowned, put N +1/+1 counters on it and it becomes renowned."
+      ]
+    },
+    {
+      "name": "<Replicate>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast this spell, you may pay its replicate cost any number of times. If you do, copy it that many times."
+      ]
+    },
+    {
+      "name": "<Retrace>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this card from your graveyard by discarding a land card as an additional cost."
+      ]
+    },
+    {
+      "name": "<Riot>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature enters with your choice of a +1/+1 counter or haste."
+      ]
+    },
+    {
+      "name": "<Sacrifice>",
+      "category": "Keyword Action",
+      "text": [
+        "Move a permanent you control from the battlefield to its owner's graveyard. Cannot be prevented by indestructible."
+      ]
+    },
+    {
+      "name": "<Scavenge>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the scavenge cost and exile this card from your graveyard to put N +1/+1 counters on target creature."
+      ]
+    },
+    {
+      "name": "<Scry>",
+      "category": "Keyword Action",
+      "text": [
+        "Look at the top N cards of your library. Put any number on the bottom and the rest back on top in any order."
+      ]
+    },
+    {
+      "name": "<Shadow>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can only block or be blocked by creatures with shadow."
+      ]
+    },
+    {
+      "name": "<Skulk>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature can't be blocked by creatures with greater power."
+      ]
+    },
+    {
+      "name": "<Soulbond>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may pair this creature with another unpaired creature when either enters. As long as they remain paired, both gain the listed ability."
+      ]
+    },
+    {
+      "name": "<Sorcery>",
+      "category": "Core Concept",
+      "text": [
+        "A one-shot spell type castable only during your main phase when the stack is empty. Goes to the graveyard after resolving."
+      ]
+    },
+    {
+      "name": "<Spectacle>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell for its spectacle cost if an opponent lost life this turn."
+      ]
+    },
+    {
+      "name": "<Split Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Cards with two halves separated by a dividing line. You may cast either half. Some have Fuse allowing both halves to be cast together."
+      ]
+    },
+    {
+      "name": "<Splice>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast an instant or sorcery spell, you may reveal this card and pay its splice cost to add its effects to that spell."
+      ]
+    },
+    {
+      "name": "<Split Second>",
+      "category": "Keyword Ability",
+      "text": [
+        "While this spell is on the stack, players can't cast spells or activate nonmana abilities."
+      ]
+    },
+    {
+      "name": "<Station Cards>",
+      "category": "Core Concept",
+      "text": [
+        "Enchantments with abilities that can be activated by tapping (stationing) themselves. Often part of a cycle where each station has a related effect."
+      ]
+    },
+    {
+      "name": "<Squad>",
+      "category": "Keyword Ability",
+      "text": [
+        "As you cast this spell, you may pay the squad cost any number of times. Create that many token copies of this creature."
+      ]
+    },
+    {
+      "name": "<Stack>",
+      "category": "Core Concept",
+      "text": [
+        "The zone where spells and abilities wait to resolve. Uses a last-in, first-out (LIFO) system. Both players may respond before anything resolves."
+      ]
+    },
+    {
+      "name": "<Storm>",
+      "category": "Keyword Ability",
+      "text": [
+        "When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies."
+      ]
+    },
+    {
+      "name": "<Sunburst>",
+      "category": "Keyword Ability",
+      "text": [
+        "This permanent enters with a +1/+1 counter for each color of mana spent to cast it."
+      ]
+    },
+    {
+      "name": "<Surge>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may cast this spell for its surge cost if you or a teammate have cast another spell this turn."
+      ]
+    },
+    {
+      "name": "<Surveil>",
+      "category": "Keyword Action",
+      "text": [
+        "Look at the top N cards of your library. Put any number into your graveyard and the rest back on top in any order."
+      ]
+    },
+    {
+      "name": "<Suspect>",
+      "category": "Keyword Action",
+      "text": [
+        "A suspected creature has menace and can't block. It remains suspected until it leaves the battlefield."
+      ]
+    },
+    {
+      "name": "<Suspend>",
+      "category": "Keyword Ability",
+      "text": [
+        "Exile this card from your hand with N time counters. At your upkeep, remove one. When the last is removed, cast it without paying its mana cost. It gains haste."
+      ]
+    },
+    {
+      "name": "<The Initiative>",
+      "category": "Core Concept",
+      "text": [
+        "A designation a player can have. Take the initiative to venture into the Undercity dungeon. Only one player can have the initiative at a time."
+      ]
+    },
+    {
+      "name": "<The Monarch>",
+      "category": "Core Concept",
+      "text": [
+        "A designation a player can have. At the beginning of the monarch's end step, they draw a card. When a creature deals combat damage to the monarch, its controller becomes the monarch."
+      ]
+    },
+    {
+      "name": "<Toxic>",
+      "category": "Keyword Ability",
+      "text": [
+        "Combat damage from this creature also gives the player N poison counters in addition to regular damage."
+      ]
+    },
+    {
+      "name": "<Training>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this creature and another creature with greater power attack together, put a +1/+1 counter on this creature."
+      ]
+    },
+    {
+      "name": "<Trample>",
+      "category": "Keyword Ability",
+      "text": [
+        "Excess combat damage dealt to blockers spills over to the defending player or planeswalker."
+      ]
+    },
+    {
+      "name": "<Transform>",
+      "category": "Keyword Action",
+      "text": [
+        "Flip the card over to its other face. The transformed side is now the active face."
+      ]
+    },
+    {
+      "name": "<Transmute>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the transmute cost, discard this card, then search your library for a card with the same mana value, reveal it, put it into your hand, and shuffle."
+      ]
+    },
+    {
+      "name": "<Umbra Armor>",
+      "category": "Keyword Ability",
+      "text": [
+        "If the enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura."
+      ]
+    },
+    {
+      "name": "<Undying>",
+      "category": "Keyword Ability",
+      "text": [
+        "When this creature dies, if it had no +1/+1 counters, return it to the battlefield under its owner's control with a +1/+1 counter."
+      ]
+    },
+    {
+      "name": "<Unearth>",
+      "category": "Keyword Ability",
+      "text": [
+        "Pay the unearth cost to return this creature from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave."
+      ]
+    },
+    {
+      "name": "<Unleash>",
+      "category": "Keyword Ability",
+      "text": [
+        "You may have this creature enter with a +1/+1 counter. If you do, it can't block."
+      ]
+    },
+    {
+      "name": "<Vanishing>",
+      "category": "Keyword Ability",
+      "text": [
+        "This permanent enters with N time counters. At your upkeep, remove one. When the last is removed, sacrifice it."
+      ]
+    },
+    {
+      "name": "<Vigilance>",
+      "category": "Keyword Ability",
+      "text": [
+        "Attacking does not cause this creature to tap."
+      ]
+    },
+    {
+      "name": "<Ward>",
+      "category": "Keyword Ability",
+      "text": [
+        "Whenever this permanent becomes the target of a spell or ability an opponent controls, counter it unless that player pays the ward cost."
+      ]
+    },
+    {
+      "name": "<Wither>",
+      "category": "Keyword Ability",
+      "text": [
+        "This creature deals damage to creatures in the form of -1/-1 counters."
+      ]
+    }
+  ]
+}
