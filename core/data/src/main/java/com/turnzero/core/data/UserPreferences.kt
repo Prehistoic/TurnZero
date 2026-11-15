@@ -31,9 +31,6 @@ object UserPreferences {
     val LIFE_COUNTER_STARTING_LP = stringPreferencesKey("life_counter_starting_lp")
     val RULINGS_ENABLED_FORMATS = stringSetPreferencesKey("rulings_enabled_formats")
     val RULINGS_DEFAULT_FORMAT = stringPreferencesKey("rulings_default_format")
-    // Legacy rules keys, still read by the pre-revamp RulesViewModel until Task 23 removes it.
-    val RULES_DEFAULT_RULESET = stringPreferencesKey("rules_default_ruleset")
-    val RULES_ENABLED_RULESETS = stringSetPreferencesKey("rules_enabled_rulesets")
 
     val RULES_LAYOUT = stringPreferencesKey("rules_layout")
 

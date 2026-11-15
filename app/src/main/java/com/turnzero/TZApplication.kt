@@ -8,22 +8,10 @@ import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import okio.Path.Companion.toPath
-import com.turnzero.games.digimon.rules.DigimonRules
-import com.turnzero.games.fab.rules.FaBRules
-import com.turnzero.games.mtg.rules.MagicRules
-import com.turnzero.games.onepiece.rules.OnePieceRules
-import com.turnzero.games.pokemon.rules.PokemonRules
-import com.turnzero.games.swu.rules.SwuRules
-import com.turnzero.games.yugioh.rules.YuGiOhRules
-import com.turnzero.tools.rules.InMemoryRulesProvider
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 
 @HiltAndroidApp
 class TZApplication : Application(), SingletonImageLoader.Factory {
-
-    @Inject
-    lateinit var rulesProvider: InMemoryRulesProvider
 
     override fun newImageLoader(context: Context): ImageLoader {
         return ImageLoader.Builder(context)
@@ -40,16 +28,5 @@ class TZApplication : Application(), SingletonImageLoader.Factory {
             }
             .crossfade(true)
             .build()
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        rulesProvider.register("yugioh", YuGiOhRules.configs)
-        rulesProvider.register("swu", SwuRules.configs)
-        rulesProvider.register("fab", FaBRules.configs)
-        rulesProvider.register("onepiece", OnePieceRules.configs)
-        rulesProvider.register("digimon", DigimonRules.configs)
-        rulesProvider.register("pokemon", PokemonRules.configs)
-        rulesProvider.register("mtg", MagicRules.configs)
     }
 }
