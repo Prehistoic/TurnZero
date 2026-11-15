@@ -159,6 +159,10 @@ class RulesToolViewModel @Inject constructor(
         }
     }
 
+    fun showLayoutSheet() {
+        _uiState.update { it.copy(showLayoutSheet = true) }
+    }
+
     fun dismissLayoutSheet() {
         _uiState.update { it.copy(showLayoutSheet = false) }
     }

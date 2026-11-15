@@ -329,6 +329,20 @@ class RulesToolViewModelTest : TZViewModelTest() {
     }
 
     @Test
+    fun `showLayoutSheet opens the sheet and dismissLayoutSheet closes it`() = runTest {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertFalse(vm.uiState.value.showLayoutSheet)
+
+        vm.showLayoutSheet()
+        assertTrue(vm.uiState.value.showLayoutSheet)
+
+        vm.dismissLayoutSheet()
+        assertFalse(vm.uiState.value.showLayoutSheet)
+    }
+
+    @Test
     fun `specificitySummary formats single number and multi parts`() = runTest {
         val vm = createViewModel()
         advanceUntilIdle()
