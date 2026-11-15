@@ -1,0 +1,178 @@
+{
+  "keywords": [
+    {
+      "name": "[Rush]",
+      "category": "Combat",
+      "text": [
+        "A Character with Rush can attack on the same turn it is played. Normally, Characters must wait until the next turn."
+      ]
+    },
+    {
+      "name": "[Rush: Character]",
+      "category": "Combat",
+      "text": [
+        "A Character with Rush: Character can attack opponent's Characters on the turn it is played, but not the opponent's Leader."
+      ]
+    },
+    {
+      "name": "[Double Attack]",
+      "category": "Combat",
+      "text": [
+        "When this card deals damage to the opponent's Leader, it deals 2 damage instead of 1. The opponent processes 2 Life cards."
+      ]
+    },
+    {
+      "name": "[Banish]",
+      "category": "Combat",
+      "text": [
+        "When this card deals damage to the opponent's Leader, the Life card is trashed directly — it is not added to their hand, and its [Trigger] cannot be activated."
+      ]
+    },
+    {
+      "name": "[Blocker]",
+      "category": "Combat",
+      "text": [
+        "During the Block Step, you may rest this Character to have it take the place of the target being attacked. The attacker now faces the Blocker instead.",
+        "Only one Blocker can be activated per battle."
+      ]
+    },
+    {
+      "name": "[Unblockable]",
+      "category": "Combat",
+      "text": [
+        "When this card attacks, your opponent cannot activate [Blocker]. The attack cannot be redirected and will hit its intended target."
+      ]
+    },
+    {
+      "name": "[On Play]",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically activates when this Character or Stage card is played onto the field."
+      ]
+    },
+    {
+      "name": "[When Attacking]",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically activates when this card declares an attack during your Attack Step."
+      ]
+    },
+    {
+      "name": "[On Block]",
+      "category": "Timing",
+      "text": [
+        "An effect that automatically activates when this card uses its [Blocker] ability during the Block Step."
+      ]
+    },
+    {
+      "name": "[On K.O.]",
+      "category": "Timing",
+      "text": [
+        "An effect that activates when this Character is K.O.'d (trashed by battle or effect). The effect activates on the field, but resolves after the card is in the trash.",
+        "Only activates when the card moves to an open area — K.O.'d is different from being trashed by other means (e.g., making room for a 6th Character)."
+      ]
+    },
+    {
+      "name": "[On Your Opponent's Attack]",
+      "category": "Timing",
+      "text": [
+        "An effect that activates when your opponent declares an attack, after their [When Attacking] effects have resolved."
+      ]
+    },
+    {
+      "name": "[End of Your Turn]",
+      "category": "Timing",
+      "text": [
+        "An effect that activates during the End Phase of your turn. If you have multiple, you choose the activation order."
+      ]
+    },
+    {
+      "name": "[End of Your Opponent's Turn]",
+      "category": "Timing",
+      "text": [
+        "An effect that activates during the End Phase of your opponent's turn. If the opponent has multiple, they choose the order."
+      ]
+    },
+    {
+      "name": "[Activate: Main]",
+      "category": "Activation",
+      "text": [
+        "An effect you can manually activate during your Main Phase (but not during a battle). Pay any listed activation cost to use it."
+      ]
+    },
+    {
+      "name": "[Main]",
+      "category": "Activation",
+      "text": [
+        "Found on Event cards. You can play this Event during your Main Phase (not during battle) by paying its cost. After resolving, the card goes to the trash."
+      ]
+    },
+    {
+      "name": "[Counter]",
+      "category": "Activation",
+      "text": [
+        "Found on Event cards. You can play this Event during the Counter Step of your opponent's attack by paying its cost. After resolving, the card goes to the trash.",
+        "Counter cannot be activated by other card effects unless the effect specifically says \"activate [Counter]\"."
+      ]
+    },
+    {
+      "name": "[Once Per Turn]",
+      "category": "Conditions",
+      "text": [
+        "This effect can only be activated and resolved once during each turn. If the card moves to another area and returns, it's treated as a new card and can activate again."
+      ]
+    },
+    {
+      "name": "[Your Turn]",
+      "category": "Conditions",
+      "text": [
+        "This effect's condition is only met during your own turn. The effect is inactive during your opponent's turn."
+      ]
+    },
+    {
+      "name": "[Opponent's Turn]",
+      "category": "Conditions",
+      "text": [
+        "This effect's condition is only met during your opponent's turn. The effect is inactive during your own turn."
+      ]
+    },
+    {
+      "name": "[DON!! xX]",
+      "category": "Conditions",
+      "text": [
+        "This effect's condition is met when this card has X or more DON!! cards attached to it (from the Give DON!! action). The effect only activates when the DON!! threshold is reached."
+      ]
+    },
+    {
+      "name": "DON!! -X",
+      "category": "Costs",
+      "text": [
+        "A cost requirement: return a total of X DON!! cards from your Leader area, Character area, and/or cost area back to your DON!! deck. Active or rested — both count."
+      ]
+    },
+    {
+      "name": "Rest Symbol",
+      "category": "Costs",
+      "text": [
+        "A cost requirement: rest the specified number of active DON!! cards in your cost area. The number in the circle symbol tells you how many DON!! to rest (e.g. a circled 1 means rest 1 DON!!).",
+        "This is the most common activation cost — you read the number in the symbol as the number of DON!! to rest."
+      ]
+    },
+    {
+      "name": "[Trigger]",
+      "category": "Misc",
+      "text": [
+        "When a Life card with [Trigger] is added to your hand from taking damage, you may reveal it and activate its [Trigger] effect instead of adding it to your hand.",
+        "You can choose not to activate it and add the card to your hand normally. After resolving a [Trigger], the card is trashed unless the effect says otherwise."
+      ]
+    },
+    {
+      "name": "K.O.",
+      "category": "Misc",
+      "text": [
+        "A Character card being trashed as a result of losing a battle or a card effect. K.O.'d cards go to the trash.",
+        "Trashing a Character to make room for a 6th Character (the 5-card limit rule) is NOT a K.O. — [On K.O.] won't trigger."
+      ]
+    }
+  ]
+}

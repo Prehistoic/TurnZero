@@ -1,0 +1,106 @@
+{
+  "steps": [
+    {
+      "title": "Shuffle & Place Deck",
+      "text": [
+        "Thoroughly shuffle your deck, then place it face-down in the deck area.",
+        "Randomize the order of all cards in your deck. Give your opponent the opportunity to shuffle or cut your deck after you're done.",
+        "Place your deck face-down in its designated area. Neither player may look at or change the order of cards in either deck."
+      ]
+    },
+    {
+      "title": "Place Your Leader",
+      "text": [
+        "Put your Leader card face-up in the Leader area.",
+        "Your Leader card sits face-up in the Leader area and stays there for the entire game — it cannot be moved from this area by any effect or rule.",
+        "Your Leader provides the colors that determine which cards can be included in your deck. Its Life value (printed on the card) determines how many Life cards you'll place in the final setup step.",
+        "If your Leader has an \"At the start of the game\" effect, it is processed now."
+      ]
+    },
+    {
+      "title": "Determine First Player",
+      "text": [
+        "Play Rock-Paper-Scissors; the winner freely chooses to go first or second.",
+        "Both players play Rock-Paper-Scissors. The winner decides whether to go first or second — no outside intervention is allowed in this decision."
+      ]
+    },
+    {
+      "title": "Draw Opening Hand",
+      "text": [
+        "Each player draws 5 cards from the top of their deck as their starting hand.",
+        "Both players draw the top 5 cards of their deck simultaneously. Keep your hand secret from your opponent — you may freely rearrange your own cards."
+      ]
+    },
+    {
+      "title": "Mulligan (Optional)",
+      "text": [
+        "Each player may return their entire hand to the deck, reshuffle, and draw a new hand of 5 cards — once only, starting with the first player.",
+        "Starting with the first player, each player may declare a re-draw. If you do, return all cards from your hand to your deck, reshuffle, and draw a new hand of 5 cards.",
+        "You can only do this once. After taking your mulligan (or choosing not to), you must keep that hand for the rest of the game.",
+        "Tip: If your opening hand has no low-cost cards or no Characters to play early, strongly consider taking the mulligan."
+      ]
+    },
+    {
+      "title": "Place Life Cards",
+      "text": [
+        "Draw cards equal to your Leader's Life value from the top of your deck and place them face-down in your Life area.",
+        "Draw cards from the top of your deck equal to your Leader's Life value (typically 4 or 5) and place them face-down one at a time in your Life area without looking at their contents.",
+        "The card at the top of your deck ends up at the bottom of your Life stack. This means the first card you placed will be the last one drawn when you take damage.",
+        "Your Life area is your primary defense — when your Leader takes damage, cards are moved from here to your hand. If a card has [Trigger], you may activate it instead of adding it to your hand."
+      ]
+    },
+    {
+      "title": "Deck — Main Deck",
+      "text": [
+        "Exactly 50 cards made up of Character, Event, and Stage cards.",
+        "You can have no more than 4 cards with the same card number."
+      ]
+    },
+    {
+      "title": "Deck — DON!! Deck",
+      "text": [
+        "Exactly 10 DON!! cards — these are your resource cards used to pay costs."
+      ]
+    },
+    {
+      "title": "Deck — Leader Card",
+      "text": [
+        "1 Leader card, separate from your main deck. Provides the colors that determine which cards can be included."
+      ]
+    },
+    {
+      "title": "Deck — Color Restrictions",
+      "text": [
+        "All cards must include at least one color that matches your Leader card. Cards with colors outside your Leader's colors cannot be included."
+      ]
+    },
+    {
+      "image": "rulebooks/images/onepiece-field.png",
+      "text": [
+        "Your play area is arranged as shown above. Cards on the field are either Active (upright) or Rested (sideways). When paying costs or attacking, you rest cards. During the Refresh Phase, all cards return to active."
+      ]
+    },
+    {
+      "text": [
+        "**The Eight Areas**"
+      ],
+      "bullets": [
+        "**1. Character area** — Your Character cards sit here face-up. Maximum 5. Characters enter active and cannot attack on the turn they're played (unless they have Rush).",
+        "**2. Leader area** — Your Leader card, always face-up. Provides colors for deck building, has a Life value. Cannot be moved from this area by any effect or rule.",
+        "**3. Stage area** — Your Stage card (max 1). Provides ongoing effects while on the field.",
+        "**4. Deck** — Your 50-card draw pile, face-down. A secret area — neither player can look at or change its order.",
+        "**5. Trash** — K.O.'d Characters and used Events go here face-up. An open area — both players can look through it.",
+        "**6. Cost area** — Your DON!! cards. Cards here are either active (available to pay costs) or rested (used). During your turn, you can give active DON!! cards to Leader/Characters for +1000 power each.",
+        "**7. DON!! deck** — 10 DON!! cards, face-down. An open area — both players can view its contents.",
+        "**8. Life area** — Face-down cards equal to your Leader's Life value. When your Leader takes damage, move the top card to your hand. If a card has [Trigger], you may activate it instead."
+      ]
+    },
+    {
+      "text": [
+        "**Active vs. Rested**",
+        "Active cards are upright and can attack, block, or be used to pay costs. Rested cards are sideways and can't be used for anything until readied.",
+        "When a Character with given DON!! cards leaves the field (K.O.'d, returned to hand, etc.), the attached DON!! cards return to your cost area and are rested."
+      ]
+    }
+  ]
+}

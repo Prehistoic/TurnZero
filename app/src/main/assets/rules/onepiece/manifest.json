@@ -1,0 +1,17 @@
+{
+  "specificities": [],
+  "rulebooks": [
+    {
+      "id": "manual",
+      "name": "Official Rule Manual",
+      "asset": "rulebooks/onepiece-rule-manual-rulebook.pdf",
+      "when": {}
+    },
+    {
+      "id": "comp",
+      "name": "Comprehensive Rules",
+      "asset": "rulebooks/onepiece-comprehensive-rulebook.pdf",
+      "when": {}
+    }
+  ]
+}
